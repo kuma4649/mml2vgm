@@ -55,12 +55,14 @@ namespace mml2vgmIDE
         private bool shift = false;
         private bool alt = false;
         private MIDIKbd midikbd;
-
-        public bool SendProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            return ProcessCmdKey(ref msg, keyData);
-        }
-
+        private List<List<LinePos>> lstOldAliesPos = new List<List<LinePos>>();
+        private LinePos oldTraceLoc = null;
+        private List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>> scriptShortCutKey
+            = new List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>>();
+        private mmfControl mmf = null;
+        private mmfControl mml2vgmMmf = null;
+        private mmfControl mmfFMVoicePool = null;
+        private bool failFast = false;
         //private bool beforeAlt = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
@@ -86,6 +88,11 @@ namespace mml2vgmIDE
 
 
 
+
+        public bool SendProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            return ProcessCmdKey(ref msg, keyData);
+        }
 
         //SendMessageで送る構造体（Unicode文字列送信に最適化したパターン）
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -174,9 +181,9 @@ namespace mml2vgmIDE
         {
             UpdateControl();
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
-            CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
-            CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
-            CheckAndLoadMoonDriverDotNET(System.Windows.Forms.Application.StartupPath, Disp);
+            if(setting.other.UseMucomDotNET) CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
+            if (setting.other.UsePMDDotNET) CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
+            if (setting.other.UseMoonDriverDotNET) CheckAndLoadMoonDriverDotNET(System.Windows.Forms.Application.StartupPath, Disp);
 
             Audio.OPNARhythmSample = LoadRhythmSample(System.Windows.Forms.Application.StartupPath, Disp);
 
@@ -547,222 +554,6 @@ namespace mml2vgmIDE
             //}
 
             //ImportFile(ofd.FileName);
-        }
-
-        private bool ExportVgmXgmZgm(Document d, ref string fn)
-        {
-            Compile(false, false, false, false, true);
-            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
-
-            if (msgBox.getErr().Length > 0)
-            {
-                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
-                    "エラー発生",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            SaveFileDialog sfd = new SaveFileDialog();
-            fn = d.gwiFullPath;
-            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
-            {
-                fn = fn.Substring(0, fn.Length - 1);
-            }
-            sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
-            string path1 = System.IO.Path.GetDirectoryName(fn);
-            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
-            if (FileInformation.format == enmFormat.XGM)
-            {
-                sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
-            }
-            else if (FileInformation.format == enmFormat.ZGM)
-            {
-                sfd.Filter = "zgmファイル(*.zgm)|*.zgm|すべてのファイル(*.*)|*.*";
-            }
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return false;
-            }
-            fn = sfd.FileName;
-            if (Path.GetExtension(fn) == "")
-            {
-                fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
-            }
-
-            string sf = Path.Combine(
-                Common.GetApplicationDataFolder(true)
-                , "temp"
-                , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
-                );
-            File.Copy(sf, fn, File.Exists(fn));
-
-            return true;
-        }
-
-        private bool ExportM(Document d, ref string fn)
-        {
-            Compile(false, false, false, false, true);
-            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
-
-            if (msgBox.getErr().Length > 0)
-            {
-                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
-                    "エラー発生",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            SaveFileDialog sfd = new SaveFileDialog();
-            fn = d.gwiFullPath;
-            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
-            {
-                fn = fn.Substring(0, fn.Length - 1);
-            }
-
-            GD3Tag gd3 = pmdmng.GetGD3Tag();
-            string gd3FileName = "";
-            if (gd3.dicItem.ContainsKey(enmTag.SongObjFilename))
-            {
-                gd3FileName = gd3.dicItem[enmTag.SongObjFilename][0];
-                if (Path.GetFileNameWithoutExtension(gd3FileName) == "")
-                {
-                    gd3FileName = Path.GetFileNameWithoutExtension(fn) + gd3FileName;
-                }
-            }
-            if (gd3FileName == "")
-            {
-                gd3FileName = Path.GetFileNameWithoutExtension(fn) + ".m";
-            }
-
-            sfd.FileName = gd3FileName;
-            string path1 = System.IO.Path.GetDirectoryName(fn);
-            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Filter = "mファイル(*.m;*.m2;*.mz)|*.m;*.m2;*.mz|すべてのファイル(*.*)|*.*";
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return false;
-            }
-            fn = sfd.FileName;
-
-            if (Path.GetExtension(fn) == "")
-            {
-                fn = Path.GetFileNameWithoutExtension(fn) + ".m";
-            }
-
-            List<byte> buf = new List<byte>();
-            foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
-
-            File.WriteAllBytes(fn, buf.ToArray());
-            return true;
-        }
-
-        private bool ExportMub(Document d,ref string fn)
-        {
-            Compile(false, false, false, false, true);
-            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
-
-            if (msgBox.getErr().Length > 0)
-            {
-                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
-                    "エラー発生",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            SaveFileDialog sfd = new SaveFileDialog();
-            fn = d.gwiFullPath;
-            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
-            {
-                fn = fn.Substring(0, fn.Length - 1);
-            }
-            fn = Path.Combine(Path.GetDirectoryName(fn), Path.GetFileNameWithoutExtension(fn) + ".mub");
-
-            sfd.FileName = fn;
-            string path1 = System.IO.Path.GetDirectoryName(fn);
-            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Filter = "mubファイル(*.mub)|*.mub|すべてのファイル(*.*)|*.*";
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return false;
-            }
-            fn = sfd.FileName;
-
-            if (Path.GetExtension(fn) == "")
-            {
-                fn = Path.GetFileNameWithoutExtension(fn) + ".mub";
-            }
-
-            List<byte> buf = new List<byte>();
-            foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
-
-            File.WriteAllBytes(fn, buf.ToArray());
-
-            return true;
-        }
-
-        private bool ExportMdr(Document d, ref string fn)
-        {
-            Compile(false, false, false, false, true);
-            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
-
-            if (msgBox.getErr().Length > 0)
-            {
-                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
-                    "エラー発生",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            SaveFileDialog sfd = new SaveFileDialog();
-            fn = d.gwiFullPath;
-            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
-            {
-                fn = fn.Substring(0, fn.Length - 1);
-            }
-            fn = Path.Combine(Path.GetDirectoryName(fn), Path.GetFileNameWithoutExtension(fn) + ".mdr");
-
-            sfd.FileName = fn;
-            string path1 = System.IO.Path.GetDirectoryName(fn);
-            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Filter = "mdrファイル(*.mdr)|*.mdr|すべてのファイル(*.*)|*.*";
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return false;
-            }
-            fn = sfd.FileName;
-
-            if (Path.GetExtension(fn) == "")
-            {
-                fn = Path.GetFileNameWithoutExtension(fn) + ".mdr";
-            }
-
-            List<byte> buf = new List<byte>();
-            foreach (MmlDatum md in mData) buf.Add(md != null ? (byte)md.dat : (byte)0);
-
-            File.WriteAllBytes(fn, buf.ToArray());
-
-            return true;
         }
 
         private void TsmiExit_Click(object sender, EventArgs e)
@@ -4085,13 +3876,6 @@ namespace mml2vgmIDE
             return flg;
         }
 
-
-
-        private List<List<LinePos>> lstOldAliesPos = new List<List<LinePos>>();
-        private LinePos oldTraceLoc = null;
-        private List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>> scriptShortCutKey
-            = new List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>>();
-
         private void TsmiFncHide_Click(object sender, EventArgs e)
         {
             SetFunctionKeyButtonState(false, ToolStripItemDisplayStyle.None);
@@ -4199,7 +3983,10 @@ namespace mml2vgmIDE
             }
 
             tsmiTreeView = new ToolStripMenuItem();
-            GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
+            if (setting.other.UseScript)
+            {
+                GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
+            }
 
             //frmSien = new FrmSien(setting);
             //frmSien.parent = this;
@@ -4895,11 +4682,6 @@ namespace mml2vgmIDE
             }
         }
 
-        private mmfControl mmf = null;
-        private mmfControl mml2vgmMmf = null;
-        private mmfControl mmfFMVoicePool = null;
-        private bool failFast = false;
-
         private void tsmiExport_MuctoVGM_Click(object sender, EventArgs e)
         {
             IDockContent dc = GetActiveDockContent();
@@ -4965,6 +4747,494 @@ namespace mml2vgmIDE
             compileManager.RequestPlayBack(((FrmEditor)dc).document, playToMIDCB);
         }
 
+        private void tsmiMakeCSM_Click(object sender, EventArgs e)
+        {
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+
+            FrmCSM fm = new FrmCSM(RemoveForm, (FrmEditor)dc);
+            FormBox.Add(fm);
+            fm.Show();
+        }
+
+        private string GetSoloChFileName(string fileName, Tuple<int, int, int> ch)
+        {
+            string[] chipCh = new string[]
+            {
+                "ABCDEFGHIJK",
+                "LMNOPQRSTUV",
+                "abcdefghijk",
+                "lmnopqrstuv",
+                "WXYZwxyz"
+            };
+
+            string ret;
+            if (ch.Item1 < 0)
+            {
+                ret = string.Format("{0}_{1}.{2}"
+                    , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
+                    , chipCh[0][ch.Item3]
+                    , Path.GetExtension(fileName)
+                    );
+            }
+            else
+            {
+                ret = string.Format("{0}_{1}{2}{3}.{4}"
+                    , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
+                    , ch.Item1 == 0 ? "OPNA1_" :
+                    (ch.Item1 == 1 ? "OPNA2_" :
+                    (ch.Item1 == 2 ? "OPNB1_" :
+                    (ch.Item1 == 3 ? "OPNB2_" :
+                    string.Format("OPM_{0}_",ch.Item2)
+                    )))
+                    , chipCh[ch.Item1][ch.Item2]
+                    , ch.Item3
+                    , Path.GetExtension(fileName)
+                    );
+            }
+
+            return ret;
+        }
+        
+        private bool GetPartCounterSoloStatus( Tuple<int, int, int> ch)
+        {
+            string[] chipCh = new string[]
+            {
+                "ABCDEFGHIJK",
+                "LMNOPQRSTUV",
+                "abcdefghijk",
+                "lmnopqrstuv",
+                "WXYZwxyz"
+            };
+            int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
+
+            if (ch.Item1 < 0)
+            {
+                bool? solo = muteManager.GetSoloStatus(pn[ch.Item3], 0, 0, chipCh[0][ch.Item3].ToString(), "YM2608");
+                return solo == true;
+            }
+            else
+            {
+                bool? solo = muteManager.GetSoloStatus(
+                    pn[ch.Item2],
+                    0,
+                    ch.Item1,
+                    String.Format("{0}{1}",chipCh[ch.Item1][ch.Item2],ch.Item3),
+                    ch.Item1 == 0 ? "YM2608" :
+                    (ch.Item1 == 1 ? "YM2608" :
+                    (ch.Item1 == 2 ? "YM2610B" :
+                    (ch.Item1 == 3 ? "YM2610B" :
+                    "YM2151"))));
+                return solo == true;
+            }
+        }
+
+        private bool ExportVgmXgmZgm(Document d, ref string fn)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
+            if (FileInformation.format == enmFormat.XGM)
+            {
+                sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
+            }
+            else if (FileInformation.format == enmFormat.ZGM)
+            {
+                sfd.Filter = "zgmファイル(*.zgm)|*.zgm|すべてのファイル(*.*)|*.*";
+            }
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+            fn = sfd.FileName;
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
+            }
+
+            string sf = Path.Combine(
+                Common.GetApplicationDataFolder(true)
+                , "temp"
+                , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
+                );
+            File.Copy(sf, fn, File.Exists(fn));
+
+            return true;
+        }
+
+        private bool ExportM(Document d, ref string fn)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+
+            GD3Tag gd3 = pmdmng.GetGD3Tag();
+            string gd3FileName = "";
+            if (gd3.dicItem.ContainsKey(enmTag.SongObjFilename))
+            {
+                gd3FileName = gd3.dicItem[enmTag.SongObjFilename][0];
+                if (Path.GetFileNameWithoutExtension(gd3FileName) == "")
+                {
+                    gd3FileName = Path.GetFileNameWithoutExtension(fn) + gd3FileName;
+                }
+            }
+            if (gd3FileName == "")
+            {
+                gd3FileName = Path.GetFileNameWithoutExtension(fn) + ".m";
+            }
+
+            sfd.FileName = gd3FileName;
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "mファイル(*.m;*.m2;*.mz)|*.m;*.m2;*.mz|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+            fn = sfd.FileName;
+
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + ".m";
+            }
+
+            List<byte> buf = new List<byte>();
+            foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
+
+            File.WriteAllBytes(fn, buf.ToArray());
+            return true;
+        }
+
+        private bool ExportMub(Document d, ref string fn)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            fn = Path.Combine(Path.GetDirectoryName(fn), Path.GetFileNameWithoutExtension(fn) + ".mub");
+
+            sfd.FileName = fn;
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "mubファイル(*.mub)|*.mub|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+            fn = sfd.FileName;
+
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + ".mub";
+            }
+
+            List<byte> buf = new List<byte>();
+            foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
+
+            File.WriteAllBytes(fn, buf.ToArray());
+
+            return true;
+        }
+
+        private bool ExportMdr(Document d, ref string fn)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            fn = Path.Combine(Path.GetDirectoryName(fn), Path.GetFileNameWithoutExtension(fn) + ".mdr");
+
+            sfd.FileName = fn;
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "mdrファイル(*.mdr)|*.mdr|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+            fn = sfd.FileName;
+
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + ".mdr";
+            }
+
+            List<byte> buf = new List<byte>();
+            foreach (MmlDatum md in mData) buf.Add(md != null ? (byte)md.dat : (byte)0);
+
+            File.WriteAllBytes(fn, buf.ToArray());
+
+            return true;
+        }
+
+        private void playToMIDCB(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(playToMIDCB), new object[] { qi });
+                return;
+            }
+
+            //コンパイルエラーが発生する場合はエクスポート処理中止
+            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (qi.doc.dstFileFormat != EnmFileFormat.ZGM)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("MIDエクスポートはZGM形式のみです。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //出力ファイル名の問い合わせ
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnMid = qi.doc.gwiFullPath;
+            if (fnMid.Length > 0 && fnMid[fnMid.Length - 1] == '*')
+            {
+                fnMid = fnMid.Substring(0, fnMid.Length - 1);
+            }
+            fnMid = Path.Combine(Path.GetDirectoryName(fnMid), Path.GetFileNameWithoutExtension(fnMid) + ".mid");
+            sfd.FileName = fnMid;
+            string path1 = System.IO.Path.GetDirectoryName(fnMid);
+            path1 = string.IsNullOrEmpty(path1) ? fnMid : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "Standard MIDファイル(*.mid)|*.mid|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            AskLoopCount();
+
+            exportMid = true;
+            int Latency = setting.outputDevice.Latency;
+            int WaitTime = setting.outputDevice.WaitTime;
+            int LatencyEmu = setting.LatencyEmulation;
+            int LatencySCCI = setting.LatencySCCI;
+            setting.outputDevice.Latency = 0;
+            setting.outputDevice.WaitTime = 0;
+            setting.LatencyEmulation = 0;
+            setting.LatencySCCI = 0;
+
+            try
+            {
+                mv = (Mml2vgm)qi.doc.compiledData;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                finishedCompileGWI();
+
+                Audio.waveMode = true;
+                Audio.waveModeAbort = false;
+                Audio.Stop(SendMode.Both);
+                exportMid = false;
+
+                bool res = Audio.PlayToMid(setting, sfd.FileName);
+                if (!res)
+                {
+                    MessageBox.Show("失敗");
+                    return;
+                }
+
+                FrmProgress fp = new FrmProgress();
+                fp.ShowDialog();
+
+                MessageBox.Show("完了");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
+            }
+            finally
+            {
+                setting.outputDevice.Latency = Latency;
+                setting.outputDevice.WaitTime = WaitTime;
+                setting.LatencyEmulation = LatencyEmu;
+                setting.LatencySCCI = LatencySCCI;
+            }
+
+        }
+
+        private void playToVGMCB(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(playToVGMCB), new object[] { qi });
+                return;
+            }
+
+            //コンパイルエラーが発生する場合はエクスポート処理中止
+            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (qi.doc.dstFileFormat != EnmFileFormat.MUB)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("VGMエクスポートはMUB形式のみです。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //出力ファイル名の問い合わせ
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnVgm = qi.doc.gwiFullPath;
+            if (fnVgm.Length > 0 && fnVgm[fnVgm.Length - 1] == '*')
+            {
+                fnVgm = fnVgm.Substring(0, fnVgm.Length - 1);
+            }
+            fnVgm = Path.Combine(Path.GetDirectoryName(fnVgm), Path.GetFileNameWithoutExtension(fnVgm) + ".vgm");
+            sfd.FileName = fnVgm;
+            string path1 = System.IO.Path.GetDirectoryName(fnVgm);
+            path1 = string.IsNullOrEmpty(path1) ? fnVgm : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "VGMファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            AskLoopCount();
+
+            exportVGM = true;
+            int Latency = setting.outputDevice.Latency;
+            int WaitTime = setting.outputDevice.WaitTime;
+            int LatencyEmu = setting.LatencyEmulation;
+            int LatencySCCI = setting.LatencySCCI;
+            setting.outputDevice.Latency = 0;
+            setting.outputDevice.WaitTime = 0;
+            setting.LatencyEmulation = 0;
+            setting.LatencySCCI = 0;
+
+            try
+            {
+                mubData = (MmlDatum[])qi.doc.compiledData;
+                Document doc = qi.doc;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                compileTargetDocument = qi.doc;
+                finishedCompileMUC();
+
+                Audio.waveMode = true;
+                Audio.waveModeAbort = false;
+                Audio.Stop(SendMode.Both);
+                exportVGM = false;
+
+                bool res = Audio.PlayToVGM(setting, sfd.FileName, false, null, doc);
+                if (!res)
+                {
+                    MessageBox.Show("失敗");
+                    return;
+                }
+
+                FrmProgress fp = new FrmProgress();
+                fp.ShowDialog();
+
+                MessageBox.Show("完了");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
+            }
+            finally
+            {
+                setting.outputDevice.Latency = Latency;
+                setting.outputDevice.WaitTime = WaitTime;
+                setting.LatencyEmulation = LatencyEmu;
+                setting.LatencySCCI = LatencySCCI;
+            }
+
+        }
+
         private void playToWavCB(CompileManager.queItem qi)
         {
             if (InvokeRequired)
@@ -5018,7 +5288,8 @@ namespace mml2vgmIDE
                 }
                 fnOutputName = sfd.FileName;
             }
-            else {
+            else
+            {
                 fnOutputName = Path.Combine(setting.export.FixedExportPlacePath, Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
                 if (!qi.doc.isMp3)
                 {
@@ -5026,16 +5297,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            if (setting.export.AlwaysAsksForLoopCounts)
-            {
-                FrmLoopTimes flc = new FrmLoopTimes();
-                flc.count = setting.other.LoopTimes;
-                DialogResult res = flc.ShowDialog();
-                if (res == DialogResult.OK)
-                {
-                    setting.other.LoopTimes = flc.count;
-                }
-            }
+            AskLoopCount();
 
             exportWav = true;
             int Latency = setting.outputDevice.Latency;
@@ -5172,16 +5434,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            if (setting.export.AlwaysAsksForLoopCounts)
-            {
-                FrmLoopTimes flc = new FrmLoopTimes();
-                flc.count = setting.other.LoopTimes;
-                DialogResult res = flc.ShowDialog();
-                if (res == DialogResult.OK)
-                {
-                    setting.other.LoopTimes = flc.count;
-                }
-            }
+            AskLoopCount();
 
             exportWav = true;
             int Latency = setting.outputDevice.Latency;
@@ -5226,7 +5479,7 @@ namespace mml2vgmIDE
 
                 musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
                 List<Tuple<int, int, int>> useCh = new List<Tuple<int, int, int>>();
-                for(int n = 0; n < ci.totalCount.Count; n++)
+                for (int n = 0; n < ci.totalCount.Count; n++)
                 {
                     if (ci.totalCount[n] == 0) continue;
                     if (ci.formatType == "mub")
@@ -5252,7 +5505,7 @@ namespace mml2vgmIDE
                         exportWav = false;
 
                         bool solo = GetPartCounterSoloStatus(ch);
-                        if (!solo && i==0) continue;
+                        if (!solo && i == 0) continue;
                         all = false;
                         string fn = GetSoloChFileName(fnOutputName, ch);
                         bool res = Audio.PlayToWavSolo(setting, fn, ch);
@@ -5288,272 +5541,18 @@ namespace mml2vgmIDE
 
         }
 
-        private string GetSoloChFileName(string fileName, Tuple<int, int, int> ch)
+        private void AskLoopCount()
         {
-            string[] chipCh = new string[]
+            if (setting.export.AlwaysAsksForLoopCounts)
             {
-                "ABCDEFGHIJK",
-                "LMNOPQRSTUV",
-                "abcdefghijk",
-                "lmnopqrstuv",
-                "WXYZwxyz"
-            };
-
-            string ret;
-            if (ch.Item1 < 0)
-            {
-                ret = string.Format("{0}_{1}.{2}"
-                    , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
-                    , chipCh[0][ch.Item3]
-                    , Path.GetExtension(fileName)
-                    );
-            }
-            else
-            {
-                ret = string.Format("{0}_{1}{2}{3}.{4}"
-                    , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
-                    , ch.Item1 == 0 ? "OPNA1_" :
-                    (ch.Item1 == 1 ? "OPNA2_" :
-                    (ch.Item1 == 2 ? "OPNB1_" :
-                    (ch.Item1 == 3 ? "OPNB2_" :
-                    string.Format("OPM_{0}_",ch.Item2)
-                    )))
-                    , chipCh[ch.Item1][ch.Item2]
-                    , ch.Item3
-                    , Path.GetExtension(fileName)
-                    );
-            }
-
-            return ret;
-        }
-        
-        private bool GetPartCounterSoloStatus( Tuple<int, int, int> ch)
-        {
-            string[] chipCh = new string[]
-            {
-                "ABCDEFGHIJK",
-                "LMNOPQRSTUV",
-                "abcdefghijk",
-                "lmnopqrstuv",
-                "WXYZwxyz"
-            };
-            int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
-
-            if (ch.Item1 < 0)
-            {
-                bool? solo = muteManager.GetSoloStatus(pn[ch.Item3], 0, 0, chipCh[0][ch.Item3].ToString(), "YM2608");
-                return solo == true;
-            }
-            else
-            {
-                bool? solo = muteManager.GetSoloStatus(
-                    pn[ch.Item2],
-                    0,
-                    ch.Item1,
-                    String.Format("{0}{1}",chipCh[ch.Item1][ch.Item2],ch.Item3),
-                    ch.Item1 == 0 ? "YM2608" :
-                    (ch.Item1 == 1 ? "YM2608" :
-                    (ch.Item1 == 2 ? "YM2610B" :
-                    (ch.Item1 == 3 ? "YM2610B" :
-                    "YM2151"))));
-                return solo == true;
-            }
-        }
-
-        private void playToMIDCB(CompileManager.queItem qi)
-        {
-            if (InvokeRequired)
-            {
-                this.Invoke(new Action<CompileManager.queItem>(playToMIDCB), new object[] { qi });
-                return;
-            }
-
-            //コンパイルエラーが発生する場合はエクスポート処理中止
-            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
-            {
-                Audio.Stop(SendMode.Both);
-                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (qi.doc.dstFileFormat != EnmFileFormat.ZGM)
-            {
-                Audio.Stop(SendMode.Both);
-                MessageBox.Show("MIDエクスポートはZGM形式のみです。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            //出力ファイル名の問い合わせ
-            SaveFileDialog sfd = new SaveFileDialog();
-            string fnMid = qi.doc.gwiFullPath;
-            if (fnMid.Length > 0 && fnMid[fnMid.Length - 1] == '*')
-            {
-                fnMid = fnMid.Substring(0, fnMid.Length - 1);
-            }
-            fnMid = Path.Combine(Path.GetDirectoryName(fnMid), Path.GetFileNameWithoutExtension(fnMid) + ".mid");
-            sfd.FileName = fnMid;
-            string path1 = System.IO.Path.GetDirectoryName(fnMid);
-            path1 = string.IsNullOrEmpty(path1) ? fnMid : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Filter = "Standard MIDファイル(*.mid)|*.mid|すべてのファイル(*.*)|*.*";
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            sfd.OverwritePrompt = false;
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            exportMid = true;
-            int Latency = setting.outputDevice.Latency;
-            int WaitTime = setting.outputDevice.WaitTime;
-            int LatencyEmu = setting.LatencyEmulation;
-            int LatencySCCI = setting.LatencySCCI;
-            setting.outputDevice.Latency = 0;
-            setting.outputDevice.WaitTime = 0;
-            setting.LatencyEmulation = 0;
-            setting.LatencySCCI = 0;
-
-            try
-            {
-                mv = (Mml2vgm)qi.doc.compiledData;
-                doPlay = true;
-                args = new string[2] { qi.doc.gwiFullPath, "" };
-                finishedCompileGWI();
-
-                Audio.waveMode = true;
-                Audio.waveModeAbort = false;
-                Audio.Stop(SendMode.Both);
-                exportMid = false;
-
-                bool res = Audio.PlayToMid(setting, sfd.FileName);
-                if (!res)
+                FrmLoopTimes flc = new FrmLoopTimes();
+                flc.count = setting.other.LoopTimes;
+                DialogResult res = flc.ShowDialog();
+                if (res == DialogResult.OK)
                 {
-                    MessageBox.Show("失敗");
-                    return;
+                    setting.other.LoopTimes = flc.count;
                 }
-
-                FrmProgress fp = new FrmProgress();
-                fp.ShowDialog();
-
-                MessageBox.Show("完了");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
-            }
-            finally
-            {
-                setting.outputDevice.Latency = Latency;
-                setting.outputDevice.WaitTime = WaitTime;
-                setting.LatencyEmulation = LatencyEmu;
-                setting.LatencySCCI = LatencySCCI;
-            }
-
-        }
-
-        private void playToVGMCB(CompileManager.queItem qi)
-        {
-            if (InvokeRequired)
-            {
-                this.Invoke(new Action<CompileManager.queItem>(playToVGMCB), new object[] { qi });
-                return;
-            }
-
-            //コンパイルエラーが発生する場合はエクスポート処理中止
-            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
-            {
-                Audio.Stop(SendMode.Both);
-                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (qi.doc.dstFileFormat != EnmFileFormat.MUB)
-            {
-                Audio.Stop(SendMode.Both);
-                MessageBox.Show("VGMエクスポートはMUB形式のみです。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            //出力ファイル名の問い合わせ
-            SaveFileDialog sfd = new SaveFileDialog();
-            string fnVgm = qi.doc.gwiFullPath;
-            if (fnVgm.Length > 0 && fnVgm[fnVgm.Length - 1] == '*')
-            {
-                fnVgm = fnVgm.Substring(0, fnVgm.Length - 1);
-            }
-            fnVgm = Path.Combine(Path.GetDirectoryName(fnVgm), Path.GetFileNameWithoutExtension(fnVgm) + ".vgm");
-            sfd.FileName = fnVgm;
-            string path1 = System.IO.Path.GetDirectoryName(fnVgm);
-            path1 = string.IsNullOrEmpty(path1) ? fnVgm : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Filter = "VGMファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            sfd.OverwritePrompt = false;
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            exportVGM = true;
-            int Latency = setting.outputDevice.Latency;
-            int WaitTime = setting.outputDevice.WaitTime;
-            int LatencyEmu = setting.LatencyEmulation;
-            int LatencySCCI = setting.LatencySCCI;
-            setting.outputDevice.Latency = 0;
-            setting.outputDevice.WaitTime = 0;
-            setting.LatencyEmulation = 0;
-            setting.LatencySCCI = 0;
-
-            try
-            {
-                mubData = (MmlDatum[])qi.doc.compiledData;
-                Document doc = qi.doc;
-                doPlay = true;
-                args = new string[2] { qi.doc.gwiFullPath, "" };
-                compileTargetDocument = qi.doc;
-                finishedCompileMUC();
-
-                Audio.waveMode = true;
-                Audio.waveModeAbort = false;
-                Audio.Stop(SendMode.Both);
-                exportVGM = false;
-
-                bool res = Audio.PlayToVGM(setting, sfd.FileName, false, null, doc);
-                if (!res)
-                {
-                    MessageBox.Show("失敗");
-                    return;
-                }
-
-                FrmProgress fp = new FrmProgress();
-                fp.ShowDialog();
-
-                MessageBox.Show("完了");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
-            }
-            finally
-            {
-                setting.outputDevice.Latency = Latency;
-                setting.outputDevice.WaitTime = WaitTime;
-                setting.LatencyEmulation = LatencyEmu;
-                setting.LatencySCCI = LatencySCCI;
-            }
-
-        }
-
-        private void tsmiMakeCSM_Click(object sender, EventArgs e)
-        {
-            IDockContent dc = GetActiveDockContent();
-            if (dc == null) return;
-
-            FrmCSM fm = new FrmCSM(RemoveForm, (FrmEditor)dc);
-            FormBox.Add(fm);
-            fm.Show();
         }
 
     }

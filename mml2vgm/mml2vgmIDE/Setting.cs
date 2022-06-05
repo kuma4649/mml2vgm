@@ -1955,8 +1955,16 @@ namespace mml2vgmIDE
             public int LogLevel { get; set; } = 8;//8:INFO
             public List<string> SearchWordHistory { get; set; }
             public List<string> ReplaceToWordHistory { get; set; }
-            private bool _ClearHistory  = true;
+            private bool _ClearHistory = true;
             public bool ClearHistory { get => _ClearHistory; set => _ClearHistory = value; }
+            private bool _UseScript = true;
+            public bool UseScript { get => _UseScript; set => _UseScript = value; }
+            private bool _UseMucomDotNET = true;
+            public bool UseMucomDotNET { get => _UseMucomDotNET; set => _UseMucomDotNET = value; }
+            private bool _UsePMDDotNET = true;
+            public bool UsePMDDotNET { get => _UsePMDDotNET; set => _UsePMDDotNET = value; }
+            private bool _UseMoonDriverDotNET = true;
+            public bool UseMoonDriverDotNET { get => _UseMoonDriverDotNET; set => _UseMoonDriverDotNET = value; }
 
             public Other Copy()
             {
@@ -1995,6 +2003,10 @@ namespace mml2vgmIDE
                 other.CommandManualM98 = this.CommandManualM98;
                 other.sinWaveGen = this.sinWaveGen;
                 other.ClearHistory = this.ClearHistory;
+                other.UseScript = this.UseScript;
+                other.UseMucomDotNET = this.UseMucomDotNET;
+                other.UsePMDDotNET = this.UsePMDDotNET;
+                other.UseMoonDriverDotNET = this.UseMoonDriverDotNET;
                 other.SearchWordHistory = this.SearchWordHistory;
                 other.ReplaceToWordHistory = this.ReplaceToWordHistory;
 

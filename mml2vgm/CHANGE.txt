@@ -1,4 +1,12 @@
 更新履歴
+TAG623 2022/06/06
+  IDE:export:mucToVGM:ループ回数の問い合わせ機能を追加。
+  IDE:setting:other:おまけをおまけとotherに分割。
+  IDE:setting:other>useScript:スクリプトを使用可否設定を追加。
+  IDE:setting:other>useMucomDotNET:MucomDotNETを使用可否設定を追加。
+  IDE:setting:other>usePMDDotNET:PMDDotNETを使用可否設定を追加。
+  IDE:setting:other>useMoonDriverDotNET:MoonDriverDotNETを使用可否設定を追加。
+
 TAG622 2022/06/03
   IDE:export:wav|wavAllChSolo:オプションで有効に設定すると、エクスポート時にループ回数を問い合わせる機能を追加。
 

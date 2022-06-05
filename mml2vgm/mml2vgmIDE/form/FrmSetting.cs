@@ -720,6 +720,10 @@ namespace mml2vgmIDE
             }
 
             cbClearHistory.Checked = setting.other.ClearHistory;
+            cbUseScript.Checked = setting.other.UseScript;
+            cbUseMucomDotNET.Checked = setting.other.UseMucomDotNET;
+            cbUsePMDDotNET.Checked = setting.other.UsePMDDotNET;
+            cbUseMoonDriverDotNET.Checked = setting.other.UseMoonDriverDotNET;
 
             cbDispInstrumentName.Checked = setting.MMLParameter.dispInstrumentName;
 
@@ -1362,6 +1366,10 @@ namespace mml2vgmIDE
             else if (rbLoglevelDEBUG.Checked) setting.other.LogLevel = 16;
             else if (rbLoglevelTRACE.Checked) setting.other.LogLevel = 32;
             setting.other.ClearHistory = cbClearHistory.Checked;
+            setting.other.UseScript = cbUseScript.Checked;
+            setting.other.UseMucomDotNET = cbUseMucomDotNET.Checked;
+            setting.other.UsePMDDotNET = cbUsePMDDotNET.Checked;
+            setting.other.UseMoonDriverDotNET = cbUseMoonDriverDotNET.Checked;
 
 
             setting.midiExport.UseMIDIExport = cbUseMIDIExport.Checked;

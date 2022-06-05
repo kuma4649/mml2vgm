@@ -231,6 +231,7 @@
             this.label45 = new System.Windows.Forms.Label();
             this.tbPMDVolumeFM = new System.Windows.Forms.TextBox();
             this.tpExport = new System.Windows.Forms.TabPage();
+            this.cbAlwaysAskForLoopCount = new System.Windows.Forms.CheckBox();
             this.cbFixedExportPlace = new System.Windows.Forms.CheckBox();
             this.gpbFixedExportPlace = new System.Windows.Forms.GroupBox();
             this.btnFixedExportPlace = new System.Windows.Forms.Button();
@@ -341,6 +342,23 @@
             this.rbAutoBalanceLoadDriverBalance = new System.Windows.Forms.RadioButton();
             this.tpMMLParameter = new System.Windows.Forms.TabPage();
             this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
+            this.tpOther2 = new System.Windows.Forms.TabPage();
+            this.cbUseScript = new System.Windows.Forms.CheckBox();
+            this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
+            this.cbClearHistory = new System.Windows.Forms.CheckBox();
+            this.tbOpacity = new System.Windows.Forms.TrackBar();
+            this.label52 = new System.Windows.Forms.Label();
+            this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.btFont = new System.Windows.Forms.Button();
+            this.label54 = new System.Windows.Forms.Label();
+            this.lblFontName = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.lblFontSize = new System.Windows.Forms.Label();
+            this.lblFontStyle = new System.Windows.Forms.Label();
+            this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
+            this.cbUseSIen = new System.Windows.Forms.CheckBox();
+            this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
             this.tpOther = new System.Windows.Forms.TabPage();
             this.cbWavSwitch = new System.Windows.Forms.CheckBox();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
@@ -376,8 +394,6 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
-            this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
-            this.cbClearHistory = new System.Windows.Forms.CheckBox();
             this.groupBox31 = new System.Windows.Forms.GroupBox();
             this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
             this.rbLoglevelDEBUG = new System.Windows.Forms.RadioButton();
@@ -386,19 +402,6 @@
             this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
             this.rbDateTime = new System.Windows.Forms.RadioButton();
             this.rbStopWatch = new System.Windows.Forms.RadioButton();
-            this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
-            this.cbUseSIen = new System.Windows.Forms.CheckBox();
-            this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
-            this.groupBox29 = new System.Windows.Forms.GroupBox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.btFont = new System.Windows.Forms.Button();
-            this.label54 = new System.Windows.Forms.Label();
-            this.lblFontName = new System.Windows.Forms.Label();
-            this.label53 = new System.Windows.Forms.Label();
-            this.lblFontSize = new System.Windows.Forms.Label();
-            this.lblFontStyle = new System.Windows.Forms.Label();
-            this.tbOpacity = new System.Windows.Forms.TrackBar();
-            this.label52 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.btVST = new System.Windows.Forms.Button();
             this.tbVST = new System.Windows.Forms.TextBox();
@@ -418,7 +421,9 @@
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
             this.ucSI = new mml2vgmIDE.ucSettingInstruments();
-            this.cbAlwaysAskForLoopCount = new System.Windows.Forms.CheckBox();
+            this.cbUseMucomDotNET = new System.Windows.Forms.CheckBox();
+            this.cbUsePMDDotNET = new System.Windows.Forms.CheckBox();
+            this.cbUseMoonDriverDotNET = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -503,6 +508,9 @@
             this.groupBox19.SuspendLayout();
             this.groupBox20.SuspendLayout();
             this.tpMMLParameter.SuspendLayout();
+            this.tpOther2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
+            this.groupBox29.SuspendLayout();
             this.tpOther.SuspendLayout();
             this.groupBox17.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -511,8 +519,6 @@
             this.tpOmake.SuspendLayout();
             this.groupBox31.SuspendLayout();
             this.groupBox30.SuspendLayout();
-            this.groupBox29.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -522,7 +528,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(296, 435);
+            this.btnOK.Location = new System.Drawing.Point(296, 455);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -534,7 +540,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(377, 435);
+            this.btnCancel.Location = new System.Drawing.Point(377, 455);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -548,7 +554,7 @@
             this.gbWaveOut.Controls.Add(this.cmbWaveOutDevice);
             this.gbWaveOut.Location = new System.Drawing.Point(6, 10);
             this.gbWaveOut.Name = "gbWaveOut";
-            this.gbWaveOut.Size = new System.Drawing.Size(322, 48);
+            this.gbWaveOut.Size = new System.Drawing.Size(320, 48);
             this.gbWaveOut.TabIndex = 1;
             this.gbWaveOut.TabStop = false;
             // 
@@ -560,7 +566,7 @@
             this.cmbWaveOutDevice.FormattingEnabled = true;
             this.cmbWaveOutDevice.Location = new System.Drawing.Point(6, 18);
             this.cmbWaveOutDevice.Name = "cmbWaveOutDevice";
-            this.cmbWaveOutDevice.Size = new System.Drawing.Size(310, 20);
+            this.cmbWaveOutDevice.Size = new System.Drawing.Size(308, 20);
             this.cmbWaveOutDevice.TabIndex = 0;
             // 
             // rbWaveOut
@@ -606,14 +612,14 @@
             this.gbAsioOut.Controls.Add(this.cmbAsioDevice);
             this.gbAsioOut.Location = new System.Drawing.Point(6, 177);
             this.gbAsioOut.Name = "gbAsioOut";
-            this.gbAsioOut.Size = new System.Drawing.Size(416, 50);
+            this.gbAsioOut.Size = new System.Drawing.Size(414, 50);
             this.gbAsioOut.TabIndex = 7;
             this.gbAsioOut.TabStop = false;
             // 
             // btnASIOControlPanel
             // 
             this.btnASIOControlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnASIOControlPanel.Location = new System.Drawing.Point(330, 8);
+            this.btnASIOControlPanel.Location = new System.Drawing.Point(328, 8);
             this.btnASIOControlPanel.Name = "btnASIOControlPanel";
             this.btnASIOControlPanel.Size = new System.Drawing.Size(81, 39);
             this.btnASIOControlPanel.TabIndex = 8;
@@ -629,7 +635,7 @@
             this.cmbAsioDevice.FormattingEnabled = true;
             this.cmbAsioDevice.Location = new System.Drawing.Point(6, 18);
             this.cmbAsioDevice.Name = "cmbAsioDevice";
-            this.cmbAsioDevice.Size = new System.Drawing.Size(317, 20);
+            this.cmbAsioDevice.Size = new System.Drawing.Size(315, 20);
             this.cmbAsioDevice.TabIndex = 6;
             // 
             // rbDirectSoundOut
@@ -652,7 +658,7 @@
             this.gbWasapiOut.Controls.Add(this.cmbWasapiDevice);
             this.gbWasapiOut.Location = new System.Drawing.Point(6, 121);
             this.gbWasapiOut.Name = "gbWasapiOut";
-            this.gbWasapiOut.Size = new System.Drawing.Size(416, 50);
+            this.gbWasapiOut.Size = new System.Drawing.Size(414, 50);
             this.gbWasapiOut.TabIndex = 5;
             this.gbWasapiOut.TabStop = false;
             // 
@@ -660,7 +666,7 @@
             // 
             this.rbExclusive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbExclusive.AutoSize = true;
-            this.rbExclusive.Location = new System.Drawing.Point(330, 31);
+            this.rbExclusive.Location = new System.Drawing.Point(328, 31);
             this.rbExclusive.Name = "rbExclusive";
             this.rbExclusive.Size = new System.Drawing.Size(47, 16);
             this.rbExclusive.TabIndex = 7;
@@ -672,7 +678,7 @@
             // 
             this.rbShare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbShare.AutoSize = true;
-            this.rbShare.Location = new System.Drawing.Point(330, 9);
+            this.rbShare.Location = new System.Drawing.Point(328, 9);
             this.rbShare.Name = "rbShare";
             this.rbShare.Size = new System.Drawing.Size(47, 16);
             this.rbShare.TabIndex = 6;
@@ -688,7 +694,7 @@
             this.cmbWasapiDevice.FormattingEnabled = true;
             this.cmbWasapiDevice.Location = new System.Drawing.Point(6, 18);
             this.cmbWasapiDevice.Name = "cmbWasapiDevice";
-            this.cmbWasapiDevice.Size = new System.Drawing.Size(317, 20);
+            this.cmbWasapiDevice.Size = new System.Drawing.Size(315, 20);
             this.cmbWasapiDevice.TabIndex = 4;
             // 
             // gbDirectSound
@@ -698,7 +704,7 @@
             this.gbDirectSound.Controls.Add(this.cmbDirectSoundDevice);
             this.gbDirectSound.Location = new System.Drawing.Point(6, 66);
             this.gbDirectSound.Name = "gbDirectSound";
-            this.gbDirectSound.Size = new System.Drawing.Size(417, 48);
+            this.gbDirectSound.Size = new System.Drawing.Size(415, 48);
             this.gbDirectSound.TabIndex = 3;
             this.gbDirectSound.TabStop = false;
             // 
@@ -710,7 +716,7 @@
             this.cmbDirectSoundDevice.FormattingEnabled = true;
             this.cmbDirectSoundDevice.Location = new System.Drawing.Point(6, 18);
             this.cmbDirectSoundDevice.Name = "cmbDirectSoundDevice";
-            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(406, 20);
+            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(404, 20);
             this.cmbDirectSoundDevice.TabIndex = 2;
             // 
             // tcSetting
@@ -728,24 +734,27 @@
             this.tcSetting.Controls.Add(this.tpKeyBoard);
             this.tcSetting.Controls.Add(this.tpBalance);
             this.tcSetting.Controls.Add(this.tpMMLParameter);
+            this.tcSetting.Controls.Add(this.tpOther2);
             this.tcSetting.Controls.Add(this.tpOther);
             this.tcSetting.Controls.Add(this.tpOmake);
             this.tcSetting.Controls.Add(this.tpAbout);
             this.tcSetting.HotTrack = true;
             this.tcSetting.Location = new System.Drawing.Point(1, 3);
+            this.tcSetting.Multiline = true;
             this.tcSetting.Name = "tcSetting";
             this.tcSetting.SelectedIndex = 0;
-            this.tcSetting.Size = new System.Drawing.Size(451, 426);
+            this.tcSetting.Size = new System.Drawing.Size(451, 446);
             this.tcSetting.TabIndex = 2;
             // 
             // tpOutput
             // 
+            this.tpOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpOutput.Controls.Add(this.cbUseRealChip);
             this.tpOutput.Controls.Add(this.tabControl1);
-            this.tpOutput.Location = new System.Drawing.Point(4, 22);
+            this.tpOutput.Location = new System.Drawing.Point(4, 40);
             this.tpOutput.Name = "tpOutput";
             this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tpOutput.Size = new System.Drawing.Size(443, 400);
+            this.tpOutput.Size = new System.Drawing.Size(443, 402);
             this.tpOutput.TabIndex = 0;
             this.tpOutput.Text = "出力";
             this.tpOutput.UseVisualStyleBackColor = true;
@@ -772,7 +781,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 30);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(437, 367);
+            this.tabControl1.Size = new System.Drawing.Size(435, 367);
             this.tabControl1.TabIndex = 7;
             // 
             // tabPage11
@@ -801,15 +810,16 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(429, 341);
+            this.tabPage11.Size = new System.Drawing.Size(427, 341);
             this.tabPage11.TabIndex = 0;
             this.tabPage11.Text = "Emulation";
             this.tabPage11.UseVisualStyleBackColor = true;
             // 
             // label55
             // 
+            this.label55.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(400, 50);
+            this.label55.Location = new System.Drawing.Point(398, 50);
             this.label55.Name = "label55";
             this.label55.Size = new System.Drawing.Size(18, 12);
             this.label55.TabIndex = 12;
@@ -817,8 +827,9 @@
             // 
             // label50
             // 
+            this.label50.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(336, 10);
+            this.label50.Location = new System.Drawing.Point(334, 10);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(66, 12);
             this.label50.TabIndex = 11;
@@ -826,6 +837,7 @@
             // 
             // cmbSampleRate
             // 
+            this.cmbSampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSampleRate.FormattingEnabled = true;
             this.cmbSampleRate.Items.AddRange(new object[] {
@@ -833,7 +845,7 @@
             "48000",
             "96000",
             "192000"});
-            this.cmbSampleRate.Location = new System.Drawing.Point(334, 26);
+            this.cmbSampleRate.Location = new System.Drawing.Point(332, 26);
             this.cmbSampleRate.Name = "cmbSampleRate";
             this.cmbSampleRate.Size = new System.Drawing.Size(86, 20);
             this.cmbSampleRate.TabIndex = 10;
@@ -1027,7 +1039,7 @@
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
             this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage12.Size = new System.Drawing.Size(429, 341);
+            this.tabPage12.Size = new System.Drawing.Size(427, 341);
             this.tabPage12.TabIndex = 1;
             this.tabPage12.Text = "音源割り当て";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -1041,7 +1053,7 @@
             this.groupBox27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox27.Location = new System.Drawing.Point(3, 3);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(423, 335);
+            this.groupBox27.Size = new System.Drawing.Size(421, 335);
             this.groupBox27.TabIndex = 9;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "音源の割り当て";
@@ -1076,7 +1088,7 @@
             this.groupBox28.Controls.Add(this.rbC86ctlDetect);
             this.groupBox28.Location = new System.Drawing.Point(6, 18);
             this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Size = new System.Drawing.Size(411, 46);
+            this.groupBox28.Size = new System.Drawing.Size(409, 46);
             this.groupBox28.TabIndex = 9;
             this.groupBox28.TabStop = false;
             // 
@@ -1110,7 +1122,7 @@
             this.groupBox1.Controls.Add(this.ucSI);
             this.groupBox1.Location = new System.Drawing.Point(6, 71);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(411, 258);
+            this.groupBox1.Size = new System.Drawing.Size(409, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             // 
@@ -1119,7 +1131,7 @@
             this.tabPage13.Controls.Add(this.splitContainer1);
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(429, 341);
+            this.tabPage13.Size = new System.Drawing.Size(427, 341);
             this.tabPage13.TabIndex = 2;
             this.tabPage13.Text = "MIDI";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -1143,7 +1155,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.label18);
             this.splitContainer1.Panel2.Controls.Add(this.btnAddMIDIout);
             this.splitContainer1.Panel2.Controls.Add(this.btnSubMIDIout);
-            this.splitContainer1.Size = new System.Drawing.Size(429, 341);
+            this.splitContainer1.Size = new System.Drawing.Size(427, 341);
             this.splitContainer1.SplitterDistance = 136;
             this.splitContainer1.TabIndex = 6;
             // 
@@ -1176,7 +1188,7 @@
             this.dgvMIDIoutPallet.RowHeadersVisible = false;
             this.dgvMIDIoutPallet.RowTemplate.Height = 21;
             this.dgvMIDIoutPallet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutPallet.Size = new System.Drawing.Size(422, 118);
+            this.dgvMIDIoutPallet.Size = new System.Drawing.Size(420, 118);
             this.dgvMIDIoutPallet.TabIndex = 1;
             // 
             // clmID
@@ -1225,7 +1237,7 @@
             this.tbcMIDIoutList.Location = new System.Drawing.Point(3, 31);
             this.tbcMIDIoutList.Name = "tbcMIDIoutList";
             this.tbcMIDIoutList.SelectedIndex = 0;
-            this.tbcMIDIoutList.Size = new System.Drawing.Size(422, 167);
+            this.tbcMIDIoutList.Size = new System.Drawing.Size(420, 167);
             this.tbcMIDIoutList.TabIndex = 4;
             // 
             // tabPage1
@@ -1236,7 +1248,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(414, 141);
+            this.tabPage1.Size = new System.Drawing.Size(412, 141);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Tag = "0";
             this.tabPage1.Text = "GM";
@@ -1266,7 +1278,7 @@
             this.dgvMIDIoutListA.RowHeadersVisible = false;
             this.dgvMIDIoutListA.RowTemplate.Height = 21;
             this.dgvMIDIoutListA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListA.Size = new System.Drawing.Size(384, 136);
+            this.dgvMIDIoutListA.Size = new System.Drawing.Size(382, 136);
             this.dgvMIDIoutListA.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -1341,7 +1353,7 @@
             // btnUP_A
             // 
             this.btnUP_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_A.Location = new System.Drawing.Point(390, 0);
+            this.btnUP_A.Location = new System.Drawing.Point(388, 0);
             this.btnUP_A.Name = "btnUP_A";
             this.btnUP_A.Size = new System.Drawing.Size(22, 58);
             this.btnUP_A.TabIndex = 3;
@@ -1352,7 +1364,7 @@
             // btnDOWN_A
             // 
             this.btnDOWN_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_A.Location = new System.Drawing.Point(390, 78);
+            this.btnDOWN_A.Location = new System.Drawing.Point(388, 78);
             this.btnDOWN_A.Name = "btnDOWN_A";
             this.btnDOWN_A.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_A.TabIndex = 3;
@@ -1368,7 +1380,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(414, 141);
+            this.tabPage2.Size = new System.Drawing.Size(412, 141);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Tag = "1";
             this.tabPage2.Text = "GS";
@@ -1421,7 +1433,7 @@
             this.tabPage3.Controls.Add(this.btnDOWN_C);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(414, 141);
+            this.tabPage3.Size = new System.Drawing.Size(412, 141);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Tag = "2";
             this.tabPage3.Text = "XG";
@@ -1474,7 +1486,7 @@
             this.tabPage4.Controls.Add(this.btnDOWN_D);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(414, 141);
+            this.tabPage4.Size = new System.Drawing.Size(412, 141);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Tag = "3";
             this.tabPage4.Text = "VSTi";
@@ -1562,10 +1574,11 @@
             // 
             // tpNuked
             // 
+            this.tpNuked.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpNuked.Controls.Add(this.tabControl2);
-            this.tpNuked.Location = new System.Drawing.Point(4, 22);
+            this.tpNuked.Location = new System.Drawing.Point(4, 40);
             this.tpNuked.Name = "tpNuked";
-            this.tpNuked.Size = new System.Drawing.Size(443, 400);
+            this.tpNuked.Size = new System.Drawing.Size(443, 402);
             this.tpNuked.TabIndex = 14;
             this.tpNuked.Text = "チップ別";
             this.tpNuked.UseVisualStyleBackColor = true;
@@ -1579,7 +1592,7 @@
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(443, 400);
+            this.tabControl2.Size = new System.Drawing.Size(441, 400);
             this.tabControl2.TabIndex = 1;
             // 
             // tabPage14
@@ -1588,7 +1601,7 @@
             this.tabPage14.Location = new System.Drawing.Point(4, 22);
             this.tabPage14.Name = "tabPage14";
             this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage14.Size = new System.Drawing.Size(435, 374);
+            this.tabPage14.Size = new System.Drawing.Size(433, 374);
             this.tabPage14.TabIndex = 0;
             this.tabPage14.Text = "Nuked-OPN2";
             this.tabPage14.UseVisualStyleBackColor = true;
@@ -1668,7 +1681,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(435, 374);
+            this.tabPage5.Size = new System.Drawing.Size(433, 392);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Gens";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1706,10 +1719,11 @@
             // 
             // tpNSF
             // 
+            this.tpNSF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpNSF.Controls.Add(this.tabControl3);
-            this.tpNSF.Location = new System.Drawing.Point(4, 22);
+            this.tpNSF.Location = new System.Drawing.Point(4, 40);
             this.tpNSF.Name = "tpNSF";
-            this.tpNSF.Size = new System.Drawing.Size(443, 400);
+            this.tpNSF.Size = new System.Drawing.Size(443, 402);
             this.tpNSF.TabIndex = 9;
             this.tpNSF.Text = "MIDI詳細";
             this.tpNSF.UseVisualStyleBackColor = true;
@@ -1725,7 +1739,7 @@
             this.tabControl3.Multiline = true;
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(443, 400);
+            this.tabControl3.Size = new System.Drawing.Size(441, 400);
             this.tabControl3.TabIndex = 9;
             // 
             // tabPage15
@@ -1738,7 +1752,7 @@
             this.tabPage15.Location = new System.Drawing.Point(4, 22);
             this.tabPage15.Name = "tabPage15";
             this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(435, 374);
+            this.tabPage15.Size = new System.Drawing.Size(433, 374);
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = ".NSF";
             this.tabPage15.UseVisualStyleBackColor = true;
@@ -2013,7 +2027,7 @@
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(435, 374);
+            this.tabPage16.Size = new System.Drawing.Size(433, 392);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = ".SID";
             this.tabPage16.UseVisualStyleBackColor = true;
@@ -2118,7 +2132,7 @@
             this.groupBox13.Controls.Add(this.label22);
             this.groupBox13.Location = new System.Drawing.Point(3, 3);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(428, 100);
+            this.groupBox13.Size = new System.Drawing.Size(426, 100);
             this.groupBox13.TabIndex = 0;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "ROM Image";
@@ -2126,7 +2140,7 @@
             // btnSIDBasic
             // 
             this.btnSIDBasic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDBasic.Location = new System.Drawing.Point(400, 44);
+            this.btnSIDBasic.Location = new System.Drawing.Point(398, 44);
             this.btnSIDBasic.Name = "btnSIDBasic";
             this.btnSIDBasic.Size = new System.Drawing.Size(23, 23);
             this.btnSIDBasic.TabIndex = 2;
@@ -2137,7 +2151,7 @@
             // btnSIDCharacter
             // 
             this.btnSIDCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDCharacter.Location = new System.Drawing.Point(400, 69);
+            this.btnSIDCharacter.Location = new System.Drawing.Point(398, 69);
             this.btnSIDCharacter.Name = "btnSIDCharacter";
             this.btnSIDCharacter.Size = new System.Drawing.Size(23, 23);
             this.btnSIDCharacter.TabIndex = 2;
@@ -2148,7 +2162,7 @@
             // btnSIDKernal
             // 
             this.btnSIDKernal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDKernal.Location = new System.Drawing.Point(400, 19);
+            this.btnSIDKernal.Location = new System.Drawing.Point(398, 19);
             this.btnSIDKernal.Name = "btnSIDKernal";
             this.btnSIDKernal.Size = new System.Drawing.Size(23, 23);
             this.btnSIDKernal.TabIndex = 2;
@@ -2162,7 +2176,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSIDCharacter.Location = new System.Drawing.Point(67, 71);
             this.tbSIDCharacter.Name = "tbSIDCharacter";
-            this.tbSIDCharacter.Size = new System.Drawing.Size(327, 19);
+            this.tbSIDCharacter.Size = new System.Drawing.Size(325, 19);
             this.tbSIDCharacter.TabIndex = 1;
             // 
             // tbSIDBasic
@@ -2171,7 +2185,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSIDBasic.Location = new System.Drawing.Point(67, 46);
             this.tbSIDBasic.Name = "tbSIDBasic";
-            this.tbSIDBasic.Size = new System.Drawing.Size(327, 19);
+            this.tbSIDBasic.Size = new System.Drawing.Size(325, 19);
             this.tbSIDBasic.TabIndex = 1;
             // 
             // tbSIDKernal
@@ -2180,7 +2194,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSIDKernal.Location = new System.Drawing.Point(67, 21);
             this.tbSIDKernal.Name = "tbSIDKernal";
-            this.tbSIDKernal.Size = new System.Drawing.Size(327, 19);
+            this.tbSIDKernal.Size = new System.Drawing.Size(325, 19);
             this.tbSIDKernal.TabIndex = 1;
             // 
             // label24
@@ -2240,7 +2254,7 @@
             this.tabPage17.Controls.Add(this.groupBox15);
             this.tabPage17.Location = new System.Drawing.Point(4, 22);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(435, 374);
+            this.tabPage17.Size = new System.Drawing.Size(433, 392);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = "Resetコマンド";
             this.tabPage17.UseVisualStyleBackColor = true;
@@ -2261,7 +2275,7 @@
             this.groupBox15.Controls.Add(this.label31);
             this.groupBox15.Location = new System.Drawing.Point(3, 3);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(428, 199);
+            this.groupBox15.Size = new System.Drawing.Size(426, 199);
             this.groupBox15.TabIndex = 0;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Before Send";
@@ -2269,7 +2283,7 @@
             // btnBeforeSend_Default
             // 
             this.btnBeforeSend_Default.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBeforeSend_Default.Location = new System.Drawing.Point(348, 123);
+            this.btnBeforeSend_Default.Location = new System.Drawing.Point(346, 123);
             this.btnBeforeSend_Default.Name = "btnBeforeSend_Default";
             this.btnBeforeSend_Default.Size = new System.Drawing.Size(75, 23);
             this.btnBeforeSend_Default.TabIndex = 2;
@@ -2283,7 +2297,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbBeforeSend_Custom.Location = new System.Drawing.Point(90, 98);
             this.tbBeforeSend_Custom.Name = "tbBeforeSend_Custom";
-            this.tbBeforeSend_Custom.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_Custom.Size = new System.Drawing.Size(331, 19);
             this.tbBeforeSend_Custom.TabIndex = 1;
             // 
             // tbBeforeSend_XGReset
@@ -2292,7 +2306,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbBeforeSend_XGReset.Location = new System.Drawing.Point(90, 48);
             this.tbBeforeSend_XGReset.Name = "tbBeforeSend_XGReset";
-            this.tbBeforeSend_XGReset.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_XGReset.Size = new System.Drawing.Size(331, 19);
             this.tbBeforeSend_XGReset.TabIndex = 1;
             // 
             // label35
@@ -2329,7 +2343,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbBeforeSend_GSReset.Location = new System.Drawing.Point(90, 73);
             this.tbBeforeSend_GSReset.Name = "tbBeforeSend_GSReset";
-            this.tbBeforeSend_GSReset.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_GSReset.Size = new System.Drawing.Size(331, 19);
             this.tbBeforeSend_GSReset.TabIndex = 1;
             // 
             // label33
@@ -2347,7 +2361,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbBeforeSend_GMReset.Location = new System.Drawing.Point(90, 23);
             this.tbBeforeSend_GMReset.Name = "tbBeforeSend_GMReset";
-            this.tbBeforeSend_GMReset.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_GMReset.Size = new System.Drawing.Size(331, 19);
             this.tbBeforeSend_GMReset.TabIndex = 1;
             // 
             // label31
@@ -2361,6 +2375,7 @@
             // 
             // tpPMDDotNET
             // 
+            this.tpPMDDotNET.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpPMDDotNET.Controls.Add(this.rbPMDManual);
             this.tpPMDDotNET.Controls.Add(this.rbPMDAuto);
             this.tpPMDDotNET.Controls.Add(this.btnPMDResetDriverArguments);
@@ -2370,9 +2385,9 @@
             this.tpPMDDotNET.Controls.Add(this.label37);
             this.tpPMDDotNET.Controls.Add(this.tbPMDCompilerArguments);
             this.tpPMDDotNET.Controls.Add(this.gbPMDManual);
-            this.tpPMDDotNET.Location = new System.Drawing.Point(4, 22);
+            this.tpPMDDotNET.Location = new System.Drawing.Point(4, 40);
             this.tpPMDDotNET.Name = "tpPMDDotNET";
-            this.tpPMDDotNET.Size = new System.Drawing.Size(443, 400);
+            this.tpPMDDotNET.Size = new System.Drawing.Size(443, 402);
             this.tpPMDDotNET.TabIndex = 15;
             this.tpPMDDotNET.Text = "PMDDotNET";
             this.tpPMDDotNET.UseVisualStyleBackColor = true;
@@ -2756,18 +2771,30 @@
             // 
             // tpExport
             // 
+            this.tpExport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpExport.Controls.Add(this.cbAlwaysAskForLoopCount);
             this.tpExport.Controls.Add(this.cbFixedExportPlace);
             this.tpExport.Controls.Add(this.gpbFixedExportPlace);
             this.tpExport.Controls.Add(this.label48);
             this.tpExport.Controls.Add(this.tbLoopTimes);
             this.tpExport.Controls.Add(this.lblLoopTimes);
-            this.tpExport.Location = new System.Drawing.Point(4, 22);
+            this.tpExport.Location = new System.Drawing.Point(4, 40);
             this.tpExport.Name = "tpExport";
-            this.tpExport.Size = new System.Drawing.Size(443, 400);
+            this.tpExport.Size = new System.Drawing.Size(443, 402);
             this.tpExport.TabIndex = 17;
             this.tpExport.Text = "Export";
             this.tpExport.UseVisualStyleBackColor = true;
+            // 
+            // cbAlwaysAskForLoopCount
+            // 
+            this.cbAlwaysAskForLoopCount.AutoSize = true;
+            this.cbAlwaysAskForLoopCount.Location = new System.Drawing.Point(14, 89);
+            this.cbAlwaysAskForLoopCount.Name = "cbAlwaysAskForLoopCount";
+            this.cbAlwaysAskForLoopCount.Size = new System.Drawing.Size(224, 16);
+            this.cbAlwaysAskForLoopCount.TabIndex = 28;
+            this.cbAlwaysAskForLoopCount.Text = "エクスポート時にループ回数を問い合わせる";
+            this.cbAlwaysAskForLoopCount.UseVisualStyleBackColor = true;
+            this.cbAlwaysAskForLoopCount.CheckedChanged += new System.EventHandler(this.cbFixedExportPlace_CheckedChanged);
             // 
             // cbFixedExportPlace
             // 
@@ -2789,14 +2816,14 @@
             this.gpbFixedExportPlace.Controls.Add(this.tbFixedExportPlacePath);
             this.gpbFixedExportPlace.Location = new System.Drawing.Point(7, 38);
             this.gpbFixedExportPlace.Name = "gpbFixedExportPlace";
-            this.gpbFixedExportPlace.Size = new System.Drawing.Size(433, 45);
+            this.gpbFixedExportPlace.Size = new System.Drawing.Size(431, 45);
             this.gpbFixedExportPlace.TabIndex = 29;
             this.gpbFixedExportPlace.TabStop = false;
             // 
             // btnFixedExportPlace
             // 
             this.btnFixedExportPlace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFixedExportPlace.Location = new System.Drawing.Point(404, 16);
+            this.btnFixedExportPlace.Location = new System.Drawing.Point(402, 16);
             this.btnFixedExportPlace.Name = "btnFixedExportPlace";
             this.btnFixedExportPlace.Size = new System.Drawing.Size(23, 23);
             this.btnFixedExportPlace.TabIndex = 16;
@@ -2819,7 +2846,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbFixedExportPlacePath.Location = new System.Drawing.Point(73, 18);
             this.tbFixedExportPlacePath.Name = "tbFixedExportPlacePath";
-            this.tbFixedExportPlacePath.Size = new System.Drawing.Size(325, 19);
+            this.tbFixedExportPlacePath.Size = new System.Drawing.Size(323, 19);
             this.tbFixedExportPlacePath.TabIndex = 15;
             // 
             // label48
@@ -2828,7 +2855,7 @@
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(201, 19);
             this.label48.TabIndex = 27;
-            this.label48.Text = "wavファイルエクスポート時のループ回数";
+            this.label48.Text = "ファイルエクスポート時のループ回数";
             this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tbLoopTimes
@@ -2849,11 +2876,12 @@
             // 
             // tpMIDIExp
             // 
+            this.tpMIDIExp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpMIDIExp.Controls.Add(this.cbUseMIDIExport);
             this.tpMIDIExp.Controls.Add(this.gbMIDIExport);
-            this.tpMIDIExp.Location = new System.Drawing.Point(4, 22);
+            this.tpMIDIExp.Location = new System.Drawing.Point(4, 40);
             this.tpMIDIExp.Name = "tpMIDIExp";
-            this.tpMIDIExp.Size = new System.Drawing.Size(443, 400);
+            this.tpMIDIExp.Size = new System.Drawing.Size(443, 402);
             this.tpMIDIExp.TabIndex = 6;
             this.tpMIDIExp.Text = "MIDIExport";
             this.tpMIDIExp.UseVisualStyleBackColor = true;
@@ -2883,7 +2911,7 @@
             this.gbMIDIExport.Controls.Add(this.tbMIDIOutputPath);
             this.gbMIDIExport.Location = new System.Drawing.Point(7, 3);
             this.gbMIDIExport.Name = "gbMIDIExport";
-            this.gbMIDIExport.Size = new System.Drawing.Size(433, 394);
+            this.gbMIDIExport.Size = new System.Drawing.Size(431, 430);
             this.gbMIDIExport.TabIndex = 0;
             this.gbMIDIExport.TabStop = false;
             // 
@@ -3074,7 +3102,7 @@
             // btnMIDIOutputPath
             // 
             this.btnMIDIOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMIDIOutputPath.Location = new System.Drawing.Point(403, 86);
+            this.btnMIDIOutputPath.Location = new System.Drawing.Point(401, 86);
             this.btnMIDIOutputPath.Name = "btnMIDIOutputPath";
             this.btnMIDIOutputPath.Size = new System.Drawing.Size(23, 23);
             this.btnMIDIOutputPath.TabIndex = 19;
@@ -3097,17 +3125,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbMIDIOutputPath.Location = new System.Drawing.Point(77, 88);
             this.tbMIDIOutputPath.Name = "tbMIDIOutputPath";
-            this.tbMIDIOutputPath.Size = new System.Drawing.Size(320, 19);
+            this.tbMIDIOutputPath.Size = new System.Drawing.Size(318, 19);
             this.tbMIDIOutputPath.TabIndex = 18;
             // 
             // tpMIDIKBD
             // 
+            this.tpMIDIKBD.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpMIDIKBD.Controls.Add(this.cbMIDIKbdAlwaysTop);
             this.tpMIDIKBD.Controls.Add(this.cbUseMIDIKeyboard);
             this.tpMIDIKBD.Controls.Add(this.gbMIDIKeyboard);
-            this.tpMIDIKBD.Location = new System.Drawing.Point(4, 22);
+            this.tpMIDIKBD.Location = new System.Drawing.Point(4, 40);
             this.tpMIDIKBD.Name = "tpMIDIKBD";
-            this.tpMIDIKBD.Size = new System.Drawing.Size(443, 400);
+            this.tpMIDIKBD.Size = new System.Drawing.Size(443, 402);
             this.tpMIDIKBD.TabIndex = 5;
             this.tpMIDIKBD.Text = "MIDI鍵盤";
             this.tpMIDIKBD.UseVisualStyleBackColor = true;
@@ -3167,7 +3196,7 @@
             this.gbMIDIKeyboard.Enabled = false;
             this.gbMIDIKeyboard.Location = new System.Drawing.Point(3, 6);
             this.gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            this.gbMIDIKeyboard.Size = new System.Drawing.Size(437, 76);
+            this.gbMIDIKeyboard.Size = new System.Drawing.Size(435, 112);
             this.gbMIDIKeyboard.TabIndex = 0;
             this.gbMIDIKeyboard.TabStop = false;
             // 
@@ -3596,7 +3625,7 @@
             this.cmbMIDIIN.FormattingEnabled = true;
             this.cmbMIDIIN.Location = new System.Drawing.Point(72, 18);
             this.cmbMIDIIN.Name = "cmbMIDIIN";
-            this.cmbMIDIIN.Size = new System.Drawing.Size(359, 20);
+            this.cmbMIDIIN.Size = new System.Drawing.Size(357, 20);
             this.cmbMIDIIN.TabIndex = 1;
             // 
             // label5
@@ -3610,12 +3639,13 @@
             // 
             // tpKeyBoard
             // 
+            this.tpKeyBoard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpKeyBoard.Controls.Add(this.btnInitializeShortCutKey);
             this.tpKeyBoard.Controls.Add(this.lblSKKey);
             this.tpKeyBoard.Controls.Add(this.dgvShortCutKey);
-            this.tpKeyBoard.Location = new System.Drawing.Point(4, 22);
+            this.tpKeyBoard.Location = new System.Drawing.Point(4, 40);
             this.tpKeyBoard.Name = "tpKeyBoard";
-            this.tpKeyBoard.Size = new System.Drawing.Size(443, 400);
+            this.tpKeyBoard.Size = new System.Drawing.Size(443, 402);
             this.tpKeyBoard.TabIndex = 13;
             this.tpKeyBoard.Text = "ショートカットキー";
             this.tpKeyBoard.UseVisualStyleBackColor = true;
@@ -3623,7 +3653,7 @@
             // btnInitializeShortCutKey
             // 
             this.btnInitializeShortCutKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInitializeShortCutKey.Location = new System.Drawing.Point(336, 369);
+            this.btnInitializeShortCutKey.Location = new System.Drawing.Point(334, 369);
             this.btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
             this.btnInitializeShortCutKey.Size = new System.Drawing.Size(104, 23);
             this.btnInitializeShortCutKey.TabIndex = 31;
@@ -3666,7 +3696,7 @@
             this.dgvShortCutKey.RowHeadersVisible = false;
             this.dgvShortCutKey.RowTemplate.Height = 21;
             this.dgvShortCutKey.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvShortCutKey.Size = new System.Drawing.Size(437, 353);
+            this.dgvShortCutKey.Size = new System.Drawing.Size(435, 353);
             this.dgvShortCutKey.TabIndex = 29;
             this.dgvShortCutKey.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvShortCutKey_CellContentClick);
             // 
@@ -3738,12 +3768,13 @@
             // 
             // tpBalance
             // 
+            this.tpBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpBalance.Controls.Add(this.groupBox25);
             this.tpBalance.Controls.Add(this.cbAutoBalanceUseThis);
             this.tpBalance.Controls.Add(this.groupBox18);
-            this.tpBalance.Location = new System.Drawing.Point(4, 22);
+            this.tpBalance.Location = new System.Drawing.Point(4, 40);
             this.tpBalance.Name = "tpBalance";
-            this.tpBalance.Size = new System.Drawing.Size(443, 400);
+            this.tpBalance.Size = new System.Drawing.Size(443, 402);
             this.tpBalance.TabIndex = 12;
             this.tpBalance.Text = "ミキサーバランス";
             this.tpBalance.UseVisualStyleBackColor = true;
@@ -3756,7 +3787,7 @@
             this.groupBox25.Controls.Add(this.rbAutoBalanceSamePositionAsSongData);
             this.groupBox25.Location = new System.Drawing.Point(7, 327);
             this.groupBox25.Name = "groupBox25";
-            this.groupBox25.Size = new System.Drawing.Size(433, 41);
+            this.groupBox25.Size = new System.Drawing.Size(431, 41);
             this.groupBox25.TabIndex = 1;
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "ソングミキサーバランス参照フォルダー";
@@ -3803,7 +3834,7 @@
             this.groupBox18.Controls.Add(this.groupBox23);
             this.groupBox18.Location = new System.Drawing.Point(7, 3);
             this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(433, 318);
+            this.groupBox18.Size = new System.Drawing.Size(431, 318);
             this.groupBox18.TabIndex = 0;
             this.groupBox18.TabStop = false;
             // 
@@ -3815,7 +3846,7 @@
             this.groupBox24.Controls.Add(this.groupBox22);
             this.groupBox24.Location = new System.Drawing.Point(6, 185);
             this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(421, 127);
+            this.groupBox24.Size = new System.Drawing.Size(419, 127);
             this.groupBox24.TabIndex = 1;
             this.groupBox24.TabStop = false;
             this.groupBox24.Text = "保存";
@@ -3828,7 +3859,7 @@
             this.groupBox21.Controls.Add(this.rbAutoBalanceSaveSongBalance);
             this.groupBox21.Location = new System.Drawing.Point(6, 18);
             this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(409, 62);
+            this.groupBox21.Size = new System.Drawing.Size(407, 62);
             this.groupBox21.TabIndex = 0;
             this.groupBox21.TabStop = false;
             this.groupBox21.Text = "ソングミキサーバランス(曲データ毎)";
@@ -3862,7 +3893,7 @@
             this.groupBox22.Controls.Add(this.label4);
             this.groupBox22.Location = new System.Drawing.Point(6, 86);
             this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(409, 35);
+            this.groupBox22.Size = new System.Drawing.Size(407, 35);
             this.groupBox22.TabIndex = 0;
             this.groupBox22.TabStop = false;
             this.groupBox22.Text = "ドライバーミキサーバランス(ドライバ毎)";
@@ -3884,7 +3915,7 @@
             this.groupBox23.Controls.Add(this.groupBox20);
             this.groupBox23.Location = new System.Drawing.Point(6, 22);
             this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(421, 157);
+            this.groupBox23.Size = new System.Drawing.Size(419, 157);
             this.groupBox23.TabIndex = 1;
             this.groupBox23.TabStop = false;
             this.groupBox23.Text = "読み込み";
@@ -3897,7 +3928,7 @@
             this.groupBox19.Controls.Add(this.rbAutoBalanceLoadSongBalance);
             this.groupBox19.Location = new System.Drawing.Point(6, 18);
             this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(409, 63);
+            this.groupBox19.Size = new System.Drawing.Size(407, 63);
             this.groupBox19.TabIndex = 0;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "ソングミキサーバランス(曲データ毎)";
@@ -3932,7 +3963,7 @@
             this.groupBox20.Controls.Add(this.rbAutoBalanceLoadDriverBalance);
             this.groupBox20.Location = new System.Drawing.Point(6, 87);
             this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(409, 63);
+            this.groupBox20.Size = new System.Drawing.Size(407, 63);
             this.groupBox20.TabIndex = 0;
             this.groupBox20.TabStop = false;
             this.groupBox20.Text = "ドライバーミキサーバランス(ドライバ毎)";
@@ -3961,10 +3992,11 @@
             // 
             // tpMMLParameter
             // 
+            this.tpMMLParameter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpMMLParameter.Controls.Add(this.cbDispInstrumentName);
-            this.tpMMLParameter.Location = new System.Drawing.Point(4, 22);
+            this.tpMMLParameter.Location = new System.Drawing.Point(4, 40);
             this.tpMMLParameter.Name = "tpMMLParameter";
-            this.tpMMLParameter.Size = new System.Drawing.Size(443, 400);
+            this.tpMMLParameter.Size = new System.Drawing.Size(443, 402);
             this.tpMMLParameter.TabIndex = 16;
             this.tpMMLParameter.Text = "MMLParameter";
             this.tpMMLParameter.UseVisualStyleBackColor = true;
@@ -3979,543 +4011,78 @@
             this.cbDispInstrumentName.Text = "disp Instrument name";
             this.cbDispInstrumentName.UseVisualStyleBackColor = true;
             // 
-            // tpOther
-            // 
-            this.tpOther.Controls.Add(this.cbWavSwitch);
-            this.tpOther.Controls.Add(this.groupBox17);
-            this.tpOther.Controls.Add(this.cbUseGetInst);
-            this.tpOther.Controls.Add(this.groupBox4);
-            this.tpOther.Controls.Add(this.cbDumpSwitch);
-            this.tpOther.Controls.Add(this.gbWav);
-            this.tpOther.Controls.Add(this.gbDump);
-            this.tpOther.Controls.Add(this.label30);
-            this.tpOther.Controls.Add(this.tbScreenFrameRate);
-            this.tpOther.Controls.Add(this.label29);
-            this.tpOther.Controls.Add(this.btnDataPath);
-            this.tpOther.Controls.Add(this.tbDataPath);
-            this.tpOther.Controls.Add(this.label19);
-            this.tpOther.Controls.Add(this.btnResetPosition);
-            this.tpOther.Controls.Add(this.btnOpenSettingFolder);
-            this.tpOther.Controls.Add(this.cbEmptyPlayList);
-            this.tpOther.Controls.Add(this.cbInitAlways);
-            this.tpOther.Controls.Add(this.cbAutoOpen);
-            this.tpOther.Controls.Add(this.cbUseLoopTimes);
-            this.tpOther.Location = new System.Drawing.Point(4, 22);
-            this.tpOther.Name = "tpOther";
-            this.tpOther.Size = new System.Drawing.Size(443, 400);
-            this.tpOther.TabIndex = 2;
-            this.tpOther.Text = "Other";
-            this.tpOther.UseVisualStyleBackColor = true;
-            // 
-            // cbWavSwitch
-            // 
-            this.cbWavSwitch.AutoSize = true;
-            this.cbWavSwitch.Location = new System.Drawing.Point(14, 202);
-            this.cbWavSwitch.Name = "cbWavSwitch";
-            this.cbWavSwitch.Size = new System.Drawing.Size(177, 16);
-            this.cbWavSwitch.TabIndex = 0;
-            this.cbWavSwitch.Text = "演奏時に.wavファイルを出力する";
-            this.cbWavSwitch.UseVisualStyleBackColor = true;
-            this.cbWavSwitch.CheckedChanged += new System.EventHandler(this.cbWavSwitch_CheckedChanged);
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox17.Controls.Add(this.tbImageExt);
-            this.groupBox17.Controls.Add(this.tbMMLExt);
-            this.groupBox17.Controls.Add(this.tbTextExt);
-            this.groupBox17.Controls.Add(this.label1);
-            this.groupBox17.Controls.Add(this.label3);
-            this.groupBox17.Controls.Add(this.label2);
-            this.groupBox17.Location = new System.Drawing.Point(7, 256);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(227, 83);
-            this.groupBox17.TabIndex = 1;
-            this.groupBox17.TabStop = false;
-            this.groupBox17.Text = "File Extension";
-            // 
-            // tbImageExt
-            // 
-            this.tbImageExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbImageExt.Location = new System.Drawing.Point(52, 58);
-            this.tbImageExt.Name = "tbImageExt";
-            this.tbImageExt.Size = new System.Drawing.Size(164, 19);
-            this.tbImageExt.TabIndex = 1;
-            // 
-            // tbMMLExt
-            // 
-            this.tbMMLExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbMMLExt.Location = new System.Drawing.Point(52, 35);
-            this.tbMMLExt.Name = "tbMMLExt";
-            this.tbMMLExt.Size = new System.Drawing.Size(164, 19);
-            this.tbMMLExt.TabIndex = 1;
-            // 
-            // tbTextExt
-            // 
-            this.tbTextExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbTextExt.Location = new System.Drawing.Point(52, 12);
-            this.tbTextExt.Name = "tbTextExt";
-            this.tbTextExt.Size = new System.Drawing.Size(164, 19);
-            this.tbTextExt.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Text";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 61);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Image";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 38);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "MML";
-            // 
-            // cbUseGetInst
-            // 
-            this.cbUseGetInst.AutoSize = true;
-            this.cbUseGetInst.Location = new System.Drawing.Point(14, 31);
-            this.cbUseGetInst.Name = "cbUseGetInst";
-            this.cbUseGetInst.Size = new System.Drawing.Size(286, 16);
-            this.cbUseGetInst.TabIndex = 12;
-            this.cbUseGetInst.Text = "音色欄をクリック時、その音色をクリップボードにコピーする";
-            this.cbUseGetInst.UseVisualStyleBackColor = true;
-            this.cbUseGetInst.CheckedChanged += new System.EventHandler(this.cbUseGetInst_CheckedChanged);
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.cmbInstFormat);
-            this.groupBox4.Controls.Add(this.lblInstFormat);
-            this.groupBox4.Location = new System.Drawing.Point(7, 31);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(433, 45);
-            this.groupBox4.TabIndex = 23;
-            this.groupBox4.TabStop = false;
-            // 
-            // cmbInstFormat
-            // 
-            this.cmbInstFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbInstFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbInstFormat.FormattingEnabled = true;
-            this.cmbInstFormat.Items.AddRange(new object[] {
-            "FMP7",
-            "MDX",
-            ".TFI(ファイル出力)",
-            "MUSIC LALF #1",
-            "MUSIC LALF #2",
-            "MML2VGM",
-            "NRTDRV",
-            "HuSIC"});
-            this.cmbInstFormat.Location = new System.Drawing.Point(298, 19);
-            this.cmbInstFormat.Name = "cmbInstFormat";
-            this.cmbInstFormat.Size = new System.Drawing.Size(129, 20);
-            this.cmbInstFormat.TabIndex = 18;
-            // 
-            // lblInstFormat
-            // 
-            this.lblInstFormat.AutoSize = true;
-            this.lblInstFormat.Location = new System.Drawing.Point(237, 22);
-            this.lblInstFormat.Name = "lblInstFormat";
-            this.lblInstFormat.Size = new System.Drawing.Size(55, 12);
-            this.lblInstFormat.TabIndex = 17;
-            this.lblInstFormat.Text = "フォーマット";
-            // 
-            // cbDumpSwitch
-            // 
-            this.cbDumpSwitch.AutoSize = true;
-            this.cbDumpSwitch.Location = new System.Drawing.Point(14, 152);
-            this.cbDumpSwitch.Name = "cbDumpSwitch";
-            this.cbDumpSwitch.Size = new System.Drawing.Size(220, 16);
-            this.cbDumpSwitch.TabIndex = 0;
-            this.cbDumpSwitch.Text = "DataBlock処理時にその内容をダンプする";
-            this.cbDumpSwitch.UseVisualStyleBackColor = true;
-            this.cbDumpSwitch.CheckedChanged += new System.EventHandler(this.cbDumpSwitch_CheckedChanged);
-            // 
-            // gbWav
-            // 
-            this.gbWav.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbWav.Controls.Add(this.btnWavPath);
-            this.gbWav.Controls.Add(this.label7);
-            this.gbWav.Controls.Add(this.tbWavPath);
-            this.gbWav.Location = new System.Drawing.Point(7, 205);
-            this.gbWav.Name = "gbWav";
-            this.gbWav.Size = new System.Drawing.Size(433, 45);
-            this.gbWav.TabIndex = 22;
-            this.gbWav.TabStop = false;
-            // 
-            // btnWavPath
-            // 
-            this.btnWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnWavPath.Location = new System.Drawing.Point(404, 16);
-            this.btnWavPath.Name = "btnWavPath";
-            this.btnWavPath.Size = new System.Drawing.Size(23, 23);
-            this.btnWavPath.TabIndex = 16;
-            this.btnWavPath.Text = "...";
-            this.btnWavPath.UseVisualStyleBackColor = true;
-            this.btnWavPath.Click += new System.EventHandler(this.btnWavPath_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 21);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(52, 12);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "出力Path";
-            // 
-            // tbWavPath
-            // 
-            this.tbWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbWavPath.Location = new System.Drawing.Point(73, 18);
-            this.tbWavPath.Name = "tbWavPath";
-            this.tbWavPath.Size = new System.Drawing.Size(325, 19);
-            this.tbWavPath.TabIndex = 15;
-            // 
-            // gbDump
-            // 
-            this.gbDump.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbDump.Controls.Add(this.btnDumpPath);
-            this.gbDump.Controls.Add(this.label6);
-            this.gbDump.Controls.Add(this.tbDumpPath);
-            this.gbDump.Location = new System.Drawing.Point(7, 154);
-            this.gbDump.Name = "gbDump";
-            this.gbDump.Size = new System.Drawing.Size(433, 45);
-            this.gbDump.TabIndex = 22;
-            this.gbDump.TabStop = false;
-            // 
-            // btnDumpPath
-            // 
-            this.btnDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDumpPath.Location = new System.Drawing.Point(404, 16);
-            this.btnDumpPath.Name = "btnDumpPath";
-            this.btnDumpPath.Size = new System.Drawing.Size(23, 23);
-            this.btnDumpPath.TabIndex = 16;
-            this.btnDumpPath.Text = "...";
-            this.btnDumpPath.UseVisualStyleBackColor = true;
-            this.btnDumpPath.Click += new System.EventHandler(this.btnDumpPath_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 21);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 12);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "出力Path";
-            // 
-            // tbDumpPath
-            // 
-            this.tbDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDumpPath.Location = new System.Drawing.Point(73, 18);
-            this.tbDumpPath.Name = "tbDumpPath";
-            this.tbDumpPath.Size = new System.Drawing.Size(325, 19);
-            this.tbDumpPath.TabIndex = 15;
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(136, 132);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(30, 12);
-            this.label30.TabIndex = 21;
-            this.label30.Text = "Hz/s";
-            // 
-            // tbScreenFrameRate
-            // 
-            this.tbScreenFrameRate.Location = new System.Drawing.Point(80, 129);
-            this.tbScreenFrameRate.Name = "tbScreenFrameRate";
-            this.tbScreenFrameRate.Size = new System.Drawing.Size(50, 19);
-            this.tbScreenFrameRate.TabIndex = 20;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(5, 132);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(69, 12);
-            this.label29.TabIndex = 19;
-            this.label29.Text = "フレームレート";
-            // 
-            // btnDataPath
-            // 
-            this.btnDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDataPath.Location = new System.Drawing.Point(411, 102);
-            this.btnDataPath.Name = "btnDataPath";
-            this.btnDataPath.Size = new System.Drawing.Size(23, 23);
-            this.btnDataPath.TabIndex = 16;
-            this.btnDataPath.Text = "...";
-            this.btnDataPath.UseVisualStyleBackColor = true;
-            this.btnDataPath.Click += new System.EventHandler(this.btnDataPath_Click);
-            // 
-            // tbDataPath
-            // 
-            this.tbDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDataPath.Location = new System.Drawing.Point(80, 104);
-            this.tbDataPath.Name = "tbDataPath";
-            this.tbDataPath.Size = new System.Drawing.Size(325, 19);
-            this.tbDataPath.TabIndex = 15;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(5, 107);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(56, 12);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "データPath";
-            // 
-            // btnResetPosition
-            // 
-            this.btnResetPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetPosition.Location = new System.Drawing.Point(167, 374);
-            this.btnResetPosition.Name = "btnResetPosition";
-            this.btnResetPosition.Size = new System.Drawing.Size(142, 23);
-            this.btnResetPosition.TabIndex = 13;
-            this.btnResetPosition.Text = "ウィンドウ位置をリセット";
-            this.btnResetPosition.UseVisualStyleBackColor = true;
-            this.btnResetPosition.Click += new System.EventHandler(this.btnResetPosition_Click);
-            // 
-            // btnOpenSettingFolder
-            // 
-            this.btnOpenSettingFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenSettingFolder.Location = new System.Drawing.Point(315, 374);
-            this.btnOpenSettingFolder.Name = "btnOpenSettingFolder";
-            this.btnOpenSettingFolder.Size = new System.Drawing.Size(125, 23);
-            this.btnOpenSettingFolder.TabIndex = 13;
-            this.btnOpenSettingFolder.Text = "設定フォルダーを開く";
-            this.btnOpenSettingFolder.UseVisualStyleBackColor = true;
-            this.btnOpenSettingFolder.Click += new System.EventHandler(this.btnOpenSettingFolder_Click);
-            // 
-            // cbEmptyPlayList
-            // 
-            this.cbEmptyPlayList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbEmptyPlayList.AutoSize = true;
-            this.cbEmptyPlayList.Location = new System.Drawing.Point(240, 308);
-            this.cbEmptyPlayList.Name = "cbEmptyPlayList";
-            this.cbEmptyPlayList.Size = new System.Drawing.Size(177, 16);
-            this.cbEmptyPlayList.TabIndex = 0;
-            this.cbEmptyPlayList.Text = "起動時にプレイリストを空にする。";
-            this.cbEmptyPlayList.UseVisualStyleBackColor = true;
-            this.cbEmptyPlayList.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // cbInitAlways
-            // 
-            this.cbInitAlways.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbInitAlways.Location = new System.Drawing.Point(240, 263);
-            this.cbInitAlways.Name = "cbInitAlways";
-            this.cbInitAlways.Size = new System.Drawing.Size(194, 39);
-            this.cbInitAlways.TabIndex = 0;
-            this.cbInitAlways.Text = "再生開始時に必ずデバイスを初期化する。";
-            this.cbInitAlways.UseVisualStyleBackColor = true;
-            this.cbInitAlways.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // cbAutoOpen
-            // 
-            this.cbAutoOpen.AutoSize = true;
-            this.cbAutoOpen.Location = new System.Drawing.Point(7, 82);
-            this.cbAutoOpen.Name = "cbAutoOpen";
-            this.cbAutoOpen.Size = new System.Drawing.Size(167, 16);
-            this.cbAutoOpen.TabIndex = 0;
-            this.cbAutoOpen.Text = "使用音源の画面を自動で開く";
-            this.cbAutoOpen.UseVisualStyleBackColor = true;
-            this.cbAutoOpen.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // cbUseLoopTimes
-            // 
-            this.cbUseLoopTimes.AutoSize = true;
-            this.cbUseLoopTimes.Location = new System.Drawing.Point(7, 7);
-            this.cbUseLoopTimes.Name = "cbUseLoopTimes";
-            this.cbUseLoopTimes.Size = new System.Drawing.Size(216, 16);
-            this.cbUseLoopTimes.TabIndex = 0;
-            this.cbUseLoopTimes.Text = "無限ループ時、指定の回数だけ繰り返す";
-            this.cbUseLoopTimes.UseVisualStyleBackColor = true;
-            this.cbUseLoopTimes.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // tpOmake
-            // 
-            this.tpOmake.Controls.Add(this.cbChangeEnterCode);
-            this.tpOmake.Controls.Add(this.cbClearHistory);
-            this.tpOmake.Controls.Add(this.groupBox31);
-            this.tpOmake.Controls.Add(this.groupBox30);
-            this.tpOmake.Controls.Add(this.cbRequestCacheClear);
-            this.tpOmake.Controls.Add(this.cbUseSIen);
-            this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
-            this.tpOmake.Controls.Add(this.groupBox29);
-            this.tpOmake.Controls.Add(this.tbOpacity);
-            this.tpOmake.Controls.Add(this.label52);
-            this.tpOmake.Controls.Add(this.label14);
-            this.tpOmake.Controls.Add(this.btVST);
-            this.tpOmake.Controls.Add(this.tbVST);
-            this.tpOmake.Controls.Add(this.groupBox5);
-            this.tpOmake.Location = new System.Drawing.Point(4, 22);
-            this.tpOmake.Name = "tpOmake";
-            this.tpOmake.Size = new System.Drawing.Size(443, 400);
-            this.tpOmake.TabIndex = 7;
-            this.tpOmake.Text = "おまけ";
-            this.tpOmake.UseVisualStyleBackColor = true;
+            // tpOther2
+            // 
+            this.tpOther2.Controls.Add(this.cbUseMoonDriverDotNET);
+            this.tpOther2.Controls.Add(this.cbUsePMDDotNET);
+            this.tpOther2.Controls.Add(this.cbUseMucomDotNET);
+            this.tpOther2.Controls.Add(this.cbUseScript);
+            this.tpOther2.Controls.Add(this.cbChangeEnterCode);
+            this.tpOther2.Controls.Add(this.cbClearHistory);
+            this.tpOther2.Controls.Add(this.tbOpacity);
+            this.tpOther2.Controls.Add(this.label52);
+            this.tpOther2.Controls.Add(this.groupBox29);
+            this.tpOther2.Controls.Add(this.cbInfiniteOfflineMode);
+            this.tpOther2.Controls.Add(this.cbUseSIen);
+            this.tpOther2.Controls.Add(this.cbRequestCacheClear);
+            this.tpOther2.Location = new System.Drawing.Point(4, 40);
+            this.tpOther2.Name = "tpOther2";
+            this.tpOther2.Size = new System.Drawing.Size(443, 402);
+            this.tpOther2.TabIndex = 18;
+            this.tpOther2.Text = "Other";
+            this.tpOther2.UseVisualStyleBackColor = true;
+            // 
+            // cbUseScript
+            // 
+            this.cbUseScript.AutoSize = true;
+            this.cbUseScript.Location = new System.Drawing.Point(7, 113);
+            this.cbUseScript.Name = "cbUseScript";
+            this.cbUseScript.Size = new System.Drawing.Size(173, 16);
+            this.cbUseScript.TabIndex = 27;
+            this.cbUseScript.Text = "スクリプトを使用する(要再起動)";
+            this.cbUseScript.UseVisualStyleBackColor = true;
             // 
             // cbChangeEnterCode
             // 
-            this.cbChangeEnterCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbChangeEnterCode.Location = new System.Drawing.Point(228, 182);
+            this.cbChangeEnterCode.AutoSize = true;
+            this.cbChangeEnterCode.Location = new System.Drawing.Point(7, 25);
             this.cbChangeEnterCode.Name = "cbChangeEnterCode";
-            this.cbChangeEnterCode.Size = new System.Drawing.Size(194, 28);
+            this.cbChangeEnterCode.Size = new System.Drawing.Size(257, 16);
             this.cbChangeEnterCode.TabIndex = 24;
-            this.cbChangeEnterCode.Text = "テキストファイルを開いた時、\r\n改行コード変換を行う";
+            this.cbChangeEnterCode.Text = "テキストファイルを開いた時、改行コード変換を行う";
             this.cbChangeEnterCode.UseVisualStyleBackColor = true;
             // 
             // cbClearHistory
             // 
-            this.cbClearHistory.Location = new System.Drawing.Point(228, 137);
+            this.cbClearHistory.AutoSize = true;
+            this.cbClearHistory.Location = new System.Drawing.Point(7, 3);
             this.cbClearHistory.Name = "cbClearHistory";
-            this.cbClearHistory.Size = new System.Drawing.Size(204, 34);
+            this.cbClearHistory.Size = new System.Drawing.Size(228, 16);
             this.cbClearHistory.TabIndex = 26;
             this.cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
             this.cbClearHistory.UseVisualStyleBackColor = true;
             // 
-            // groupBox31
+            // tbOpacity
             // 
-            this.groupBox31.Controls.Add(this.rbLoglevelINFO);
-            this.groupBox31.Controls.Add(this.rbLoglevelDEBUG);
-            this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
-            this.groupBox31.Location = new System.Drawing.Point(192, 3);
-            this.groupBox31.Name = "groupBox31";
-            this.groupBox31.Size = new System.Drawing.Size(243, 43);
-            this.groupBox31.TabIndex = 25;
-            this.groupBox31.TabStop = false;
-            this.groupBox31.Text = "Log level";
+            this.tbOpacity.Location = new System.Drawing.Point(107, 333);
+            this.tbOpacity.Maximum = 100;
+            this.tbOpacity.Minimum = 1;
+            this.tbOpacity.Name = "tbOpacity";
+            this.tbOpacity.Size = new System.Drawing.Size(143, 45);
+            this.tbOpacity.TabIndex = 20;
+            this.tbOpacity.TickFrequency = 10;
+            this.tbOpacity.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.tbOpacity.Value = 1;
+            this.tbOpacity.Scroll += new System.EventHandler(this.tbOpacity_Scroll);
             // 
-            // rbLoglevelINFO
+            // label52
             // 
-            this.rbLoglevelINFO.AutoSize = true;
-            this.rbLoglevelINFO.Checked = true;
-            this.rbLoglevelINFO.Location = new System.Drawing.Point(11, 16);
-            this.rbLoglevelINFO.Name = "rbLoglevelINFO";
-            this.rbLoglevelINFO.Size = new System.Drawing.Size(49, 16);
-            this.rbLoglevelINFO.TabIndex = 3;
-            this.rbLoglevelINFO.TabStop = true;
-            this.rbLoglevelINFO.Text = "INFO";
-            this.rbLoglevelINFO.UseVisualStyleBackColor = true;
-            // 
-            // rbLoglevelDEBUG
-            // 
-            this.rbLoglevelDEBUG.AutoSize = true;
-            this.rbLoglevelDEBUG.Location = new System.Drawing.Point(66, 16);
-            this.rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
-            this.rbLoglevelDEBUG.Size = new System.Drawing.Size(62, 16);
-            this.rbLoglevelDEBUG.TabIndex = 3;
-            this.rbLoglevelDEBUG.Text = "DEBUG";
-            this.rbLoglevelDEBUG.UseVisualStyleBackColor = true;
-            // 
-            // rbLoglevelTRACE
-            // 
-            this.rbLoglevelTRACE.AutoSize = true;
-            this.rbLoglevelTRACE.Location = new System.Drawing.Point(134, 16);
-            this.rbLoglevelTRACE.Name = "rbLoglevelTRACE";
-            this.rbLoglevelTRACE.Size = new System.Drawing.Size(61, 16);
-            this.rbLoglevelTRACE.TabIndex = 3;
-            this.rbLoglevelTRACE.Text = "TRACE";
-            this.rbLoglevelTRACE.UseVisualStyleBackColor = true;
-            // 
-            // groupBox30
-            // 
-            this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
-            this.groupBox30.Controls.Add(this.rbDateTime);
-            this.groupBox30.Controls.Add(this.rbStopWatch);
-            this.groupBox30.Location = new System.Drawing.Point(7, 285);
-            this.groupBox30.Name = "groupBox30";
-            this.groupBox30.Size = new System.Drawing.Size(236, 85);
-            this.groupBox30.TabIndex = 24;
-            this.groupBox30.TabStop = false;
-            this.groupBox30.Text = "Music Interrupt Timer";
-            // 
-            // rbQueryPerformanceCounter
-            // 
-            this.rbQueryPerformanceCounter.AutoSize = true;
-            this.rbQueryPerformanceCounter.Location = new System.Drawing.Point(6, 62);
-            this.rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
-            this.rbQueryPerformanceCounter.Size = new System.Drawing.Size(213, 16);
-            this.rbQueryPerformanceCounter.TabIndex = 2;
-            this.rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
-            this.rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
-            // 
-            // rbDateTime
-            // 
-            this.rbDateTime.AutoSize = true;
-            this.rbDateTime.Location = new System.Drawing.Point(6, 40);
-            this.rbDateTime.Name = "rbDateTime";
-            this.rbDateTime.Size = new System.Drawing.Size(94, 16);
-            this.rbDateTime.TabIndex = 1;
-            this.rbDateTime.Text = "DateTime(C#)";
-            this.rbDateTime.UseVisualStyleBackColor = true;
-            // 
-            // rbStopWatch
-            // 
-            this.rbStopWatch.AutoSize = true;
-            this.rbStopWatch.Checked = true;
-            this.rbStopWatch.Location = new System.Drawing.Point(6, 18);
-            this.rbStopWatch.Name = "rbStopWatch";
-            this.rbStopWatch.Size = new System.Drawing.Size(137, 16);
-            this.rbStopWatch.TabIndex = 0;
-            this.rbStopWatch.TabStop = true;
-            this.rbStopWatch.Text = "Stopwatch(C#) default";
-            this.rbStopWatch.UseVisualStyleBackColor = true;
-            // 
-            // cbRequestCacheClear
-            // 
-            this.cbRequestCacheClear.AutoSize = true;
-            this.cbRequestCacheClear.Location = new System.Drawing.Point(16, 245);
-            this.cbRequestCacheClear.Name = "cbRequestCacheClear";
-            this.cbRequestCacheClear.Size = new System.Drawing.Size(209, 16);
-            this.cbRequestCacheClear.TabIndex = 23;
-            this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
-            this.cbRequestCacheClear.UseVisualStyleBackColor = true;
-            // 
-            // cbUseSIen
-            // 
-            this.cbUseSIen.AutoSize = true;
-            this.cbUseSIen.Location = new System.Drawing.Point(162, 223);
-            this.cbUseSIen.Name = "cbUseSIen";
-            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
-            this.cbUseSIen.TabIndex = 23;
-            this.cbUseSIen.Text = "入力支援機能を使用する";
-            this.cbUseSIen.UseVisualStyleBackColor = true;
-            // 
-            // cbInfiniteOfflineMode
-            // 
-            this.cbInfiniteOfflineMode.AutoSize = true;
-            this.cbInfiniteOfflineMode.Location = new System.Drawing.Point(16, 223);
-            this.cbInfiniteOfflineMode.Name = "cbInfiniteOfflineMode";
-            this.cbInfiniteOfflineMode.Size = new System.Drawing.Size(140, 16);
-            this.cbInfiniteOfflineMode.TabIndex = 23;
-            this.cbInfiniteOfflineMode.Text = "永続的にオフラインモード";
-            this.cbInfiniteOfflineMode.UseVisualStyleBackColor = true;
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(5, 349);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(96, 12);
+            this.label52.TabIndex = 19;
+            this.label52.Text = "ウィンドウ不透明度";
             // 
             // groupBox29
             // 
@@ -4526,7 +4093,7 @@
             this.groupBox29.Controls.Add(this.label53);
             this.groupBox29.Controls.Add(this.lblFontSize);
             this.groupBox29.Controls.Add(this.lblFontStyle);
-            this.groupBox29.Location = new System.Drawing.Point(9, 132);
+            this.groupBox29.Location = new System.Drawing.Point(13, 239);
             this.groupBox29.Name = "groupBox29";
             this.groupBox29.Size = new System.Drawing.Size(213, 85);
             this.groupBox29.TabIndex = 21;
@@ -4597,27 +4164,522 @@
             this.lblFontStyle.TabIndex = 19;
             this.lblFontStyle.Text = "Regular";
             // 
-            // tbOpacity
+            // cbInfiniteOfflineMode
             // 
-            this.tbOpacity.Location = new System.Drawing.Point(292, 52);
-            this.tbOpacity.Maximum = 100;
-            this.tbOpacity.Minimum = 1;
-            this.tbOpacity.Name = "tbOpacity";
-            this.tbOpacity.Size = new System.Drawing.Size(143, 45);
-            this.tbOpacity.TabIndex = 20;
-            this.tbOpacity.TickFrequency = 10;
-            this.tbOpacity.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.tbOpacity.Value = 1;
-            this.tbOpacity.Scroll += new System.EventHandler(this.tbOpacity_Scroll);
+            this.cbInfiniteOfflineMode.AutoSize = true;
+            this.cbInfiniteOfflineMode.Location = new System.Drawing.Point(7, 91);
+            this.cbInfiniteOfflineMode.Name = "cbInfiniteOfflineMode";
+            this.cbInfiniteOfflineMode.Size = new System.Drawing.Size(140, 16);
+            this.cbInfiniteOfflineMode.TabIndex = 23;
+            this.cbInfiniteOfflineMode.Text = "永続的にオフラインモード";
+            this.cbInfiniteOfflineMode.UseVisualStyleBackColor = true;
             // 
-            // label52
+            // cbUseSIen
             // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(190, 67);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(96, 12);
-            this.label52.TabIndex = 19;
-            this.label52.Text = "ウィンドウ不透明度";
+            this.cbUseSIen.AutoSize = true;
+            this.cbUseSIen.Location = new System.Drawing.Point(7, 69);
+            this.cbUseSIen.Name = "cbUseSIen";
+            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
+            this.cbUseSIen.TabIndex = 23;
+            this.cbUseSIen.Text = "入力支援機能を使用する";
+            this.cbUseSIen.UseVisualStyleBackColor = true;
+            // 
+            // cbRequestCacheClear
+            // 
+            this.cbRequestCacheClear.AutoSize = true;
+            this.cbRequestCacheClear.Location = new System.Drawing.Point(7, 47);
+            this.cbRequestCacheClear.Name = "cbRequestCacheClear";
+            this.cbRequestCacheClear.Size = new System.Drawing.Size(209, 16);
+            this.cbRequestCacheClear.TabIndex = 23;
+            this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
+            this.cbRequestCacheClear.UseVisualStyleBackColor = true;
+            // 
+            // tpOther
+            // 
+            this.tpOther.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tpOther.Controls.Add(this.cbWavSwitch);
+            this.tpOther.Controls.Add(this.groupBox17);
+            this.tpOther.Controls.Add(this.cbUseGetInst);
+            this.tpOther.Controls.Add(this.groupBox4);
+            this.tpOther.Controls.Add(this.cbDumpSwitch);
+            this.tpOther.Controls.Add(this.gbWav);
+            this.tpOther.Controls.Add(this.gbDump);
+            this.tpOther.Controls.Add(this.label30);
+            this.tpOther.Controls.Add(this.tbScreenFrameRate);
+            this.tpOther.Controls.Add(this.label29);
+            this.tpOther.Controls.Add(this.btnDataPath);
+            this.tpOther.Controls.Add(this.tbDataPath);
+            this.tpOther.Controls.Add(this.label19);
+            this.tpOther.Controls.Add(this.btnResetPosition);
+            this.tpOther.Controls.Add(this.btnOpenSettingFolder);
+            this.tpOther.Controls.Add(this.cbEmptyPlayList);
+            this.tpOther.Controls.Add(this.cbInitAlways);
+            this.tpOther.Controls.Add(this.cbAutoOpen);
+            this.tpOther.Controls.Add(this.cbUseLoopTimes);
+            this.tpOther.Location = new System.Drawing.Point(4, 40);
+            this.tpOther.Name = "tpOther";
+            this.tpOther.Size = new System.Drawing.Size(443, 402);
+            this.tpOther.TabIndex = 2;
+            this.tpOther.Text = "Other";
+            this.tpOther.UseVisualStyleBackColor = true;
+            // 
+            // cbWavSwitch
+            // 
+            this.cbWavSwitch.AutoSize = true;
+            this.cbWavSwitch.Location = new System.Drawing.Point(14, 202);
+            this.cbWavSwitch.Name = "cbWavSwitch";
+            this.cbWavSwitch.Size = new System.Drawing.Size(177, 16);
+            this.cbWavSwitch.TabIndex = 0;
+            this.cbWavSwitch.Text = "演奏時に.wavファイルを出力する";
+            this.cbWavSwitch.UseVisualStyleBackColor = true;
+            this.cbWavSwitch.CheckedChanged += new System.EventHandler(this.cbWavSwitch_CheckedChanged);
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox17.Controls.Add(this.tbImageExt);
+            this.groupBox17.Controls.Add(this.tbMMLExt);
+            this.groupBox17.Controls.Add(this.tbTextExt);
+            this.groupBox17.Controls.Add(this.label1);
+            this.groupBox17.Controls.Add(this.label3);
+            this.groupBox17.Controls.Add(this.label2);
+            this.groupBox17.Location = new System.Drawing.Point(7, 256);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(225, 83);
+            this.groupBox17.TabIndex = 1;
+            this.groupBox17.TabStop = false;
+            this.groupBox17.Text = "File Extension";
+            // 
+            // tbImageExt
+            // 
+            this.tbImageExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbImageExt.Location = new System.Drawing.Point(52, 58);
+            this.tbImageExt.Name = "tbImageExt";
+            this.tbImageExt.Size = new System.Drawing.Size(162, 19);
+            this.tbImageExt.TabIndex = 1;
+            // 
+            // tbMMLExt
+            // 
+            this.tbMMLExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbMMLExt.Location = new System.Drawing.Point(52, 35);
+            this.tbMMLExt.Name = "tbMMLExt";
+            this.tbMMLExt.Size = new System.Drawing.Size(162, 19);
+            this.tbMMLExt.TabIndex = 1;
+            // 
+            // tbTextExt
+            // 
+            this.tbTextExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbTextExt.Location = new System.Drawing.Point(52, 12);
+            this.tbTextExt.Name = "tbTextExt";
+            this.tbTextExt.Size = new System.Drawing.Size(162, 19);
+            this.tbTextExt.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Text";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 61);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Image";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 38);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "MML";
+            // 
+            // cbUseGetInst
+            // 
+            this.cbUseGetInst.AutoSize = true;
+            this.cbUseGetInst.Location = new System.Drawing.Point(14, 31);
+            this.cbUseGetInst.Name = "cbUseGetInst";
+            this.cbUseGetInst.Size = new System.Drawing.Size(286, 16);
+            this.cbUseGetInst.TabIndex = 12;
+            this.cbUseGetInst.Text = "音色欄をクリック時、その音色をクリップボードにコピーする";
+            this.cbUseGetInst.UseVisualStyleBackColor = true;
+            this.cbUseGetInst.CheckedChanged += new System.EventHandler(this.cbUseGetInst_CheckedChanged);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.cmbInstFormat);
+            this.groupBox4.Controls.Add(this.lblInstFormat);
+            this.groupBox4.Location = new System.Drawing.Point(7, 31);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(431, 45);
+            this.groupBox4.TabIndex = 23;
+            this.groupBox4.TabStop = false;
+            // 
+            // cmbInstFormat
+            // 
+            this.cmbInstFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbInstFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbInstFormat.FormattingEnabled = true;
+            this.cmbInstFormat.Items.AddRange(new object[] {
+            "FMP7",
+            "MDX",
+            ".TFI(ファイル出力)",
+            "MUSIC LALF #1",
+            "MUSIC LALF #2",
+            "MML2VGM",
+            "NRTDRV",
+            "HuSIC"});
+            this.cmbInstFormat.Location = new System.Drawing.Point(298, 19);
+            this.cmbInstFormat.Name = "cmbInstFormat";
+            this.cmbInstFormat.Size = new System.Drawing.Size(127, 20);
+            this.cmbInstFormat.TabIndex = 18;
+            // 
+            // lblInstFormat
+            // 
+            this.lblInstFormat.AutoSize = true;
+            this.lblInstFormat.Location = new System.Drawing.Point(237, 22);
+            this.lblInstFormat.Name = "lblInstFormat";
+            this.lblInstFormat.Size = new System.Drawing.Size(55, 12);
+            this.lblInstFormat.TabIndex = 17;
+            this.lblInstFormat.Text = "フォーマット";
+            // 
+            // cbDumpSwitch
+            // 
+            this.cbDumpSwitch.AutoSize = true;
+            this.cbDumpSwitch.Location = new System.Drawing.Point(14, 152);
+            this.cbDumpSwitch.Name = "cbDumpSwitch";
+            this.cbDumpSwitch.Size = new System.Drawing.Size(220, 16);
+            this.cbDumpSwitch.TabIndex = 0;
+            this.cbDumpSwitch.Text = "DataBlock処理時にその内容をダンプする";
+            this.cbDumpSwitch.UseVisualStyleBackColor = true;
+            this.cbDumpSwitch.CheckedChanged += new System.EventHandler(this.cbDumpSwitch_CheckedChanged);
+            // 
+            // gbWav
+            // 
+            this.gbWav.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbWav.Controls.Add(this.btnWavPath);
+            this.gbWav.Controls.Add(this.label7);
+            this.gbWav.Controls.Add(this.tbWavPath);
+            this.gbWav.Location = new System.Drawing.Point(7, 205);
+            this.gbWav.Name = "gbWav";
+            this.gbWav.Size = new System.Drawing.Size(431, 45);
+            this.gbWav.TabIndex = 22;
+            this.gbWav.TabStop = false;
+            // 
+            // btnWavPath
+            // 
+            this.btnWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnWavPath.Location = new System.Drawing.Point(402, 16);
+            this.btnWavPath.Name = "btnWavPath";
+            this.btnWavPath.Size = new System.Drawing.Size(23, 23);
+            this.btnWavPath.TabIndex = 16;
+            this.btnWavPath.Text = "...";
+            this.btnWavPath.UseVisualStyleBackColor = true;
+            this.btnWavPath.Click += new System.EventHandler(this.btnWavPath_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(52, 12);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "出力Path";
+            // 
+            // tbWavPath
+            // 
+            this.tbWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbWavPath.Location = new System.Drawing.Point(73, 18);
+            this.tbWavPath.Name = "tbWavPath";
+            this.tbWavPath.Size = new System.Drawing.Size(323, 19);
+            this.tbWavPath.TabIndex = 15;
+            // 
+            // gbDump
+            // 
+            this.gbDump.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbDump.Controls.Add(this.btnDumpPath);
+            this.gbDump.Controls.Add(this.label6);
+            this.gbDump.Controls.Add(this.tbDumpPath);
+            this.gbDump.Location = new System.Drawing.Point(7, 154);
+            this.gbDump.Name = "gbDump";
+            this.gbDump.Size = new System.Drawing.Size(431, 45);
+            this.gbDump.TabIndex = 22;
+            this.gbDump.TabStop = false;
+            // 
+            // btnDumpPath
+            // 
+            this.btnDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDumpPath.Location = new System.Drawing.Point(402, 16);
+            this.btnDumpPath.Name = "btnDumpPath";
+            this.btnDumpPath.Size = new System.Drawing.Size(23, 23);
+            this.btnDumpPath.TabIndex = 16;
+            this.btnDumpPath.Text = "...";
+            this.btnDumpPath.UseVisualStyleBackColor = true;
+            this.btnDumpPath.Click += new System.EventHandler(this.btnDumpPath_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 21);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(52, 12);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "出力Path";
+            // 
+            // tbDumpPath
+            // 
+            this.tbDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDumpPath.Location = new System.Drawing.Point(73, 18);
+            this.tbDumpPath.Name = "tbDumpPath";
+            this.tbDumpPath.Size = new System.Drawing.Size(323, 19);
+            this.tbDumpPath.TabIndex = 15;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(136, 132);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(30, 12);
+            this.label30.TabIndex = 21;
+            this.label30.Text = "Hz/s";
+            // 
+            // tbScreenFrameRate
+            // 
+            this.tbScreenFrameRate.Location = new System.Drawing.Point(80, 129);
+            this.tbScreenFrameRate.Name = "tbScreenFrameRate";
+            this.tbScreenFrameRate.Size = new System.Drawing.Size(50, 19);
+            this.tbScreenFrameRate.TabIndex = 20;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(5, 132);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(69, 12);
+            this.label29.TabIndex = 19;
+            this.label29.Text = "フレームレート";
+            // 
+            // btnDataPath
+            // 
+            this.btnDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDataPath.Location = new System.Drawing.Point(409, 102);
+            this.btnDataPath.Name = "btnDataPath";
+            this.btnDataPath.Size = new System.Drawing.Size(23, 23);
+            this.btnDataPath.TabIndex = 16;
+            this.btnDataPath.Text = "...";
+            this.btnDataPath.UseVisualStyleBackColor = true;
+            this.btnDataPath.Click += new System.EventHandler(this.btnDataPath_Click);
+            // 
+            // tbDataPath
+            // 
+            this.tbDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDataPath.Location = new System.Drawing.Point(80, 104);
+            this.tbDataPath.Name = "tbDataPath";
+            this.tbDataPath.Size = new System.Drawing.Size(323, 19);
+            this.tbDataPath.TabIndex = 15;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(5, 107);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(56, 12);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "データPath";
+            // 
+            // btnResetPosition
+            // 
+            this.btnResetPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetPosition.Location = new System.Drawing.Point(165, 374);
+            this.btnResetPosition.Name = "btnResetPosition";
+            this.btnResetPosition.Size = new System.Drawing.Size(142, 23);
+            this.btnResetPosition.TabIndex = 13;
+            this.btnResetPosition.Text = "ウィンドウ位置をリセット";
+            this.btnResetPosition.UseVisualStyleBackColor = true;
+            this.btnResetPosition.Click += new System.EventHandler(this.btnResetPosition_Click);
+            // 
+            // btnOpenSettingFolder
+            // 
+            this.btnOpenSettingFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpenSettingFolder.Location = new System.Drawing.Point(313, 374);
+            this.btnOpenSettingFolder.Name = "btnOpenSettingFolder";
+            this.btnOpenSettingFolder.Size = new System.Drawing.Size(125, 23);
+            this.btnOpenSettingFolder.TabIndex = 13;
+            this.btnOpenSettingFolder.Text = "設定フォルダーを開く";
+            this.btnOpenSettingFolder.UseVisualStyleBackColor = true;
+            this.btnOpenSettingFolder.Click += new System.EventHandler(this.btnOpenSettingFolder_Click);
+            // 
+            // cbEmptyPlayList
+            // 
+            this.cbEmptyPlayList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbEmptyPlayList.AutoSize = true;
+            this.cbEmptyPlayList.Location = new System.Drawing.Point(238, 308);
+            this.cbEmptyPlayList.Name = "cbEmptyPlayList";
+            this.cbEmptyPlayList.Size = new System.Drawing.Size(177, 16);
+            this.cbEmptyPlayList.TabIndex = 0;
+            this.cbEmptyPlayList.Text = "起動時にプレイリストを空にする。";
+            this.cbEmptyPlayList.UseVisualStyleBackColor = true;
+            this.cbEmptyPlayList.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
+            // 
+            // cbInitAlways
+            // 
+            this.cbInitAlways.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbInitAlways.Location = new System.Drawing.Point(238, 263);
+            this.cbInitAlways.Name = "cbInitAlways";
+            this.cbInitAlways.Size = new System.Drawing.Size(194, 39);
+            this.cbInitAlways.TabIndex = 0;
+            this.cbInitAlways.Text = "再生開始時に必ずデバイスを初期化する。";
+            this.cbInitAlways.UseVisualStyleBackColor = true;
+            this.cbInitAlways.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
+            // 
+            // cbAutoOpen
+            // 
+            this.cbAutoOpen.AutoSize = true;
+            this.cbAutoOpen.Location = new System.Drawing.Point(7, 82);
+            this.cbAutoOpen.Name = "cbAutoOpen";
+            this.cbAutoOpen.Size = new System.Drawing.Size(167, 16);
+            this.cbAutoOpen.TabIndex = 0;
+            this.cbAutoOpen.Text = "使用音源の画面を自動で開く";
+            this.cbAutoOpen.UseVisualStyleBackColor = true;
+            this.cbAutoOpen.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
+            // 
+            // cbUseLoopTimes
+            // 
+            this.cbUseLoopTimes.AutoSize = true;
+            this.cbUseLoopTimes.Location = new System.Drawing.Point(7, 7);
+            this.cbUseLoopTimes.Name = "cbUseLoopTimes";
+            this.cbUseLoopTimes.Size = new System.Drawing.Size(216, 16);
+            this.cbUseLoopTimes.TabIndex = 0;
+            this.cbUseLoopTimes.Text = "無限ループ時、指定の回数だけ繰り返す";
+            this.cbUseLoopTimes.UseVisualStyleBackColor = true;
+            this.cbUseLoopTimes.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
+            // 
+            // tpOmake
+            // 
+            this.tpOmake.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tpOmake.Controls.Add(this.groupBox31);
+            this.tpOmake.Controls.Add(this.groupBox30);
+            this.tpOmake.Controls.Add(this.label14);
+            this.tpOmake.Controls.Add(this.btVST);
+            this.tpOmake.Controls.Add(this.tbVST);
+            this.tpOmake.Controls.Add(this.groupBox5);
+            this.tpOmake.Location = new System.Drawing.Point(4, 40);
+            this.tpOmake.Name = "tpOmake";
+            this.tpOmake.Size = new System.Drawing.Size(443, 402);
+            this.tpOmake.TabIndex = 7;
+            this.tpOmake.Text = "おまけ";
+            this.tpOmake.UseVisualStyleBackColor = true;
+            // 
+            // groupBox31
+            // 
+            this.groupBox31.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox31.Controls.Add(this.rbLoglevelINFO);
+            this.groupBox31.Controls.Add(this.rbLoglevelDEBUG);
+            this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
+            this.groupBox31.Location = new System.Drawing.Point(7, 121);
+            this.groupBox31.Name = "groupBox31";
+            this.groupBox31.Size = new System.Drawing.Size(431, 43);
+            this.groupBox31.TabIndex = 25;
+            this.groupBox31.TabStop = false;
+            this.groupBox31.Text = "Log level";
+            // 
+            // rbLoglevelINFO
+            // 
+            this.rbLoglevelINFO.AutoSize = true;
+            this.rbLoglevelINFO.Checked = true;
+            this.rbLoglevelINFO.Location = new System.Drawing.Point(11, 16);
+            this.rbLoglevelINFO.Name = "rbLoglevelINFO";
+            this.rbLoglevelINFO.Size = new System.Drawing.Size(49, 16);
+            this.rbLoglevelINFO.TabIndex = 3;
+            this.rbLoglevelINFO.TabStop = true;
+            this.rbLoglevelINFO.Text = "INFO";
+            this.rbLoglevelINFO.UseVisualStyleBackColor = true;
+            // 
+            // rbLoglevelDEBUG
+            // 
+            this.rbLoglevelDEBUG.AutoSize = true;
+            this.rbLoglevelDEBUG.Location = new System.Drawing.Point(66, 16);
+            this.rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
+            this.rbLoglevelDEBUG.Size = new System.Drawing.Size(62, 16);
+            this.rbLoglevelDEBUG.TabIndex = 3;
+            this.rbLoglevelDEBUG.Text = "DEBUG";
+            this.rbLoglevelDEBUG.UseVisualStyleBackColor = true;
+            // 
+            // rbLoglevelTRACE
+            // 
+            this.rbLoglevelTRACE.AutoSize = true;
+            this.rbLoglevelTRACE.Location = new System.Drawing.Point(134, 16);
+            this.rbLoglevelTRACE.Name = "rbLoglevelTRACE";
+            this.rbLoglevelTRACE.Size = new System.Drawing.Size(61, 16);
+            this.rbLoglevelTRACE.TabIndex = 3;
+            this.rbLoglevelTRACE.Text = "TRACE";
+            this.rbLoglevelTRACE.UseVisualStyleBackColor = true;
+            // 
+            // groupBox30
+            // 
+            this.groupBox30.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
+            this.groupBox30.Controls.Add(this.rbDateTime);
+            this.groupBox30.Controls.Add(this.rbStopWatch);
+            this.groupBox30.Location = new System.Drawing.Point(7, 170);
+            this.groupBox30.Name = "groupBox30";
+            this.groupBox30.Size = new System.Drawing.Size(431, 85);
+            this.groupBox30.TabIndex = 24;
+            this.groupBox30.TabStop = false;
+            this.groupBox30.Text = "Music Interrupt Timer";
+            // 
+            // rbQueryPerformanceCounter
+            // 
+            this.rbQueryPerformanceCounter.AutoSize = true;
+            this.rbQueryPerformanceCounter.Location = new System.Drawing.Point(6, 62);
+            this.rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
+            this.rbQueryPerformanceCounter.Size = new System.Drawing.Size(213, 16);
+            this.rbQueryPerformanceCounter.TabIndex = 2;
+            this.rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
+            this.rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
+            // 
+            // rbDateTime
+            // 
+            this.rbDateTime.AutoSize = true;
+            this.rbDateTime.Location = new System.Drawing.Point(6, 40);
+            this.rbDateTime.Name = "rbDateTime";
+            this.rbDateTime.Size = new System.Drawing.Size(94, 16);
+            this.rbDateTime.TabIndex = 1;
+            this.rbDateTime.Text = "DateTime(C#)";
+            this.rbDateTime.UseVisualStyleBackColor = true;
+            // 
+            // rbStopWatch
+            // 
+            this.rbStopWatch.AutoSize = true;
+            this.rbStopWatch.Checked = true;
+            this.rbStopWatch.Location = new System.Drawing.Point(6, 18);
+            this.rbStopWatch.Name = "rbStopWatch";
+            this.rbStopWatch.Size = new System.Drawing.Size(137, 16);
+            this.rbStopWatch.TabIndex = 0;
+            this.rbStopWatch.TabStop = true;
+            this.rbStopWatch.Text = "Stopwatch(C#) default";
+            this.rbStopWatch.UseVisualStyleBackColor = true;
             // 
             // label14
             // 
@@ -4650,13 +4712,15 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.cbSinWave);
             this.groupBox5.Controls.Add(this.cbPlayDeviceCB);
             this.groupBox5.Controls.Add(this.cbLogWarning);
             this.groupBox5.Controls.Add(this.cbDispFrameCounter);
             this.groupBox5.Location = new System.Drawing.Point(7, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(178, 112);
+            this.groupBox5.Size = new System.Drawing.Size(431, 112);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
@@ -4703,11 +4767,12 @@
             // 
             // tpAbout
             // 
+            this.tpAbout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tpAbout.Controls.Add(this.tableLayoutPanel);
-            this.tpAbout.Location = new System.Drawing.Point(4, 22);
+            this.tpAbout.Location = new System.Drawing.Point(4, 40);
             this.tpAbout.Name = "tpAbout";
             this.tpAbout.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAbout.Size = new System.Drawing.Size(443, 400);
+            this.tpAbout.Size = new System.Drawing.Size(443, 402);
             this.tpAbout.TabIndex = 1;
             this.tpAbout.Text = "About";
             this.tpAbout.UseVisualStyleBackColor = true;
@@ -4734,7 +4799,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.070175F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.33333F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.421053F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(437, 394);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(435, 394);
             this.tableLayoutPanel.TabIndex = 1;
             // 
             // logoPictureBox
@@ -4744,7 +4809,7 @@
             this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
             this.logoPictureBox.Name = "logoPictureBox";
             this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
-            this.logoPictureBox.Size = new System.Drawing.Size(138, 388);
+            this.logoPictureBox.Size = new System.Drawing.Size(137, 388);
             this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.logoPictureBox.TabIndex = 12;
             this.logoPictureBox.TabStop = false;
@@ -4752,11 +4817,11 @@
             // labelProductName
             // 
             this.labelProductName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelProductName.Location = new System.Drawing.Point(150, 0);
+            this.labelProductName.Location = new System.Drawing.Point(149, 0);
             this.labelProductName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelProductName.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelProductName.Name = "labelProductName";
-            this.labelProductName.Size = new System.Drawing.Size(284, 16);
+            this.labelProductName.Size = new System.Drawing.Size(283, 16);
             this.labelProductName.TabIndex = 19;
             this.labelProductName.Text = "製品名";
             this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4764,11 +4829,11 @@
             // labelVersion
             // 
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(150, 39);
+            this.labelVersion.Location = new System.Drawing.Point(149, 39);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelVersion.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(284, 16);
+            this.labelVersion.Size = new System.Drawing.Size(283, 16);
             this.labelVersion.TabIndex = 0;
             this.labelVersion.Text = "バージョン";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4776,11 +4841,11 @@
             // labelCopyright
             // 
             this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(150, 78);
+            this.labelCopyright.Location = new System.Drawing.Point(149, 78);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(284, 16);
+            this.labelCopyright.Size = new System.Drawing.Size(283, 16);
             this.labelCopyright.TabIndex = 21;
             this.labelCopyright.Text = "著作権";
             this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4788,11 +4853,11 @@
             // labelCompanyName
             // 
             this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(150, 117);
+            this.labelCompanyName.Location = new System.Drawing.Point(149, 117);
             this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(284, 16);
+            this.labelCompanyName.Size = new System.Drawing.Size(283, 16);
             this.labelCompanyName.TabIndex = 22;
             this.labelCompanyName.Text = "会社名";
             this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4800,13 +4865,13 @@
             // textBoxDescription
             // 
             this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDescription.Location = new System.Drawing.Point(150, 151);
+            this.textBoxDescription.Location = new System.Drawing.Point(149, 151);
             this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(284, 204);
+            this.textBoxDescription.Size = new System.Drawing.Size(283, 204);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "説明";
@@ -4815,9 +4880,9 @@
             // 
             this.llOpenGithub.AutoSize = true;
             this.llOpenGithub.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.llOpenGithub.Location = new System.Drawing.Point(147, 358);
+            this.llOpenGithub.Location = new System.Drawing.Point(146, 358);
             this.llOpenGithub.Name = "llOpenGithub";
-            this.llOpenGithub.Size = new System.Drawing.Size(287, 36);
+            this.llOpenGithub.Size = new System.Drawing.Size(286, 36);
             this.llOpenGithub.TabIndex = 24;
             this.llOpenGithub.TabStop = true;
             this.llOpenGithub.Text = "Open latest version page of Github.";
@@ -4826,8 +4891,9 @@
             // 
             // cbHiyorimiMode
             // 
+            this.cbHiyorimiMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbHiyorimiMode.AutoSize = true;
-            this.cbHiyorimiMode.Location = new System.Drawing.Point(8, 435);
+            this.cbHiyorimiMode.Location = new System.Drawing.Point(11, 455);
             this.cbHiyorimiMode.Name = "cbHiyorimiMode";
             this.cbHiyorimiMode.Size = new System.Drawing.Size(220, 28);
             this.cbHiyorimiMode.TabIndex = 6;
@@ -4843,32 +4909,51 @@
             this.ucSI.AutoScroll = true;
             this.ucSI.Location = new System.Drawing.Point(3, 18);
             this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.Size = new System.Drawing.Size(403, 237);
             this.ucSI.TabIndex = 7;
             // 
-            // cbAlwaysAskForLoopCount
+            // cbUseMucomDotNET
             // 
-            this.cbAlwaysAskForLoopCount.AutoSize = true;
-            this.cbAlwaysAskForLoopCount.Location = new System.Drawing.Point(14, 89);
-            this.cbAlwaysAskForLoopCount.Name = "cbAlwaysAskForLoopCount";
-            this.cbAlwaysAskForLoopCount.Size = new System.Drawing.Size(224, 16);
-            this.cbAlwaysAskForLoopCount.TabIndex = 28;
-            this.cbAlwaysAskForLoopCount.Text = "エクスポート時にループ回数を問い合わせる";
-            this.cbAlwaysAskForLoopCount.UseVisualStyleBackColor = true;
-            this.cbAlwaysAskForLoopCount.CheckedChanged += new System.EventHandler(this.cbFixedExportPlace_CheckedChanged);
+            this.cbUseMucomDotNET.AutoSize = true;
+            this.cbUseMucomDotNET.Location = new System.Drawing.Point(7, 135);
+            this.cbUseMucomDotNET.Name = "cbUseMucomDotNET";
+            this.cbUseMucomDotNET.Size = new System.Drawing.Size(208, 16);
+            this.cbUseMucomDotNET.TabIndex = 27;
+            this.cbUseMucomDotNET.Text = "mucomDotNETを使用する(要再起動)";
+            this.cbUseMucomDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUsePMDDotNET
+            // 
+            this.cbUsePMDDotNET.AutoSize = true;
+            this.cbUsePMDDotNET.Location = new System.Drawing.Point(7, 157);
+            this.cbUsePMDDotNET.Name = "cbUsePMDDotNET";
+            this.cbUsePMDDotNET.Size = new System.Drawing.Size(196, 16);
+            this.cbUsePMDDotNET.TabIndex = 27;
+            this.cbUsePMDDotNET.Text = "PMDDotNETを使用する(要再起動)";
+            this.cbUsePMDDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMoonDriverDotNET
+            // 
+            this.cbUseMoonDriverDotNET.AutoSize = true;
+            this.cbUseMoonDriverDotNET.Location = new System.Drawing.Point(7, 179);
+            this.cbUseMoonDriverDotNET.Name = "cbUseMoonDriverDotNET";
+            this.cbUseMoonDriverDotNET.Size = new System.Drawing.Size(230, 16);
+            this.cbUseMoonDriverDotNET.TabIndex = 27;
+            this.cbUseMoonDriverDotNET.Text = "MoonDriverDotNETを使用する(要再起動)";
+            this.cbUseMoonDriverDotNET.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(464, 470);
+            this.ClientSize = new System.Drawing.Size(464, 490);
             this.Controls.Add(this.cbHiyorimiMode);
             this.Controls.Add(this.tcSetting);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(480, 480);
+            this.MinimumSize = new System.Drawing.Size(480, 529);
             this.Name = "FrmSetting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "オプション";
@@ -5000,6 +5085,11 @@
             this.groupBox20.PerformLayout();
             this.tpMMLParameter.ResumeLayout(false);
             this.tpMMLParameter.PerformLayout();
+            this.tpOther2.ResumeLayout(false);
+            this.tpOther2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();
+            this.groupBox29.ResumeLayout(false);
+            this.groupBox29.PerformLayout();
             this.tpOther.ResumeLayout(false);
             this.tpOther.PerformLayout();
             this.groupBox17.ResumeLayout(false);
@@ -5016,9 +5106,6 @@
             this.groupBox31.PerformLayout();
             this.groupBox30.ResumeLayout(false);
             this.groupBox30.PerformLayout();
-            this.groupBox29.ResumeLayout(false);
-            this.groupBox29.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.tpAbout.ResumeLayout(false);
@@ -5422,5 +5509,10 @@
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.TextBox tbFixedExportPlacePath;
         private System.Windows.Forms.CheckBox cbAlwaysAskForLoopCount;
+        private System.Windows.Forms.TabPage tpOther2;
+        private System.Windows.Forms.CheckBox cbUseScript;
+        private System.Windows.Forms.CheckBox cbUseMoonDriverDotNET;
+        private System.Windows.Forms.CheckBox cbUsePMDDotNET;
+        private System.Windows.Forms.CheckBox cbUseMucomDotNET;
     }
 }
