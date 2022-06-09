@@ -1,4 +1,7 @@
 更新履歴
+TAG624 2022/06/09
+  IDE:mucomDotNET:差し替え
+
 TAG623 2022/06/06
   IDE:export:mucToVGM:ループ回数の問い合わせ機能を追加。
   IDE:setting:other:おまけをおまけとotherに分割。
