@@ -120,6 +120,7 @@ namespace mml2vgmIDE
                 try
                 {
 
+                    OpenFile(sParam);
                     //frmPlayList.Stop();
 
                     //PlayList pl = frmPlayList.getPlayList();
