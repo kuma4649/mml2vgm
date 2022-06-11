@@ -192,11 +192,13 @@ namespace mml2vgmIDE
             string[] args = Environment.GetCommandLineArgs();
             //foreach (string ag in args) MessageBox.Show(ag);
             string startFn = "";
-            if (args.Length > 1
-                && File.Exists(args[1])
-                && (Path.GetExtension(args[1]).ToLower() == ".gwi" || Path.GetExtension(args[1]).ToLower() == ".muc"))
+            if (args.Length > 1 && File.Exists(args[1]))
             {
-                startFn = args[1];
+                string ext = Path.GetExtension(args[1]).ToLower();
+                if (ext == ".gwi" || ext == ".muc" || ext == ".mml" || ext == ".mdl")
+                {
+                    startFn = args[1];
+                }
             }
 
             OpenLatestFile(startFn);
@@ -2748,19 +2750,14 @@ namespace mml2vgmIDE
                         continue;
                     }
 
-                    if (Path.GetExtension(filename).ToLower() == ".gwi")
+                    string ext = Path.GetExtension(filename).ToLower();
+                    if (ext == ".gwi" || ext == ".muc" || ext == ".mml" || ext == ".mdl")
                     {
                         OpenFile(filename);
                         continue;
                     }
 
-                    if (Path.GetExtension(filename).ToLower() == ".muc")
-                    {
-                        OpenFile(filename);
-                        continue;
-                    }
-
-                    if (Path.GetExtension(filename).ToLower() == ".wav")
+                    if (ext == ".wav")
                     {
                         if (player != null)
                             StopSound();
@@ -4575,24 +4572,23 @@ namespace mml2vgmIDE
 
                 if (d == null) return;
 
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
+                string ext = Path.GetExtension(d.gwiFullPath).ToLower();
+                if (ext == ".muc")
                 {
                     ExportMub(d, ref outFn);
                     return;
                 }
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
+                if (ext == ".mml")
                 {
                     ExportM(d, ref outFn);
                     return;
                 }
-
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
+                if (ext == ".gwi")
                 {
                     ExportVgmXgmZgm(d, ref outFn);
                     return;
                 }
-
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mdl")
+                if (ext == ".mdl")
                 {
                     ExportMdr(d, ref outFn);
                     return;
