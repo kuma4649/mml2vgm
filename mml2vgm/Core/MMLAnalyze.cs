@@ -4072,16 +4072,20 @@ namespace Core
                 if (page.mmlData[i].type != enmMMLType.Note
                     && page.mmlData[i].type != enmMMLType.Rest
                     //&& page.mmlData[i].type != enmMMLType.Bend
-                    && page.mmlData[i].type != enmMMLType.ToneDoubler)
+                    //&& page.mmlData[i].type != enmMMLType.ToneDoubler
+                    )
                 {
                     continue;
                 }
                 //タイで繋げる予定のノートの場合は対象外
-                if (page.mmlData[i].type != enmMMLType.Rest)
-                {
-                    Note note = (Note)page.mmlData[i].args[0];
-                    if (note.tieSw) continue;
-                }
+                //if (page.mmlData[i].type != enmMMLType.ToneDoubler)
+                //{
+                    if (page.mmlData[i].type != enmMMLType.Rest)
+                    {
+                        Note note = (Note)page.mmlData[i].args[0];
+                        if (note.tieSw) continue;
+                    }
+                //}
 
                 //次のノート系を探す
                 int j = i + 1;
@@ -4091,7 +4095,8 @@ namespace Core
                     if (page.mmlData[j].type != enmMMLType.Note
                         && page.mmlData[j].type != enmMMLType.Rest
                         //&& page.mmlData[j].type != enmMMLType.Bend
-                        && page.mmlData[j].type != enmMMLType.ToneDoubler)
+                        //&& page.mmlData[j].type != enmMMLType.ToneDoubler
+                        )
                     {
                         continue;
                     }
