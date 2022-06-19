@@ -114,7 +114,7 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(page.instrument))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument),(mml!=null ? mml.line.Lp : null));
                 return;
             }
 
