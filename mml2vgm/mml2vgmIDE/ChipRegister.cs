@@ -7808,6 +7808,13 @@ namespace mml2vgmIDE
                     {
                         mds.WriteYM2609_SetAdpcmA(Chip.Index, (byte)Chip.Number, adpcmData);
                     }
+                    else if (data < -1 && data > -5)
+                    {
+                        //data = -2 :Adpcm0
+                        //data = -3 :Adpcm1
+                        //data = -4 :Adpcm2
+                        mds.WriteYM2609_SetAdpcm012(Chip.Index, (byte)Chip.Number, -data - 2, adpcmData);
+                    }
                 }
                 finally
                 {
@@ -8116,6 +8123,19 @@ namespace mml2vgmIDE
             }
 
             enq(od, Counter, dummyChip, EnmDataType.Block, -1, -1, ym2609AdpcmA);
+
+        }
+
+        public void YM2609WriteSetAdpcm012(outDatum od, long Counter, int ChipID,int adpcmChNum, byte[] ym2609Adpcm012)
+        {
+            dummyChip.Move(YM2609[ChipID]);
+
+            if (ctYM2609[0].OnlyPCMEmulation)
+            {
+                dummyChip.Model = EnmVRModel.VirtualModel;
+            }
+
+            enq(od, Counter, dummyChip, EnmDataType.Block, -1, -adpcmChNum - 2, ym2609Adpcm012);
 
         }
 

@@ -527,38 +527,45 @@ namespace mml2vgmIDE.Driver.ZGM
                         break;
                     }
 
-                    List<PackData> data = new List<PackData>
-                    {
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x20,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x21,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x00,null),
-
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x10, 0x00,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x10, 0x80,null),
-
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x61,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x68,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x01, 0x00,null),
-
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x02, (byte)(startAddress >> 2),null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x03, (byte)(startAddress >> 10),null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x04, 0xff,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x05, 0xff,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x0c, 0xff,null),
-                        new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x0d, 0xff,null)
-                    };
-                    // データ転送
+                    byte[] pcm012Buf = new byte[bLen];
                     for (int cnt = 0; cnt < bLen - 8; cnt++)
                     {
-                        data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x08, vgmBuf[vgmAdr + 15 + cnt].val, null));
+                        pcm012Buf[cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
                     }
-                    data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x00, 0x00, null));
-                    data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x10, 0x80, null));
+                    chipRegister.YM2609WriteSetAdpcm012(od, Audio.DriverSeqCounter, chip.Index, bType, pcm012Buf);
 
-                    SoundManager.Chip dummyChip = new SoundManager.Chip(1);
-                    dummyChip.Move(chipRegister.YM2609[chip.Index]);
+                    //List<PackData> data = new List<PackData>
+                    //{
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x20,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x21,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x00,null),
 
-                    chipRegister.YM2609SetRegister(od, Audio.DriverSeqCounter, dummyChip, data.ToArray());
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x10, 0x00,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x10, 0x80,null),
+
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x61,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x68,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x01, 0x00,null),
+
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x02, (byte)(startAddress >> 2),null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x03, (byte)(startAddress >> 10),null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x04, 0xff,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x05, 0xff,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x0c, 0xff,null),
+                    //    new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x0d, 0xff,null)
+                    //};
+                    //// データ転送
+                    //for (int cnt = 0; cnt < bLen - 8; cnt++)
+                    //{
+                    //    data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x08, vgmBuf[vgmAdr + 15 + cnt].val, null));
+                    //}
+                    //data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x00, 0x00, null));
+                    //data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x10, 0x80, null));
+
+                    //SoundManager.Chip dummyChip = new SoundManager.Chip(1);
+                    //dummyChip.Move(chipRegister.YM2609[chip.Index]);
+
+                    //chipRegister.YM2609SetRegister(od, Audio.DriverSeqCounter, dummyChip, data.ToArray());
 
                     //dumpData(dummyChip, "YM2609_ADPCM", vgmAdr + 15, bLen - 8);
                     vgmAdr += (uint)bLen + 7;

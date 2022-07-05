@@ -45,6 +45,7 @@ W0413=!!Caution!! The timer-B setting value is 253 to 255 or less. (Driver hang 
 W0414=Portamento specifies a clock of 129 or higher. (Value:{0})
 W0415=If the value1 (upper 4 bits for rhythm) is 1-3 with the 'p' pan command, no wait value is required.(value:{0})
 W0416=']' command value range is exceeding $01~$ff.(Value:{0})
+W0417=An unsupported driver ({0}) was specified. Compile by forcibly changing Driver to DotNET.
 E0400=Trying to call undefined macro!
 E0401=Unable to return from macro line.(Address Exceeded)
 E0402=Unable to return from macro line.(Address Undefined)
