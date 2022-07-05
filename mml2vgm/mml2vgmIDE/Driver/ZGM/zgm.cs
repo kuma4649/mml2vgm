@@ -526,6 +526,22 @@ namespace mml2vgmIDE.Driver.ZGM
                         vgmAdr += (uint)bLen + 7;
                         break;
                     }
+                    else if (bType == 4)
+                    {
+                        int blockSize = 1024 * 2;
+                        for (int j = 0; j < bLen - 8; j += blockSize + 2)
+                        {
+                            int n = vgmBuf[vgmAdr + 15 + j].val;
+                            byte[] wav = new byte[blockSize];
+                            for (int i = 0; i < blockSize; i++)
+                            {
+                                wav[i] = vgmBuf[vgmAdr + 17 + i + j].val;
+                            }
+                            chipRegister.YM2609WriteSetOperatorWaveDic(od, Audio.DriverSeqCounter, chip.Index, n, wav);
+                        }
+                        vgmAdr += (uint)bLen + 7;
+                        break;
+                    }
 
                     byte[] pcm012Buf = new byte[bLen];
                     for (int cnt = 0; cnt < bLen - 8; cnt++)

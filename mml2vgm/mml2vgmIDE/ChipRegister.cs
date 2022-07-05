@@ -7815,6 +7815,10 @@ namespace mml2vgmIDE
                         //data = -4 :Adpcm2
                         mds.WriteYM2609_SetAdpcm012(Chip.Index, (byte)Chip.Number, -data - 2, adpcmData);
                     }
+                    else
+                    {
+                        mds.WriteYM2609_SetOperatorWaveDic(Chip.Index, (byte)Chip.Number, -data - 5, adpcmData);
+                    }
                 }
                 finally
                 {
@@ -8136,6 +8140,19 @@ namespace mml2vgmIDE
             }
 
             enq(od, Counter, dummyChip, EnmDataType.Block, -1, -adpcmChNum - 2, ym2609Adpcm012);
+
+        }
+
+        public void YM2609WriteSetOperatorWaveDic(outDatum od, long Counter, int ChipID, int waveNum, byte[] wav)
+        {
+            dummyChip.Move(YM2609[ChipID]);
+
+            if (ctYM2609[0].OnlyPCMEmulation)
+            {
+                dummyChip.Model = EnmVRModel.VirtualModel;
+            }
+
+            enq(od, Counter, dummyChip, EnmDataType.Block, -1, -waveNum - 5, wav);
 
         }
 

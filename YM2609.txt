@@ -174,10 +174,10 @@ Virtual Instrument YM2609(Register Map)
      2A    |================================|
            |________________________________|  __________________________
            |                |   |    |      |
-     2B    | Wave Write Ch  |===|WRst|WavTyp|  WaveWriteCh(0-11) / Wave Reset / Wave Type(0-3)
+     2B    | Wave Write Ch  |DIC|WRst|WavTyp|  WaveWriteCh(0-11) / set DICtionary mode / Wave Reset / Wave Type(0-3)
            |________________|___|____|______|  __________________________
            |                                |
-     2C    |      Wave data(L/H)            |  Write Wave data( 1024 * 2 count (L:8bit H:5bit))
+     2C    |    Wave data(L/H) / dicNum     |  Write Wave data( 1024 * 2 count (L:8bit H:5bit)) / dicNum(8bit)
            |________________________________|  __________________________
            |                                |
     2D-2F  |      Prescaler                 |  Prescaler

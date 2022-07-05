@@ -137,10 +137,13 @@ namespace Core
             Ch[38].Type = enmChannelType.ADPCMB;
 
             pcmDataInfo = new clsPcmDataInfo[] {
-                new clsPcmDataInfo(), new clsPcmDataInfo(),
-                new clsPcmDataInfo(), new clsPcmDataInfo(),
-                new clsPcmDataInfo()};
-            for (int i = 0; i < 5; i++)
+                new clsPcmDataInfo(),//ADPCM-B OPNA type
+                new clsPcmDataInfo(),//ADPCM-B OPNB type
+                new clsPcmDataInfo(),//ADPCM-B OPNB type
+                new clsPcmDataInfo(),//ADPCM-A OPNB type
+                new clsPcmDataInfo() //SSGPCM
+            };
+            for (int i = 0; i < pcmDataInfo.Length; i++)
             {
                 pcmDataInfo[i].totalBufPtr = 0L;
                 pcmDataInfo[i].use = false;
@@ -1093,6 +1096,7 @@ namespace Core
             SetPCMDataBlock_AB(mml, pcmDataEasyC, pcmDataDirectC);
             SetPCMDataBlock_AB(mml, pcmDataEasyD, pcmDataDirect);
             SetPCMDataBlock_AB(mml, pcmDataEasyE, null);
+            SetOperatorWave2DataBlock(mml);
         }
 
         private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
@@ -1159,6 +1163,60 @@ namespace Core
                     parent.OutData(mml, null, dat);
             }
         }
+
+        private void SetOperatorWave2DataBlock(MML mml)
+        {
+            if (parent.info.format != enmFormat.ZGM) return;
+            if (parent.instOPNA2WF == null || parent.instOPNA2WF.Count < 1) return;
+
+            List<byte> wave = new List<byte>();
+            foreach (int a in parent.instOPNA2WF.Keys)
+            {
+                Tuple<string, ushort[]> val = parent.instOPNA2WF[a];
+                bool v = true;
+                foreach (ushort n in val.Item2)
+                {
+                    int i = n;
+                    if (v) v = false;
+                    else
+                    {
+                        i = (ushort)((4095 - Math.Abs(n)) * 2 + (n < 0 ? 1 : 0));
+                    }
+                    wave.Add((byte)i);
+                    wave.Add((byte)(i >> 8));
+                }
+            }
+            if (wave.Count < 1) return;
+
+            byte[] head;
+            int sizePtr;
+            if (parent.ChipCommandSize == 2)
+            {
+                //                  cmdL  cmdH  ccL   ccH   tt    size1 2     3     4
+                head = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                sizePtr = 5;
+                head[2] = (byte)ChipID;
+                head[3] = (byte)(ChipID >> 8);
+            }
+            else
+            {
+                //                  cmd   cc    tt    size1 2     3     4
+                head = new byte[] { 0x07, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                sizePtr = 3;
+                head[1] = (byte)ChipID;
+            }
+            int size = wave.Count + 8 + ((parent.ChipCommandSize != 2) ? 0 : 2);
+            head[sizePtr + 0] = (byte)size;
+            head[sizePtr + 1] = (byte)(size >> 8);
+            head[sizePtr + 2] = (byte)(size >> 16);
+            head[sizePtr + 3] = (byte)(size >> 24);
+            foreach (byte b in head) parent.OutData(mml, null, b);
+            foreach (byte b in wave) parent.OutData(mml, null, b);
+
+        }
+
+
+
 
         public override void CmdY(partPage page, MML mml)
         {
@@ -1938,23 +1996,29 @@ namespace Core
             }
 
             //データを流し込みますよ？宣言を送信
-            SOutData(page, mml, page.port[0], 0x2b, (byte)((vch << 4) | ((reset ? 1 : 0) << 2) | (ope & 0x3)));
-
+            SOutData(page, mml, page.port[0], 0x2b, (byte)((vch << 4) | 0x08 | ((reset ? 1 : 0) << 2) | (ope & 0x3)));
             //実はリセット宣言だった　又は流し込むデータなんてなかった場合は処理終了
             if (reset || !parent.instOPNA2WF.ContainsKey(n)) return;
+            SOutData(page, mml, page.port[0], 0x2c, (byte)(n));
 
-            //データの流し込みいくよー
-            ushort[] wd = parent.instOPNA2WF[n].Item2;
-            for (n = 0; n < wd.Length; n++)
-            {
-                if (n == 0) continue;
+            ////データを流し込みますよ？宣言を送信
+            //SOutData(page, mml, page.port[0], 0x2b, (byte)((vch << 4) | ((reset ? 1 : 0) << 2) | (ope & 0x3)));
 
-                short s = (short)wd[n];
-                ushort d = (ushort)((4095 - Math.Abs(s)) * 2 + (s < 0 ? 1 : 0));
-                SOutData(page, mml, page.port[0], 0x2c, (byte)d);
-                SOutData(page, mml, page.port[0], 0x2c, (byte)(d >> 8));
+            ////実はリセット宣言だった　又は流し込むデータなんてなかった場合は処理終了
+            //if (reset || !parent.instOPNA2WF.ContainsKey(n)) return;
 
-            }
+            ////データの流し込みいくよー
+            //ushort[] wd = parent.instOPNA2WF[n].Item2;
+            //for (n = 0; n < wd.Length; n++)
+            //{
+            //    if (n == 0) continue;
+
+            //    short s = (short)wd[n];
+            //    ushort d = (ushort)((4095 - Math.Abs(s)) * 2 + (s < 0 ? 1 : 0));
+            //    SOutData(page, mml, page.port[0], 0x2c, (byte)d);
+            //    SOutData(page, mml, page.port[0], 0x2c, (byte)(d >> 8));
+
+            //}
         }
 
         public void SetWaveTableSSGFromInstrument(partPage page, MML mml)
