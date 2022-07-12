@@ -1176,14 +1176,15 @@ namespace Core
                 bool v = true;
                 foreach (ushort n in val.Item2)
                 {
-                    int i = n;
-                    if (v) v = false;
+                    short i = (short)n;
+                    ushort j;
+                    if (v) { v = false;j = (ushort)i; }
                     else
                     {
-                        i = (ushort)((4095 - Math.Abs(n)) * 2 + (n < 0 ? 1 : 0));
+                        j = (ushort)((4095 - Math.Abs(i)) * 2 + (i < 0 ? 1 : 0));
                     }
-                    wave.Add((byte)i);
-                    wave.Add((byte)(i >> 8));
+                    wave.Add((byte)j);
+                    wave.Add((byte)(j >> 8));
                 }
             }
             if (wave.Count < 1) return;
