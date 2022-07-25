@@ -1,4 +1,7 @@
 更新履歴
+TAG632 2022/07/26
+  IDE:mucomDotNET:差し替え
+
 TAG631 2022/07/13
   IDE:YM2609:ZGM:FMのOperatorデータ生成時、負の値が無視されていたのを修正
 

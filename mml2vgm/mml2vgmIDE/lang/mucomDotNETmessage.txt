@@ -193,4 +193,8 @@ I0600=mucomDotNETConsole Command line Compiler\r\n                              
 ;compiler.cs 0700
 E0700=The buffer (65535byte) that can be used per part has been exceeded.(Used buffer by the channel: Ch.{0}: {1}byte)
 
+;expand.cs 0800
+E0800=The tone definition format is incorrect. Please check that there are no extra spaces or commas, that the required number of lines exists, etc.
+W0800=It is written for mucomDotNET and may not be readable by mucom88 and others.
+
 E9998=Driver error. Please specify mucomDotNET in #Driver tag to use the specified function.

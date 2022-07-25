@@ -255,6 +255,9 @@ Virtual Instrument YM2609(Register Map)
   12ch * 4 * 2048 = 98304 byte
 
 
+    Write Data(Rhythm:0.$10-$1F)
+  OPNAのレジスタマップとコンパチブル
+
     Write Data(ADPCM-A:1.$11-$17)
     ADDR.     D7    D6    D5    D4    D3    D2    D1    D0              COMMENT
     _____  __________________________________________________   _______________________
