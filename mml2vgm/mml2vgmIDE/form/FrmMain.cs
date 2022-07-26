@@ -464,6 +464,9 @@ namespace mml2vgmIDE
 
             try
             {
+                //もし既にファイルがある場合はHistoryBackup機能を実施
+                if (File.Exists(d.gwiFullPath)) ExecHistoryBackUp(d);
+
                 if (d.srcFileFormat == EnmMmlFileFormat.GWI)
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
                 else if (d.srcFileFormat == EnmMmlFileFormat.MUC)
@@ -494,6 +497,43 @@ namespace mml2vgmIDE
                 MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}", ioe.Message), "Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void ExecHistoryBackUp(Document d)
+        {
+            if (!setting.other.UseHistoryBackUp) return;
+
+            try
+            {
+                //既存ファイルのリネーム
+                string rName = Path.Combine(
+                    Path.GetDirectoryName(d.gwiFullPath)
+                    , string.Format("{0}_{1}.bak{2}"
+                        , Path.GetFileNameWithoutExtension(d.gwiFullPath)
+                        , DateTime.Now.Ticks
+                        , Path.GetExtension(d.gwiFullPath))
+                    );
+                File.Move(d.gwiFullPath, rName);
+
+                //ディレクトリ内のバックアップファイルの検索
+                string dName = string.Format("{0}_*.bak{1}"
+                        , Path.GetFileNameWithoutExtension(d.gwiFullPath)
+                        , Path.GetExtension(d.gwiFullPath)
+                        );
+                string[] fileList = Directory.GetFiles(Path.GetDirectoryName(d.gwiFullPath), dName);
+                if (fileList.Length > setting.other.HistoryBackUpKeepFileCount)
+                {
+                    Array.Sort(fileList);
+                    for (int i = 0; i < fileList.Length - setting.other.HistoryBackUpKeepFileCount; i++)
+                    {
+                        File.Delete(fileList[i]);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}", ex.Message), "History Backup failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void refreshFolderTreeView()

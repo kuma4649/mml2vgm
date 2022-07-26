@@ -79,6 +79,7 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -343,6 +344,11 @@
             this.tpMMLParameter = new System.Windows.Forms.TabPage();
             this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
             this.tpOther2 = new System.Windows.Forms.TabPage();
+            this.tbUseHistoryBackUp = new System.Windows.Forms.TextBox();
+            this.cbUseHistoryBackUp = new System.Windows.Forms.CheckBox();
+            this.cbUseMoonDriverDotNET = new System.Windows.Forms.CheckBox();
+            this.cbUsePMDDotNET = new System.Windows.Forms.CheckBox();
+            this.cbUseMucomDotNET = new System.Windows.Forms.CheckBox();
             this.cbUseScript = new System.Windows.Forms.CheckBox();
             this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
             this.cbClearHistory = new System.Windows.Forms.CheckBox();
@@ -420,10 +426,6 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
-            this.cbUseMucomDotNET = new System.Windows.Forms.CheckBox();
-            this.cbUsePMDDotNET = new System.Windows.Forms.CheckBox();
-            this.cbUseMoonDriverDotNET = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -1126,6 +1128,17 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             // 
+            // ucSI
+            // 
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(403, 237);
+            this.ucSI.TabIndex = 7;
+            // 
             // tabPage13
             // 
             this.tabPage13.Controls.Add(this.splitContainer1);
@@ -1681,7 +1694,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(433, 392);
+            this.tabPage5.Size = new System.Drawing.Size(433, 374);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Gens";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2027,7 +2040,7 @@
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(433, 392);
+            this.tabPage16.Size = new System.Drawing.Size(433, 374);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = ".SID";
             this.tabPage16.UseVisualStyleBackColor = true;
@@ -2254,7 +2267,7 @@
             this.tabPage17.Controls.Add(this.groupBox15);
             this.tabPage17.Location = new System.Drawing.Point(4, 22);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(433, 392);
+            this.tabPage17.Size = new System.Drawing.Size(433, 374);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = "Resetコマンド";
             this.tabPage17.UseVisualStyleBackColor = true;
@@ -4013,6 +4026,8 @@
             // 
             // tpOther2
             // 
+            this.tpOther2.Controls.Add(this.tbUseHistoryBackUp);
+            this.tpOther2.Controls.Add(this.cbUseHistoryBackUp);
             this.tpOther2.Controls.Add(this.cbUseMoonDriverDotNET);
             this.tpOther2.Controls.Add(this.cbUsePMDDotNET);
             this.tpOther2.Controls.Add(this.cbUseMucomDotNET);
@@ -4031,6 +4046,53 @@
             this.tpOther2.TabIndex = 18;
             this.tpOther2.Text = "Other";
             this.tpOther2.UseVisualStyleBackColor = true;
+            // 
+            // tbUseHistoryBackUp
+            // 
+            this.tbUseHistoryBackUp.Location = new System.Drawing.Point(345, 199);
+            this.tbUseHistoryBackUp.Name = "tbUseHistoryBackUp";
+            this.tbUseHistoryBackUp.Size = new System.Drawing.Size(53, 19);
+            this.tbUseHistoryBackUp.TabIndex = 29;
+            // 
+            // cbUseHistoryBackUp
+            // 
+            this.cbUseHistoryBackUp.AutoSize = true;
+            this.cbUseHistoryBackUp.Location = new System.Drawing.Point(7, 201);
+            this.cbUseHistoryBackUp.Name = "cbUseHistoryBackUp";
+            this.cbUseHistoryBackUp.Size = new System.Drawing.Size(332, 16);
+            this.cbUseHistoryBackUp.TabIndex = 28;
+            this.cbUseHistoryBackUp.Text = "保存時に既にファイルがある場合はバックアップする。バックアップ数：";
+            this.cbUseHistoryBackUp.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMoonDriverDotNET
+            // 
+            this.cbUseMoonDriverDotNET.AutoSize = true;
+            this.cbUseMoonDriverDotNET.Location = new System.Drawing.Point(7, 179);
+            this.cbUseMoonDriverDotNET.Name = "cbUseMoonDriverDotNET";
+            this.cbUseMoonDriverDotNET.Size = new System.Drawing.Size(230, 16);
+            this.cbUseMoonDriverDotNET.TabIndex = 27;
+            this.cbUseMoonDriverDotNET.Text = "MoonDriverDotNETを使用する(要再起動)";
+            this.cbUseMoonDriverDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUsePMDDotNET
+            // 
+            this.cbUsePMDDotNET.AutoSize = true;
+            this.cbUsePMDDotNET.Location = new System.Drawing.Point(7, 157);
+            this.cbUsePMDDotNET.Name = "cbUsePMDDotNET";
+            this.cbUsePMDDotNET.Size = new System.Drawing.Size(196, 16);
+            this.cbUsePMDDotNET.TabIndex = 27;
+            this.cbUsePMDDotNET.Text = "PMDDotNETを使用する(要再起動)";
+            this.cbUsePMDDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMucomDotNET
+            // 
+            this.cbUseMucomDotNET.AutoSize = true;
+            this.cbUseMucomDotNET.Location = new System.Drawing.Point(7, 135);
+            this.cbUseMucomDotNET.Name = "cbUseMucomDotNET";
+            this.cbUseMucomDotNET.Size = new System.Drawing.Size(208, 16);
+            this.cbUseMucomDotNET.TabIndex = 27;
+            this.cbUseMucomDotNET.Text = "mucomDotNETを使用する(要再起動)";
+            this.cbUseMucomDotNET.UseVisualStyleBackColor = true;
             // 
             // cbUseScript
             // 
@@ -4901,47 +4963,6 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(403, 237);
-            this.ucSI.TabIndex = 7;
-            // 
-            // cbUseMucomDotNET
-            // 
-            this.cbUseMucomDotNET.AutoSize = true;
-            this.cbUseMucomDotNET.Location = new System.Drawing.Point(7, 135);
-            this.cbUseMucomDotNET.Name = "cbUseMucomDotNET";
-            this.cbUseMucomDotNET.Size = new System.Drawing.Size(208, 16);
-            this.cbUseMucomDotNET.TabIndex = 27;
-            this.cbUseMucomDotNET.Text = "mucomDotNETを使用する(要再起動)";
-            this.cbUseMucomDotNET.UseVisualStyleBackColor = true;
-            // 
-            // cbUsePMDDotNET
-            // 
-            this.cbUsePMDDotNET.AutoSize = true;
-            this.cbUsePMDDotNET.Location = new System.Drawing.Point(7, 157);
-            this.cbUsePMDDotNET.Name = "cbUsePMDDotNET";
-            this.cbUsePMDDotNET.Size = new System.Drawing.Size(196, 16);
-            this.cbUsePMDDotNET.TabIndex = 27;
-            this.cbUsePMDDotNET.Text = "PMDDotNETを使用する(要再起動)";
-            this.cbUsePMDDotNET.UseVisualStyleBackColor = true;
-            // 
-            // cbUseMoonDriverDotNET
-            // 
-            this.cbUseMoonDriverDotNET.AutoSize = true;
-            this.cbUseMoonDriverDotNET.Location = new System.Drawing.Point(7, 179);
-            this.cbUseMoonDriverDotNET.Name = "cbUseMoonDriverDotNET";
-            this.cbUseMoonDriverDotNET.Size = new System.Drawing.Size(230, 16);
-            this.cbUseMoonDriverDotNET.TabIndex = 27;
-            this.cbUseMoonDriverDotNET.Text = "MoonDriverDotNETを使用する(要再起動)";
-            this.cbUseMoonDriverDotNET.UseVisualStyleBackColor = true;
-            // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -5514,5 +5535,7 @@
         private System.Windows.Forms.CheckBox cbUseMoonDriverDotNET;
         private System.Windows.Forms.CheckBox cbUsePMDDotNET;
         private System.Windows.Forms.CheckBox cbUseMucomDotNET;
+        private System.Windows.Forms.TextBox tbUseHistoryBackUp;
+        private System.Windows.Forms.CheckBox cbUseHistoryBackUp;
     }
 }

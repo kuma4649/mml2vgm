@@ -502,6 +502,8 @@ namespace mml2vgmIDE
             rbLoglevelINFO.Checked = setting.other.LogLevel == 8;
             rbLoglevelDEBUG.Checked = setting.other.LogLevel == 16;
             rbLoglevelTRACE.Checked = setting.other.LogLevel == 32;
+            cbUseHistoryBackUp.Checked = setting.other.UseHistoryBackUp;
+            tbUseHistoryBackUp.Text = setting.other.HistoryBackUpKeepFileCount.ToString();
 
             cbUseMIDIExport.Checked = setting.midiExport.UseMIDIExport;
             gbMIDIExport.Enabled = cbUseMIDIExport.Checked;
@@ -1370,7 +1372,11 @@ namespace mml2vgmIDE
             setting.other.UseMucomDotNET = cbUseMucomDotNET.Checked;
             setting.other.UsePMDDotNET = cbUsePMDDotNET.Checked;
             setting.other.UseMoonDriverDotNET = cbUseMoonDriverDotNET.Checked;
-
+            setting.other.UseHistoryBackUp = cbUseHistoryBackUp.Checked;
+            if (int.TryParse(tbUseHistoryBackUp.Text, out i))
+            {
+                setting.other.HistoryBackUpKeepFileCount = Math.Max(Math.Min(i, 20), 1);
+            }
 
             setting.midiExport.UseMIDIExport = cbUseMIDIExport.Checked;
             setting.midiExport.ExportPath = tbMIDIOutputPath.Text;
