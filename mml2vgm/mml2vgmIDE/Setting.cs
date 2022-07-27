@@ -1967,6 +1967,7 @@ namespace mml2vgmIDE
             public bool UseMoonDriverDotNET { get => _UseMoonDriverDotNET; set => _UseMoonDriverDotNET = value; }
             public bool UseHistoryBackUp { get; set; } = false;
             public int HistoryBackUpKeepFileCount { get; set; } = 5;
+            public bool DispWarningMessage { get; set; } = false;
 
             public Other Copy()
             {
@@ -2013,6 +2014,7 @@ namespace mml2vgmIDE
                 other.ReplaceToWordHistory = this.ReplaceToWordHistory;
                 other.UseHistoryBackUp = this.UseHistoryBackUp;
                 other.HistoryBackUpKeepFileCount = this.HistoryBackUpKeepFileCount;
+                other.DispWarningMessage = this.DispWarningMessage;
 
                 return other;
             }

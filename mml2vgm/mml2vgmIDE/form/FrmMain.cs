@@ -2010,6 +2010,7 @@ namespace mml2vgmIDE
         {
             if (frmLog == null) return;
             if (frmLog.IsDisposed) return;
+            if (!setting.other.DispWarningMessage && msg.IndexOf("[WARNING]") >= 0) return;
 
             frmLog.tbLog.AppendText(msg + "\r\n");
         }

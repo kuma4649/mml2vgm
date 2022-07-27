@@ -1,4 +1,8 @@
 更新履歴
+TAG634 2022/07/27 2nd
+  IDE:mucomDotNET:差し替え
+  IDE:コンパイル時の警告の出力を抑制する機能追加
+
 TAG634 2022/07/27
   IDE:mucomDotNET:差し替え
 

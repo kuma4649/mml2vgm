@@ -79,7 +79,6 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -426,6 +425,8 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
+            this.cbDispWarningMessage = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -1128,17 +1129,6 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(403, 237);
-            this.ucSI.TabIndex = 7;
-            // 
             // tabPage13
             // 
             this.tabPage13.Controls.Add(this.splitContainer1);
@@ -1694,7 +1684,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(433, 374);
+            this.tabPage5.Size = new System.Drawing.Size(433, 392);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Gens";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2040,7 +2030,7 @@
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(433, 374);
+            this.tabPage16.Size = new System.Drawing.Size(433, 392);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = ".SID";
             this.tabPage16.UseVisualStyleBackColor = true;
@@ -2267,7 +2257,7 @@
             this.tabPage17.Controls.Add(this.groupBox15);
             this.tabPage17.Location = new System.Drawing.Point(4, 22);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(433, 374);
+            this.tabPage17.Size = new System.Drawing.Size(433, 392);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = "Resetコマンド";
             this.tabPage17.UseVisualStyleBackColor = true;
@@ -2924,7 +2914,7 @@
             this.gbMIDIExport.Controls.Add(this.tbMIDIOutputPath);
             this.gbMIDIExport.Location = new System.Drawing.Point(7, 3);
             this.gbMIDIExport.Name = "gbMIDIExport";
-            this.gbMIDIExport.Size = new System.Drawing.Size(431, 430);
+            this.gbMIDIExport.Size = new System.Drawing.Size(431, 466);
             this.gbMIDIExport.TabIndex = 0;
             this.gbMIDIExport.TabStop = false;
             // 
@@ -3209,7 +3199,7 @@
             this.gbMIDIKeyboard.Enabled = false;
             this.gbMIDIKeyboard.Location = new System.Drawing.Point(3, 6);
             this.gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            this.gbMIDIKeyboard.Size = new System.Drawing.Size(435, 112);
+            this.gbMIDIKeyboard.Size = new System.Drawing.Size(435, 148);
             this.gbMIDIKeyboard.TabIndex = 0;
             this.gbMIDIKeyboard.TabStop = false;
             // 
@@ -4026,6 +4016,7 @@
             // 
             // tpOther2
             // 
+            this.tpOther2.Controls.Add(this.cbDispWarningMessage);
             this.tpOther2.Controls.Add(this.tbUseHistoryBackUp);
             this.tpOther2.Controls.Add(this.cbUseHistoryBackUp);
             this.tpOther2.Controls.Add(this.cbUseMoonDriverDotNET);
@@ -4155,9 +4146,9 @@
             this.groupBox29.Controls.Add(this.label53);
             this.groupBox29.Controls.Add(this.lblFontSize);
             this.groupBox29.Controls.Add(this.lblFontStyle);
-            this.groupBox29.Location = new System.Drawing.Point(13, 239);
+            this.groupBox29.Location = new System.Drawing.Point(256, 314);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(213, 85);
+            this.groupBox29.Size = new System.Drawing.Size(184, 85);
             this.groupBox29.TabIndex = 21;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "フォント";
@@ -4173,7 +4164,7 @@
             // 
             // btFont
             // 
-            this.btFont.Location = new System.Drawing.Point(183, 55);
+            this.btFont.Location = new System.Drawing.Point(155, 55);
             this.btFont.Name = "btFont";
             this.btFont.Size = new System.Drawing.Size(23, 23);
             this.btFont.TabIndex = 18;
@@ -4963,6 +4954,27 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
+            // ucSI
+            // 
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(403, 237);
+            this.ucSI.TabIndex = 7;
+            // 
+            // cbDispWarningMessage
+            // 
+            this.cbDispWarningMessage.AutoSize = true;
+            this.cbDispWarningMessage.Location = new System.Drawing.Point(7, 223);
+            this.cbDispWarningMessage.Name = "cbDispWarningMessage";
+            this.cbDispWarningMessage.Size = new System.Drawing.Size(283, 16);
+            this.cbDispWarningMessage.TabIndex = 30;
+            this.cbDispWarningMessage.Text = "コンパイル時の警告メッセージをログウィンドウに表示する";
+            this.cbDispWarningMessage.UseVisualStyleBackColor = true;
+            // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -5537,5 +5549,6 @@
         private System.Windows.Forms.CheckBox cbUseMucomDotNET;
         private System.Windows.Forms.TextBox tbUseHistoryBackUp;
         private System.Windows.Forms.CheckBox cbUseHistoryBackUp;
+        private System.Windows.Forms.CheckBox cbDispWarningMessage;
     }
 }

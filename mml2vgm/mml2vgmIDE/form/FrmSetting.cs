@@ -728,6 +728,7 @@ namespace mml2vgmIDE
             cbUseMoonDriverDotNET.Checked = setting.other.UseMoonDriverDotNET;
 
             cbDispInstrumentName.Checked = setting.MMLParameter.dispInstrumentName;
+            cbDispWarningMessage.Checked = setting.other.DispWarningMessage;
 
             cbFixedExportPlace.Checked = setting.export.FixedExportPlace;
             gpbFixedExportPlace.Enabled = cbFixedExportPlace.Checked;
@@ -1377,6 +1378,7 @@ namespace mml2vgmIDE
             {
                 setting.other.HistoryBackUpKeepFileCount = Math.Max(Math.Min(i, 20), 1);
             }
+            setting.other.DispWarningMessage = cbDispWarningMessage.Checked;
 
             setting.midiExport.UseMIDIExport = cbUseMIDIExport.Checked;
             setting.midiExport.ExportPath = tbMIDIOutputPath.Text;
