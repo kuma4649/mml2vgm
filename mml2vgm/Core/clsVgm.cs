@@ -5944,17 +5944,17 @@ namespace Core
                     page.chip.CmdRenpuEnd(page, mml);
                     page.mmlPos++;
                     break;
-                case enmMMLType.Repeat:
+                case enmMMLType.Repeat: //展開済みなので無駄
                     log.Write("Repeat");
                     page.chip.CmdRepeatStart(page, mml);
                     page.mmlPos++;
                     break;
-                case enmMMLType.RepeatEnd:
+                case enmMMLType.RepeatEnd: //展開済みなので無駄
                     log.Write("RepeatEnd");
                     page.chip.CmdRepeatEnd(page, mml);
                     page.mmlPos++;
                     break;
-                case enmMMLType.RepertExit:
+                case enmMMLType.RepertExit: //展開済みなので無駄
                     log.Write("RepertExit");
                     page.chip.CmdRepeatExit(page, mml);
                     page.mmlPos++;

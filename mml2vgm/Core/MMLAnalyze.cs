@@ -56,7 +56,9 @@ namespace Core
                             page.waitCounter = 0;
                             page.freq = -1;
 
+                            useRR15 = false;
                             Step1(pw, page);//mml全体のフォーマット解析
+                            if(useRR15) Step1_3(page);//リピートの展開
                             Step1_5(page);//ReplaceByPartsコマンドの解析
                             Step2(page);//toneDoubler,bend,tieコマンドの解析
                             Step3(page);//リピート、連符コマンドの解析
@@ -109,6 +111,7 @@ namespace Core
         /// GUI/CUI向け(IDEは別)
         /// </summary>
         public bool useJumpPoint=false;
+        private bool useRR15;
 
         public LinePos linePos { get; internal set; }
 
@@ -467,6 +470,7 @@ namespace Core
             if (pw.getChar(page) == 'T') //TT
             {
                 CmdRR15(pw, page, mml);
+                useRR15 = true;
                 return;
             }
             CmdTempo(pw, page, mml);
@@ -3817,6 +3821,68 @@ namespace Core
 
         #endregion
 
+        #region step1_3
+        private void Step1_3(partPage page)
+        {
+            List<MML> dest = new List<MML>();
+
+            for (int i = 0; i < page.mmlData.Count; i++)
+            {
+                MML mml = page.mmlData[i];
+                if (mml.type == enmMMLType.Repeat)
+                {
+                    i=Step1_3_reEnt(dest,page.mmlData,i+1);
+                    continue;
+                }
+                dest.Add(mml);
+            }
+
+            page.mmlData = dest;
+        }
+
+        private int Step1_3_reEnt(List<MML> dest, List<MML> mmlData, int pos)
+        {
+            int rep = 0;
+            int endPos = -1;
+            int loopCount = -1;
+            for (int i = pos; i < mmlData.Count; i++)
+            {
+                MML mml = mmlData[i];
+                if (mml.type == enmMMLType.Repeat)
+                {
+                    i = Step1_3_reEnt(dest, mmlData, i + 1);
+                    continue;
+                }
+                else if (mml.type == enmMMLType.RepertExit)
+                {
+                    if (endPos == -1) continue;
+                    ;
+                    if (rep + 1 >= loopCount)
+                    {
+                        return endPos;
+                    }
+                    continue;
+                }
+                else if (mml.type == enmMMLType.RepeatEnd)
+                {
+                    rep++;
+                    endPos = i;
+                    loopCount = (int)mml.args[0];
+                    if (rep < loopCount)
+                    {
+                        i = pos - 1;
+                        continue;
+                    }
+                    return i;
+                }
+                dest.Add(mml.Copy());
+            }
+
+            return mmlData.Count;
+        }
+
+        #endregion
+
         #region step1_5
 
         private void Step1_5(partPage page)
@@ -4094,6 +4160,9 @@ namespace Core
                     //ノート系のみ対象
                     if (page.mmlData[j].type != enmMMLType.Note
                         && page.mmlData[j].type != enmMMLType.Rest
+                        && page.mmlData[j].type != enmMMLType.RestNoWork
+                        && page.mmlData[j].type != enmMMLType.RepeatEnd
+                        && page.mmlData[j].type != enmMMLType.RepertExit
                         //&& page.mmlData[j].type != enmMMLType.Bend
                         //&& page.mmlData[j].type != enmMMLType.ToneDoubler
                         )
@@ -4101,7 +4170,7 @@ namespace Core
                         continue;
                     }
 
-                    if (page.mmlData[j].type == enmMMLType.Rest)
+                    if (page.mmlData[j].type == enmMMLType.Rest || page.mmlData[j].type == enmMMLType.RestNoWork)
                     {
                         j = -1;
                     }

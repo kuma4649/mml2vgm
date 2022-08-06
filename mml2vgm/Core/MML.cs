@@ -23,9 +23,10 @@ namespace Core
                 for (int i = 0; i < args.Count; i++)
                 {
                     n.args.Add(args[i]);
-                    if (n.args[i].GetType() == typeof(Note))
+                    if (args[i] == null) continue;
+                    if (args[i].GetType() == typeof(Note))
                     {
-                        n.args[i] = ((Note)n.args[i]).Copy();
+                        n.args[i] = ((Note)args[i]).Copy();
                     }
                 }
             }

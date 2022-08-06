@@ -1870,6 +1870,7 @@ namespace Core
 
         protected virtual void ResetRR15(partPage page, MML mml, int slot)
         {
+            if (!parent.instFM.ContainsKey(page.instrument)) return;
             for (byte ope = 0; ope < 4; ope++)
             {
                 if ((slot & (1 << ope)) == 0) continue;

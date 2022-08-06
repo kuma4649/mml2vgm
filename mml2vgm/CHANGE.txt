@@ -1,4 +1,7 @@
 更新履歴
+TAG637 2022/08/06
+  IDE:Core:TTON/TTOFコマンド使用時は事前にループを展開するように修正
+
 TAG636 2022/07/31
   IDE:mucomDotNET:差し替え
 
