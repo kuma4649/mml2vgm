@@ -2171,6 +2171,13 @@ namespace mml2vgmIDE
             frmLog.tbLog.AppendText("\r\n");
             frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
+            if (!isSuccess)
+            {
+                Compiling = 0;
+                UpdateControl();
+                return;
+            }
+
             if (mv.desVGM.loopSamples != -1)
             {
                 frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
@@ -2198,12 +2205,12 @@ namespace mml2vgmIDE
 
 
 
-            if (!isSuccess)
-            {
-                Compiling = 0;
-                UpdateControl();
-                return;
-            }
+            //if (!isSuccess)
+            //{
+            //    Compiling = 0;
+            //    UpdateControl();
+            //    return;
+            //}
 
             if (args.Length != 2 || !doPlay || msgBox.getErr().Length >= 1)
             {

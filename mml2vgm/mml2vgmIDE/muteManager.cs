@@ -263,7 +263,13 @@ namespace mml2vgmIDE
             mts.mute = !nowMute;
             if (SoloMode[doc]) mts.solo = nowMute;
 
-            SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber, mts.mute);
+            if (doc.srcFileFormat == EnmMmlFileFormat.MUC && "GgRr".IndexOf(mts.trackName[0]) >= 0)
+            {
+                for (int c = 0; c < 6; c++)
+                    SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber + c, mts.mute);
+            }
+            else
+                SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber, mts.mute);
 
             if (SoloMode[doc] && !nowMute && !CheckSoloCh(doc))
             {
@@ -273,7 +279,13 @@ namespace mml2vgmIDE
                 foreach (muteStatus ms in lstMuteStatus[doc].Values)
                 {
                     ms.mute = ms.cache;
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                    if (doc.srcFileFormat == EnmMmlFileFormat.MUC && "GgRr".IndexOf(ms.trackName[0]) >= 0)
+                    {
+                        for (int c = 0; c < 6; c++)
+                            SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber + c, ms.mute);
+                    }
+                    else
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
                 }
             }
 
@@ -288,7 +300,13 @@ namespace mml2vgmIDE
                 ms.mute = mts.mute;
                 ms.solo = mts.solo;
                 ms.cache = mts.cache;
-                SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                if (doc.srcFileFormat == EnmMmlFileFormat.MUC && "GgRr".IndexOf(ms.trackName[0]) >= 0)
+                {
+                    for (int c = 0; c < 6; c++)
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber + c, ms.mute);
+                }
+                else
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
             }
         }
 
