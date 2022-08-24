@@ -1,4 +1,8 @@
 更新履歴
+TAG639 2022/07/24
+  IDE:mucomDotNET:差し替え
+  (Thanks!! ゆきにゃんさん)
+
 TAG638 2022/08/21
   IDE:mucomDotNET:mute:リズム音源/ADPCM-Aのミュート操作時のバグを修正
   (Thnaks!! ゆきにゃんさん)
