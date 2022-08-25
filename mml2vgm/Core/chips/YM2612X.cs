@@ -88,6 +88,7 @@ namespace Core
         {
             if (page.instrument >= 63) return;
 
+            MML mmlDmy = mml != null ? mml : lastKeyOnMML;
             if (page.isPcmMap)
             {
                 int n = Const.NOTE.IndexOf(page.noteCmd);
@@ -101,20 +102,22 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
+                        msgBox.setErrMsg(
+                            string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote),
+                            mmlDmy != null ? mmlDmy.line.Lp : null);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mmlDmy != null ? mmlDmy.line.Lp : null);
                     return;
                 }
             }
 
             if (!parent.instPCM.ContainsKey(page.instrument))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument),(mml!=null ? mml.line.Lp : null));
+                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument), mmlDmy != null ? mmlDmy.line.Lp : null);
                 return;
             }
 
@@ -134,7 +137,7 @@ namespace Core
 
             SOutData(
                 page,
-                mml,
+                mmlDmy,
                 cmd // original vgm command : YM2151
                 , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
                 , (byte)id
@@ -414,6 +417,15 @@ namespace Core
                 //パン
                 ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
             }
+        }
+
+        private MML lastKeyOnMML = null;
+
+        public override void SetKeyOn(partPage page, MML mml)
+        {
+            SetDummyData(page, mml);
+            page.keyOn = true;
+            lastKeyOnMML = mml;
         }
 
         public override void MultiChannelCommand(MML mml)
