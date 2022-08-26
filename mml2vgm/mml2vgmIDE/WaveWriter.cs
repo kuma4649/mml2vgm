@@ -12,7 +12,7 @@ namespace mml2vgmIDE
     public class WaveWriter
     {
         private Setting setting = null;
-        private MemoryStream dest = null;
+        private FileStream dest = null;
         private string filename = null;
         private bool isMp3 = false;
         private int len = 0;
@@ -28,7 +28,9 @@ namespace mml2vgmIDE
             if (dest != null) Close();
             this.filename = filename;
             isMp3 = Path.GetExtension(filename).ToLower().Trim() == ".mp3";
-            dest = new MemoryStream();
+
+            if (File.Exists(filename + ".tmp")) File.Delete(filename + ".tmp");
+            dest = new FileStream(filename + ".tmp", FileMode.OpenOrCreate);
 
             List<byte> des = new List<byte>();
             len = 0;
@@ -106,7 +108,7 @@ namespace mml2vgmIDE
 
             dest.Close();
             dest = null;
-
+            if(File.Exists(filename + ".tmp"))File.Delete(filename + ".tmp");
         }
 
         public void Write(short[] buffer, int offset, int sampleCount)
