@@ -55,14 +55,20 @@ lead synthっぽいなにか
 
 'Cn1 T110
 
-'E01 @0D0p3v115o6l8q0
-'E01 AP0c1 < AP1b1 > 
-'E01 AP2c1 < AP3b1 > 
+E01 @0D0p3v115o6l8q0
+E01 AP0c1 < AP1b1 > 
+E01 AP2c1 < AP3b1 > 
 
-'E01 @1D0p3v120o6l16q0
-'E01 AP4 
-'E01 APON e#180 APOF b     
-'E01 APON d#144 APOF da>cd<
-'E01 APON e#180 APOF b     
-'E01 APON d#144 APOF daga  
+E01 @1D0p3v120o6l16q0
+E01 AP4 
+E01 APON e#180 APOF b     
+E01 APON d#144 APOF da>cd<
+E01 APON e#180 APOF b     
+E01 APON d#144 APOF daga  
+
+'@ CAR 0,p,1, #8,|,3,1,3,2
+;
+'E01 @0D0p3v115o6l8q0
+'E01 CA0,0@1
+'E01 CAON0 v127c1^1d1^1 CAOF0
 

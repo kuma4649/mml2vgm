@@ -4728,8 +4728,22 @@ namespace Core
                                     cnt = Math.Min(cnt, 1);
 
                                 //envelope
-                                if (!(page.chip is SN76489)) continue;
+                                //if (!(page.chip is SN76489)) continue;
                                 if (page.envelopeMode && page.envIndex != -1) cnt = Math.Min(cnt, page.envCounter);
+
+                                if (page.arpeggioMode && page.arpIndex != -1)
+                                    cnt = Math.Min(cnt, page.arpCounter);
+
+                                if (page.varpeggioMode && page.varpIndex != -1)
+                                    cnt = Math.Min(cnt, page.varpCounter);
+
+                                foreach (CommandArpeggio ca in page.commandArpeggio.Values)
+                                {
+                                    if (!ca.Sw) continue;
+                                    if (ca.Ptr == -1) continue;
+
+                                    cnt = Math.Min(cnt, ca.WaitCounter);
+                                }
                             }
                         }
                     }
@@ -4771,6 +4785,16 @@ namespace Core
                             }
 
                             if (pg.arpeggioMode && pg.arpIndex != -1) pg.arpCounter -= (int)cnt;
+
+                            if (pg.varpeggioMode && pg.varpIndex != -1)
+                                pg.varpCounter -= (int)cnt;
+
+                            foreach (CommandArpeggio ca in pg.commandArpeggio.Values)
+                            {
+                                if (!ca.Sw) continue;
+                                if (ca.Ptr == -1) continue;
+                                ca.WaitCounter -= (int)cnt;
+                            }
 
                             if (pg.keyOnDelay.sw)
                             {
