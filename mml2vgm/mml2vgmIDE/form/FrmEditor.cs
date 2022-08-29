@@ -838,7 +838,7 @@ namespace mml2vgmIDE
             }
             else
             {
-                MessageBox.Show("見つかりません");
+                _main.DispStatus("見つかりません");
                 return false;
             }
 
@@ -901,7 +901,7 @@ namespace mml2vgmIDE
             }
             else
             {
-                MessageBox.Show("見つかりません");
+                _main.DispStatus("見つかりません");
                 return false;
             }
 
@@ -976,15 +976,30 @@ namespace mml2vgmIDE
             {
                 if (!forceClose && (document.isNew || document.edit))
                 {
-                    DialogResult res = MessageBox.Show("このファイルは未保存です。保存せずに閉じますか？"
+                    DialogResult res = MessageBox.Show("このファイルは未保存です。保存して閉じますか？"
                         , "ファイル保存確認"
-                        , MessageBoxButtons.YesNo
+                        , MessageBoxButtons.YesNoCancel
                         , MessageBoxIcon.Question
-                        , MessageBoxDefaultButton.Button2);
-                    if (res != DialogResult.Yes)
+                        , MessageBoxDefaultButton.Button3);
+
+                    //キャンセルの場合は閉じる処理をキャンセル
+                    if (res == DialogResult.Cancel)
                     {
                         e.Cancel = true;
                         return;
+                    }
+
+                    //Yesの場合は保存処理実施後閉じる
+                    if (res == DialogResult.Yes)
+                    {
+                        if (document.isNew)
+                        {
+                            _main.TsmiSaveAs_Click(null, null);
+                        }
+                        else
+                        {
+                            _main.TsmiSaveFile_Click(null, null);
+                        }
                     }
                 }
 

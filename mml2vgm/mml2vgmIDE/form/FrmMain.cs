@@ -2,6 +2,7 @@
 using mml2vgmIDE.D88N88;
 using mml2vgmIDE.form;
 using musicDriverInterface;
+using Sgry.Azuki;
 using Sgry.Azuki.WinForms;
 using System;
 using System.Collections.Concurrent;
@@ -11,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -372,19 +374,20 @@ namespace mml2vgmIDE
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            bool flg = false;
+            int flg = 0;
+            Document ad = null;
             foreach (Document d in DocumentBox)
             {
                 if (d.isNew || d.edit)
                 {
-                    flg = true;
-                    break;
+                    flg++;
+                    ad = d;
                 }
             }
 
-            if (flg)
+            if (flg > 1)
             {
-                DialogResult res = MessageBox.Show("未保存のファイルがあります。このまま終了しますか？"
+                DialogResult res = MessageBox.Show("未保存のファイルが複数あります。このまま終了しますか？"
                     , "終了確認"
                     , MessageBoxButtons.YesNo
                     , MessageBoxIcon.Question
@@ -393,6 +396,33 @@ namespace mml2vgmIDE
                 {
                     e.Cancel = true;
                     return;
+                }
+            }
+            else if (flg == 1)
+            {
+                DialogResult res = MessageBox.Show("このファイルは未保存です。保存して閉じますか？"
+                    , "ファイル保存確認"
+                    , MessageBoxButtons.YesNoCancel
+                    , MessageBoxIcon.Question
+                    , MessageBoxDefaultButton.Button3);
+                //キャンセルの場合は閉じる処理をキャンセル
+                if (res == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                //Yesの場合は保存処理実施後閉じる
+                if (res == DialogResult.Yes)
+                {
+                    if (ad.isNew)
+                    {
+                        TsmiSaveAs_Click(null, null);
+                    }
+                    else
+                    {
+                        TsmiSaveFile_Click(null, null);
+                    }
                 }
             }
 
@@ -542,7 +572,7 @@ namespace mml2vgmIDE
             //UpdateFolderTree();
         }
 
-        private void TsmiSaveAs_Click(object sender, EventArgs e)
+        public void TsmiSaveAs_Click(object sender, EventArgs e)
         {
             DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
@@ -1368,6 +1398,23 @@ namespace mml2vgmIDE
 
         private void OpenFile(string fileName)
         {
+            if (ExistOpenedFile(fileName))
+            {
+                DialogResult res = MessageBox.Show("現在、編集中のファイルです。開きなおしますか?", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (res != DialogResult.Yes) return;
+
+                //開きなおす場合は編集中のファイルを閉じる
+                string fullPath = fileName.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                for (int i = 0; i < DocumentBox.Count; i++)
+                {
+                    Document d = DocumentBox[i];
+                    if (d.gwiFullPath != fullPath) continue;
+                    d.editor.forceClose = true;
+                    d.editor.Close();
+                    i--;
+                }
+            }
+
             Document dc = new Document(setting, Common.GetEnmMmlFileFormat(Path.GetExtension(fileName)));//,frmSien);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
@@ -1384,6 +1431,20 @@ namespace mml2vgmIDE
             DocumentBox.Add(dc);
             AddGwiFileHistory(fileName);
             UpdateGwiFileHistory();
+        }
+
+        private bool ExistOpenedFile(string fileName)
+        {
+            bool flg = false;
+            string fullPath = fileName.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            foreach (Document d in DocumentBox)
+            {
+                if (d.gwiFullPath != fullPath) continue;
+                flg = true;
+                break;
+            }
+
+            return flg;
         }
 
         private void ImportFile(string fileName)
@@ -2259,6 +2320,7 @@ namespace mml2vgmIDE
         }
 
         private string mucPartName = "ABCDEFGHIJKLMNOPQRSTUVabcdefghijklmnopqrstuvWXYZwxyz";
+        private int StatusDelay;
 
         private void finishedCompileMUC()
         {
@@ -3593,6 +3655,8 @@ namespace mml2vgmIDE
             long w = Audio.EmuSeqCounter;
             double sec = (double)w / (double)Common.DataSequenceSampleRate;//.SampleRate;
             toolStripStatusLabel1.Text = string.Format("{0:d2}:{1:d2}.{2:d2}", (int)(sec / 60), (int)(sec % 60), (int)(sec * 100 % 100));
+
+            if (StatusDelay-- < 0) { tsslStatus.Text = ""; StatusDelay = 0; }
 
             CheckRemoteMemory();
         }
@@ -5600,5 +5664,15 @@ namespace mml2vgmIDE
             }
         }
 
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void DispStatus(string v)
+        {
+            tsslStatus.Text = v;
+            StatusDelay = 100;
+        }
     }
 }

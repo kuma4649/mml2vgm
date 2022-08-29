@@ -73,6 +73,7 @@
             this.tsmiExport_MuctoD88 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_MuctoVGM = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toWaveFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiExport_toWaveFileAllChSolo = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMp3File = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMidiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toDriverFormatAndPlay = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,7 +123,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsmiExport_toWaveFileAllChSolo = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -151,6 +152,7 @@
             this.TsslLineCol,
             this.tsslJumpSoloMode,
             this.toolStripStatusLabel1,
+            this.tsslStatus,
             this.tssbOpen,
             this.tssbSave,
             this.tssbFind,
@@ -203,7 +205,7 @@
             // 
             resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Spring = true;
+            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
             // tssbOpen
             // 
@@ -459,6 +461,12 @@
             this.tsmiExport_toWaveFile.Name = "tsmiExport_toWaveFile";
             resources.ApplyResources(this.tsmiExport_toWaveFile, "tsmiExport_toWaveFile");
             this.tsmiExport_toWaveFile.Click += new System.EventHandler(this.tsmiExport_toWaveFile_Click);
+            // 
+            // tsmiExport_toWaveFileAllChSolo
+            // 
+            this.tsmiExport_toWaveFileAllChSolo.Name = "tsmiExport_toWaveFileAllChSolo";
+            resources.ApplyResources(this.tsmiExport_toWaveFileAllChSolo, "tsmiExport_toWaveFileAllChSolo");
+            this.tsmiExport_toWaveFileAllChSolo.Click += new System.EventHandler(this.tsmiExport_toWaveFileAllChSolo_Click);
             // 
             // tsmiExport_toMp3File
             // 
@@ -783,11 +791,11 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tsmiExport_toWaveFileAllChSolo
+            // tsslStatus
             // 
-            this.tsmiExport_toWaveFileAllChSolo.Name = "tsmiExport_toWaveFileAllChSolo";
-            resources.ApplyResources(this.tsmiExport_toWaveFileAllChSolo, "tsmiExport_toWaveFileAllChSolo");
-            this.tsmiExport_toWaveFileAllChSolo.Click += new System.EventHandler(this.tsmiExport_toWaveFileAllChSolo_Click);
+            resources.ApplyResources(this.tsslStatus, "tsslStatus");
+            this.tsslStatus.Name = "tsslStatus";
+            this.tsslStatus.Spring = true;
             // 
             // FrmMain
             // 
@@ -862,7 +870,6 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiFncHide;
         private System.Windows.Forms.ToolStripMenuItem TsmiFncButtonOnly;
         private System.Windows.Forms.ToolStripMenuItem TsmiFncButtonAndText;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripMenuItem tsmiGwiFileHistory;
         private System.Windows.Forms.ToolStripMenuItem tsmiImport;
         private System.Windows.Forms.ToolStripMenuItem tsmiScript;
@@ -907,6 +914,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiImport_MIDtoGWI;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_MuctoVGM;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toWaveFileAllChSolo;
+        public System.Windows.Forms.ToolStripStatusLabel tsslStatus;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 
