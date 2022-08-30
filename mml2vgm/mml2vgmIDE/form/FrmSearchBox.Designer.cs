@@ -33,6 +33,7 @@
             this.btnPrevious = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.cmbPattern = new System.Windows.Forms.ComboBox();
+            this.cbCaseSenstivity = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -61,10 +62,17 @@
             this.cmbPattern.Name = "cmbPattern";
             this.cmbPattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbPattern_KeyDown);
             // 
+            // cbCaseSenstivity
+            // 
+            resources.ApplyResources(this.cbCaseSenstivity, "cbCaseSenstivity");
+            this.cbCaseSenstivity.Name = "cbCaseSenstivity";
+            this.cbCaseSenstivity.UseVisualStyleBackColor = true;
+            // 
             // FrmSearchBox
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cbCaseSenstivity);
             this.Controls.Add(this.cmbPattern);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnPrevious);
@@ -82,5 +90,6 @@
         private System.Windows.Forms.Button btnPrevious;
         private System.Windows.Forms.Button btnNext;
         public System.Windows.Forms.ComboBox cmbPattern;
+        public System.Windows.Forms.CheckBox cbCaseSenstivity;
     }
 }

@@ -680,12 +680,14 @@ namespace mml2vgmIDE
             if (res == DialogResult.OK)
             {
                 searchTextPattern = fsb.cmbPattern.Text;
+                searchMatchCase = fsb.cbCaseSenstivity.Checked;
                 AddSearchWordHistory(searchTextPattern);
                 ActionFindNext(ui);
             }
             else if (res == DialogResult.Yes)
             {
                 searchTextPattern = fsb.cmbPattern.Text;
+                searchMatchCase = fsb.cbCaseSenstivity.Checked;
                 AddSearchWordHistory(searchTextPattern);
                 ActionFindPrevious(ui);
             }
