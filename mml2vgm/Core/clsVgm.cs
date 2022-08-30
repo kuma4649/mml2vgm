@@ -1393,6 +1393,21 @@ namespace Core
                     opt = 36;
             }
 
+            for (int i = 0; i < instPCMDatSeq.Count; i++)
+            {
+                clsPcmDatSeq ele = instPCMDatSeq[i];
+                if (ele.No == num)
+                {
+                    instPCMDatSeq.Remove(ele);
+                    i--;
+                }
+            }
+            //if (instPCM.ContainsKey(num))
+            //{
+            //    instPCM.Remove(num);
+            //}
+
+
             instPCMDatSeq.Add(new clsPcmDatSeq(
                 enmPcmDefineType.Easy
                 , num

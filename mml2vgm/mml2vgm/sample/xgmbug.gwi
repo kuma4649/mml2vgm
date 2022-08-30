@@ -1,0 +1,16 @@
+﻿'{
+	Format=XGM
+}
+'@ P  1,".\wav\BD_8bit14000.wav",,100,OPN2X
+'@ P  2,".\wav\SD_8bit14000Hz.wav",,100,OPN2X
+'@ P  2,".\wav\SD_8bit14000Hz.wav",,100,OPN2X;2をダブり登録したよ
+'@ P  3,".\wav\Guitar.wav",,100,OPN2X
+'@ P  4,".\wav\str.wav",,100,OPN2X
+'@ P  5,".\wav\muteGuitar.wav",,100,OPN2X
+'@ PM 0, 4, 0, 1,,2,,3,4,,5
+
+'E06 T120 m1 l4 mon @0 o4 
+'E06 cd  ;kick => SD だけどGuitarの音が出るよ
+'E06 ce  ;kick => Guitarだけどstrの音が出るよ
+'E06 cf  ;kick => strだけどmuteGuitarの音が出るよ
+'E06 cg  ;kick => muteGuitarだけ
