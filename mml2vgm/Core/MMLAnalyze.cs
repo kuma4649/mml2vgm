@@ -2668,7 +2668,7 @@ namespace Core
                     msgBox.setErrMsg(msg.get("E05075"), mml.line.Lp);
                     return;
                 }
-                n = Common.CheckRange(n, 0, 8);
+                n = Common.CheckRange(n, 0, 63);
                 mml.type = enmMMLType.PartColor;
                 mml.args = new List<object>();
                 mml.args.Add(n);

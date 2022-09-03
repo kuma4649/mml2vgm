@@ -1,4 +1,9 @@
 更新履歴
+TAG647 2022/09/03
+  IDE:PartCounter:VolumeBarのカラーセットを64色まで拡張。
+  IDE:PartCounter:VolumeBarのカラーセットの定義を外部ファイル(VolumeBarColorScheme.txt)化。
+  (Thanks!! ぐほんさん)
+
 TAG646 2022/08/30 2nd
   Core:PCM:PCMの登録番号が重複している時、意図した登録にならないバグを修正
   (Thanks!! ぐほんさん)

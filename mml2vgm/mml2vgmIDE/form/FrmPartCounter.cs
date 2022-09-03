@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -13,12 +15,13 @@ namespace mml2vgmIDE
         public Action parentUpdate = null;
         private MMLParameter.Manager mmlParams = null;
         private Setting setting = null;
-        private Brush[][] meterBrush = new Brush[9][];
+        private Brush[][] meterBrush = new Brush[64][];
         private bool SoloMode = false;
         //private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
 
         private const string clmKBDAssign = "ClmKBDAssign";
         private const string Assign = "Assign";
+        private const string vbcs = "VolumeBarColorScheme.txt";
 
 
         public FrmPartCounter(Setting setting)
@@ -57,10 +60,33 @@ namespace mml2vgmIDE
             double div = 0;
             int cnt = 0;
 
-            double[][] bar = new double[9][]
+            double[][] bar;
+            bar = LoadVolumeBarColorScheme(System.Windows.Forms.Application.StartupPath);
+            if (bar == null)
+            {
+                bar = new double[64][]
             {
                 //black 
-                new double[]{    140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                new double[]{    255 ,   0 ,   0   ,140 , 120 , 120   , 80 ,  80 ,  80   , 40 ,  40 ,  40   }
+                //blue 
+                , new double[]{  255 ,   0 ,   0   ,140 , 120 , 215   , 80 ,  80 , 160   , 40 ,  40 ,  80   }
+                //red 
+                , new double[]{  255 ,   0 ,   0   ,235 , 120 , 140   ,160 ,  80 ,  80   , 80 ,  40 ,  40   }
+                //purple
+                , new double[]{  255 ,   0 ,   0   ,235 , 120 , 215   ,160 ,  80 , 160   , 80 ,  40 ,  80   }
+                //green
+                , new double[]{  255 ,   0 ,   0   ,140 , 215 , 120   , 80 , 160 ,  80   , 40 ,  80 ,  40   }
+                //aqua
+                , new double[]{  255 ,   0 ,   0   ,140 , 215 , 215   , 80 , 160 , 160   , 40 ,  80 ,  80   }
+                //yellow
+                , new double[]{  255 ,   0 ,   0   ,235 , 215 , 120   ,160 , 160 ,  80   , 80 ,  80 ,  40   }
+                //white
+                , new double[]{  255 ,   0 ,   0   ,235 , 215 , 215   ,160 , 160 , 160   , 80 ,  80 ,  80   }
+                //muap
+                , new double[]{  255 ,   0 ,   0   ,255 ,   0 ,   0   ,255 , 255 ,   0   ,  0 ,   0 , 255   }
+
+                //black 
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
                 //blue 
                 , new double[]{  140 , 120 , 215   , 80 ,  80 , 160   , 70 ,  70 , 120   , 40 ,  40 ,  80   }
                 //red 
@@ -77,7 +103,55 @@ namespace mml2vgmIDE
                 , new double[]{  235 , 215 , 215   ,160 , 160 , 160   ,120 , 120 , 120   , 80 ,  80 ,  80   }
                 //muap
                 , new double[]{  255 ,   0 ,   0   ,255 , 255 ,   0   ,  0 , 255 ,   0   ,  0 ,   0 , 255   }
+
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
+                , new double[]{  140 , 120 , 120   , 80 ,  80 ,  80   , 70 ,  70 ,  70   , 40 ,  40 ,  40   }
             };
+            }
 
             for (int j = 0; j < meterBrush.Length; j++)
             {
@@ -141,6 +215,104 @@ namespace mml2vgmIDE
                     meterBrush[j][255 - i] = new SolidBrush(c);
                 }
             }
+        }
+
+        protected double[][] LoadVolumeBarColorScheme(string stPath)
+        {
+            string fn = vbcs;
+            Stream stream;
+            if (File.Exists(Path.Combine(stPath, vbcs)))
+            {
+                fn = Path.Combine(stPath, vbcs);
+                stream = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            else
+            {
+                System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+                string[] resources = asm.GetManifestResourceNames();
+                foreach (string resource in resources)
+                {
+                    if (resource.IndexOf(fn) >= 0)
+                    {
+                        fn = resource;
+                    }
+                }
+                stream = asm.GetManifestResourceStream(fn);
+            }
+
+            Dictionary<int, double[]> dic = new Dictionary<int, double[]>();
+
+            try
+            {
+                if (stream != null)
+                {
+                    using (System.IO.StreamReader sr = new System.IO.StreamReader(stream, Encoding.Unicode))
+                    {
+                        stream = null;
+                        while (!sr.EndOfStream)
+                        {
+                            //内容を読み込む
+                            string[] s = sr.ReadLine().Split(new string[] { "=" }, StringSplitOptions.None);
+                            if (s == null || s.Length != 2) continue;
+                            if (s[0].Trim() == "" || s[0].Trim().Length < 1 || s[0].Trim()[0] == '\'') continue;
+                            string[] val = s[1].Split(new string[] { "," }, StringSplitOptions.None);
+                            s[0] = s[0].ToUpper().Trim();
+                            const string Op = "VOLUMEBARCOLORSCHEME_";
+                            if (s[0].IndexOf(Op) != 0) continue;
+
+                            int num =int.Parse(s[0].Replace(Op, ""));
+                            List<double> vals = new List<double>();
+
+                            foreach (string v in val)
+                            {
+                                string vv = v.Trim();
+
+                                if (vv[0] == '$' && vv.Length > 1)
+                                {
+                                    int num16 = Convert.ToInt32(vv.Substring(1), 16);
+                                    vals.Add(num16);
+                                }
+                                else
+                                {
+                                    if (double.TryParse(vv, out double o))
+                                    {
+                                        vals.Add(o);
+                                    }
+                                }
+                            }
+
+                            if (dic.ContainsKey(num)) dic.Remove(num);
+                            dic.Add(num, vals.ToArray());
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
+
+            }
+
+            double[][] ret = new double[64][];
+
+            for (int i = 0; i < 64; i++)
+            {
+                if (!dic.ContainsKey(i))
+                {
+                    ret[i] = new double[] { 140, 120, 120, 80, 80, 80, 70, 70, 70, 40, 40, 40 };
+                    continue;
+                }
+                ret[i] = dic[i];
+            }
+
+            return ret;
         }
 
 

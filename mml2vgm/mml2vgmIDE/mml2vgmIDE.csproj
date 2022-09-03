@@ -644,6 +644,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\ClearLog.png" />
+    <Content Include="VolumeBarColorScheme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resource\Comp48.ico" />
     <Content Include="Resource\Filter.png" />
     <Content Include="Resource\planeMIDIKB.png" />
