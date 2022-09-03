@@ -1,4 +1,7 @@
 更新履歴
+TAG648 2022/09/03 2nd
+  IDE:PartCounter:設定フォルダのVolumeBarColorScheme.txtを参照するように修正
+
 TAG647 2022/09/03
   IDE:PartCounter:VolumeBarのカラーセットを64色まで拡張。
   IDE:PartCounter:VolumeBarのカラーセットの定義を外部ファイル(VolumeBarColorScheme.txt)化。

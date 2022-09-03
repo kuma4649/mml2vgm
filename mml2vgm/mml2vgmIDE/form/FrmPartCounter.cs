@@ -61,7 +61,7 @@ namespace mml2vgmIDE
             int cnt = 0;
 
             double[][] bar;
-            bar = LoadVolumeBarColorScheme(System.Windows.Forms.Application.StartupPath);
+            bar = LoadVolumeBarColorScheme(Common.GetApplicationDataFolder(false));
             if (bar == null)
             {
                 bar = new double[64][]
@@ -219,6 +219,15 @@ namespace mml2vgmIDE
 
         protected double[][] LoadVolumeBarColorScheme(string stPath)
         {
+            if (!File.Exists(Path.Combine(stPath, vbcs)))
+            {
+                try
+                {
+                    File.Copy(Path.Combine(Application.StartupPath, vbcs), Path.Combine(stPath, vbcs));
+                }
+                catch { }
+            }
+
             string fn = vbcs;
             Stream stream;
             if (File.Exists(Path.Combine(stPath, vbcs)))
