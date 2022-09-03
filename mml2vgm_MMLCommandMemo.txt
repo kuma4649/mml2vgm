@@ -1013,9 +1013,9 @@ ___             -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  局所�
 ;               oooooooooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
 *Mn             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  同期マーキング (0 - )
 *Sn             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  同期(0 - )
-PCn             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 8 def:1)IDEのパート色を指定する。
+PCn             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 63 def:1)IDEのパート色を指定する。
                                                                           0:黒 1:青 2:赤 3:紫 4:緑 5:水 6:黄 7:白
-                                                                          8:muap風味色
+                                                                          8:muap風味色 9-15:最大音量時、赤になる。 16以降63までは繰り返し
                                                                       
 c               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ド
 d               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符レ
