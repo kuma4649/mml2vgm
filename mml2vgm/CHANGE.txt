@@ -1,4 +1,8 @@
 更新履歴
+TAG648 2022/09/24
+  IDE:mucomDotNET:差し替え
+  (Thanks!! ゆきにゃんさん)
+
 TAG648 2022/09/03 2nd
   IDE:PartCounter:設定フォルダのVolumeBarColorScheme.txtを参照するように修正
 
