@@ -1,10 +1,9 @@
 #title testSSGuserwave
 #composer test
 #author test
-#date 2021/03/12
+#date 2022/09/24
 #comment test
 #SSGExtend on
-
 
 
   @W0
@@ -13,12 +12,40 @@
   $00,$00,$50,$50,$10,$10,$c0,$c0,$d0,$d0,$f0,$f0,$a0,$a0,$80,$80
   $b0,$b0,$00,$00,$d0,$d0,$90,$90,$b0,$b0,$e0,$e0,$b0,$b0,$90,$90
 
-D t211
-D @0v15o4l8
-D pe0,8 r @W0q5 a4.f+a4.f+ af+ara4.f+  a4rf+a4.f+ ee16d16<br>d2
-D pe4,8 r @W0q5 a4.f+a4.f+ af+ara4.f+  a4rf+a4.f+ ee16d16<br>d2
-D pe8,8 r @W0q5 a4.f+a4.f+ af+ara4.f+  a4rf+a4.f+ ee16d16<br>d2
-D pe8,4 r @W0q5 a4.f+a4.f+ af+ara4.f+  a4rf+a4.f+ ee16d16<br>d2
-D pe8,0 r @W0q5 a4.f+a4.f+ af+ara4.f+  a4rf+a4.f+ ee16d16<br>d2
+-- setup
+
+DEFOPQdefopq C96 t223 r4
+
+DEFOPQ @2 @W0 v13         o6 q4 D0 l4   
+eop    @1 @I1 v11         o5 q4 D1 l4   
+d      @2 @I2 v13         o2 q2 D0 l8 p3
+fq     @10@I8 [|v14|v12|] o2 q0 D0 l8 p3
+
+
+-- Intro
+
+ melody
+DEF    [| pe8,8  | pe2,8) | pe8,2)< |]
+OPQ    [| pe8,8( | pe8,7  | pe7,8 < |]
+eop    [| pe8,8( | pe8,6  | pe6,8 < |]
+OPQ    D-3r8(3
+DEF    [ [| eed.ee8d ed8e8 | cc<a+.>cc8<a+>c<a+8>c8 | ggf.gg8f gf8g8 |] ]4
+OPQ    [ [| eed.ee8d ed8e8 | cc<a+.>cc8<a+>c<a+8>c8 | ggf.gg8f gf8g8 |] ]4
+eop    [ [| eed.ee8d ed8e8 | cc<a+.>cc8<a+>c<a+8>c8 | ggf.gg8f gf8g8 |] ]4
+
+
+ bass
+d      [ ccgc >c<c>d<c> ef<c>e <c>dc<g ]4
+
+
+ drums
+f      [ @11 crcr @10>)c4.(<@11c / r(c)cr @10c4.@11c ]4 
+f      @11>>)rpe2,8e16e16eepe8,8cc<pe8,2ge<(pe8,8
+q      [ @9  pe4,8cpe8,4cpe4,8cpe8,4c ]16
+
+
+
+DEFOPQdefopq r4
+
 
 
