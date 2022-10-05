@@ -1,4 +1,8 @@
 更新履歴
+TAG652 2022/10/05 2nd
+  IDE:PMDDotNET:差し替え
+  (Thanks!! pedipanol.)
+
 TAG651 2022/10/05
   IDE:共有メモリ処理を廃止。ファイルによる処理に変更。
 
