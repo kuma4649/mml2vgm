@@ -61,9 +61,9 @@ namespace mml2vgmIDE
         private LinePos oldTraceLoc = null;
         private List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>> scriptShortCutKey
             = new List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>>();
-        private mmfControl mmf = null;
-        private mmfControl mml2vgmMmf = null;
-        private mmfControl mmfFMVoicePool = null;
+        private KumaCom mmf = null;
+        private KumaCom mml2vgmMmf = null;
+        private KumaCom mmfFMVoicePool = null;
         private bool failFast = false;
         //private bool beforeAlt = false;
         private ChannelInfo defaultChannelInfo = null;
@@ -3545,7 +3545,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            mmfControl mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
+            KumaCom mmf = new fileCom(true, "MDPlayer", "MDPlayer", 1024 * 4);
             try
             {
                 mmf.SendMessage(string.Join(" ", "STOP"));
@@ -4102,7 +4102,7 @@ namespace mml2vgmIDE
             //frmSien.parent = this;
             //frmSien.Show();
 
-            mmfFMVoicePool = new mmfControl(false, "mml2vgmFMVoicePool", 1024 * 4);
+            mmfFMVoicePool = new fileCom(false,"mml2vgmIDE","mml2vgmFMVoicePool", 1024 * 4);
         }
 
         private bool SearchScreen(int x, int y)
@@ -4773,12 +4773,12 @@ namespace mml2vgmIDE
             {
 
                 if (mml2vgmMmf != null) mml2vgmMmf.Close();
-                mml2vgmMmf = new mmfControl(false, "mml2vgmIDEmmf", buf.Count);
+                mml2vgmMmf = new fileCom(false, "mml2vgmIDE", "mml2vgmIDEmmf", buf.Count);
                 mml2vgmMmf.SetBytes(buf.ToArray());
 
                 if (mmf != null) mmf.Close();
-                mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
-                mmf.SendMessage(string.Join(" ", "SPLAY", "mml2vgmIDEmmf", buf.Count.ToString(), outFn));
+                mmf = new fileCom(true,"MDPlayer", "MDPlayer", 1024 * 4);
+                mmf.SendMessage(string.Join(" ", "SPLAY", "mml2vgmIDE", "mml2vgmIDEmmf", buf.Count.ToString(), outFn));
 
             }
             catch (ArgumentOutOfRangeException)

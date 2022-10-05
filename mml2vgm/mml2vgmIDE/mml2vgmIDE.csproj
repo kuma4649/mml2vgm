@@ -210,6 +210,7 @@
     <Compile Include="Driver\ZGM\zgm.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Environment.cs" />
+    <Compile Include="fileCom.cs" />
     <Compile Include="form\ChannelInfo.cs" />
     <Compile Include="form\DataGridViewImageCellEx.cs" />
     <Compile Include="form\FormN88Files.cs">
@@ -350,6 +351,7 @@
     <Compile Include="iEncoding.cs" />
     <Compile Include="InstrumentAtLocal.cs" />
     <Compile Include="InstrumentAtValSound.cs" />
+    <Compile Include="KumaCom.cs" />
     <Compile Include="log.cs" />
     <Compile Include="MDChipParams.cs" />
     <Compile Include="MIDIImporter.cs" />

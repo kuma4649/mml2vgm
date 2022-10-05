@@ -7,12 +7,13 @@ using System.Text;
 
 namespace mml2vgmIDE
 {
-    public class mmfControl
+    public class mmfControl : KumaCom
     {
-        private object lockobj = new object();
+        private readonly object lockobj = new object();
         private static Dictionary<string, Tuple<MemoryMappedFile, byte[]>> _map = new Dictionary<string, Tuple<MemoryMappedFile, byte[]>>();
         public string mmfName = "dummy";
         public int mmfSize = 1024;
+        private static bool unuse = false;
 
         public mmfControl()
         {
@@ -22,30 +23,41 @@ namespace mml2vgmIDE
         {
             this.mmfName = mmfName;
             this.mmfSize = mmfSize;
-            if (!isClient) Open(mmfName, mmfSize);
-        }
-
-        public void Open(string mmfName, int mmfSize)
-        {
-            if (_map.ContainsKey(mmfName)) return;
-            MemoryMappedFile mp;
-            byte[] mmfBuf = new byte[mmfSize];
-
-            lock (lockobj)
+            if (!isClient)
             {
-                mp = MemoryMappedFile.CreateNew(mmfName, mmfSize);
-                MemoryMappedFileSecurity permission = mp.GetAccessControl();
-                permission.AddAccessRule(
-                  new AccessRule<MemoryMappedFileRights>("Everyone",
-                    MemoryMappedFileRights.FullControl, AccessControlType.Allow));
-                mp.SetAccessControl(permission);
+                if(!Open(mmfName, mmfSize)) unuse=true;
             }
-            _map.Add(mmfName, new Tuple<MemoryMappedFile, byte[]>(mp, mmfBuf));
-
-            return;
         }
 
-        public void Close()
+        public override bool Open(string mmfName, int mmfSize)
+        {
+            if (unuse) return false;
+            try
+            {
+                if (_map.ContainsKey(mmfName)) return true;
+                MemoryMappedFile mp;
+                byte[] mmfBuf = new byte[mmfSize];
+
+                lock (lockobj)
+                {
+                    mp = MemoryMappedFile.CreateNew(mmfName, mmfSize);
+                    MemoryMappedFileSecurity permission = mp.GetAccessControl();
+                    permission.AddAccessRule(
+                      new AccessRule<MemoryMappedFileRights>("Everyone",
+                        MemoryMappedFileRights.FullControl, AccessControlType.Allow));
+                    mp.SetAccessControl(permission);
+                }
+                _map.Add(mmfName, new Tuple<MemoryMappedFile, byte[]>(mp, mmfBuf));
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public override void Close()
         {
             //lock (lockobj)
             //{
@@ -55,8 +67,10 @@ namespace mml2vgmIDE
             //}
         }
 
-        public string GetMessage()
+        public override string GetMessage()
         {
+            if (unuse) return "";
+
             string msg = "";
 
             lock (lockobj)
@@ -74,8 +88,10 @@ namespace mml2vgmIDE
             return msg;
         }
 
-        public void SendMessage(string msg)
+        public override void SendMessage(string msg)
         {
+            if (unuse) return;
+
             byte[] ary = Encoding.Unicode.GetBytes(msg);
             if (ary.Length > mmfSize) throw new ArgumentOutOfRangeException();
 
@@ -90,8 +106,10 @@ namespace mml2vgmIDE
                 view.WriteArray(0, ary, 0, ary.Length);
         }
 
-        public void SetBytes(byte[] buf)
+        public override void SetBytes(byte[] buf)
         {
+            if (unuse) return;
+
             if (buf.Length > mmfSize) throw new ArgumentOutOfRangeException();
 
             if (!_map.ContainsKey(mmfName))
