@@ -1954,6 +1954,7 @@ namespace mml2vgmIDE
 
             public int LogLevel { get; set; } = 8;//8:INFO
             public List<string> SearchWordHistory { get; set; }
+            public bool SearchWordCaseSenstivity { get; set; }
             public List<string> ReplaceToWordHistory { get; set; }
             private bool _ClearHistory = true;
             public bool ClearHistory { get => _ClearHistory; set => _ClearHistory = value; }
@@ -2011,6 +2012,7 @@ namespace mml2vgmIDE
                 other.UsePMDDotNET = this.UsePMDDotNET;
                 other.UseMoonDriverDotNET = this.UseMoonDriverDotNET;
                 other.SearchWordHistory = this.SearchWordHistory;
+                other.SearchWordCaseSenstivity = this.SearchWordCaseSenstivity;
                 other.ReplaceToWordHistory = this.ReplaceToWordHistory;
                 other.UseHistoryBackUp = this.UseHistoryBackUp;
                 other.HistoryBackUpKeepFileCount = this.HistoryBackUpKeepFileCount;

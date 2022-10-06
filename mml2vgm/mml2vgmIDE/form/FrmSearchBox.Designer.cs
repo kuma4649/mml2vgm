@@ -79,6 +79,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "FrmSearchBox";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmSearchBox_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
