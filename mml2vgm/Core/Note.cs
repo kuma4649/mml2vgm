@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core
 {
@@ -12,6 +13,16 @@ namespace Core
         /// 次が音符かどうか(RR15処理用)
         /// </summary>
         public bool nextIsNote { get; internal set; }
+
+        public Rest Copy()
+        {
+            Rest n = new Rest();
+            n.cmd = this.cmd;
+            n.length = this.length;
+            n.nextIsNote = this.nextIsNote;
+
+            return n;
+        }
     }
 
     public class Note : Rest

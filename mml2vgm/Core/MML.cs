@@ -28,6 +28,10 @@ namespace Core
                     {
                         n.args[i] = ((Note)args[i]).Copy();
                     }
+                    if (args[i].GetType() == typeof(Rest))
+                    {
+                        n.args[i] = ((Rest)args[i]).Copy();
+                    }
                 }
             }
             return n;

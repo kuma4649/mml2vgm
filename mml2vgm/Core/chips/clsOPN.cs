@@ -1860,6 +1860,7 @@ namespace Core
             for (byte ope = 0; ope < 4; ope++)
             {
                 if ((slot & (1 << ope)) == 0) continue;
+                if (!parent.instFM.ContainsKey(page.instrument)) continue;
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope,
                     parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
                     15);
