@@ -44,6 +44,7 @@ namespace mml2vgmIDE.MMLParameter
                 }
             }
             beforeTie[od.linePos.ch] = nt.tieSw;
+            bendOctaveHosei(od, nt);
         }
 
         protected override void SetLyric(outDatum od, int ch, int cc)

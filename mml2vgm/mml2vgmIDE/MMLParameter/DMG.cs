@@ -44,6 +44,7 @@ namespace mml2vgmIDE.MMLParameter
                 }
             }
             beforeTie[od.linePos.ch] = nt.tieSw;
+            bendOctaveHosei(od, nt);
         }
 
         public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace,MIDIKbd midiKbd)

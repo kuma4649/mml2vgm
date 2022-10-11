@@ -341,28 +341,30 @@ namespace Core
                     {
                         case enmMMLType.Octave:
                             int n = (int)note.bendOctave[i].args[0];
-                            n = Common.CheckRange(n, 1, 8);
+                            n = Common.CheckRange(n, 0, 8);
                             page.bendOctave = n;
                             break;
                         case enmMMLType.OctaveUp:
                             //pw.incPos(page);
                             page.bendOctave += parent.info.octaveRev ? -1 : 1;
-                            page.bendOctave = Common.CheckRange(page.bendOctave, 1, 8);
+                            page.bendOctave = Common.CheckRange(page.bendOctave, 0, 8);
                             break;
                         case enmMMLType.OctaveDown:
                             //pw.incPos(page);
                             page.bendOctave += parent.info.octaveRev ? 1 : -1;
-                            page.bendOctave = Common.CheckRange(page.bendOctave, 1, 8);
+                            page.bendOctave = Common.CheckRange(page.bendOctave, 0, 8);
                             break;
                     }
                 }
             }
 
             //音符の変化量
-            int ed = Const.NOTE.IndexOf(page.bendNote) + 1 + (page.bendOctave - 1) * 12 + page.bendShift;
-            ed = Common.CheckRange(ed, 0, 8 * 12 - 1);
-            int st = Const.NOTE.IndexOf(note.cmd) + 1 + (page.octaveNow - 1) * 12 + note.shift;//
-            st = Common.CheckRange(st, 0, 8 * 12 - 1);
+            //int ed = Const.NOTE.IndexOf(page.bendNote) + 1 + (page.bendOctave - 1) * 12 + page.bendShift;
+            int ed = Const.NOTE.IndexOf(page.bendNote) + 1 + (page.bendOctave - 0) * 12 + page.bendShift;
+            ed = Common.CheckRange(ed, 0, 9 * 12 - 1);
+            //int st = Const.NOTE.IndexOf(note.cmd) + 1 + (page.octaveNow - 1) * 12 + note.shift;//
+            int st = Const.NOTE.IndexOf(note.cmd) + 1 + (page.octaveNow - 0) * 12 + note.shift;//
+            st = Common.CheckRange(st, 0, 9 * 12 - 1);
             //今回のノートを保存
             page.MPortamentLastNote = page.bendOctave * 12 + "czdzefzgzazb".IndexOf(page.bendNote) + page.bendShift;
 
@@ -2039,6 +2041,8 @@ namespace Core
             //タイ指定では無い場合はキーオンする
             if (!page.beforeTie)
             {
+                MML bk = mml;
+                mml = null;
                 if (page.envIndex != -1 || page.varpIndex != -1 || forcedKeyoff)
                 {
                     SetKeyOff(page, mml);
@@ -2071,12 +2075,14 @@ namespace Core
                             page.keyOnDelay.keyOn |= (byte)(1 << i);
                     }
                 }
-
+                mml = bk;
                 SetKeyOn(page, mml);
                 //}
             }
             else
             {
+                MML bk = mml;
+                mml = null;
                 //強制設定
                 //pw.ppg[pw.cpgNum].freq = -1;
                 //発音周波数の決定
@@ -2084,6 +2090,7 @@ namespace Core
                 SetFNum(page, mml);
                 SetTieBend(page, mml);
                 SetVolume(page, mml);
+                mml = bk;
 
                 if (page.Type == enmChannelType.MIDI)
                 {

@@ -46,6 +46,7 @@ namespace mml2vgmIDE.MMLParameter
                 }
             }
             beforeTie[od.linePos.ch] = nt.tieSw;
+            bendOctaveHosei(od, nt);
         }
 
         protected override void SetPan(outDatum od, int ch, int cc)

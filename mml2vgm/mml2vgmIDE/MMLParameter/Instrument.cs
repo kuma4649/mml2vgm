@@ -389,6 +389,27 @@ namespace mml2vgmIDE.MMLParameter
         {
             ;
         }
+
+        public void bendOctaveHosei(outDatum od,Core.Note nt)
+        {
+            if (!nt.bendSw) return;
+            foreach (MML o in nt.bendOctave)
+            {
+                if (o == null) continue;
+                switch (o.type)
+                {
+                    case enmMMLType.Octave:
+                        octave[od.linePos.ch] = (int)o.args[0];
+                        break;
+                    case enmMMLType.OctaveUp:
+                        octave[od.linePos.ch]++;
+                        break;
+                    case enmMMLType.OctaveDown:
+                        octave[od.linePos.ch]--;
+                        break;
+                }
+            }
+        }
     }
 
 }

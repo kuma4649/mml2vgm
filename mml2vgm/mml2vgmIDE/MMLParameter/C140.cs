@@ -50,6 +50,7 @@ namespace mml2vgmIDE.MMLParameter
             }
 
             beforeTie[od.linePos.ch] = nt.tieSw;
+            bendOctaveHosei(od, nt);
         }
 
     }
