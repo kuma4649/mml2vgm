@@ -359,11 +359,9 @@ namespace Core
             }
 
             //音符の変化量
-            //int ed = Const.NOTE.IndexOf(page.bendNote) + 1 + (page.bendOctave - 1) * 12 + page.bendShift;
-            int ed = Const.NOTE.IndexOf(page.bendNote) + 1 + (page.bendOctave - 0) * 12 + page.bendShift;
+            int ed = Const.NOTE.IndexOf(page.bendNote) + 1 + page.bendOctave * 12 + page.bendShift;
             ed = Common.CheckRange(ed, 0, 9 * 12 - 1);
-            //int st = Const.NOTE.IndexOf(note.cmd) + 1 + (page.octaveNow - 1) * 12 + note.shift;//
-            int st = Const.NOTE.IndexOf(note.cmd) + 1 + (page.octaveNow - 0) * 12 + note.shift;//
+            int st = Const.NOTE.IndexOf(note.cmd) + 1 + page.octaveNow * 12 + note.shift;//
             st = Common.CheckRange(st, 0, 9 * 12 - 1);
             //今回のノートを保存
             page.MPortamentLastNote = page.bendOctave * 12 + "czdzefzgzazb".IndexOf(page.bendNote) + page.bendShift;
@@ -1655,6 +1653,7 @@ namespace Core
 
         public virtual void CmdRenpuStart(partPage page, MML mml)
         {
+            if (mml.args == null) return;
             int noteCount = (int)mml.args[0];
             int len = (int)page.length;
             int n;

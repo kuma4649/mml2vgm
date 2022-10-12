@@ -4701,7 +4701,20 @@ namespace Core
                         }
                         break;
                     case enmMMLType.Renpu:
-                        renpuStack.Push((int)mml.args[1]);
+                        try
+                        {
+                            if (mml.args == null)
+                            {
+                                msgBox.setWrnMsg(msg.get("E05050")
+                                    , mml.line.Lp);
+                                break;
+                            }
+                            renpuStack.Push((int)mml.args[1]);
+                        }
+                        catch
+                        {
+                            ;//スタックがない場合は既にエラー検知されているのでここでは無視する
+                        }
                         break;
                     case enmMMLType.RenpuEnd:
                         try
