@@ -1,4 +1,8 @@
 更新履歴
+TAG657 2022/10/15
+  IDE:PMDDotNET:差し替え
+  (Thanks!! pedipanol.)
+
 TAG656 2022/10/13
   Core:連符コマンドの組み合わせが悪いときのエラーを検出できるようにした
   (Thanks!! ぐほんさん)
