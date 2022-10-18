@@ -835,7 +835,9 @@ namespace mml2vgmIDE
             {
                 azukiControl.Document.SetSelection(result.Begin, result.End);
                 azukiControl.View.SetDesiredColumn();
-                azukiControl.ScrollToCaret();
+                //azukiControl.ScrollToCaret();
+                azukiControl.View.ScrollToCaretVCenter();
+
                 searchAnchorIndex = result.End;
             }
             else
@@ -899,7 +901,8 @@ namespace mml2vgmIDE
             {
                 azukiControl.Document.SetSelection(result.End, result.Begin);
                 azukiControl.View.SetDesiredColumn();
-                azukiControl.ScrollToCaret();
+                //azukiControl.ScrollToCaret();
+                azukiControl.View.ScrollToCaretVCenter();
             }
             else
             {
