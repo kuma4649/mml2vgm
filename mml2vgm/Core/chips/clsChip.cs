@@ -2051,11 +2051,11 @@ namespace Core
                 SetCommandArpeggioAtKeyOn(page, mml);
                 SetEnvelopeAtKeyOn(page, mml);
                 SetLfoAtKeyOn(page, mml);
-                SetVolume(page, mml);
+                SetVolume(page,  mml);
                 //強制設定
                 //pw.ppg[pw.cpgNum].freq = -1;
                 //発音周波数の決定
-                SetDummyData(page, mml);
+                SetDummyData(page,  bk);
                 SetFNum(page, mml);
                 //midiむけ
                 if (page.bendWaitCounter == -1)
@@ -2085,7 +2085,7 @@ namespace Core
                 //強制設定
                 //pw.ppg[pw.cpgNum].freq = -1;
                 //発音周波数の決定
-                SetDummyData(page, mml);
+                SetDummyData(page, bk);
                 SetFNum(page, mml);
                 SetTieBend(page, mml);
                 SetVolume(page, mml);
