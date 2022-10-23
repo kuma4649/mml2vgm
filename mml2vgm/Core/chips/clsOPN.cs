@@ -2721,6 +2721,7 @@ namespace Core
                         if (page.Ch3SpecialMode)
                         {
                             page.slots = page.slotsEX;
+                            page.spg.freq = -1;
                             page.beforeVolume = -1;
                         }
                     }
