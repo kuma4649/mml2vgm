@@ -64,8 +64,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Azuki.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.42.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.42\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.46.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.46\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="IronPython, Version=2.7.12.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPython.2.7.12\lib\net45\IronPython.dll</HintPath>
@@ -98,29 +98,29 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\musicDriverInterface.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio, Version=2.0.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.2.0.1\lib\netstandard2.0\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.2.1.0\lib\net472\NAudio.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Asio, Version=2.0.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Asio.2.0.0\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
+    <Reference Include="NAudio.Asio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Asio.2.1.0\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Core.2.0.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
+    <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
     </Reference>
     <Reference Include="NAudio.Lame, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.Lame.2.0.1\lib\netstandard2.0\NAudio.Lame.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Midi, Version=2.0.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Midi.2.0.1\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
+    <Reference Include="NAudio.Midi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Midi.2.1.0\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.Wasapi, Version=2.0.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Wasapi.2.0.0\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
+    <Reference Include="NAudio.Wasapi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.Wasapi.2.1.0\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.WinForms, Version=2.0.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.WinForms.2.0.1\lib\net472\NAudio.WinForms.dll</HintPath>
+    <Reference Include="NAudio.WinForms, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.WinForms.2.1.0\lib\net472\NAudio.WinForms.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio.WinMM, Version=2.0.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.WinMM.2.0.1\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
+    <Reference Include="NAudio.WinMM, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.WinMM.2.1.0\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

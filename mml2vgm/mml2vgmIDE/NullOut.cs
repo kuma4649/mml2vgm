@@ -33,6 +33,8 @@ namespace mml2vgmIDE
             }
         }
 
+        public WaveFormat OutputWaveFormat =>  throw new NotImplementedException();
+
         public event EventHandler<StoppedEventArgs> PlaybackStopped = null;
 
         public void Dispose()
