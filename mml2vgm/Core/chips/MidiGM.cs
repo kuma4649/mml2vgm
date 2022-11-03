@@ -33,9 +33,9 @@ namespace Core
 
             pcmDataInfo = null;
 
-        }
+    }
 
-        public override void InitChip()
+    public override void InitChip()
         {
             if (!use) return;
 
@@ -71,6 +71,7 @@ namespace Core
                 pg.directModeTre = false;
                 pg.pitchBend = 0;
                 pg.MIDIch = pg.ch % 16;
+                pg.noteOns = new MIDINote[128];
             }
         }
 

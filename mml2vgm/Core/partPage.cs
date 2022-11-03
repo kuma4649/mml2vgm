@@ -630,7 +630,7 @@ namespace Core
         public bool renpuFlg = false;
         public List<int> lstRenpuLength = null;
 
-        public MIDINote[] noteOns = new MIDINote[128];
+        public MIDINote[] noteOns = null;
 
         public List<clsPos> LstPos = null;
         public bool phaseReset = false;

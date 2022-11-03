@@ -3564,6 +3564,7 @@ namespace Core
                                     }
                                 }
 
+                                if (pg.noteOns == null) continue;
                                 for (int i = 0; i < pg.noteOns.Length; i++)
                                 {
                                     if (pg.noteOns[i] == null) continue;
@@ -3672,6 +3673,7 @@ namespace Core
                                 waitCounter = Math.Min(waitCounter, page.pcmWaitKeyOnCounter);
 
                             //MIDINoteOns
+                            if (page.noteOns == null) continue;
                             for (int i = 0; i < page.noteOns.Length; i++)
                             {
                                 if (page.noteOns[i] == null) continue;
@@ -5326,6 +5328,7 @@ namespace Core
 
         private void ProcMidiNoteOff(partPage page)
         {
+            if (page.noteOns == null) return;
             for (int i = 0; i < page.noteOns.Length; i++)
             {
                 if (page.noteOns[i] == null) continue;
