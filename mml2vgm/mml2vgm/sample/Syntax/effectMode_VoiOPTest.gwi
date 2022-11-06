@@ -1,0 +1,46 @@
+﻿'{
+
+	TitleName   =EffectMode fixed fnum Test
+	TitleNameJ  =効果音モード 固定fnum
+	GameName    =none
+	GameNameJ   =none
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega Mega Drive
+	Composer    =kuma
+	ComposerJ   =kuma
+	ReleaseDate =2021/09/xx
+	Converted   =
+	Notes       =
+	Format=XGM
+
+
+}
+
+
+
+'@ N 004
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 024,004,004,000,000,028,000,008,000,000,000
+'@ 024,008,004,008,006,000,000,004,000,000,000
+'@ 025,012,012,008,012,000,000,004,000,000,000
+'@ 025,012,012,008,012,000,000,004,000,000,000
+   ALG FB
+'@ 006,007
+
+'@ F 005
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 24,4,4,0,0,28,0,8,0
+'@ 24,8,4,8,6,0,0,4,0
+'@ 18,4,4,0,4,0,0,4,0
+'@ 18,4,4,0,4,0,0,4,0
+'@ 6,7
+
+
+'E01 T90
+
+'E07 EXON EX3  @4,3v106q2o4l8axxxrrxxxxrxrx
+'E08 EXON EX4  @5,4v105q2o4l4b-df<c>e<cg2
+
+
+
+

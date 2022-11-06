@@ -1035,17 +1035,56 @@ namespace Core
 
             int m = (page.chip is YM2203) ? 0 : 3;
 
-            if (
-                ((page.chip is YM2203) && page.ch >= 3 && page.ch < 6)
-                || ((page.chip is YM2608) && page.ch >= 6 && page.ch < 9)
-                || ((page.chip is YM2609) && page.ch >= 12 && page.ch < 18)
-                || ((page.chip is YM2610B) && page.ch >= 6 && page.ch < 9)
-                || ((page.chip is YM2612) && page.ch >= 6 && page.ch < 9)
-                || ((page.chip is YM2612X) && page.ch >= 6 && page.ch < 9)
-                )
+            //if (
+            //    ((page.chip is YM2203) && page.ch >= 3 && page.ch < 6)
+            //    || ((page.chip is YM2608) && page.ch >= 6 && page.ch < 9)
+            //    || ((page.chip is YM2609) && page.ch >= 12 && page.ch < 18)
+            //    || ((page.chip is YM2610B) && page.ch >= 6 && page.ch < 9)
+            //    || ((page.chip is YM2612) && page.ch >= 6 && page.ch < 9)
+            //    || ((page.chip is YM2612X) && page.ch >= 6 && page.ch < 9)
+            //    )
+            //{
+            //    msgBox.setWrnMsg(msg.get("E11002"), mml.line.Lp);
+            //    return;
+            //}
+
+            //ここにOP指定を読み込む処理追加
+            byte UMop = 0xf;
+            if (page.Type == enmChannelType.FMOPNex)
             {
-                msgBox.setWrnMsg(msg.get("E11002"), mml.line.Lp);
-                return;
+                //
+                if (page.Ch3SpecialMode)
+                {
+                    if (mml.args.Count > 4 && mml.args[3].ToString() == "OP")
+                    {
+                        UMop = GetSlotBit(mml, (byte)(int)mml.args[4]);
+                    }
+                    //else
+                    //{
+                    //    UMop = page.slots;
+                    //}
+                }               
+            }
+
+
+            partPage vpg = page;
+            if (!(page.chip is YM2609))
+            {
+                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= m + 3 && page.ch < m + 6)
+                {
+                    vpg = page.chip.lstPartWork[2].cpg;
+                }
+            }
+            else
+            {
+                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                {
+                    vpg = page.chip.lstPartWork[2].cpg;
+                }
+                if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                {
+                    vpg = page.chip.lstPartWork[8].cpg;
+                }
             }
 
             switch (modeBeforeSend)
@@ -1053,45 +1092,51 @@ namespace Core
                 case 0: // N)one
                     break;
                 case 1: // R)R only
-                    for (int ope = 0; ope < 4; ope++) ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, 0, 15);
+                    for (int ope = 0; ope < 4; ope++)
+                    {
+                        if ((UMop & (1 << ope)) == 0) continue;
+                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, 0, 15);
+                    }
                     break;
                 case 2: // A)ll
                     for (int ope = 0; ope < 4; ope++)
                     {
-                        ((ClsOPN)page.chip).OutFmSetDtMl(mml, page, ope, 0, 0);
-                        ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope, 3, 31);
-                        ((ClsOPN)page.chip).OutFmSetAmDr(mml, page, ope, 1, 31);
-                        ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope, 31);
-                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, 0, 15);
-                        ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope, 0);
+                        if ((UMop & (1 << ope)) == 0) continue;
+                        ((ClsOPN)page.chip).OutFmSetDtMl(mml, vpg, ope, 0, 0);
+                        ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope, 3, 31);
+                        ((ClsOPN)page.chip).OutFmSetAmDr(mml, vpg, ope, 1, 31);
+                        ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, 31);
+                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, 0, 15);
+                        ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, 0);
                     }
-                    ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, page, 7, 7);
+                    ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, vpg, 7, 7);
                     break;
             }
 
 
             for (int ope = 0; ope < 4; ope++)
             {
-                //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-                ((ClsOPN)page.chip).OutFmSetDtMl(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                ((ClsOPN)page.chip).OutFmSetAmDr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
-                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
-            }
-            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op2ml = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op3ml = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op4ml = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1dt2 = 0;
-            page.op2dt2 = 0;
-            page.op3dt2 = 0;
-            page.op4dt2 = 0;
+                //ch3以外の拡張チャンネルであってもUMopが未指定の場合はそのまま設定する
+                if ((UMop & (1 << ope)) == 0) continue;
 
-            ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, page, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
+                ((ClsOPN)page.chip).OutFmSetDtMl(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                ((ClsOPN)page.chip).OutFmSetAmDr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+            }
+
+            if ((page.slots & 1) != 0) page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            if ((page.slots & 2) != 0) page.op2ml = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            if ((page.slots & 4) != 0) page.op3ml = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            if ((page.slots & 8) != 0) page.op4ml = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            if ((page.slots & 1) != 0) page.op1dt2 = 0;
+            if ((page.slots & 2) != 0) page.op2dt2 = 0;
+            if ((page.slots & 4) != 0) page.op3dt2 = 0;
+            if ((page.slots & 8) != 0) page.op4dt2 = 0;
+
+            ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, vpg, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
 
             int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] op = new int[4] {
@@ -1114,8 +1159,7 @@ namespace Core
 
             for (int i = 0; i < 4; i++)
             {
-                //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
-                if (algs[alg][i] == 0)// || (pw.ppg[pw.cpgNum].slots & (1 << i)) == 0)
+                if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
                 {
                     op[i] = -1;
                     continue;
@@ -1123,71 +1167,52 @@ namespace Core
                 op[i] = Common.CheckRange(op[i], 0, 127);
             }
 
-            partPage vpg = page;
-            if (!(page.chip is YM2609))
-            {
-                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= m + 3 && page.ch < m + 6)
-                {
-                    vpg = page.chip.lstPartWork[2].cpg;
-                }
-            }
-            else
-            {
-                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
-                {
-                    vpg = page.chip.lstPartWork[2].cpg;
-                }
-                if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
-                {
-                    vpg = page.chip.lstPartWork[8].cpg;
-                }
-            }
 
-            //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
-            //if ((pw.ppg[pw.cpgNum].slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 0, op[0]);
-            //if ((pw.ppg[pw.cpgNum].slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 1, op[1]);
-            //if ((pw.ppg[pw.cpgNum].slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 2, op[2]);
-            //if ((pw.ppg[pw.cpgNum].slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 3, op[3]);
-            if (op[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 0, op[0]);
-            if (op[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 1, op[1]);
-            if (op[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 2, op[2]);
-            if (op[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 3, op[3]);
+            ////ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
+            //if ((page.slots & 1) != 0 && op[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 0, op[0]);
+            //if ((page.slots & 2) != 0 && op[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 1, op[1]);
+            //if ((page.slots & 4) != 0 && op[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 2, op[2]);
+            //if ((page.slots & 8) != 0 && op[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 3, op[3]);
+            if ((UMop & 1) != 0 && op[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 0, op[0]);
+            if ((UMop & 2) != 0 && op[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 1, op[1]);
+            if ((UMop & 4) != 0 && op[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 2, op[2]);
+            if ((UMop & 8) != 0 && op[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 3, op[3]);
 
 
             //音量を再セットする
 
             OutFmSetVolume(page, mml, vol, n);
 
-            //拡張チャンネルの場合は他の拡張チャンネルも音量を再セットする
-            if (page.Type == enmChannelType.FMOPNex)
-            {
-                if (!(page.chip is YM2609))
-                {
-                    if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume, n);
-                    if (page.ch != m + 3) OutFmSetVolume(page.chip.lstPartWork[m + 3].cpg, mml, page.chip.lstPartWork[m + 3].cpg.volume, n);
-                    if (page.ch != m + 4) OutFmSetVolume(page.chip.lstPartWork[m + 4].cpg, mml, page.chip.lstPartWork[m + 4].cpg.volume, n);
-                    if (page.ch != m + 5) OutFmSetVolume(page.chip.lstPartWork[m + 5].cpg, mml, page.chip.lstPartWork[m + 5].cpg.volume, n);
-                }
-                else
-                {
-                    if (page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14)
-                    {
-                        //YM2609 ch3 || ch13 || ch14 || ch15
-                        if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume, n);
-                        if (page.ch != 12) OutFmSetVolume(page.chip.lstPartWork[12].cpg, mml, page.chip.lstPartWork[12].cpg.volume, n);
-                        if (page.ch != 13) OutFmSetVolume(page.chip.lstPartWork[13].cpg, mml, page.chip.lstPartWork[13].cpg.volume, n);
-                        if (page.ch != 14) OutFmSetVolume(page.chip.lstPartWork[14].cpg, mml, page.chip.lstPartWork[14].cpg.volume, n);
-                    }
-                    else
-                    {
-                        //YM2609 ch9 || ch16 || ch17 || ch18
-                        if (page.ch != 8) OutFmSetVolume(page.chip.lstPartWork[8].cpg, mml, page.chip.lstPartWork[8].cpg.volume, n);
-                        if (page.ch != 15) OutFmSetVolume(page.chip.lstPartWork[15].cpg, mml, page.chip.lstPartWork[15].cpg.volume, n);
-                        if (page.ch != 16) OutFmSetVolume(page.chip.lstPartWork[16].cpg, mml, page.chip.lstPartWork[16].cpg.volume, n);
-                        if (page.ch != 17) OutFmSetVolume(page.chip.lstPartWork[17].cpg, mml, page.chip.lstPartWork[17].cpg.volume, n);
-                    }
-                }
-            }
+            ////拡張チャンネルの場合は他の拡張チャンネルも音量を再セットする
+            //if (page.Type == enmChannelType.FMOPNex)
+            //{
+            //    if (!(page.chip is YM2609))
+            //    {
+            //        if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume, n);
+            //        if (page.ch != m + 3) OutFmSetVolume(page.chip.lstPartWork[m + 3].cpg, mml, page.chip.lstPartWork[m + 3].cpg.volume, n);
+            //        if (page.ch != m + 4) OutFmSetVolume(page.chip.lstPartWork[m + 4].cpg, mml, page.chip.lstPartWork[m + 4].cpg.volume, n);
+            //        if (page.ch != m + 5) OutFmSetVolume(page.chip.lstPartWork[m + 5].cpg, mml, page.chip.lstPartWork[m + 5].cpg.volume, n);
+            //    }
+            //    else
+            //    {
+            //        if (page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14)
+            //        {
+            //            //YM2609 ch3 || ch13 || ch14 || ch15
+            //            if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume, n);
+            //            if (page.ch != 12) OutFmSetVolume(page.chip.lstPartWork[12].cpg, mml, page.chip.lstPartWork[12].cpg.volume, n);
+            //            if (page.ch != 13) OutFmSetVolume(page.chip.lstPartWork[13].cpg, mml, page.chip.lstPartWork[13].cpg.volume, n);
+            //            if (page.ch != 14) OutFmSetVolume(page.chip.lstPartWork[14].cpg, mml, page.chip.lstPartWork[14].cpg.volume, n);
+            //        }
+            //        else
+            //        {
+            //            //YM2609 ch9 || ch16 || ch17 || ch18
+            //            if (page.ch != 8) OutFmSetVolume(page.chip.lstPartWork[8].cpg, mml, page.chip.lstPartWork[8].cpg.volume, n);
+            //            if (page.ch != 15) OutFmSetVolume(page.chip.lstPartWork[15].cpg, mml, page.chip.lstPartWork[15].cpg.volume, n);
+            //            if (page.ch != 16) OutFmSetVolume(page.chip.lstPartWork[16].cpg, mml, page.chip.lstPartWork[16].cpg.volume, n);
+            //            if (page.ch != 17) OutFmSetVolume(page.chip.lstPartWork[17].cpg, mml, page.chip.lstPartWork[17].cpg.volume, n);
+            //        }
+            //    }
+            //}
 
         }
 
@@ -2701,20 +2726,7 @@ namespace Core
             {
                 case "EX":
                     int n = (int)mml.args[1];
-                    byte res = 0;
-                    while (n % 10 != 0)
-                    {
-                        if (n % 10 > 0 && n % 10 < 5)
-                        {
-                            res += (byte)(1 << (n % 10 - 1));
-                        }
-                        else
-                        {
-                            msgBox.setErrMsg(string.Format(msg.get("E11005"), n), mml.line.Lp);
-                            break;
-                        }
-                        n /= 10;
-                    }
+                    byte res = GetSlotBit(mml, n);
                     if (res != 0)
                     {
                         page.slotsEX = res;
@@ -2744,6 +2756,7 @@ namespace Core
 
                         if (p.apg.Type == enmChannelType.FMOPNex)
                         {
+                            p.apg.Ch3SpecialMode = true;
                             p.apg.slots = p.apg.slotsEX;
                             p.apg.beforeVolume = -1;
                             p.apg.beforeFNum = -1;
@@ -2762,6 +2775,7 @@ namespace Core
                         {
                             if (pg.Type == enmChannelType.FMOPNex)
                             {
+                                p.apg.Ch3SpecialMode = false;
                                 pg.beforeVolume = -1;
                                 pg.beforeFNum = -1;
                                 pg.freq = -1;
@@ -2807,6 +2821,25 @@ namespace Core
 
                     break;
             }
+        }
+
+        private byte GetSlotBit(MML mml,int n)
+        {
+            byte res = 0;
+            while (n % 10 != 0)
+            {
+                if (n % 10 > 0 && n % 10 < 5)
+                {
+                    res += (byte)(1 << (n % 10 - 1));
+                }
+                else
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E11005"), n), mml.line.Lp);
+                    break;
+                }
+                n /= 10;
+            }
+            return res;
         }
 
         public override void CmdVOperator(partPage page, MML mml)

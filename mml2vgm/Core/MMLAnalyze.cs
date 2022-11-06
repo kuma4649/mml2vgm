@@ -644,6 +644,20 @@ namespace Core
                     {
                         msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
                     }
+                    pw.skipTabSpace(page);
+                    a = pw.getChar(page);
+                    if (a == ',')
+                    {
+                        pw.incPos(page);
+                        if (!pw.getNum(page, out n))
+                        {
+                            if (mml.type == enmMMLType.Instrument) msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                            else msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
+                            n = 0;
+                        }
+                        mml.args.Add("OP");
+                        mml.args.Add(n);
+                    }
                 }
                 else if (
                         (
