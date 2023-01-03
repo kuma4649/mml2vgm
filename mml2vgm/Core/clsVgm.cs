@@ -63,6 +63,7 @@ namespace Core
         public Dictionary<int, MmlDatum[]> instArp = new Dictionary<int, MmlDatum[]>();
         public Dictionary<int, MmlDatum[]> instVArp = new Dictionary<int, MmlDatum[]>();
         public Dictionary<int, MmlDatum[]> instCommandArp = new Dictionary<int, MmlDatum[]>();
+        public Dictionary<int, byte[]> instTLOFS = new Dictionary<int, byte[]>();
 
         public Dictionary<string, List<List<Line>>>[] partData = new Dictionary<string, List<List<Line>>>[]{
             new Dictionary<string, List<List<Line>>>(),new Dictionary<string, List<List<Line>>>()
@@ -95,6 +96,7 @@ namespace Core
         private int opna2wfsInstrumentCounter = -1;
         private byte[] opna2WfsInstrumentBufCache = null;
 
+
         public bool doSkip = false;
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
@@ -102,6 +104,7 @@ namespace Core
         private int instArpCounter = -1;
         private int instCommandArpCounter = -1;
         private int instVArpCounter = -1;
+        private int instTLOFSCounter = -1;
 
         private int instModCounter = -1;
         private byte[] fdsModulationInstrumentBufCache = null;
@@ -624,6 +627,12 @@ namespace Core
                 SetInstModulation();
             }
 
+            if (instTLOFSCounter != -1)
+            {
+                instTLOFSCounter = -1;
+                SetInstTLOFS();
+            }
+
             //定義中で終わってしまった場合はエラーとする
             CheckDefineInstrument(null);
 
@@ -750,6 +759,21 @@ namespace Core
             if (buf.ToUpper().IndexOf("TFI") == 0)
             {
                 defineTFIInstrument(line);
+                return 0;
+            }
+
+            if (buf.ToUpper().IndexOf("TLOFS") == 0)
+            {
+                instrumentName = "";
+                try
+                {
+                    instTLOFSCounter = 0;
+                    StoreTLOFSBuffer(line);
+                }
+                catch
+                {
+                    msgBox.setWrnMsg(msg.get("E01xxx"), line.Lp);
+                }
                 return 0;
             }
 
@@ -1112,6 +1136,11 @@ namespace Core
                 return StoreInstCommandArpBuffer(line);
             }
 
+            if (instTLOFSCounter != -1)
+            {
+                return StoreTLOFSBuffer(line);
+            }
+
             return 0;
         }
 
@@ -1281,6 +1310,38 @@ namespace Core
             ret.Add((byte)(voi[1] & 0x7));//FB
 
             return ret.ToArray();
+        }
+
+        private void defineTLOFSInstrument(Line line)
+        {
+            try
+            {
+                string[] vs = Common.CutComment(line.Txt).Trim().Substring(2).Trim().Substring(5).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                if (vs.Length < 1) throw new ArgumentOutOfRangeException();
+                for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
+
+                int num = Common.ParseNumber(vs[0]);
+                string fn = vs[1].Trim().Trim('"');
+                byte[] buf;
+                fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                if (!File.Exists(fn))
+                {
+                    //fn = Path.Combine(line.Lp.path, fn);
+                    fn = Path.Combine(wrkPath, fn);
+                    fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                }
+                buf = File.ReadAllBytes(fn);
+
+                if (instFM.ContainsKey(num))
+                    instFM.Remove(num);
+                instFM.Add(num, new Tuple<string, byte[]>("", ConvertTFItoM(num, buf)));
+
+                return;
+            }
+            catch
+            {
+                msgBox.setWrnMsg(msg.get("E01021"), line.Lp);
+            }
         }
 
         private void definePCMInstrument(Line line)
@@ -2616,6 +2677,95 @@ namespace Core
             return lstBuf;
         }
 
+        /// <summary>
+        /// TLOFS専用
+        /// </summary>
+        private List<byte> GetNumsIntForTLOFS(int ptr, string vals)
+        {
+            List<byte> lstBuf = new List<byte>();
+            string n = "";
+            string h = "";
+            int hc = -1;
+            int i;
+            int p = 0;
+
+            foreach (char c in vals)
+            {
+                p++;
+                if (p <= ptr) continue;
+
+                if (c == '$')
+                {
+                    hc = 0;
+                    continue;
+                }
+
+                if (c == 'O')
+                {
+                    if (vals.Length > p + 1)
+                    {
+                        string v = vals.Substring(p, 2);
+                        if (v == "CT")
+                        {
+                            lstBuf.Add(0);
+                            continue;
+                        }
+                    }
+                }
+
+                if (c == 'V')
+                {
+                    if (vals.Length > p + 1)
+                    {
+                        string v = vals.Substring(p, 2);
+                        if (v == "OL")
+                        {
+                            lstBuf.Add(1);
+                            continue;
+                        }
+                    }
+                }
+
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                {
+                    h += c;
+                    hc++;
+                    if (hc == 2)
+                    {
+                        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                        byte dat = (byte)i;
+                        lstBuf.Add(dat);
+                        h = "";
+                        hc = -1;
+                    }
+                    continue;
+                }
+
+                if ((c >= '0' && c <= '9') || c == '-' || c == '+')
+                {
+                    n +=  c.ToString();
+                    continue;
+                }
+
+                if (int.TryParse(n, out i))
+                {
+                    lstBuf.Add((byte)i);
+                    n = "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                {
+                    lstBuf.Add((byte)i);
+                    n = "";
+                }
+            }
+
+            return lstBuf;
+        }
+
         private static void GetItemsAtCmdArp(int sin, List<MmlDatum> lstBuf, ref enmMMLType tp, ref List<object> tpArgs, ref enmMMLType defTp, ref List<object> defArgs, string vals)
         {
             string n = "";
@@ -3158,6 +3308,35 @@ namespace Core
             return 0;
         }
 
+        private int StoreTLOFSBuffer(Line line)
+        {
+            try
+            {
+                List<byte> buf = null;
+                if (instTLOFSCounter == 0)
+                {
+                    string txt = line.Txt.ToUpper();
+                    buf = GetNumsIntForTLOFS(Common.CutComment(txt).IndexOf("TLOFS") + 5, Common.CutComment(txt));
+                    instTLOFSCounter = buf[0] + 1;
+                    if (instTLOFS.ContainsKey(buf[0]))
+                        instTLOFS.Remove(buf[0]);
+                    instTLOFS.Add(buf[0], buf.ToArray());
+                }
+                else
+                {
+                    string txt = line.Txt.ToUpper();
+                    buf = GetNumsIntForTLOFS(Common.CutComment(txt).IndexOf('@') + 1, Common.CutComment(txt));
+                    List<byte> ebuf = new List<byte>(instTLOFS[instTLOFSCounter - 1]);
+                    ebuf.AddRange(buf);
+                    instTLOFS.Remove(instTLOFSCounter - 1);
+                    instTLOFS.Add(instTLOFSCounter - 1, ebuf.ToArray());
+                }
+            }
+            catch { }
+
+            return 0;
+        }
+
         private int StoreInstCommandArpBuffer(Line line)
         {
             try
@@ -3225,6 +3404,11 @@ namespace Core
         private void SetInstVArp()
         {
             instVArpCounter = -1;
+        }
+
+        private void SetInstTLOFS()
+        {
+            instTLOFSCounter = -1;
         }
 
         private void SetInstCommandArp()
@@ -6226,6 +6410,11 @@ namespace Core
                 case enmMMLType.RR15:
                     log.Write("RR15");
                     page.chip.CmdRR15(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.TLOFS:
+                    log.Write("TLOFS");
+                    page.chip.CmdTLOFS(page, mml);
                     page.mmlPos++;
                     break;
                 default:

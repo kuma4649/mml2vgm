@@ -944,6 +944,8 @@ CAOFn           oooooooooooooooooooooooooooooooooooooooooooooooooooooo  コマ�
 CAn1,n2         oooooooooooooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの定義番号を指定
                                                                          ( n1: アルペジオスロット 0 -  
                                                                            n2: 定義番号           0 - 255 )
+TLOFSONn1,n2    -oo----oo---oo---oo----oo-o---------------------------  TLオフセットの開始(n1:定義番号 n2:使用するスロットの列挙(1-4))
+TLOFSOFn1       -oo----oo---oo---oo----oo-o---------------------------  TLオフセットの停止(n1:定義番号)
 EXON            -oo----oo---oo---oo----oo-----------------------------  効果音モードの開始
 EXOF            -oo----oo---oo---oo----oo-----------------------------  効果音モードの停止
 EXn             -oo----oo---oo---oo----oo-----------------------------  効果音モードのスロット割り当て(使用するスロットを列挙する)
@@ -1028,7 +1030,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符�
 x               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直前と同じノートを意味します。但し、ベンドした場合はその時の開始音が対象になります)
     +           -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  半音上げる
     -           -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  半音下げる
-    \n\         -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  ピッチシフト
+    \n\         -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  ピッチシフト(Dコマンドと異なり、FNUM値にそのまま加算されます)
     n           -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
     #n          -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
     .           -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  符点
@@ -1639,6 +1641,27 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
                 > 音色を番号2に設定し、持続clock数24だけ持続する。
                 > 音色を番号3に設定し、持続clock数24だけ持続する。
                 > ループポイントに戻る。
+
+
+■ TLオフセット定義
+
+'@ TLOFS No , Trig , Reso , Data ...
+    No          定義番号(0-255)
+    Trig        ( oct | vol ) 音程 又は 音量 をトリガとする
+    Reso        ( 1 - 127 )
+                定義するデータの解像度。音程の場合は例えば1を指定すると1音階ずつ定義。12を指定すると12音階(1オクターブ)毎に定義する。
+                音量の場合はvコマンドの値に対して行う。
+    Data        (-128 ～ 127)
+                TLに加算する値を必要なだけ定義する。
+
+    例)
+    '@ TLOFS 0 , oct , 12 , 0,1,2,3,4,5,6,7,8,9
+                定義番号0に以下を定義する。
+                > 音程をトリガとする。
+                > 12音階ごとに定義する。
+                >   o0 には　0、　o1 には　1 ... と順番に定義している。
+
+                例えばこの定義を使用すると、o4の音程を発音するとTLOFSONで指定したスロットのTLに4の補正がかかります
 
 
 ■ エイリアス定義

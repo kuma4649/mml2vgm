@@ -702,6 +702,7 @@ namespace Core
         public bool RR15sw { get; set; } = false;
         public int RR15 { get; set; } = 0;
         public int voperator { get; set; } = 0;
+        public Dictionary<byte, byte> TLOFS = new Dictionary<byte, byte>();
 
         public bool PASwitch = false;
         public int PAIndex = 0;//現在のノートの位置
@@ -712,6 +713,7 @@ namespace Core
         public Note PAnoteOld = null;
         public int PATiePos = 0;
         public long waitRR15Counter=-1;
+        public int[] beforeTL = new int[] { -1, -1, -1, -1 };
 
         public partPage(partWork partwork,partPage sharedPg)
         {

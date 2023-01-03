@@ -2538,6 +2538,12 @@ namespace Core
             msgBox.setErrMsg(msg.get("E10048")
                     , null);
         }
+
+        public virtual void CmdTLOFS(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10048")
+                    , mml.line.Lp);
+        }
     }
 
     public class clsPcmDataInfo

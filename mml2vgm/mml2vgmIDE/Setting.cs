@@ -322,6 +322,32 @@ namespace mml2vgmIDE
                 _YM2609Type = value;
             }
         }
+        private ChipType _GigatronType = new ChipType();
+        public ChipType GigatronType
+        {
+            get
+            {
+                return _GigatronType;
+            }
+
+            set
+            {
+                _GigatronType = value;
+            }
+        }
+        private ChipType _GigatronSType = new ChipType();
+        public ChipType GigatronSType
+        {
+            get
+            {
+                return _GigatronSType;
+            }
+
+            set
+            {
+                _GigatronSType = value;
+            }
+        }
 
         private ChipType _YM2610Type = new ChipType();
         public ChipType YM2610Type

@@ -368,9 +368,9 @@ namespace Core
                     log.Write(" lfo switch or system effect");
                     CmdLfoSwitchOrSystemEffect(pw, page, mml);
                     break;
-                case 'T': // tempo or RR15 send mode
-                    log.Write(" tempo");
-                    CmdTempoOrRR15(pw, page, mml);
+                case 'T': // tempo  or  RR15 send mode  or  TLOFS
+                    log.Write(" tempo or RR15 send mode or TLOFS");
+                    CmdTempoOrRR15OrTLOFS(pw, page, mml);
                     break;
                 case 'U': // velocity
                     log.Write("velocity");
@@ -464,13 +464,18 @@ namespace Core
             }
         }
 
-        private void CmdTempoOrRR15(partWork pw, partPage page, MML mml)
+        private void CmdTempoOrRR15OrTLOFS(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             if (pw.getChar(page) == 'T') //TT
             {
                 CmdRR15(pw, page, mml);
                 useRR15 = true;
+                return;
+            }
+            else if (pw.getChar(page) == 'L') //TL
+            {
+                CmdTLOFS(pw, page, mml);
                 return;
             }
             CmdTempo(pw, page, mml);
@@ -524,6 +529,70 @@ namespace Core
             }
 
             msgBox.setErrMsg(msg.get("E05085"), mml.line.Lp);
+            return;
+        }
+
+        private void CmdTLOFS(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'O') //TLOFS
+            {
+                msgBox.setErrMsg(msg.get("E05087"), mml.line.Lp);
+                return;
+            }
+            pw.incPos(page);
+            if (pw.getChar(page) != 'F') //TLOFS
+            {
+                msgBox.setErrMsg(msg.get("E05087"), mml.line.Lp);
+                return;
+            }
+            pw.incPos(page);
+            if (pw.getChar(page) != 'S') //TLOFS
+            {
+                msgBox.setErrMsg(msg.get("E05087"), mml.line.Lp);
+                return;
+            }
+            pw.incPos(page);
+            if (pw.getChar(page) != 'O') //TLOFSO
+            {
+                msgBox.setErrMsg(msg.get("E05087"), mml.line.Lp);
+                return;
+            }
+
+            pw.incPos(page);
+            if (pw.getChar(page) == 'N') //TLOFSON
+            {
+                mml.type = enmMMLType.TLOFS;
+                mml.args = new List<object>();
+                mml.args.Add(true);
+                
+                pw.incPos(page);
+                if (pw.getNum(page, out int n))
+                    n = Math.Max(n, 0);
+                mml.args.Add(n);
+
+                pw.skipTabSpace(page);
+
+                pw.incPos(page);
+                if (pw.getNum(page, out n))
+                    n = Math.Max(n, 0);
+
+                mml.args.Add(n);
+                return;
+            }
+            if (pw.getChar(page) == 'F') //TLOFSOF
+            {
+                mml.type = enmMMLType.TLOFS;
+                mml.args = new List<object>();
+                mml.args.Add(false);
+                pw.incPos(page);
+                if (pw.getNum(page, out int n))
+                    n = Math.Max(n, 0);
+                mml.args.Add(n);
+                return;
+            }
+
+            msgBox.setErrMsg(msg.get("E05087"), mml.line.Lp);
             return;
         }
 

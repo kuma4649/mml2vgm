@@ -666,6 +666,9 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             tl &= 0x7f;
 
+            if (page.beforeTL[ope] == tl) return;
+            page.beforeTL[ope] = tl;
+
             SOutData(page, mml, port, (byte)(0x40 + vch + ope * 4), (byte)tl);
         }
 
@@ -871,7 +874,9 @@ namespace Core
                 {
                     if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
                     {
-                        ope[i] = -1;
+                        //ope[i] = -1;
+                        ope[i] += GetTLOFS(page, mml, i);
+                        ope[i] = Common.CheckRange(ope[i], 0, 127);
                         continue;
                     }
                 }
@@ -883,7 +888,8 @@ namespace Core
                         continue;
                     }
                 }
-                ope[i] = ope[i] + (127 - vol);
+                ope[i] += (127 - vol);
+                ope[i] += GetTLOFS(page,mml,i);
                 ope[i] = Common.CheckRange(ope[i], 0, 127);
             }
 
@@ -918,6 +924,42 @@ namespace Core
             if ((page.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 1, ope[1]);
             if ((page.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 2, ope[2]);
             if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
+        }
+
+        private int GetTLOFS(partPage page,MML mml, int slot)
+        {
+            int tlOfs = 0;
+
+            foreach (byte k in page.TLOFS.Keys)
+            {
+                byte trgSlot = GetSlotBit(mml, page.TLOFS[k]);
+                if ((trgSlot & (1 << slot)) == 0) continue;
+                if (!parent.instTLOFS.ContainsKey(k)) continue;
+
+                byte[] dat = parent.instTLOFS[k];
+                if (dat == null || dat.Length < 3) continue;
+                byte trig = dat[1];
+                byte reso = Math.Max(dat[2], (byte)1);
+
+                int n;
+                if (trig == 0)
+                {
+                    //octave 
+                    n = page.octaveNow * 12 + "ccddeffggaab".IndexOf(page.noteCmd) + page.keyShift;
+                }
+                else
+                {
+                    //volume
+                    n = page.volume;
+                }
+                n = n / reso;
+                n += 3;
+                if (n >= dat.Length) n = dat.Length - 1;
+                sbyte v = (sbyte)dat[n];
+                tlOfs += v;
+            }
+
+            return tlOfs;
         }
 
         public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot, int n)
@@ -2105,6 +2147,8 @@ namespace Core
                 return;
             }
 
+            SetVolume(page, mml);
+
             int[] ftbl = page.chip.FNumTbl[0];
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
@@ -2131,6 +2175,7 @@ namespace Core
                 }
                 f += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
+
             while (f < ftbl[0])
             {
                 if (o == 1)
@@ -2277,7 +2322,7 @@ namespace Core
                 vol += page.varpDelta;
             }
 
-            if (page.spg.beforeVolume != vol)
+            //if (page.spg.beforeVolume != vol)
             {
                 if (parent.instFM.ContainsKey(page.instrument))
                 {
@@ -3111,6 +3156,52 @@ namespace Core
             SetRR15(page, null, page.slots);
         }
 
+        public override void CmdTLOFS(partPage page, MML mml)
+        {
+            if (page.Type != enmChannelType.FMOPN && page.Type != enmChannelType.FMOPNex)
+            {
+                msgBox.setErrMsg(msg.get("E11012")
+                        , mml.line.Lp);
+                return;
+            }
+
+            if (mml.args == null || mml.args.Count < 2)
+            {
+                msgBox.setErrMsg(msg.get("E11012")
+                    , mml.line.Lp);
+                return;
+            }
+
+            bool sw = (bool)mml.args[0];
+            if (sw)
+            {
+                SetTLOFS(page, mml);
+                return;
+            }
+
+            ResetTLOFS(page, mml);
+        }
+
+
+        private void SetTLOFS(partPage page, MML mml)
+        {
+            byte n = (byte)(int)mml.args[1];
+            if (page.TLOFS.ContainsKey(n))
+            {
+                page.TLOFS.Remove(n);
+            }
+            page.TLOFS.Add(n, (byte)(int)mml.args[2]);
+        }
+
+        private void ResetTLOFS(partPage page, MML mml)
+        {
+            byte n = (byte)(int)mml.args[1];
+            if (page.TLOFS.ContainsKey(n))
+            {
+                page.TLOFS.Remove(n);
+            }
+        }
+
         public override void SetupPageData(partWork pw, partPage page)
         {
             //周波数
@@ -3235,6 +3326,25 @@ namespace Core
                 }
             }
 
+        }
+
+        private void outTL(partPage page,MML mml)
+        {
+
+            SetVolume(page, null);
+            int n = page.instrument;
+
+            for(int i = 0; i < 4; i++)
+            {
+                int tl = 0;
+
+                tl = Common.CheckRange(tl, 0, 127);
+                if (page.beforeTL[0] != tl)
+                {
+                    page.beforeTL[0] = tl;
+                    OutFmSetTl(mml, page, 0, tl);
+                }
+            }
         }
 
     }

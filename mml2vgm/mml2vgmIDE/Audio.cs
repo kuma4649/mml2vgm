@@ -279,6 +279,7 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2609, setting.YM2609Type, setting.YM2609SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2610, setting.YM2610Type, setting.YM2610SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2612, setting.YM2612Type, setting.YM2612SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.Gigatron, setting.GigatronType, setting.GigatronSType, setting.LatencyEmulation, setting.LatencySCCI);
 
             chipRegister.SetRealChipInfo(EnmZGMDevice.HuC6280, setting.HuC6280Type, setting.HuC6280SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.K051649, setting.K051649Type, setting.K051649SType, setting.LatencyEmulation, setting.LatencySCCI);

@@ -246,6 +246,7 @@ E05083=A '|]' has been specified even though you have not started a part-wise re
 E05084=The other cannot be executed during part replacement or part arpeggio.
 E05085=Unknown command ('TTO?') defined.
 E05086=Unknown command ('VOP?') defined.
+E05087=Unknown command ('TLOFS?') defined.
 
 
 ;partWork.cs 06000
@@ -337,6 +338,7 @@ E11008=Sound patch does not exist as PCM definition({0}).
 E11009=Selected Tone number({0}) is not for {1} PCM data.
 E11010=Unknown command defined. (TTON/TTOF)
 E11011=The specified value of VOP is invalid.
+E11012=Unknown command defined. (TLOFS)
 
 
 ;HuC6280.cs 12000

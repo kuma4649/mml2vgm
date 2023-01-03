@@ -1,0 +1,63 @@
+﻿'{
+
+	TitleName   =TLOFS test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+lead synthっぽいなにか
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,001,001,001,005,026,000,001,002,000,000
+'@ 031,004,003,008,010,000,000,000,003,000,000
+'@ 031,001,001,001,005,020,000,001,006,000,000
+'@ 031,004,003,008,010,004,000,000,005,000,000
+   ALG FB
+'@ 004,005
+
+
+ 音程によるTLのシフト
+         NO    trig  reso
+'@ TLOFS 000 , oct , 12
+          o0   1   2   3   4   5   6   7   8   9
+'@         1,  2,  3,  4, 16, -7, -7, -8, -9,-10
+
+ 音量によるTLのシフト
+         NO    trig  reso
+'@ TLOFS 001 , vol , 15
+          v0  15  30  45  60  75  90 105 120 127
+'@        20, 20, 20, 20, 20, 20, 20,  9,-10,  0
+
+
+'Cn1 T60
+Cn1 L
+
+'F1 @0D0p3v120o4l4q0
+
+
+'F1 v111c>c<
+ 音程によるTLのシフト
+           num  slot
+'F1 TLOFSON  0 ,  13
+'F1 v111c>c< 
+'F1 TLOFSOF  0
+
+
+'F1 v111cv120c
+ 音量によるTLのシフト
+           num  slot
+'F1 TLOFSON  1 ,  13
+'F1 v111cv120c
+'F1 TLOFSOF  1
+
+
+

@@ -264,6 +264,9 @@
     <None Include="sample\Syntax\testReplaceCommandByParts.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\TLOFStest.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\ttonTest.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
