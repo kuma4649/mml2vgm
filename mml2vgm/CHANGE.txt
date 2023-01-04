@@ -1,4 +1,8 @@
 更新履歴
+TAG668 2023/01/04 2nd
+  Core:OPN系:TLオフセット機能を修正
+  (Thanks!! D.M.88さん)
+
 TAG667 2023/01/04
   Core,IDE:各種dllの更新
   IDE:IronPythonの起動処理の調整

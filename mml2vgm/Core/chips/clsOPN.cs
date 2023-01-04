@@ -1,4 +1,5 @@
-﻿using musicDriverInterface;
+﻿using MDSound;
+using musicDriverInterface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -945,7 +946,8 @@ namespace Core
                 if (trig == 0)
                 {
                     //octave 
-                    n = page.octaveNow * 12 + "ccddeffggaab".IndexOf(page.noteCmd) + page.keyShift;
+                    n = page.octaveNow * 12 + "c d ef g a b".IndexOf(page.noteCmd) + page.shift + 12;
+                    n = Common.CheckRange(n, 0, 132);
                 }
                 else
                 {
