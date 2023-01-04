@@ -29,8 +29,8 @@ namespace mml2vgmIDE
             {
                 engine = Python.CreateEngine();
                 var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
-                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List;
-                hooks.Clear();
+                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
+                if(hooks!=null) hooks.Clear();
                 ScriptSource source = engine.CreateScriptSourceFromFile(path);
                 CompiledCode code = source.Compile();
                 ScriptScope scope = engine.CreateScope();
@@ -102,8 +102,8 @@ namespace mml2vgmIDE
             {
                 engine = Python.CreateEngine();
                 var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
-                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List;
-                hooks.Clear();
+                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
+                if (hooks != null) hooks.Clear();
                 ScriptSource source = engine.CreateScriptSourceFromFile(path);
                 CompiledCode code = source.Compile();
                 ScriptScope scope = engine.CreateScope();

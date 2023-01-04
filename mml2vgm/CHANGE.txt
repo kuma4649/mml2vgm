@@ -1,4 +1,8 @@
 更新履歴
+TAG667 2023/01/04
+  Core,IDE:各種dllの更新
+  IDE:IronPythonの起動処理の調整
+
 TAG666 2023/01/03
   txt:ピッチシフトについて説明を追加
   (Thanks!! maroさん)
