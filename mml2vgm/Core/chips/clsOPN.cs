@@ -952,7 +952,8 @@ namespace Core
                 else
                 {
                     //volume
-                    n = page.volume;
+                    n = 127 - page.volume;
+                    n = Common.CheckRange(n, 0, 127);
                 }
                 n = n / reso;
                 n += 3;
@@ -2887,7 +2888,7 @@ namespace Core
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E11005"), n), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E11013"), n), mml == null ? null : mml.line.Lp);
                     break;
                 }
                 n /= 10;
@@ -3187,6 +3188,8 @@ namespace Core
 
         private void SetTLOFS(partPage page, MML mml)
         {
+            if (mml == null || mml.args == null || mml.args.Count < 3) return;
+
             byte n = (byte)(int)mml.args[1];
             if (page.TLOFS.ContainsKey(n))
             {

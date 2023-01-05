@@ -575,7 +575,14 @@ namespace Core
 
                 pw.incPos(page);
                 if (pw.getNum(page, out n))
+                {
                     n = Math.Max(n, 0);
+                }
+                if (!CheckSlot(n,out byte res))
+                {
+                    msgBox.setErrMsg(msg.get("E05088"), mml.line.Lp);
+                    return;
+                }
 
                 mml.args.Add(n);
                 return;
@@ -594,6 +601,27 @@ namespace Core
 
             msgBox.setErrMsg(msg.get("E05087"), mml.line.Lp);
             return;
+        }
+
+        private bool CheckSlot(int n,out byte res)
+        {
+            res = 0;
+            while (n != 0)
+            {
+                if (n % 10 > 0 && n % 10 < 5)
+                {
+                    res += (byte)(1 << (n % 10 - 1));
+                }
+                else
+                {
+                    res = 0;
+                    return false;
+                }
+                n /= 10;
+            }
+            if (res == 0) return false;
+
+            return true;
         }
 
         private void CmdVelocity(partWork pw, partPage page, MML mml)
