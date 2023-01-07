@@ -715,6 +715,26 @@ namespace Core
         public long waitRR15Counter=-1;
         public int[] beforeTL = new int[] { -1, -1, -1, -1 };
 
+        /// <summary>
+        /// 音色パラメータ保持向けバッファ
+        /// 7OP分予約しています
+        /// 0 はALG や FBなど単独パラメータ保存
+        /// 1～はOP毎に存在するパラメータの保存に使用します
+        /// 
+        /// OPN系の場合
+        /// 0op : ALG FB 残りは未使用
+        /// 1op : AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR 残りは未使用
+        /// 2op : AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR 残りは未使用
+        /// 3op : AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR 残りは未使用
+        /// 4op : AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR 残りは未使用
+        /// 5op : 未使用
+        /// 6op : 未使用
+        /// </summary>
+        public int[] voice = new int[7 * voiceWidth];
+        public const int voiceWidth = 20;
+
+
+
         public partPage(partWork partwork,partPage sharedPg)
         {
             this.pw = partwork;

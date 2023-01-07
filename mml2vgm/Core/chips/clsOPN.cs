@@ -823,20 +823,20 @@ namespace Core
         /// <param name="ch">チャンネル</param>
         /// <param name="vol">ボリューム値</param>
         /// <param name="n">音色番号</param>
-        public void OutFmSetVolume(partPage page, MML mml, int vol, int n)
+        public void OutFmSetVolume(partPage page, MML mml, int vol)//, int n)
         {
-            if (!parent.instFM.ContainsKey(n))
-            {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
-                return;
-            }
+            //if (!parent.instFM.ContainsKey(n))
+            //{
+            //    msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+            //    return;
+            //}
 
-            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int alg = page.voice[0] & 0x7;
             int[] ope = new int[4] {
-                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                page.voice[partPage.voiceWidth+0*partPage.voiceWidth+5]
+                , page.voice[partPage.voiceWidth+1*partPage.voiceWidth+5]
+                , page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 5]
+                , page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 5]
             };
             int[][] algs = new int[8][]
             {
@@ -927,7 +927,7 @@ namespace Core
             if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
         }
 
-        private int GetTLOFS(partPage page,MML mml, int slot)
+        public int GetTLOFS(partPage page,MML mml, int slot)
         {
             int tlOfs = 0;
 
@@ -965,20 +965,20 @@ namespace Core
             return tlOfs;
         }
 
-        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot, int n)
+        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot)//, int n)
         {
-            if (!parent.instFM.ContainsKey(n))
-            {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
-                return;
-            }
+            //if (!parent.instFM.ContainsKey(n))
+            //{
+            //    msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+            //    return;
+            //}
 
-            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int alg =page.voice[0] & 0x7;
             int[] ope = new int[4] {
-                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 5]
+                , page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 5]
+                , page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 5]
+                , page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 5]
             };
             int[][] algs = new int[8][]
             {
@@ -1177,6 +1177,10 @@ namespace Core
                 ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
                 ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+
+                for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                        = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
             }
 
             if ((page.slots & 1) != 0) page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
@@ -1189,6 +1193,8 @@ namespace Core
             if ((page.slots & 8) != 0) page.op4dt2 = 0;
 
             ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, vpg, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
+            page.voice[0] = parent.instFM[n].Item2[45];//ALG
+            page.voice[1] = parent.instFM[n].Item2[46];//FB
 
             int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] op = new int[4] {
@@ -1232,35 +1238,35 @@ namespace Core
 
             //音量を再セットする
 
-            OutFmSetVolume(page, mml, vol, n);
+            OutFmSetVolume(page, mml, vol);
 
             //拡張チャンネルの場合は他の拡張チャンネルも音量を再セットする
             if (page.Type == enmChannelType.FMOPNex && isDef)
             {
                 if (!(page.chip is YM2609))
                 {
-                    if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume, n);
-                    if (page.ch != m + 3) OutFmSetVolume(page.chip.lstPartWork[m + 3].cpg, mml, page.chip.lstPartWork[m + 3].cpg.volume, n);
-                    if (page.ch != m + 4) OutFmSetVolume(page.chip.lstPartWork[m + 4].cpg, mml, page.chip.lstPartWork[m + 4].cpg.volume, n);
-                    if (page.ch != m + 5) OutFmSetVolume(page.chip.lstPartWork[m + 5].cpg, mml, page.chip.lstPartWork[m + 5].cpg.volume, n);
+                    if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume);
+                    if (page.ch != m + 3) OutFmSetVolume(page.chip.lstPartWork[m + 3].cpg, mml, page.chip.lstPartWork[m + 3].cpg.volume);
+                    if (page.ch != m + 4) OutFmSetVolume(page.chip.lstPartWork[m + 4].cpg, mml, page.chip.lstPartWork[m + 4].cpg.volume);
+                    if (page.ch != m + 5) OutFmSetVolume(page.chip.lstPartWork[m + 5].cpg, mml, page.chip.lstPartWork[m + 5].cpg.volume);
                 }
                 else
                 {
                     if (page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14)
                     {
                         //YM2609 ch3 || ch13 || ch14 || ch15
-                        if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume, n);
-                        if (page.ch != 12) OutFmSetVolume(page.chip.lstPartWork[12].cpg, mml, page.chip.lstPartWork[12].cpg.volume, n);
-                        if (page.ch != 13) OutFmSetVolume(page.chip.lstPartWork[13].cpg, mml, page.chip.lstPartWork[13].cpg.volume, n);
-                        if (page.ch != 14) OutFmSetVolume(page.chip.lstPartWork[14].cpg, mml, page.chip.lstPartWork[14].cpg.volume, n);
+                        if (page.ch != 2) OutFmSetVolume(page.chip.lstPartWork[2].cpg, mml, page.chip.lstPartWork[2].cpg.volume);
+                        if (page.ch != 12) OutFmSetVolume(page.chip.lstPartWork[12].cpg, mml, page.chip.lstPartWork[12].cpg.volume);
+                        if (page.ch != 13) OutFmSetVolume(page.chip.lstPartWork[13].cpg, mml, page.chip.lstPartWork[13].cpg.volume);
+                        if (page.ch != 14) OutFmSetVolume(page.chip.lstPartWork[14].cpg, mml, page.chip.lstPartWork[14].cpg.volume);
                     }
                     else
                     {
                         //YM2609 ch9 || ch16 || ch17 || ch18
-                        if (page.ch != 8) OutFmSetVolume(page.chip.lstPartWork[8].cpg, mml, page.chip.lstPartWork[8].cpg.volume, n);
-                        if (page.ch != 15) OutFmSetVolume(page.chip.lstPartWork[15].cpg, mml, page.chip.lstPartWork[15].cpg.volume, n);
-                        if (page.ch != 16) OutFmSetVolume(page.chip.lstPartWork[16].cpg, mml, page.chip.lstPartWork[16].cpg.volume, n);
-                        if (page.ch != 17) OutFmSetVolume(page.chip.lstPartWork[17].cpg, mml, page.chip.lstPartWork[17].cpg.volume, n);
+                        if (page.ch != 8) OutFmSetVolume(page.chip.lstPartWork[8].cpg, mml, page.chip.lstPartWork[8].cpg.volume);
+                        if (page.ch != 15) OutFmSetVolume(page.chip.lstPartWork[15].cpg, mml, page.chip.lstPartWork[15].cpg.volume);
+                        if (page.ch != 16) OutFmSetVolume(page.chip.lstPartWork[16].cpg, mml, page.chip.lstPartWork[16].cpg.volume);
+                        if (page.ch != 17) OutFmSetVolume(page.chip.lstPartWork[17].cpg, mml, page.chip.lstPartWork[17].cpg.volume);
                     }
                 }
             }
@@ -1936,9 +1942,9 @@ namespace Core
             for (byte ope = 0; ope < 4; ope++)
             {
                 if ((slot & (1 << ope)) == 0) continue;
-                if (!parent.instFM.ContainsKey(page.instrument)) continue;
+                //if (!parent.instFM.ContainsKey(page.instrument)) continue;
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope,
-                    parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + 4],// parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
                     15);
                 //((ClsOPN)page.chip).OutFmSetTl(mml, page, ope,
                 //    127);
@@ -1947,13 +1953,13 @@ namespace Core
 
         protected virtual void ResetRR15(partPage page, MML mml, int slot)
         {
-            if (!parent.instFM.ContainsKey(page.instrument)) return;
+            //if (!parent.instFM.ContainsKey(page.instrument)) return;
             for (byte ope = 0; ope < 4; ope++)
             {
                 if ((slot & (1 << ope)) == 0) continue;
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope,
-                    parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
-                    parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + 4],//parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + 3]);// parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
             }
             //page.spg.beforeVolume = -1;
             //SetFmVolume(page, mml);
@@ -2327,9 +2333,9 @@ namespace Core
 
             //if (page.spg.beforeVolume != vol)
             {
-                if (parent.instFM.ContainsKey(page.instrument))
+                //if (parent.instFM.ContainsKey(page.instrument))
                 {
-                    OutFmSetVolume(page, mml, vol, page.instrument);
+                    OutFmSetVolume(page, mml, vol);
                 }
                 page.spg.beforeVolume = vol;
             }
@@ -2362,9 +2368,9 @@ namespace Core
 
             if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
             {
-                if (parent.instFM.ContainsKey(page.instrument))
+                //if (parent.instFM.ContainsKey(page.instrument))
                 {
-                    OutFmSetTL(page, mml, tl1, tl2, tl3, tl4, slot, page.instrument);
+                    OutFmSetTL(page, mml, tl1, tl2, tl3, tl4, slot);//, page.instrument);
                 }
                 page.spg.beforeTlDelta1 = tl1;
                 page.spg.beforeTlDelta2 = tl2;
@@ -2457,32 +2463,34 @@ namespace Core
             if (i < 0) return;
 
             page.toneDoublerKeyShift = 0;
-            byte[] instFM = parent.instFM[i].Item2;
-            if (instFM == null || instFM.Length < 1) return;
+            //byte[] instFM = parent.instFM[i].Item2;
+            //if (instFM == null || instFM.Length < 1) return;
             Note note = (Note)mml.args[0];
 
             if (page.TdA == -1)
             {
                 //resetToneDoubler
-                if (page.op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op1ml != page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 7])// + instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    OutFmSetDtMl(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    //OutFmSetDtMl(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    //page.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    OutFmSetDtMl(mml, page, 0, page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 8], page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 7]);
+                    page.op1ml = page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 7];
                 }
-                if (page.op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op2ml != page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 7])
                 {
-                    OutFmSetDtMl(mml, page, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    OutFmSetDtMl(mml, page, 1, page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 8], page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 7]);
+                    page.op2ml = page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 7];
                 }
-                if (page.op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op3ml != page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 7])
                 {
-                    OutFmSetDtMl(mml, page, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    OutFmSetDtMl(mml, page, 2, page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 8], page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 7]);
+                    page.op3ml = page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 7];
                 }
-                if (page.op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op4ml != page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 7])
                 {
-                    OutFmSetDtMl(mml, page, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    OutFmSetDtMl(mml, page, 3, page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 8], page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 7]);
+                    page.op4ml = page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 7];
                 }
             }
             else
@@ -2521,22 +2529,23 @@ namespace Core
 
                 if (page.op1ml != instToneDoubler.lstTD[us].OP1ML)
                 {
-                    OutFmSetDtMl(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
+                    //OutFmSetDtMl(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
+                    OutFmSetDtMl(mml, page, 0, page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 8], instToneDoubler.lstTD[us].OP1ML);
                     page.op1ml = instToneDoubler.lstTD[us].OP1ML;
                 }
                 if (page.op2ml != instToneDoubler.lstTD[us].OP2ML)
                 {
-                    OutFmSetDtMl(mml, page, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
+                    OutFmSetDtMl(mml, page, 1, page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 8], instToneDoubler.lstTD[us].OP2ML);
                     page.op2ml = instToneDoubler.lstTD[us].OP2ML;
                 }
                 if (page.op3ml != instToneDoubler.lstTD[us].OP3ML)
                 {
-                    OutFmSetDtMl(mml, page, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
+                    OutFmSetDtMl(mml, page, 2, page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 8], instToneDoubler.lstTD[us].OP3ML);
                     page.op3ml = instToneDoubler.lstTD[us].OP3ML;
                 }
                 if (page.op4ml != instToneDoubler.lstTD[us].OP4ML)
                 {
-                    OutFmSetDtMl(mml, page, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
+                    OutFmSetDtMl(mml, page, 3, page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 8], instToneDoubler.lstTD[us].OP4ML);
                     page.op4ml = instToneDoubler.lstTD[us].OP4ML;
                 }
 
@@ -2877,7 +2886,7 @@ namespace Core
             }
         }
 
-        private byte GetSlotBit(MML mml,int n)
+        public byte GetSlotBit(MML mml,int n)
         {
             byte res = 0;
             while (n % 10 != 0)
