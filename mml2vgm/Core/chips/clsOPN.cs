@@ -946,7 +946,8 @@ namespace Core
                 if (trig == 0)
                 {
                     //octave 
-                    n = page.octaveNow * 12 + "c d ef g a b".IndexOf(page.noteCmd) + page.shift + 12;
+                    int addShift = page.keyShift + page.toneDoublerKeyShift + (page.arpFreqMode ? 0 : page.arpDelta);
+                    n = page.octaveNow * 12 + "c d ef g a b".IndexOf(page.noteCmd) + page.shift + 12 + addShift;
                     n = Common.CheckRange(n, 0, 132);
                 }
                 else
