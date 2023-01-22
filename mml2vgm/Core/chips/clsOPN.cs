@@ -1148,7 +1148,7 @@ namespace Core
                     for (int ope = 0; ope < 4; ope++)
                     {
                         if (!isDef && (UMop & (1 << ope)) == 0) continue;
-                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, 0, 15);
+                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, 0, 15);
                     }
                     break;
                 case 2: // A)ll
@@ -1180,7 +1180,7 @@ namespace Core
                 ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
 
                 for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
-                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                    vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
                         = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
             }
 
@@ -1197,7 +1197,7 @@ namespace Core
             if ((FBALG & 2) != 0) page.voice[1] = vpg.voice[1] = parent.instFM[n].Item2[46];//FB
             ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, vpg, vpg.voice[1], vpg.voice[0]);
 
-            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int alg = page.voice[0] & 0x7;
             int[] op = new int[4] {
                 parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
                 , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]

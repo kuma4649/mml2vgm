@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using static MDSound.mpcmX68k;
 
 namespace Core
 {
@@ -2253,7 +2254,7 @@ namespace Core
                     , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
 
                 for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
-                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                    vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
                         = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
             }
 
@@ -2382,7 +2383,7 @@ namespace Core
                     );
 
                 for (int i = 0; i < opeLength; i++)
-                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                    vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
                         = parent.instFM[n].Item2[ope * opeLength + 1 + i];
             }
 
@@ -2512,13 +2513,19 @@ namespace Core
             //    msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
             //    return;
             //}
+            partPage vpg = page;
+            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                vpg = page.chip.lstPartWork[2].cpg;
+            if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                vpg = page.chip.lstPartWork[8].cpg;
+
 
             int alg;
             int[] ope;
             //if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
             //{
                 //alg = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
-                alg = page.voice[0] == 0xff ? 8 : page.voice[0] & 0x7;
+                alg = vpg.voice[0] == 0xff ? 8 : vpg.voice[0] & 0x7;
                 //ope = new int[4] {
                 //    parent.instFM[n].Item2[0 * 16 + 1 + 5]// 5 : TL
                 //    , parent.instFM[n].Item2[1 * 16 + 1 + 5]// 5 : TL
@@ -2526,11 +2533,11 @@ namespace Core
                 //    , parent.instFM[n].Item2[3 * 16 + 1 + 5]// 5 : TL
                 //};
                 ope = new int[4] {
-                page.voice[partPage.voiceWidth+0*partPage.voiceWidth+5]
-                , page.voice[partPage.voiceWidth+1*partPage.voiceWidth+5]
-                , page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 5]
-                , page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 5]
-            };
+                vpg.voice[partPage.voiceWidth+0*partPage.voiceWidth+5]
+                , vpg.voice[partPage.voiceWidth+1*partPage.voiceWidth+5]
+                , vpg.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 5]
+                , vpg.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 5]
+                };
             //}
             //else
             //{
@@ -2558,13 +2565,13 @@ namespace Core
 
             if (alg == 8)
             {
-                algs = GetVolumeOpe(algs, page, false);
+                algs = GetVolumeOpe(algs, vpg, false);
             }
 
             byte res = 0;
-            if (page.voperator != 0)
+            if (vpg.voperator != 0)
             {
-                int opV = page.voperator;
+                int opV = vpg.voperator;
                 while (opV % 10 != 0)
                 {
                     if (opV % 10 > 0 && opV % 10 < 5)
@@ -2603,16 +2610,6 @@ namespace Core
                 ope[i] = ope[i] + (127 - vol);
                 ope[i] += GetTLOFS(page, mml, i);
                 ope[i] = Common.CheckRange(ope[i], 0, 127);
-            }
-
-            partPage vpg = page;
-            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
-            {
-                vpg = page.chip.lstPartWork[2].cpg;
-            }
-            if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
-            {
-                vpg = page.chip.lstPartWork[8].cpg;
             }
 
             MML vmml = new MML();
