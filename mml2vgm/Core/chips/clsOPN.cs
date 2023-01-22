@@ -3,6 +3,7 @@ using musicDriverInterface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using static MDSound.mpcmX68k;
 
 namespace Core
 {
@@ -831,12 +832,27 @@ namespace Core
             //    return;
             //}
 
-            int alg = page.voice[0] & 0x7;
+            int m = (page.chip is YM2203) ? 0 : 3;
+            partPage vpg = page;
+            if (!(page.chip is YM2609))
+            {
+                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= m + 3 && page.ch < m + 6)
+                    vpg = page.chip.lstPartWork[2].cpg;
+            }
+            else
+            {
+                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                    vpg = page.chip.lstPartWork[2].cpg;
+                if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                    vpg = page.chip.lstPartWork[8].cpg;
+            }
+
+            int alg = vpg.voice[0] & 0x7;
             int[] ope = new int[4] {
-                page.voice[partPage.voiceWidth+0*partPage.voiceWidth+5]
-                , page.voice[partPage.voiceWidth+1*partPage.voiceWidth+5]
-                , page.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 5]
-                , page.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 5]
+                vpg.voice[partPage.voiceWidth+0*partPage.voiceWidth+5]
+                , vpg.voice[partPage.voiceWidth+1*partPage.voiceWidth+5]
+                , vpg.voice[partPage.voiceWidth + 2 * partPage.voiceWidth + 5]
+                , vpg.voice[partPage.voiceWidth + 3 * partPage.voiceWidth + 5]
             };
             int[][] algs = new int[8][]
             {
@@ -892,27 +908,6 @@ namespace Core
                 ope[i] += (127 - vol);
                 ope[i] += GetTLOFS(page,mml,i);
                 ope[i] = Common.CheckRange(ope[i], 0, 127);
-            }
-
-            partPage vpg = page;
-            if (!(page.chip is YM2609))
-            {
-                int m = (page.chip is YM2203) ? 0 : 3;
-                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= m + 3 && page.ch < m + 6)
-                {
-                    vpg = page.chip.lstPartWork[2].cpg;
-                }
-            }
-            else
-            {
-                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
-                {
-                    vpg = page.chip.lstPartWork[2].cpg;
-                }
-                if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
-                {
-                    vpg = page.chip.lstPartWork[8].cpg;
-                }
             }
 
             MML vmml = new MML();
@@ -1085,6 +1080,7 @@ namespace Core
             //ここにOP指定を読み込む処理追加
             byte UMop = 0xf;
             bool isDef = true;
+            int FBALG = 3;
             if (page.Type == enmChannelType.FMOPNex)
             {
                 //
@@ -1095,6 +1091,10 @@ namespace Core
                         UMop = GetSlotBit(mml, (byte)(int)mml.args[4]);
                         UMop = (byte)Common.CheckRange(UMop, 1, 15);
                         isDef = false;
+                    }
+                    if (mml.args.Count > 6 && mml.args[5].ToString() == "FA")
+                    {
+                        FBALG = (int)mml.args[6];
                     }
                 }
             }
@@ -1193,9 +1193,9 @@ namespace Core
             if ((page.slots & 4) != 0) page.op3dt2 = 0;
             if ((page.slots & 8) != 0) page.op4dt2 = 0;
 
-            ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, vpg, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
-            page.voice[0] = parent.instFM[n].Item2[45];//ALG
-            page.voice[1] = parent.instFM[n].Item2[46];//FB
+            if ((FBALG & 1) != 0) page.voice[0] = vpg.voice[0] = parent.instFM[n].Item2[45];//ALG
+            if ((FBALG & 2) != 0) page.voice[1] = vpg.voice[1] = parent.instFM[n].Item2[46];//FB
+            ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, vpg, vpg.voice[1], vpg.voice[0]);
 
             int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] op = new int[4] {

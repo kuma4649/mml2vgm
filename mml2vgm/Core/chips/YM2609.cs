@@ -2150,6 +2150,7 @@ namespace Core
             //ここにOP指定を読み込む処理追加
             byte UMop = 0xf;
             bool isDef = true;
+            int FBALG = 3;
             if (page.Type == enmChannelType.FMOPNex)
             {
                 //
@@ -2160,6 +2161,10 @@ namespace Core
                         UMop = GetSlotBit(mml, (byte)(int)mml.args[4]);
                         UMop = (byte)Common.CheckRange(UMop, 1, 15);
                         isDef = false;
+                    }
+                    if (mml.args.Count > 6 && mml.args[5].ToString() == "FA")
+                    {
+                        FBALG = (int)mml.args[6];
                     }
                 }
             }
@@ -2203,12 +2208,12 @@ namespace Core
                     for (int ope = 0; ope < 4; ope++)
                     {
                         if (!isDef && (UMop & (1 << ope)) == 0) continue;
-                        OutFmSetWtLDtMl(mml, page, ope, 0, 0, 0);
-                        ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope, 3, 31);
-                        OutFmSetAmDt2Dr(mml, page, ope, 1, 0, 31);
-                        ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope, 31);
-                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, 0, 15);
-                        ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope, 0);
+                        OutFmSetWtLDtMl(mml, vpg, ope, 0, 0, 0);
+                        ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope, 3, 31);
+                        OutFmSetAmDt2Dr(mml, vpg, ope, 1, 0, 31);
+                        ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, 31);
+                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, 0, 15);
+                        ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, 0);
                     }
                     page.feedBack = 7;
                     page.algo = 7;
@@ -2218,7 +2223,7 @@ namespace Core
 
             if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
             {
-                OutFmSetInstrumentOPNA(page, mml, n, vol,UMop,isDef);
+                OutFmSetInstrumentOPNA(page,vpg, mml, n, vol,UMop,isDef, FBALG);
                 return;
             }
 
@@ -2261,11 +2266,11 @@ namespace Core
             if ((page.slots & 4) != 0) page.op3dt2 = 0;
             if ((page.slots & 8) != 0) page.op4dt2 = 0;
 
-            page.feedBack = parent.instFM[n].Item2[46];
-            page.algo = parent.instFM[n].Item2[45] & 0x7;
-            OutFmSetPanRFeedbackAlgorithm(mml, vpg);
-            page.voice[0] = parent.instFM[n].Item2[45];//ALG
-            page.voice[1] = parent.instFM[n].Item2[46];//FB
+            if ((FBALG & 1) != 0) page.voice[0] = vpg.voice[0] = parent.instFM[n].Item2[45];//ALG
+            if ((FBALG & 2) != 0) page.voice[1] = vpg.voice[1] = parent.instFM[n].Item2[46];//FB
+            page.feedBack = page.voice[1];
+            page.algo = page.voice[0] & 0x7;
+            OutFmSetPanRFeedbackAlgorithm(mml, page);
 
             int[] op = new int[4] {
                 parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
@@ -2339,7 +2344,7 @@ namespace Core
             }
         }
 
-        private void OutFmSetInstrumentOPNA(partPage page, MML mml, int n, int vol, byte UMop, bool isDef)
+        private void OutFmSetInstrumentOPNA(partPage page,partPage vpg, MML mml, int n, int vol, byte UMop, bool isDef, int FBALG)
         {
             int opeLength = 16;
             for (int ope = 0; ope < 4; ope++)
@@ -2348,30 +2353,30 @@ namespace Core
                 if (!isDef && (UMop & (1 << ope)) == 0) continue;
 
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-                OutFmSetWtLDtMl(mml, page, ope
+                OutFmSetWtLDtMl(mml, vpg, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 13] // 13 : WT  1 : No  15 : OPE Size
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 8] // 8 : DT1
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 7]); // 7 : ML
 
-                ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope
+                ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 6]  //  6 : KS
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 0]  //  0 : AR
                     , page.phaseReset ? parent.instFM[n].Item2[ope * opeLength + 1 + 15] : -1 // 15 : PR
                     );
-                OutFmSetAmDt2Dr(mml, page, ope
+                OutFmSetAmDt2Dr(mml, vpg, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 10] // 10 : AM
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 9] // 9 : DT2
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 1] // 1 : DR
                     );
-                OutFmSetFbSr(mml, page, ope
+                OutFmSetFbSr(mml, vpg, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 12] // 12 : FB
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 2] //2 : SR
                     );
-                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope
+                ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 4] // 4 : SL
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 3] // 3 : RR
                     );
-                OutFmSetALGLinkSSGEG(mml, page, ope
+                OutFmSetALGLinkSSGEG(mml, vpg, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 14] // 14 : ALG Link
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 11] // 11 : SSG-EG
                     );
@@ -2390,16 +2395,16 @@ namespace Core
             if ((page.slots & 4) != 0) page.op3dt2 = parent.instFM[n].Item2[2 * opeLength + 1 + 9];// 9 : DT2
             if ((page.slots & 8) != 0) page.op4dt2 = parent.instFM[n].Item2[3 * opeLength + 1 + 9];// 9 : DT2
 
-            page.feedBack = parent.instFM[n].Item2[1 + 12] & 7;
-            page.algo = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
-            OutFmSetPanRFeedbackAlgorithm(mml, page);
-            page.algo = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
-            page.algConstSw = 0;
-            if (parent.instFM[n].Item2[65] == 0xff) page.algConstSw = 1;
-            OutOPNSetPanAmsAcPms(mml, page);
 
-            page.voice[0] = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);//ALG
-            page.voice[1] = 0;//FB
+            if ((FBALG & 1) != 0) page.voice[0] = vpg.voice[0] = parent.instFM[n].Item2[65];//ALG
+            if ((FBALG & 2) != 0) page.voice[1] = vpg.voice[1] = parent.instFM[n].Item2[1+12];//FB
+            page.feedBack =page.voice[1] & 7;
+            page.algo = page.voice[0] == 0xff ? 8 : (page.voice[0] & 0x7);
+            OutFmSetPanRFeedbackAlgorithm(mml, page);
+            page.algo = page.voice[0] == 0xff ? 8 : (page.voice[0] & 0x7);
+            page.algConstSw = 0;
+            if (page.voice[0] == 0xff) page.algConstSw = 1;
+            OutOPNSetPanAmsAcPms(mml, page);
 
             int[] op = new int[4] {
                 parent.instFM[n].Item2[0 * opeLength + 1 + 5]// 5 : TL
@@ -2440,16 +2445,15 @@ namespace Core
                 op[i] = Common.CheckRange(op[i], 0, 127);
             }
 
-            partPage vpg = page;
-            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
-            {
-                vpg = page.chip.lstPartWork[2].cpg;
-            }
+            //if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+            //{
+            //    vpg = page.chip.lstPartWork[2].cpg;
+            //}
 
-            if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
-            {
-                vpg = page.chip.lstPartWork[8].cpg;
-            }
+            //if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+            //{
+            //    vpg = page.chip.lstPartWork[8].cpg;
+            //}
 
             if ((isDef || (UMop & 1) != 0) && op[0] != -1) OutFmSetWtHTl(mml, vpg, 0, page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 13], op[0]);
             if ((isDef || (UMop & 2) != 0) && op[1] != -1) OutFmSetWtHTl(mml, vpg, 1, page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 13], op[1]);
