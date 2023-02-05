@@ -3229,12 +3229,12 @@ namespace mml2vgmIDE
 
                     if (vgmDriver.YM2413ClockValue != 0)
                     {
-                        MDSound.ym2413 ym2413 = new MDSound.ym2413();
+                        MDSound.emu2413 ym2413 = new MDSound.emu2413();
 
                         for (int i = 0; i < (((vgm)driver).YM2413DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip();
-                            chip.type = MDSound.MDSound.enmInstrumentType.YM2413;
+                            chip.type = MDSound.MDSound.enmInstrumentType.YM2413emu;
                             chip.ID = (byte)i;
                             chip.Instrument = ym2413;
                             chip.Update = ym2413.Update;

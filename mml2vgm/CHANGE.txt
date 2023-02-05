@@ -1,4 +1,8 @@
 更新履歴
+TAG674 2023/02/05
+  MDSoundの差し替え(PPZ8,OPLL対応版)
+  (Thanks!! ゆみちゃん)
+
 TAG673 2023/01/22 2nd
   Core:OPN系:TAG672にて、音量が正常に切り替えられないケースがあるバグを修正
   (Thanks!! maroさん)

@@ -1670,8 +1670,8 @@ namespace mml2vgmIDE
 
                 SN76489Register[chipID] = new int[8] { 0, 15, 0, 15, 0, 15, 0, 15 };
 
-                fmRegisterYM2413[chipID] = new int[0x39];
-                for (int i = 0; i < 0x39; i++)
+                fmRegisterYM2413[chipID] = new int[0x100];
+                for (int i = 0; i < 0x100; i++)
                 {
                     fmRegisterYM2413[chipID][i] = 0;
                 }
@@ -5151,7 +5151,7 @@ namespace mml2vgmIDE
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
                     if (!ctYM2413[Chip.Number].UseScci && ctYM2413[Chip.Number].UseEmu)
-                        mds.WriteYM2413(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                        mds.WriteYM2413emu(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
                 {
@@ -5171,7 +5171,7 @@ namespace mml2vgmIDE
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
                         foreach (PackData dat in pdata)
-                            mds.WriteYM2413(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            mds.WriteYM2413emu(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
                     {

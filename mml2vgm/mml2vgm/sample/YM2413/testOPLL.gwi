@@ -35,7 +35,15 @@ L01-03 !
 作成音色
 L01 D0o4v15@110cdefgab>c
 プリセット音色
-L01 D0o4v15@I2cdefgab>c
+'L01 D0o4v15@I2y$40,0
+'L01 y$41,$41 c
+'L01 y$41,$82 d
+'L01 y$41,$b6 e
+'L01 y$41,$fb f
+'L01 y$41,$bf g
+'L01 y$41,$6b a
+'L01 y$41,$28 b
+'L01 y$41,$14 >c
 L01 D20o4v15cv14dv13ev12fv11gv10av9b>v8c
 L01 D0o3v15Q1[c8c16c16>][l8dl16dd]
 L01 D0o3v15q1[c8c16c16>][l8dl16dd]
@@ -49,12 +57,12 @@ A1 o4v15rrrrrrrrrrcdefg
 S1 o3v15rrrrrrrrrrrrrrrcdefg
 
 BD
-'L10 m1
-'L10 so v15l4Q1o4[c16r16g16<g16>]4
-'L10             [g16_<<<c>>>r16g16_<<<c>>>g16_<<<c>>>]4
+L10 m1
+L10 so v15l4Q1o4[c16r16g16<g16>]4
+L10             [g16_<<<c>>>r16g16_<<<c>>>g16_<<<c>>>]4
 SD
-'L11 so v15l4Q1o3 ceg>c<
-'L11             [rc_<<c>>]2
+L11 so v15l4Q1o3 ceg>c<
+L11             [rc_<<c>>]2
 
 L12 sfo5q10[c c_>c<]4
 L13 o8q0[o8cc]4
@@ -65,4 +73,4 @@ L14 o3v9r4c4v10c4v9c4v10c4
 [c4)1]15
 L14 o8q0[c4]4
 
-'L11 r1
+L11 r1
