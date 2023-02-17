@@ -1,0 +1,31 @@
+﻿'{
+
+	TitleName   = YMF262(OPL3) test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'@ L 2 "鈴(2Ch:D-1o7b) (from Kuma 20/12/10)" 
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ 007 004 009 003 000 020 009 000 001 000 000 005
+'@ 009 005 011 010 000 000 015 000 001 000 000 000
+   CNT FB
+'@ 000 005
+
+'Cn1 T120
+
+'D0102 @2v63l4o7q1
+'D02   D-1
+'D0102 brbbrr brb16b16br
+
+

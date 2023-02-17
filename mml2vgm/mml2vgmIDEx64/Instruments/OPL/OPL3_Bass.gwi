@@ -1,0 +1,30 @@
+﻿'{
+
+	TitleName   = YMF262(OPL3) test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'Cn1 T120
+
+
+'@ L 3 "Slap Bass (o2-4) (from Kuma 20/12/11)"
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ 015 006 009 006 000 029 003 001 000 001 001 005
+'@ 015 003 010 005 000 000 000 001 001 000 000 002
+   CNT FB
+'@ 000 007
+
+'D01 @3v63l8o3Q7
+'D01 [c>c<]4 [d>d<]4
+

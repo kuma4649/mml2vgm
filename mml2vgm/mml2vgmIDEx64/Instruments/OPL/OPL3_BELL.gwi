@@ -1,0 +1,31 @@
+﻿'{
+
+	TitleName   = YMF262(OPL3) test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'Cn1 T120
+
+
+'@ L 1 "BELL (from Kuma 20/12/09)"
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ 011 007 003 002 000 026 006 001 000 000 001 005
+'@ 015 000 005 002 000 000 001 000 001 000 001 000
+   CNT FB
+'@ 000 006
+
+'D0102 @1v63l4o5q0
+'D02   D-2r32(12
+'D0102 >cdefg2< r1 l8b4.e16f+16b>daf+4d4e^2
+'D02   ~32

@@ -1,0 +1,60 @@
+﻿;英語メッセージ定義
+;I 通常のメッセージ
+;E エラーメッセージ
+
+;English Message Definition Table
+;Messages changed based on the english translation of MC.EXE by Mana, Pigu and ValsteelXolotl https://drive.google.com/drive/folders/1fSH39Vr97_29tvjni6H7WXJlxH_HmZx0
+;I Info
+;E Error
+
+;mc.cs 0100
+W0100=You can specify a tone number from 0 to 9 for the PSG part (value:{0}).
+E0100=The specified option is incorrect.
+E0101=Invalid character in MML.
+E0102=Specified value is wrong.
+E0103=MML file could not be read.
+E0104=M file could not be written.
+E0105=FF file could not be written.
+E0106=Parameters not properly specified.
+E0107=The specified character cannot be used.
+E0108=The specified note length is too long.
+E0109=Missing portamento end symbol }.
+E0110=Notes are required after the L command.
+E0111=Hardware LFO cannot be used in the SFX part.
+E0112=The tempo command cannot be used in the SFX part.
+E0113=Missing portamento start symbol {.
+E0114=Incorrect specification of portamento command.
+E0115=Rest found within portamento command.
+E0116=Specify immediately after the pitch command.
+E0117=This command cannot be used here.
+E0118=MML file size is too large.
+E0119=Size after compilation is too large.
+E0120=Note length cannot exceed 255 ticks during W/S commands.
+E0121=Specified note length is invalid.
+E0122=The tie is not specified immediately after the pitch instruction.
+E0123=Missing loop start symbol [.
+E0124=There are no notes in the infinite loop.
+E0125=There are two or more escape symbols in the loop.
+E0126=Pitch is out of bounds.
+E0127=MML macro is not defined.
+E0128=Please specify the /V option or instrument file.
+E0129=The required R pattern is not defined.
+E0130=Instrument is not defined.
+E0131=The length of the previous note has been compressed or altered.
+E0132=Ties and slurs not allowed in R patterns.
+E0133=Numer of defined macros exceeds 256.
+E0134=Missing arpeggio start symbol {{.
+E0135=Incorrect specification of arpeggio command.
+
+E0200=: Cannot read the instrument file ({0}).
+E0201=Failed to read the file ({0}).
+
+;common
+E0000=Exception message:\r\n{0}\r\nException stacktrace:\r\n{1}\r\n
+
+;PmdException.cs 0300
+E0300=[row:{0} column:{1}]{2}
+
+;Console
+E0600=MC arguments not found.\r\nUsage:  MC [/DotNEToption] [/option] filename[.MML] [filename[.FF] [filename[.M]]]\r\nDotNETOption: -LOGLEVEL=[FATAL|ERROR|WARNING|INFO|DEBUG|TRACE] Set LOG Level.(Default:INFO)\r\n              -XML                                             output xml File\r\nOption:       /V  Compile with the spacified Instruments, Messages and Filenames\r\n              /VW Write used instruments to the instrument file after compiling.\r\n              /N  Compile on OPN   Mode(Default)\r\n              /L  Compile on OPL   Mode\r\n              /M  Compile on OPM   Mode\r\n              /T  Compile on TOWNS Mode\r\n              /P  Play after Compilation\r\n              /S  Play without writing the compiled file\r\n              /A  Ignore specified ADPCM\r\n              /O  Don't display metadata during playback\r\n              /C  Calculate and print total length of parts\r\n
+E0601=Please specify the .MML file.
