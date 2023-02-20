@@ -2821,7 +2821,7 @@ namespace Core
                         if (p.apg.Type == enmChannelType.FMOPNex)
                         {
                             p.apg.Ch3SpecialMode = true;
-                            p.apg.slots = p.apg.slotsEX;
+                            p.apg.slots = 0;// p.apg.slotsEX;
                             p.apg.beforeVolume = -1;
                             p.apg.beforeFNum = -1;
                             //p.freq = -1;
@@ -2837,6 +2837,17 @@ namespace Core
                     {
                         foreach (partPage pg in p.pg)
                         {
+                            if (page.chip.chipType == enmChipType.YM2609)
+                            {
+                                if (page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14)
+                                    if (p.apg.ch == 8 || p.apg.ch == 15 || p.apg.ch == 16 || p.apg.ch == 17)
+                                        continue;
+
+                                if (page.ch == 8 || page.ch == 15 || page.ch == 16 || page.ch == 17)
+                                    if (p.apg.ch == 2 || p.apg.ch == 12 || p.apg.ch == 13 || p.apg.ch == 14)
+                                        continue;
+                            }
+
                             if (pg.Type == enmChannelType.FMOPNex)
                             {
                                 p.apg.Ch3SpecialMode = false;

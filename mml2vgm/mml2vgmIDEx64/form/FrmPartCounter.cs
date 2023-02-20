@@ -768,27 +768,44 @@ namespace mml2vgmIDE
                     }
                 }
 
-                int bindn = -1;
-                for (int i = 0; i < aryIndex.Length; i++)
+                if (aryIndex != null && aryIndex.Length > 0)
                 {
-                    int indn = int.MaxValue;
-                    int ind = int.MaxValue;
-                    for (int j = 0; j < aryIndex.Length; j++)
+                    int bindn = -1;
+                    for (int i = 0; i < aryIndex.Length; i++)
                     {
-                        if (aryIndex[j].displayIndex < indn && aryIndex[j].displayIndex > bindn)
+                        int indn = int.MaxValue;
+                        int ind = int.MaxValue;
+                        for (int j = 0; j < aryIndex.Length; j++)
                         {
-                            indn = aryIndex[j].displayIndex;
-                            ind = j;
+                            if (aryIndex[j].displayIndex < indn && aryIndex[j].displayIndex > bindn)
+                            {
+                                indn = aryIndex[j].displayIndex;
+                                ind = j;
+                            }
                         }
+                        bindn = indn;
+
+                        if (aryIndex[ind] == null) continue;
+
+                        dgvPartCounter.Columns[aryIndex[ind].columnName].DisplayIndex = aryIndex[ind].displayIndex;
+                        dgvPartCounter.Columns[aryIndex[ind].columnName].Width = Math.Max(aryIndex[ind].size, 10);
+                        dgvPartCounter.Columns[aryIndex[ind].columnName].Visible = aryIndex[ind].visible;
+                        dgvPartCounter.Columns[aryIndex[ind].columnName].Tag = aryIndex[ind];
                     }
-                    bindn = indn;
+                }
+                else
+                {
+                    aryIndex = new dgvColumnInfo[dgvPartCounter.ColumnCount];
+                    for (int i = 0; i < dgvPartCounter.Columns.Count; i++)
+                    {
+                        aryIndex[i] = new dgvColumnInfo();
+                        aryIndex[i].columnName = dgvPartCounter.Columns[i].Name;
+                        aryIndex[i].displayIndex = i;
+                        aryIndex[i].size = dgvPartCounter.Columns[i].Width;
+                        aryIndex[i].visible = dgvPartCounter.Columns[i].Visible;
+                        dgvPartCounter.Columns[i].Tag = aryIndex[i];
+                    }
 
-                    if (aryIndex[ind] == null) continue;
-
-                    dgvPartCounter.Columns[aryIndex[ind].columnName].DisplayIndex = aryIndex[ind].displayIndex;
-                    dgvPartCounter.Columns[aryIndex[ind].columnName].Width = Math.Max(aryIndex[ind].size, 10);
-                    dgvPartCounter.Columns[aryIndex[ind].columnName].Visible = aryIndex[ind].visible;
-                    dgvPartCounter.Columns[aryIndex[ind].columnName].Tag = aryIndex[ind];
                 }
 
                 //spacerは常に最後にする
