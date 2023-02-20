@@ -40,7 +40,8 @@ namespace mml2vgmIDE
                 //c.Visible = true;
                 //continue;
                 if (
-                    c.Name == "ClmChipIndex"
+                    c.Name == "ClmMuteMngKey"
+                    || c.Name == "ClmChipIndex"
                     || c.Name == "ClmChipNumber"
                     || c.Name == "ClmPartNumber"
                     || c.Name == "ClmchipNumber"
@@ -269,7 +270,7 @@ namespace mml2vgmIDE
                             const string Op = "VOLUMEBARCOLORSCHEME_";
                             if (s[0].IndexOf(Op) != 0) continue;
 
-                            int num =int.Parse(s[0].Replace(Op, ""));
+                            int num = int.Parse(s[0].Replace(Op, ""));
                             List<double> vals = new List<double>();
 
                             foreach (string v in val)
@@ -365,23 +366,23 @@ namespace mml2vgmIDE
             for (int p = 0; p < dgvPartCounter.Rows.Count; p++)
             {
                 string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
-                int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value -1;
+                int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value - 1;
                 if (r < 0)
                     continue;
                 int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
                 int chipNumber = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
 
-                if (!mmlParams.Insts.ContainsKey(chip)) 
+                if (!mmlParams.Insts.ContainsKey(chip))
                     continue;
-                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) 
+                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber))
                     continue;
 
                 MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 
-                if(mmli is YM2608_mucom)
+                if (mmli is YM2608_mucom)
                 {
                     string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
-                    int ch = cp[0]- (chipNumber == 0 ? 'A' : 'L');
+                    int ch = cp[0] - (chipNumber == 0 ? 'A' : 'L');
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
@@ -472,6 +473,7 @@ namespace mml2vgmIDE
             {
                 if (txt == c.HeaderText) continue;
                 if (string.IsNullOrEmpty(c.HeaderText)) continue;
+                if (c.Name == "ClmPush") continue;
                 if (c.Name == "ClmChipIndex") continue;
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
@@ -512,6 +514,7 @@ namespace mml2vgmIDE
             //show all
             foreach (DataGridViewColumn c in dgvPartCounter.Columns)
             {
+                if (c.Name == "ClmPush") continue;
                 if (c.Name == "ClmChipIndex") continue;
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
@@ -695,7 +698,7 @@ namespace mml2vgmIDE
             return ret.ToArray();
         }
 
-        private Tuple<string,string,string,bool,DataGridViewContentAlignment>[] colName = new Tuple<string, string,string,bool, DataGridViewContentAlignment>[] {
+        private Tuple<string, string, string, bool, DataGridViewContentAlignment>[] colName = new Tuple<string, string, string, bool, DataGridViewContentAlignment>[] {
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMuteMngKey" ,"mmKey"     ,false,DataGridViewContentAlignment.MiddleCenter),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMute"       ,"M"          ,true,DataGridViewContentAlignment.MiddleCenter),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSolo"       ,"S"          ,true,DataGridViewContentAlignment.MiddleCenter),
@@ -715,7 +718,7 @@ namespace mml2vgmIDE
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmExpression" ,"Expression" ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVelocity"   ,"Velocity"   ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPan"        ,"Pan"        ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmNote"       ,"Note"       ,true,DataGridViewContentAlignment.NotSet),  
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmNote"       ,"Note"       ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmGateTime"   ,"GateTime"   ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLength"     ,"Length(#)"  ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvSw"      ,"Env.Sw."    ,true,DataGridViewContentAlignment.NotSet),
@@ -726,59 +729,86 @@ namespace mml2vgmIDE
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSpacer"     ,""           ,true,DataGridViewContentAlignment.NotSet)
-        };                                                                                                                                           
+        };
 
         private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
         {
-            if (aryIndex == null || aryIndex.Length < 1)
+            dgvPartCounter.SuspendLayout();
+            try
             {
-                setting.location.PartCounterClmInfo = getDisplayIndex();
-                aryIndex = setting.location.PartCounterClmInfo;
-            }
-
-            for (int i = 0; i < colName.Length; i++)
-            {
-                if (!dgvPartCounter.Columns.Contains(colName[i].Item2))
+                if (aryIndex == null || aryIndex.Length < 1)
                 {
-                    DataGridViewColumn col;
-                    if (colName[i].Item1 == "text")
-                        col = new DataGridViewTextBoxColumn();
-                    else
-                    {
-                        col = new DataGridViewImageColumn();
-                        col.DefaultCellStyle.NullValue = null;
-                        col.CellTemplate = new DataGridViewImageCellEx();
-                    }
-                    col.Name = colName[i].Item2;
-                    col.HeaderText = colName[i].Item3;
-                    col.Visible = colName[i].Item4;
-                    col.DefaultCellStyle.Alignment = colName[i].Item5;
-                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
-                    if (colName[i].Item2 == "ClmSpacer")
-                    {
-                        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    }
-                    dgvPartCounter.Columns.Add(col);
+                    setting.location.PartCounterClmInfo = getDisplayIndex();
+                    aryIndex = setting.location.PartCounterClmInfo;
                 }
-            }
 
-            for (int i = 0; i < aryIndex.Length; i++)
+                for (int i = 0; i < colName.Length; i++)
+                {
+                    if (!dgvPartCounter.Columns.Contains(colName[i].Item2))
+                    {
+                        DataGridViewColumn col;
+                        if (colName[i].Item1 == "text")
+                            col = new DataGridViewTextBoxColumn();
+                        else
+                        {
+                            col = new DataGridViewImageColumn();
+                            col.DefaultCellStyle.NullValue = null;
+                            col.CellTemplate = new DataGridViewImageCellEx();
+                        }
+                        col.Name = colName[i].Item2;
+                        col.HeaderText = colName[i].Item3;
+                        col.Visible = colName[i].Item4;
+                        col.DefaultCellStyle.Alignment = colName[i].Item5;
+                        col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                        if (colName[i].Item2 == "ClmSpacer")
+                        {
+                            col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                        }
+                        dgvPartCounter.Columns.Add(col);
+                    }
+                }
+
+                int bindn = -1;
+                for (int i = 0; i < aryIndex.Length; i++)
+                {
+                    int indn = int.MaxValue;
+                    int ind = int.MaxValue;
+                    for (int j = 0; j < aryIndex.Length; j++)
+                    {
+                        if (aryIndex[j].displayIndex < indn && aryIndex[j].displayIndex > bindn)
+                        {
+                            indn = aryIndex[j].displayIndex;
+                            ind = j;
+                        }
+                    }
+                    bindn = indn;
+
+                    if (aryIndex[ind] == null) continue;
+
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].DisplayIndex = aryIndex[ind].displayIndex;
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].Width = Math.Max(aryIndex[ind].size, 10);
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].Visible = aryIndex[ind].visible;
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].Tag = aryIndex[ind];
+                }
+
+                //spacerは常に最後にする
+                dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count - 1;
+
+                //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.ForeColor = Color.White;
+                //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.BackColor = Color.Gray;
+                //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.ForeColor = Color.White;
+                //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.BackColor = Color.DarkSlateBlue;
+
+            }
+            catch
             {
-                if (aryIndex[i] == null) continue;
 
-                dgvPartCounter.Columns[aryIndex[i].columnName].DisplayIndex = aryIndex[i].displayIndex;
-                dgvPartCounter.Columns[aryIndex[i].columnName].Width = Math.Max(aryIndex[i].size, 10);
-                dgvPartCounter.Columns[aryIndex[i].columnName].Visible = aryIndex[i].visible;
-                dgvPartCounter.Columns[aryIndex[i].columnName].Tag = aryIndex[i];
+            }
+            finally
+            {
+                dgvPartCounter.ResumeLayout();
             }
 
-            //spacerは常に最後にする
-            dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count - 1;
-
-            //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.ForeColor = Color.White;
-            //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.BackColor = Color.Gray;
-            //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.ForeColor = Color.White;
-            //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.BackColor = Color.DarkSlateBlue;
         }
 
 
@@ -825,7 +855,7 @@ namespace mml2vgmIDE
                 ms = muteManager.GetStatus(partKey);
                 //if (SoloMode)
                 {
-                    foreach(DataGridViewCell cell in row.Cells)
+                    foreach (DataGridViewCell cell in row.Cells)
                     {
                         if (ms.solo)
                         {
@@ -950,7 +980,7 @@ namespace mml2vgmIDE
                 SoloMode = false;
                 //mute復帰
                 List<char> usePt = new List<char>();
-                object obj=null;
+                object obj = null;
                 foreach (DataGridViewRow r in dgvPartCounter.Rows)
                 {
                     string sp = (string)r.Cells["ClmPart"].Value;
@@ -1132,7 +1162,7 @@ namespace mml2vgmIDE
                 pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
                 pg = p.Length < 2 ? 0 : (p[1] - '0');
 
-                if (isOPNA==0)
+                if (isOPNA == 0)
                 {
                     ((YM2608_mucom)mmli).SetMute(pn, ch, pg, mute);
                 }
@@ -1158,7 +1188,7 @@ namespace mml2vgmIDE
             int chipNumber = (int)r.Cells["ClmChipNumber"].Value;
             if (mmlParams == null) return false;
             if (!mmlParams.Insts.ContainsKey(chip)) return false;
-            if (!mmlParams.Insts[chip].ContainsKey(chipIndex) 
+            if (!mmlParams.Insts[chip].ContainsKey(chipIndex)
                 || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) return false;
             MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 

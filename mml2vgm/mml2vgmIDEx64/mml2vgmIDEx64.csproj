@@ -9,6 +9,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Platforms>x64</Platforms>
+    <ApplicationIcon>Feli48.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +30,10 @@
 
   <ItemGroup>
     <NativeLibs Remove="Azuki.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Feli48.ico" />
   </ItemGroup>
 
   <ItemGroup>

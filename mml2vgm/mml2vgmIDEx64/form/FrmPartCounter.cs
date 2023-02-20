@@ -40,7 +40,8 @@ namespace mml2vgmIDE
                 //c.Visible = true;
                 //continue;
                 if (
-                    c.Name == "ClmChipIndex"
+                    c.Name== "ClmMuteMngKey"
+                    || c.Name == "ClmChipIndex"
                     || c.Name == "ClmChipNumber"
                     || c.Name == "ClmPartNumber"
                     || c.Name == "ClmchipNumber"
@@ -472,6 +473,7 @@ namespace mml2vgmIDE
             {
                 if (txt == c.HeaderText) continue;
                 if (string.IsNullOrEmpty(c.HeaderText)) continue;
+                if (c.Name == "ClmPush") continue;
                 if (c.Name == "ClmChipIndex") continue;
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
@@ -512,6 +514,7 @@ namespace mml2vgmIDE
             //show all
             foreach (DataGridViewColumn c in dgvPartCounter.Columns)
             {
+                if (c.Name == "ClmPush") continue;
                 if (c.Name == "ClmChipIndex") continue;
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
@@ -726,59 +729,86 @@ namespace mml2vgmIDE
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSpacer"     ,""           ,true,DataGridViewContentAlignment.NotSet)
-        };                                                                                                                                           
+        };
 
         private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
         {
-            if (aryIndex == null || aryIndex.Length < 1)
+            dgvPartCounter.SuspendLayout();
+            try
             {
-                setting.location.PartCounterClmInfo = getDisplayIndex();
-                aryIndex = setting.location.PartCounterClmInfo;
-            }
-
-            for (int i = 0; i < colName.Length; i++)
-            {
-                if (!dgvPartCounter.Columns.Contains(colName[i].Item2))
+                if (aryIndex == null || aryIndex.Length < 1)
                 {
-                    DataGridViewColumn col;
-                    if (colName[i].Item1 == "text")
-                        col = new DataGridViewTextBoxColumn();
-                    else
-                    {
-                        col = new DataGridViewImageColumn();
-                        col.DefaultCellStyle.NullValue = null;
-                        col.CellTemplate = new DataGridViewImageCellEx();
-                    }
-                    col.Name = colName[i].Item2;
-                    col.HeaderText = colName[i].Item3;
-                    col.Visible = colName[i].Item4;
-                    col.DefaultCellStyle.Alignment = colName[i].Item5;
-                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
-                    if (colName[i].Item2 == "ClmSpacer")
-                    {
-                        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    }
-                    dgvPartCounter.Columns.Add(col);
+                    setting.location.PartCounterClmInfo = getDisplayIndex();
+                    aryIndex = setting.location.PartCounterClmInfo;
                 }
-            }
 
-            for (int i = 0; i < aryIndex.Length; i++)
+                for (int i = 0; i < colName.Length; i++)
+                {
+                    if (!dgvPartCounter.Columns.Contains(colName[i].Item2))
+                    {
+                        DataGridViewColumn col;
+                        if (colName[i].Item1 == "text")
+                            col = new DataGridViewTextBoxColumn();
+                        else
+                        {
+                            col = new DataGridViewImageColumn();
+                            col.DefaultCellStyle.NullValue = null;
+                            col.CellTemplate = new DataGridViewImageCellEx();
+                        }
+                        col.Name = colName[i].Item2;
+                        col.HeaderText = colName[i].Item3;
+                        col.Visible = colName[i].Item4;
+                        col.DefaultCellStyle.Alignment = colName[i].Item5;
+                        col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                        if (colName[i].Item2 == "ClmSpacer")
+                        {
+                            col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                        }
+                        dgvPartCounter.Columns.Add(col);
+                    }
+                }
+
+                int bindn = -1;
+                for (int i = 0; i < aryIndex.Length; i++)
+                {
+                    int indn = int.MaxValue;
+                    int ind = int.MaxValue;
+                    for (int j = 0; j < aryIndex.Length; j++)
+                    {
+                        if (aryIndex[j].displayIndex < indn && aryIndex[j].displayIndex > bindn)
+                        {
+                            indn = aryIndex[j].displayIndex;
+                            ind = j;
+                        }
+                    }
+                    bindn = indn;
+
+                    if (aryIndex[ind] == null) continue;
+
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].DisplayIndex = aryIndex[ind].displayIndex;
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].Width = Math.Max(aryIndex[ind].size, 10);
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].Visible = aryIndex[ind].visible;
+                    dgvPartCounter.Columns[aryIndex[ind].columnName].Tag = aryIndex[ind];
+                }
+
+                //spacerは常に最後にする
+                dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count - 1;
+
+                //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.ForeColor = Color.White;
+                //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.BackColor = Color.Gray;
+                //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.ForeColor = Color.White;
+                //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.BackColor = Color.DarkSlateBlue;
+
+            }
+            catch
             {
-                if (aryIndex[i] == null) continue;
 
-                dgvPartCounter.Columns[aryIndex[i].columnName].DisplayIndex = aryIndex[i].displayIndex;
-                dgvPartCounter.Columns[aryIndex[i].columnName].Width = Math.Max(aryIndex[i].size, 10);
-                dgvPartCounter.Columns[aryIndex[i].columnName].Visible = aryIndex[i].visible;
-                dgvPartCounter.Columns[aryIndex[i].columnName].Tag = aryIndex[i];
+            }
+            finally
+            {
+                dgvPartCounter.ResumeLayout();
             }
 
-            //spacerは常に最後にする
-            dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count - 1;
-
-            //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.ForeColor = Color.White;
-            //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.BackColor = Color.Gray;
-            //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.ForeColor = Color.White;
-            //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.BackColor = Color.DarkSlateBlue;
         }
 
 
