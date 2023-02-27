@@ -200,7 +200,7 @@ namespace SoundManager
                     {
                         if (unmount)
                             return;
-                        Thread.Sleep(100);
+                        Thread.Sleep(0);
                     }
                     Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
 
@@ -347,7 +347,7 @@ namespace SoundManager
                             o = spdc.ElapsedMilliSec();
                         }
                     }
-                    
+
                     if (SendStopData() == -1) return;
 
                     lock (lockObj)

@@ -5913,12 +5913,17 @@ namespace mml2vgmIDE
         public static int EmuSampleCount;
         private static Action startedOnceMethod = null;
         public static PackData[] stopDataVirtulaOnlySend;
-
+        private static double delta = 0.0;
         private static void oneFrameEmuDataSend()
         {
             if (sm.isVirtualOnlySend)
             {
-                oneFrameVirtualOnlySendProc();
+                delta += 44100.0 / setting.outputDevice.SampleRate;
+                while (delta >= 1.0)
+                {
+                    oneFrameVirtualOnlySendProc();
+                    delta -= 1.0;
+                }
                 return;
             }
 
