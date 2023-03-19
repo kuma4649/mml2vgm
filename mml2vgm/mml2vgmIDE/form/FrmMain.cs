@@ -5445,6 +5445,7 @@ namespace mml2vgmIDE
                     mv = (Mml2vgm)qi.doc.compiledData;
                     doPlay = true;
                     args = new string[2] { qi.doc.gwiFullPath, "" };
+                    compileTargetDocument = qi.doc;
                     finishedCompileGWI();
                 }
 

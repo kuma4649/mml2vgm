@@ -581,7 +581,10 @@ namespace SoundManager
         #region IDisposable Support
         private bool disposedValue = false; // 重複する呼び出しを検出するには
 
-        public SendMode Mode { get; set; }
+        public SendMode Mode { 
+            get;
+            set;
+        }
 
         private int _CurrentTempo = 120;
         public int CurrentTempo

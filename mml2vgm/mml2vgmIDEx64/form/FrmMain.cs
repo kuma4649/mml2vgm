@@ -3,20 +3,11 @@ using mml2vgmIDE.D88N88;
 using mml2vgmIDE.form;
 using mml2vgmIDEx64.Properties;
 using musicDriverInterface;
-using Sgry.Azuki;
 using Sgry.Azuki.WinForms;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
