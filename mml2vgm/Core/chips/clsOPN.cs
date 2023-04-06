@@ -831,6 +831,7 @@ namespace Core
             //    msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
             //    return;
             //}
+            //Console.WriteLine("{0}", vol);
 
             int m = (page.chip is YM2203) ? 0 : 3;
             partPage vpg = page;

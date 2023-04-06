@@ -2051,7 +2051,7 @@ namespace Core
                 SetCommandArpeggioAtKeyOn(page, mml);
                 SetEnvelopeAtKeyOn(page, mml);
                 SetLfoAtKeyOn(page, mml);
-                SetVolume(page,  mml);
+                SetVolume(page,  bk);
                 //強制設定
                 //pw.ppg[pw.cpgNum].freq = -1;
                 //発音周波数の決定
