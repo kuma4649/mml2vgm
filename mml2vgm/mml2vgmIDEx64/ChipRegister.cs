@@ -6490,7 +6490,7 @@ namespace mml2vgmIDE
                 {
                     if (ctYM2608[Chip.Number] == null || (!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu))
                     {
-                        //log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
+                        //if ((address >> 8) == 00) log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         //Console.WriteLine(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
@@ -6545,6 +6545,7 @@ namespace mml2vgmIDE
                         log.Write("Sending YM2608(Emu) Block data");
                         foreach (PackData dat in pdata)
                         {
+                            //if ((address >> 8) == 00) log.Write(string.Format("Block FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                             //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)dat.Address, (byte)dat.Data, (byte)(dat.Address >> 8));
                             mds.WriteYM2608((byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
                         }
