@@ -890,7 +890,21 @@ namespace Core
             {
                 if (res == 0)
                 {
-                    if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
+                    if (algs[alg][i] == 0)
+                    {
+                        int n = GetTLOFS(page, mml, i);
+                        if (n == 0)
+                        {
+                            ope[i] = -1;
+                        }
+                        else
+                        {
+                            ope[i] += n;
+                            ope[i] = Common.CheckRange(ope[i], 0, 127);
+                        }
+                        continue;
+                    }
+                    else if ((page.slots & (1 << i)) == 0)
                     {
                         //ope[i] = -1;
                         ope[i] += GetTLOFS(page, mml, i);
