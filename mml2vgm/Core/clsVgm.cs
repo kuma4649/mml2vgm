@@ -6659,6 +6659,7 @@ namespace Core
             //    Console.WriteLine("Chip:[{0}] type:[{1}]", mml.line.Lp.chip, mml.type);
             //else Console.WriteLine("mml null");
 #endif
+            //string msg = "";
             if (cmd != null && cmd.Length > 0)
             {
                 foreach (byte d in cmd)
@@ -6674,7 +6675,7 @@ namespace Core
                     }
                     dat.Add(od);
 
-                    //Console.Write("{0:x02} :", d);
+                    //msg+=string.Format("{0:x02} :", d);
                 }
             }
 
@@ -6690,14 +6691,16 @@ namespace Core
                         od.linePos = new LinePos(mml.line.Lp.document, mml.line.Lp.srcMMLID, mml.line.Lp.row, mml.line.Lp.col, mml.line.Lp.length, mml.line.Lp.part, mml.line.Lp.chip, mml.line.Lp.chipIndex, mml.line.Lp.chipNumber, mml.line.Lp.ch);
                 }
                 dat.Add(od);
-                //Console.Write("{0:x02} :", d);
+                //msg += string.Format("{0:x02} :", d);
             }
 
-            //Console.WriteLine("{0}", mml == null ? "NULL" : mml.type.ToString());
+            //msg += string.Format("{0}", mml == null ? "NULL" : mml.type.ToString());
+            //log.ForcedWrite(msg);
         }
 
         public void OutData(outDatum od, byte[] cmd, params byte[] data)
         {
+            //string msg = "";
             if (cmd != null && cmd.Length > 0)
             {
                 foreach (byte d in cmd)
@@ -6711,7 +6714,7 @@ namespace Core
                             o.linePos = new LinePos(od.linePos.document, od.linePos.srcMMLID, od.linePos.row, od.linePos.col, od.linePos.length, od.linePos.part, od.linePos.chip, od.linePos.chipIndex, od.linePos.chipNumber, od.linePos.ch);
                     }
                     dat.Add(o);
-                    //Console.Write("{0:x02} :", d);
+                    //msg += string.Format("{0:x02} :", d);
                 }
             }
             foreach (byte d in data)
@@ -6725,22 +6728,22 @@ namespace Core
                         o.linePos = new LinePos(od.linePos.document, od.linePos.srcMMLID, od.linePos.row, od.linePos.col, od.linePos.length, od.linePos.part, od.linePos.chip, od.linePos.chipIndex, od.linePos.chipNumber, od.linePos.ch);
                 }
                 dat.Add(o);
-                //Console.Write("{0:x02} :", d);
+                //msg += string.Format("{0:x02} :", d);
             }
-            //Console.WriteLine("");
+            //log.ForcedWrite(msg);
         }
 
         public void OutData(List<outDatum> sendData)
         {
             if (sendData == null || sendData.Count < 1) return;
 
-            //Console.WriteLine("SDataFlashing");
+            //string msg="SDataFlashing";
             foreach (outDatum od in sendData)
             {
                 dat.Add(od);
-                //Console.Write("{0:x02} :", od.val);
+                //msg+=string.Format("{0:x02} :", od.val);
             }
-            //Console.WriteLine("");
+            //log.ForcedWrite(msg);
         }
 
 

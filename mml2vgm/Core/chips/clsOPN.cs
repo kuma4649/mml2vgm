@@ -3162,7 +3162,7 @@ namespace Core
                 page.spg.freq = -1;
                 SetFNum(page, mml);
                 page.beforeMixer = page.mixer;
-                page.mixer = 1;
+                page.mixer = 0;
             }
             else
             {
@@ -3328,12 +3328,13 @@ namespace Core
                 //if (adr == 0x10)
                 //    p++;
 
-                byte data = (byte)(9 << vch);
+                byte data = (byte)(9 << vch);//9 -> noise&toneが消音
                 if (page.keyOn)
                 {
                     if (!page.hardEnvelopeSync.sw)
                     {
                         //noise D5/4/3  tone D2/1/0
+                        //(bitに0をセットすると出力 1で消音)
                         int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
                         data &= (byte)(~(n << vch));
                         nSSGKeyOn[ssg / 3] |= data;

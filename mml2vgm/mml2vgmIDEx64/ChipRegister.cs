@@ -6492,6 +6492,7 @@ namespace mml2vgmIDE
                     {
                         //if ((address >> 8) == 00) log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         //Console.WriteLine(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
+                        //log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                     else if (ctYM2610[Chip.Number].OnlyPCMEmulation)

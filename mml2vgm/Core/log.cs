@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace Core
 {
@@ -10,36 +12,51 @@ namespace Core
         public static string path = "";
         public static bool debug = false;
         public static StreamWriter writer;
+        private static object locker = new object();
 
         public static void ForcedWrite(string msg)
         {
-            try
-            {
-                if (path == "")
-                {
-                    string fullPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    fullPath = Path.Combine(fullPath, "KumaApp", AssemblyTitle);
-                    if (!Directory.Exists(fullPath)) Directory.CreateDirectory(fullPath);
-                    path = Path.Combine(fullPath, "log.txt");
-                    if (File.Exists(path)) File.Delete(path);
-                }
+            if (writer == null) return;
 
-                DateTime dtNow = DateTime.Now;
-                string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
-
-                Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-                using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
-                {
-                    writer.WriteLine(timefmt + msg);
-                }
-            }
-            catch
+            int retry = 3;
+            do
             {
-            }
+                try
+                {
+                    if (path == "")
+                    {
+                        string fullPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                        fullPath = Path.Combine(fullPath, "KumaApp", AssemblyTitle);
+                        if (!Directory.Exists(fullPath)) Directory.CreateDirectory(fullPath);
+                        path = Path.Combine(fullPath, "log.txt");
+                        if (File.Exists(path)) File.Delete(path);
+                    }
+
+                    DateTime dtNow = DateTime.Now;
+                    string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
+
+                    Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+                    lock (locker)
+                    {
+                        //using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
+                        {
+                            writer.WriteLine(timefmt + msg);
+                            writer.Flush();
+                        }
+                    }
+                    retry = 0;
+                }
+                catch
+                {
+                    Thread.Sleep(10);
+                    retry--;
+                }
+            }while (retry > 0);
         }
 
         public static void ForcedWrite(Exception e)
         {
+            if (writer == null) return;
             try
             {
                 if (path == "")
@@ -55,18 +72,22 @@ namespace Core
                 string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
 
                 Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-                using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
+                lock (locker)
                 {
-                    string msg = string.Format("例外発生:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n", e.GetType().Name, e.Message, e.Source, e.StackTrace);
-                    Exception ie = e;
-                    while (ie.InnerException != null)
+                    //using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
                     {
-                        ie = ie.InnerException;
-                        msg += string.Format("内部例外:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n", ie.GetType().Name, ie.Message, ie.Source, ie.StackTrace);
-                    }
+                        string msg = string.Format("例外発生:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n", e.GetType().Name, e.Message, e.Source, e.StackTrace);
+                        Exception ie = e;
+                        while (ie.InnerException != null)
+                        {
+                            ie = ie.InnerException;
+                            msg += string.Format("内部例外:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n", ie.GetType().Name, ie.Message, ie.Source, ie.StackTrace);
+                        }
 
-                    writer.WriteLine(timefmt + msg);
-                    System.Console.WriteLine(msg);
+                        writer.WriteLine(timefmt + msg);
+                        writer.Flush();
+                        //System.Console.WriteLine(msg);
+                    }
                 }
             }
             catch
@@ -76,11 +97,7 @@ namespace Core
 
         public static void Write(string msg)
         {
-            if (!debug)
-            {
-                return;
-            }
-
+            if (!debug) return;
             if (writer == null) return;
 
             try
@@ -98,12 +115,11 @@ namespace Core
                 string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
 
                 Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-                if (writer == null)
+                lock (locker)
                 {
-                    writer = new StreamWriter(path, true, sjisEnc);
+                    writer.WriteLine(timefmt + msg);
+                    writer.Flush();
                 }
-                writer.WriteLine(timefmt + msg);
-                writer.Flush();
             }
             catch
             {

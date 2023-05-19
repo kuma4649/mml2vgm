@@ -213,7 +213,7 @@ namespace Core
             parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x09, 0x00);
             parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x0a, 0x00);
             //SSG Mixer init
-            parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x07, 0x00);
+            parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x07, 0x38);
             //ADPCM-A/B Reset
             parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x1c, 0xbf);
             parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x1c, 0x00);

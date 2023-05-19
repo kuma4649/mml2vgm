@@ -196,7 +196,7 @@ namespace Core
             parent.OutData((MML)null, port[0], 0x09, 0x00);
             parent.OutData((MML)null, port[0], 0x0a, 0x00);
             //SSG Mixer init
-            parent.OutData((MML)null, port[0], 0x07, 0x00);
+            parent.OutData((MML)null, port[0], 0x07, 0x38);
             //ADPCM Reset
             parent.OutData((MML)null, port[1], 0x10, 0x17);
             parent.OutData((MML)null, port[1], 0x10, 0x80);
