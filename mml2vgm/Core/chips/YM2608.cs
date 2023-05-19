@@ -184,12 +184,19 @@ namespace Core
                 foreach (partPage page in lstPartWork[ch].pg)
                 {
                     page.volume = 0;
+                    page.mixer = 1;
                 }
             }
 
             //Use OPNA mode
             parent.OutData((MML)null, port[0], 0x29, 0x82);
             parent.OutData((MML)null, port[1], 0x29, 0x82);
+            //SSG vol0
+            parent.OutData((MML)null, port[0], 0x08, 0x00);
+            parent.OutData((MML)null, port[0], 0x09, 0x00);
+            parent.OutData((MML)null, port[0], 0x0a, 0x00);
+            //SSG Mixer init
+            parent.OutData((MML)null, port[0], 0x07, 0x00);
             //ADPCM Reset
             parent.OutData((MML)null, port[1], 0x10, 0x17);
             parent.OutData((MML)null, port[1], 0x10, 0x80);

@@ -217,6 +217,7 @@ namespace Core
                 foreach (partPage page in lstPartWork[ch].pg)
                 {
                     page.volume = 0;
+                    page.mixer = 1;
                 }
             }
 
@@ -238,6 +239,11 @@ namespace Core
             parent.OutData((MML)null, port[2], 0x18, 0x00);
             parent.OutData((MML)null, port[2], 0x19, 0x00);
             parent.OutData((MML)null, port[2], 0x1a, 0x00);
+            //SSG Mixer init
+            parent.OutData((MML)null, port[0], 0x07, 0x00);
+            parent.OutData((MML)null, port[1], 0x27, 0x00);
+            parent.OutData((MML)null, port[2], 0x07, 0x00);
+            parent.OutData((MML)null, port[2], 0x17, 0x00);
 
             //ADPCMA Reset
             parent.OutData((MML)null, port[1], 0x10, 0x17);

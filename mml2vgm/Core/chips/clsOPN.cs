@@ -268,6 +268,11 @@ namespace Core
                 , 0x00 // StepBase
                 );
 
+            // vgmplay等他プレーヤーでの再生時ノイズレジスタ初期値対策。
+            // ノイズとSSGPCMの使い方組み合わせ次第では不十分な設定、要適切な変更
+            // by きゃどん(2023/05/19 Thanks)
+            //SOutData(page, mml, page.port[port], (byte)(adr + 0x07), 0x38); //All Noise Off
+
             page.streamSetup = true;
         }
 
@@ -2652,7 +2657,8 @@ namespace Core
             {
                 int n = (int)mml.args[0];
                 n = Common.CheckRange(n, 0, 3);
-                page.mixer = n;
+                if (page.pcm) page.beforeMixer = n;
+                else page.mixer = n;
             }
         }
 
@@ -3155,6 +3161,12 @@ namespace Core
                 page.freq = 0;//freqをリセット
                 page.spg.freq = -1;
                 SetFNum(page, mml);
+                page.beforeMixer = page.mixer;
+                page.mixer = 1;
+            }
+            else
+            {
+                page.mixer = page.beforeMixer;
             }
 
             page.pcm = (n == 1);

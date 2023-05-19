@@ -1,0 +1,28 @@
+﻿'{
+
+	TitleName   =YM2608(OPNA) SSGPCM Test
+	TitleNameJ  =YM2608(OPNA) SSGPCM テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2021/07/14
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+
+
+'@ P 0,"..\wav\SD.wav",8000,100,YM2608,1 ; option 0:adpcm 1:ssgpcm
+'@ P 1,"..\wav\HC.wav",8000,100,OPNA  ,1
+
+'P10 T160
+          P1->Tone       P3->Tone&Noise 但しSSGPCM中は無視       ↓ここで有効
+'P10 m0v10P1cdef     q0m1P3 @0 c2_>>>>b<<<< cdef @1cccc     m0v10cdef
+
+

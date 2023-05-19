@@ -159,8 +159,16 @@ namespace Core
                 foreach (partPage page in lstPartWork[ch].pg)
                 {
                     page.volume = 0;
+                    page.mixer = 1;
                 }
             }
+
+            //SSG vol0
+            parent.OutData((MML)null, port[0], 0x08, 0x00);
+            parent.OutData((MML)null, port[0], 0x09, 0x00);
+            parent.OutData((MML)null, port[0], 0x0a, 0x00);
+            //SSG Mixer init
+            parent.OutData((MML)null, port[0], 0x07, 0x00);
 
             foreach (partWork pw in lstPartWork)
             {

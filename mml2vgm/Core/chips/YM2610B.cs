@@ -200,11 +200,20 @@ namespace Core
             {
                 OutSsgKeyOff(null, lstPartWork[ch].cpg);
                 for (int p = 0; p < lstPartWork[ch].pg.Count; p++)
+                {
                     lstPartWork[ch].pg[p].volume = 0;
+                    lstPartWork[ch].pg[p].mixer = 1;
+                }
                 //setSsgVolume(ym2610b[i].lstPartWork[ch]);
                 //ym2610b[i].lstPartWork[ch].volume = 15;
             }
 
+            //SSG vol0
+            parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x08, 0x00);
+            parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x09, 0x00);
+            parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x0a, 0x00);
+            //SSG Mixer init
+            parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x07, 0x00);
             //ADPCM-A/B Reset
             parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x1c, 0xbf);
             parent.OutData((MML)null, lstPartWork[0].apg.port[0], 0x1c, 0x00);
