@@ -342,6 +342,7 @@ E11010=Unknown command defined. (TTON/TTOF)
 E11011=The specified value of VOP is invalid.
 E11012=Unknown command defined. (TLOFS)
 E11013=A slot number is specified that cannot be used. slot enumerates the number of slots (1-4) to be used.
+E11014=The tone number specified in the PCM definition has not been specified. Use the @ command to specify it.
 
 
 ;HuC6280.cs 12000

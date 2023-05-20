@@ -152,6 +152,12 @@ namespace Core
             {
                 return;
             }
+            if (page.instrument < 0)
+            {
+                msgBox.setErrMsg(msg.get("E11014")
+                        , mml?.line.Lp);
+                return;
+            }
 
             float m = Const.pcmMTbl[page.pcmNote] * (float)Math.Pow(2, (page.pcmOctave - 4));
             page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].Item2.freq * m);
@@ -474,6 +480,13 @@ namespace Core
         {
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            if (page.instrument < 0)
+            {
+                msgBox.setErrMsg(msg.get("E11014")
+                        , mml?.line.Lp);
+                return;
+            }
 
             long f = 0;
             f = -page.detune;
@@ -3170,7 +3183,7 @@ namespace Core
             }
 
             page.pcm = (n == 1);
-            page.instrument = -1;
+            //page.instrument = -1;
             page.spg.beforeVolume = -1;
         }
 
