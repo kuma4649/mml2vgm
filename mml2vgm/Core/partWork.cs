@@ -543,7 +543,7 @@ namespace Core
             return true;
         }
 
-        public bool getNum(partPage page, out int num, ref int col)
+        public bool getNum(partPage page, out int num, ref int col,ref int kcol)
         {
 
             string n = "";
@@ -557,6 +557,7 @@ namespace Core
                 n = getChar(page).ToString();
                 incPos(page);
                 col++;
+                kcol = col;
             }
 
             col += skipTabSpace(page);
@@ -593,6 +594,7 @@ namespace Core
                     return false;
                 }
 
+                kcol = col;
                 num = ret;
             }
             else
@@ -610,6 +612,7 @@ namespace Core
                 try
                 {
                     num = Convert.ToInt32(n, 16);
+                    kcol = col;
                 }
                 catch
                 {
@@ -715,11 +718,12 @@ namespace Core
             return getNum(page, out num);
         }
 
-        public bool getNumNoteLength(partPage page, out int num, out bool flg, out int col)
+        public bool getNumNoteLength(partPage page, out int num, out bool flg, out int col,out int kcol)
         {
 
             flg = false;
             col = 0;
+            kcol = 0;
 
             col += skipTabSpace(page);
 
@@ -729,9 +733,10 @@ namespace Core
                 flg = true;
                 incPos(page);
                 col++;
+                kcol = col;
             }
 
-            return getNum(page, out num, ref col);
+            return getNum(page, out num, ref col,ref kcol);
         }
 
         /// <summary>

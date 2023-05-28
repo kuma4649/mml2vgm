@@ -3368,13 +3368,14 @@ namespace Core
         {
             pw.incPos(page);
             mml.line.Lp.length = 1;
+            int len = 1;
             mml.type = enmMMLType.Note;
             mml.args = new List<object>();
             Note note = new Note();
             mml.args.Add(note);
             note.cmd = cmd;
 
-            pw.skipTabSpace(page);
+            len += pw.skipTabSpace(page);
 
             //+ -の解析
             int shift = 0;
@@ -3385,41 +3386,46 @@ namespace Core
                 else
                     shift--;
                 pw.incPos(page);
-                mml.line.Lp.length++;
+                len++;
+                mml.line.Lp.length=len;
             }
             note.shift = shift;
 
             int n;// = -1;
             bool directFlg;// = false;
             int col = 0;
+            int kcol = 0;
 
-            mml.line.Lp.length += pw.skipTabSpace(page);
+            len += pw.skipTabSpace(page);
 
             //ピッチシフトの解析
             int pitchShift = 0;
             if (pw.getChar(page) == '\\')
             {
                 pw.incPos(page);
-                mml.line.Lp.length++;
+                len++;
+                mml.line.Lp.length = len;
 
-                if (!pw.getNum(page, out pitchShift,ref col))
+                if (!pw.getNum(page, out pitchShift,ref col,ref kcol))
                 {
                     msgBox.setErrMsg(msg.get("E05076"), mml.line.Lp);
                 }
-                mml.line.Lp.length += col;
+                mml.line.Lp.length = len+kcol;
+                len += col;
 
-                mml.line.Lp.length += pw.skipTabSpace(page);
+                len += pw.skipTabSpace(page);
                 if (pw.getChar(page) == '\\')
                 {
                     pw.incPos(page);
-                    mml.line.Lp.length++;
+                    len++;
+                    mml.line.Lp.length = len;
                 }
 
             }
             note.pitchShift = pitchShift;
 
             //数値の解析
-            if (pw.getNumNoteLength(page, out n, out directFlg, out col))
+            if (pw.getNumNoteLength(page, out n, out directFlg, out col,out kcol))
             {
                 if (!directFlg)
                 {
@@ -3438,7 +3444,8 @@ namespace Core
                 }
 
                 note.length = n;
-                mml.line.Lp.length += col;
+                mml.line.Lp.length = len + kcol;
+                len += col;
 
                 //ToneDoubler'0'指定の場合はここで解析終了
                 if (n == 0)
@@ -3452,17 +3459,17 @@ namespace Core
 
                 //数値未指定の場合はlコマンドでの設定値を使用する
                 note.length = (int)page.length;
-                mml.line.Lp.length += pw.skipTabSpace(page);
+                len += pw.skipTabSpace(page);
 
             }
 
             //.の解析
-            note.length += CountFuten(pw, page, mml, note.length);
+            note.length += CountFuten(pw, page, mml, note.length, ref len);
 
-            pw.skipTabSpace(page);
+            len += pw.skipTabSpace(page);
 
             //& ^ ~ コマンドの解析
-            int len = 0;
+            int leng = 0;
             while (pw.getChar(page) == '&' || pw.getChar(page) == '^' || pw.getChar(page) == '~')
             {
                 char ch = pw.getChar(page);
@@ -3470,7 +3477,7 @@ namespace Core
                 pw.incPos(page);
                 if (ch == '&')
                 {
-                    if (pw.getNumNoteLength(page, out n, out directFlg))
+                    if (pw.getNumNoteLength(page, out n, out directFlg,out col,out kcol))
                     {
                         if (!directFlg)
                         {
@@ -3485,6 +3492,8 @@ namespace Core
                         {
                             n = Common.CheckRange(n, 1, 65535);
                         }
+                        mml.line.Lp.length = len + kcol;
+                        len += col;
                     }
                     else
                     {
@@ -3493,53 +3502,73 @@ namespace Core
                         pw.decPos(page, nowPos - oldPos);
                         break;
                     }
-                    n += CountFuten(pw, page, mml, n);
+                    int dmy=0;
+                    n += CountFuten(pw, page, mml, n,ref dmy);
 
                 }
                 else if (ch == '^')
                 {
-                    GetLength(pw, page, mml, out n);
+                    len++;
+                    mml.line.Lp.length = len;
+                    GetLength(pw, page, mml, out n, out col, out kcol);
+                    mml.line.Lp.length = len + kcol;
+                    len += col;
                 }
                 else if (ch == '~')
                 {
-                    GetLength(pw, page, mml, out n);
+                    len++;
+                    mml.line.Lp.length = len;
+                    GetLength(pw, page, mml, out n, out col, out kcol);
                     n = -n;
+                    mml.line.Lp.length = len + kcol;
+                    len += col;
                 }
 
-                len += n;
+                leng += n;
             }
 
-            note.length += len;
-            note.addLength = len;
-            pw.skipTabSpace(page);
+            note.length += leng;
+            note.addLength = leng;
+            len+=pw.skipTabSpace(page);
             //
 
             //,はToneDoublerかベロシティのどちらか。
             if (pw.getChar(page) == ',')
             {
                 pw.incPos(page);
-                pw.skipTabSpace(page);
-                if (!pw.getNum(page, out n))
+                len++;
+                mml.line.Lp.length = len;
+
+                len += pw.skipTabSpace(page);
+
+                col = 0;
+                kcol=0;
+                if (!pw.getNum(page, out n,ref col,ref kcol))
                 {
                     //Tone Doubler','指定の場合はここで解析終了
                     //ToneDoublerは数値ではないはず
-                    mml.line.Lp.length++;
+                    mml.line.Lp.length = len + kcol;
+                    len += col;
                     swToneDoubler = true;
                     return;
                 }
                 else
                 {
                     note.velocity = Common.CheckRange(n, 0, 65535);
+                    mml.line.Lp.length = len + kcol;
+                    len += col;
                 }
             }
 
-            pw.skipTabSpace(page);
+            len += pw.skipTabSpace(page);
 
             //和音装飾解析
             if (pw.getChar(page) == ':')
             {
                 pw.incPos(page);
-                pw.skipTabSpace(page);
+                len++;
+                mml.line.Lp.length = len;
+                len += pw.skipTabSpace(page);
 
                 note.chordSw = true;
             }
@@ -3573,10 +3602,40 @@ namespace Core
                 //数値未指定の場合はlコマンドでの設定値を使用する
                 n = (int)page.length;
             }
-            n += CountFuten(pw, page, mml, n);
+            int dmy = 0;
+            n += CountFuten(pw, page, mml, n,ref dmy);
         }
 
-        private int CountFuten(partWork pw, partPage page, MML mml, int noteLength)
+        private void GetLength(partWork pw, partPage page, MML mml, out int n,out int col,out int kcol)
+        {
+            if (pw.getNumNoteLength(page, out n, out bool directFlg,out col,out kcol))
+            {
+                if (!directFlg)
+                {
+                    if ((int)info.clockCount % n != 0)
+                    {
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
+                            , n), mml.line.Lp);
+                    }
+                    n = (int)info.clockCount / n;
+                }
+                else
+                {
+                    n = Common.CheckRange(n, 1, 65535);
+                }
+            }
+            else
+            {
+                //数値未指定の場合はlコマンドでの設定値を使用する
+                n = (int)page.length;
+            }
+            int dmy = 0;
+            n += CountFuten(pw, page, mml, n, ref dmy);
+            col += dmy;
+            kcol += dmy;
+        }
+
+        private int CountFuten(partWork pw, partPage page, MML mml, int noteLength,ref int len)
         {
             int futen = 0;
             int fn = noteLength;
@@ -3590,7 +3649,8 @@ namespace Core
                 fn = fn / 2;
                 futen += fn;
                 pw.incPos(page);
-                mml.line.Lp.length++;
+                len++;
+                mml.line.Lp.length = len;
             }
 
             return futen;
@@ -3668,13 +3728,18 @@ namespace Core
 
             rest.cmd = 'r';
 
-            int n = -1;
-            bool directFlg = false;
-            int col = 0;
+            int n;
+            bool directFlg;
+            int col;//未確定の文字数
+            int kcol;//確定した文字数
+            int clen = 0;//文字数
 
             //数値の解析
-            if (pw.getNumNoteLength(page, out n, out directFlg, out col))
+            if (pw.getNumNoteLength(page, out n, out directFlg, out col,out kcol))
             {
+                clen += col;
+                mml.line.Lp.length += kcol;
+
                 if (!directFlg)
                 {
                     if ((int)info.clockCount % n != 0)
@@ -3689,12 +3754,14 @@ namespace Core
                 }
 
                 rest.length = n;
-                mml.line.Lp.length += col;
 
             }
             else
             {
                 rest.length = (int)page.length;
+
+                clen += col;
+                mml.line.Lp.length += kcol;
             }
 
             //.の解析
@@ -3702,6 +3769,10 @@ namespace Core
             int fn = rest.length;
             while (pw.getChar(page) == '.')
             {
+                pw.incPos(page);
+                clen++;
+                mml.line.Lp.length = clen;
+
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
@@ -3709,8 +3780,6 @@ namespace Core
                 }
                 fn = fn / 2;
                 futen += fn;
-                pw.incPos(page);
-                mml.line.Lp.length++;
             }
             rest.length += futen;
 
@@ -3727,13 +3796,18 @@ namespace Core
 
             rest.cmd = 'R';
 
-            int n = -1;
-            bool directFlg = false;
-            int col = 0;
+            int n;
+            bool directFlg;
+            int col;//未確定の文字数
+            int kcol;//確定した文字数
+            int clen = 0;//文字数
 
             //数値の解析
-            if (pw.getNumNoteLength(page, out n, out directFlg, out col))
+            if (pw.getNumNoteLength(page, out n, out directFlg, out col,out kcol))
             {
+                clen += col;
+                mml.line.Lp.length += kcol;
+
                 if (!directFlg)
                 {
                     if ((int)info.clockCount % n != 0)
@@ -3750,12 +3824,14 @@ namespace Core
                 }
 
                 rest.length = n;
-                mml.line.Lp.length += col;
 
             }
             else
             {
                 rest.length = (int)page.length;
+
+                clen += col;
+                mml.line.Lp.length += kcol;
             }
 
             //.の解析
@@ -3763,6 +3839,10 @@ namespace Core
             int fn = rest.length;
             while (pw.getChar(page) == '.')
             {
+                pw.incPos(page);
+                clen++;
+                mml.line.Lp.length = clen;
+
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
@@ -3770,8 +3850,6 @@ namespace Core
                 }
                 fn = fn / 2;
                 futen += fn;
-                pw.incPos(page);
-                mml.line.Lp.length++;
             }
             rest.length += futen;
 
