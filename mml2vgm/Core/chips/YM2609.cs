@@ -1910,47 +1910,58 @@ namespace Core
         {
             byte ch = (byte)page.ch;
 
-            if (ch < 12)
+            if (ch < 12)//FM
             {
-                //FM
                 rv[ch] = (int)mml.args[0] & 3;
-                parent.OutData(mml, port[0], (byte)(0xD0 + ch / 3), (byte)(rv[ch / 3 + 0] | (rv[ch / 3 + 1] << 2) | (rv[ch / 3 + 2] << 4)));
+                parent.OutData(mml, port[0]
+                    , (byte)(0xD0 + ch / 3)
+                    , (byte)(rv[ch / 3 * 3 + 0] | (rv[ch / 3 * 3 + 1] << 2) | (rv[ch / 3 * 3 + 2] << 4)));
             }
-            else if (ch < 15)
+            else if (ch < 15)//FM3ex
             {
                 ch = 2;
                 rv[ch] = (int)mml.args[0] & 3;
-                parent.OutData(mml, port[0], (byte)(0xD0 + ch / 3), (byte)(rv[ch / 3 + 0] | (rv[ch / 3 + 1] << 2) | (rv[ch / 3 + 2] << 4)));
+                parent.OutData(mml, port[0]
+                    , (byte)(0xD0 + ch / 3)
+                    , (byte)(rv[ch / 3 * 3 + 0] | (rv[ch / 3 * 3 + 1] << 2) | (rv[ch / 3 * 3 + 2] << 4)));
             }
-            else if (ch < 18)
+            else if (ch < 18)//FM9ex
             {
                 ch = 8;
                 rv[ch] = (int)mml.args[0] & 3;
-                parent.OutData(mml, port[0], (byte)(0xD0 + ch / 3), (byte)(rv[ch / 3 + 0] | (rv[ch / 3 + 1] << 2) | (rv[ch / 3 + 2] << 4)));
+                parent.OutData(mml, port[0]
+                    , (byte)(0xD0 + ch / 3)
+                    , (byte)(rv[ch / 3 * 3 + 0] | (rv[ch / 3 * 3 + 1] << 2) | (rv[ch / 3 * 3 + 2] << 4)));
             }
-            else if (ch < 30)
+            else if (ch < 30)//SSG1-12
             {
                 ch = (byte)(ch - 18);
                 rv[ch + 12] = (int)mml.args[0] & 3;
-                parent.OutData(mml, port[0], (byte)(0xCC + ch / 3), (byte)(rv[ch / 3 + 12] | (rv[ch / 3 + 13] << 2) | (rv[ch / 3 + 14] << 4)));
+                parent.OutData(mml, port[0]
+                    , (byte)(0xCC + ch / 3)
+                    , (byte)(rv[ch / 3 * 3 + 12] | (rv[ch / 3 * 3 + 13] << 2) | (rv[ch / 3 * 3 + 14] << 4)));
             }
-            else if (ch < 36)
+            else if (ch < 36)//Rhythm1-6
             {
                 ch = (byte)(ch - 30);
                 rv[ch + 27] = (int)mml.args[0] & 3;
-                parent.OutData(mml, port[0], (byte)(0xD4 + ch / 3), (byte)(rv[ch / 3 + 27] | (rv[ch / 3 + 28] << 2) | (rv[ch / 3 + 29] << 4)));
+                parent.OutData(mml, port[0]
+                    , (byte)(0xD4 + ch / 3)
+                    , (byte)(rv[ch / 3 * 3 + 27] | (rv[ch / 3 * 3 + 28] << 2) | (rv[ch / 3 * 3 + 29] << 4)));
             }
-            else if (ch < 39)
+            else if (ch < 39)//ADPCM1-3
             {
                 ch = (byte)(ch - 36);
                 rv[ch + 24] = (int)mml.args[0] & 3;
                 parent.OutData(mml, port[0], (byte)(0xD8 + ch / 3), (byte)(rv[ch / 3 + 24] | (rv[ch / 3 + 25] << 2) | (rv[ch / 3 + 26] << 4)));
             }
-            else
+            else//ADPCM-A1-6
             {
                 ch = (byte)(ch - 39);
                 rv[ch + 33] = (int)mml.args[0] & 3;
-                parent.OutData(mml, port[0], (byte)(0xD6 + ch / 3), (byte)(rv[ch / 3 + 33] | (rv[ch / 3 + 34] << 2) | (rv[ch / 3 + 35] << 4)));
+                parent.OutData(mml, port[0]
+                    , (byte)(0xD6 + ch / 3)
+                    , (byte)(rv[ch / 3 * 3 + 33] | (rv[ch / 3 * 3 + 34] << 2) | (rv[ch / 3 * 3 + 35] << 4)));
             }
         }
 

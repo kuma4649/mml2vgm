@@ -3477,6 +3477,8 @@ namespace Core
                 pw.incPos(page);
                 if (ch == '&')
                 {
+                    len++;
+                    mml.line.Lp.length = len;
                     if (pw.getNumNoteLength(page, out n, out directFlg,out col,out kcol))
                     {
                         if (!directFlg)
