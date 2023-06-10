@@ -1,4 +1,8 @@
 更新履歴
+TAG692 2023/06/10
+  IDE:mucomDotNET:エディタの動作が遅いためハイライト処理の無駄を修正
+  (Thanks!! かずあにさまさん)
+
 TAG691 2023/06/01
   Core:妄想音源YM2609:逆位相コマンドのバグ修正
   (Thanks!! Some Spoony Bardさん)

@@ -89,28 +89,30 @@ namespace mml2vgmIDE
 
                     //更にJコマンドがあればそこも
                     bool comment = false;
+                    char t;
+                    char tb = '\0';
+                    string line = doc.Text;
                     for (int i = patEnd; i < end; i++)
                     {
+                        t = line[i];
+
                         if (comment)
                             doc.SetCharClass(i, CharClass.Comment);
-                        else if (doc.Text[i] == 'J')
+                        else if (t == 'J')
                             doc.SetCharClass(i, CharClass.Annotation);
-                        else if ((doc.Text[i] == 'S' || doc.Text[i] == 'M') && i + 1 < end && doc.Text[i + 1] == 'L')//SL,MLの時はLに反応しないように飛ばす
-                        {
-                            doc.SetCharClass(i, CharClass.Normal);
-                            i++;
-                        }
-                        else if (doc.Text[i] == 'L' && (i == 0 || doc.Text[i - 1] != 'T'))
+                        else if (t == 'L' && (tb != 'T' && tb != 'S' && tb != 'M'))
                             doc.SetCharClass(i, CharClass.Annotation);
-                        else if (doc.Text[i] == '!')
+                        else if (t == '!')
                             doc.SetCharClass(i, CharClass.Annotation);
-                        else if (doc.Text[i] == ';')
+                        else if (t == ';')
                         {
                             doc.SetCharClass(i, CharClass.Comment);
                             comment = true;
                         }
                         else
                             doc.SetCharClass(i, CharClass.Normal);
+
+                        tb = t;
                     }
                 }
 
