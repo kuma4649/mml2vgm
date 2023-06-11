@@ -1,4 +1,5 @@
 ﻿using Sgry.Azuki;
+using Sgry.Azuki.Highlighter;
 using Sgry.Azuki.WinForms;
 using System;
 using System.Drawing;
@@ -47,14 +48,15 @@ namespace mml2vgmIDE
         {
             InitializeComponent();
             this.setting = setting;
-            if (fmt == EnmMmlFileFormat.GWI) setHighlighterVGMZGMZGM();
-            else if (fmt == EnmMmlFileFormat.MUC) setHighlighterMUC();
-            else if (fmt == EnmMmlFileFormat.MML) setHighlighterMML();
-            else if (fmt == EnmMmlFileFormat.MDL) setHighlighterMDL();
-            else setHighlighterVGMZGMZGM();
+            IHighlighter ih = null;
+            if (fmt == EnmMmlFileFormat.GWI) ih = setHighlighterVGMZGMZGM();
+            else if (fmt == EnmMmlFileFormat.MUC) ih = setHighlighterMUC();
+            else if (fmt == EnmMmlFileFormat.MML) ih = setHighlighterMML();
+            else if (fmt == EnmMmlFileFormat.MDL) ih = setHighlighterMDL();
+            else ih = setHighlighterVGMZGMZGM();
+            setHighlighterCommon(ih);
 
             //frmSien = sien;
-
             //frmSien = new FrmSien(setting);
             //frmSien.parent = main;
             //frmSien.Show();
@@ -69,21 +71,13 @@ namespace mml2vgmIDE
             return main.SendProcessCmdKey(ref msg, keyData);
         }
 
-        private void setHighlighterVGMZGMZGM()
+        private void setHighlighterCommon(IHighlighter highlighter)
         {
-            Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
-            keywordHighlighter.AddRegex("^[^'].*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+_*[ |\\t]", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+~*[ |\\t]", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'@[ |\\t]", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
-            keywordHighlighter.AddRegex(";.*", CharClass.DocComment);
-            keywordHighlighter.AddEnclosure("'{", "}", CharClass.Comment, true);
             azukiControl = new AzukiControl();
             azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
             azukiControl.Dock = DockStyle.Fill;
             azukiControl.ShowsIconBar = true;
-            azukiControl.Highlighter = keywordHighlighter;
+            azukiControl.Highlighter = highlighter;
             azukiControl.IconBarImageList = imglstIconBar;
             azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
             azukiControl.TextChanged += AzukiControl_TextChanged;
@@ -113,80 +107,8 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Delimiter, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-
-            MarkingInfo info = new MarkingInfo(1, "TraceInfo");
-            Marking.Register(info);
-            TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
-            azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
-            
-            info = new MarkingInfo(2, "TraceInfoAlies");
-            Marking.Register(info);
-            dec = new BgColorTextDecoration(Color.FromArgb(0xff,0xd4,0x68,0x10));
-            azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
-
-            info = new MarkingInfo(3, "Replace");
-            Marking.Register(info);
-            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
-            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
-
-            this.Controls.Add(azukiControl);
-
-        }
-
-        private void setHighlighterMUC()
-        {
-            //Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
-            ////keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
-            //keywordHighlighter.AddRegex("^[A-Za-z0-9]+[ |\\t]", CharClass.Keyword);//パート部
-            //keywordHighlighter.AddRegex("^#[_@A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
-            //keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
-            //keywordHighlighter.AddRegex("^'@", CharClass.Keyword);
-            //keywordHighlighter.AddRegex("(?<!^[^\\s]*)J", CharClass.Keyword);
-            ////keywordHighlighter.AddRegex("(?<!^[^\\S]+[ |\\t]+)J", CharClass.Keyword);
-            //keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
-            //keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
-            //keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);
-            //keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
-            ////keywordHighlighter.AddEnclosure("{", "}", CharClass.Comment, true);
-
-            MUCHighlighter mucHighlighter = new MUCHighlighter();
-
-            azukiControl = new AzukiControl();
-            azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
-            azukiControl.Dock = DockStyle.Fill;
-            azukiControl.ShowsIconBar = true;
-            //azukiControl.Highlighter = keywordHighlighter;
-            azukiControl.Highlighter = mucHighlighter;
-            azukiControl.IconBarImageList = imglstIconBar;
-            azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
-            azukiControl.TextChanged += AzukiControl_TextChanged;
-            azukiControl.KeyDown += AzukiControl_KeyDown;
-            //azukiControl.HScroll += AzukiControl_CancelSien;
-            //azukiControl.VScroll += AzukiControl_CancelSien;
-            //azukiControl.LocationChanged += AzukiControl_CancelSien;
-            //azukiControl.SizeChanged += AzukiControl_CancelSien;
-            azukiControl.CaretMoved += AzukiControl_CaretMoved;
-            azukiControl.AllowDrop = true;
-            azukiControl.DragOver += AzukiControl_DragOver;
-            azukiControl.DragDrop += AzukiControl_DragDrop;
-            azukiControl.Silence = true;
-            azukiControl.DrawingOption |= DrawingOption.ShowsHRuler;
-
-            azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
-            azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
-            azukiControl.ColorScheme.IconBarBack = Color.FromArgb(setting.ColorScheme.Azuki_IconBarBack);
-            azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
-            azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
-            azukiControl.ColorScheme.SelectionBack = Color.FromArgb(setting.ColorScheme.Azuki_SelectionBack_Normal);
-            azukiControl.ColorScheme.SelectionFore = Color.FromArgb(setting.ColorScheme.Azuki_SelectionFore_Normal);
-            azukiControl.ColorScheme.MatchedBracketBack = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketBack_Normal);
-            azukiControl.ColorScheme.MatchedBracketFore = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketFore_Normal);
-            azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(setting.ColorScheme.Azuki_Keyword), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(setting.ColorScheme.Azuki_Comment), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Delimiter, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Annotation, Color.FromArgb(60,255,60), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.Annotation, Color.FromArgb(setting.ColorScheme.Azuki_Annotation), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.Keyword2, Color.FromArgb(setting.ColorScheme.Azuki_Keyword2), Color.Transparent);
 
             MarkingInfo info = new MarkingInfo(1, "TraceInfo");
             Marking.Register(info);
@@ -204,13 +126,23 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
 
             this.Controls.Add(azukiControl);
-
         }
 
-        private void setHighlighterMML()
+        private IHighlighter setHighlighterVGMZGMZGM()
         {
-            Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
-            //keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
+            VGMHighlighter vgmHighlighter = new();
+            return vgmHighlighter;
+        }
+
+        private IHighlighter setHighlighterMUC()
+        {
+            MUCHighlighter mucHighlighter = new();
+            return mucHighlighter;
+        }
+
+        private IHighlighter setHighlighterMML()
+        {
+            KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             keywordHighlighter.AddRegex("^[A-Za-z]+[0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^[#|!][A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
@@ -219,65 +151,12 @@ namespace mml2vgmIDE
             keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
             keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);
             keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
-            //keywordHighlighter.AddEnclosure("{", "}", CharClass.Comment, true);
-            azukiControl = new AzukiControl();
-            azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
-            azukiControl.Dock = DockStyle.Fill;
-            azukiControl.ShowsIconBar = true;
-            azukiControl.Highlighter = keywordHighlighter;
-            azukiControl.IconBarImageList = imglstIconBar;
-            azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
-            azukiControl.TextChanged += AzukiControl_TextChanged;
-            azukiControl.KeyDown += AzukiControl_KeyDown;
-            //azukiControl.HScroll += AzukiControl_CancelSien;
-            //azukiControl.VScroll += AzukiControl_CancelSien;
-            //azukiControl.LocationChanged += AzukiControl_CancelSien;
-            //azukiControl.SizeChanged += AzukiControl_CancelSien;
-            azukiControl.CaretMoved += AzukiControl_CaretMoved;
-            azukiControl.AllowDrop = true;
-            azukiControl.DragOver += AzukiControl_DragOver;
-            azukiControl.DragDrop += AzukiControl_DragDrop;
-            azukiControl.Silence = true;
-            azukiControl.DrawingOption |= DrawingOption.ShowsHRuler;
-
-            azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
-            azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
-            azukiControl.ColorScheme.IconBarBack = Color.FromArgb(setting.ColorScheme.Azuki_IconBarBack);
-            azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
-            azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
-            azukiControl.ColorScheme.SelectionBack = Color.FromArgb(setting.ColorScheme.Azuki_SelectionBack_Normal);
-            azukiControl.ColorScheme.SelectionFore = Color.FromArgb(setting.ColorScheme.Azuki_SelectionFore_Normal);
-            azukiControl.ColorScheme.MatchedBracketBack = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketBack_Normal);
-            azukiControl.ColorScheme.MatchedBracketFore = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketFore_Normal);
-            azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(setting.ColorScheme.Azuki_Keyword), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(setting.ColorScheme.Azuki_Comment), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Delimiter, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-
-            MarkingInfo info = new MarkingInfo(1, "TraceInfo");
-            Marking.Register(info);
-            TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
-            azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
-
-            info = new MarkingInfo(2, "TraceInfoAlies");
-            Marking.Register(info);
-            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
-            azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
-
-            info = new MarkingInfo(3, "Replace");
-            Marking.Register(info);
-            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
-            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
-
-            this.Controls.Add(azukiControl);
-
+            return keywordHighlighter;
         }
 
-        private void setHighlighterMDL()
+        private IHighlighter setHighlighterMDL()
         {
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
-            //keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
             keywordHighlighter.AddRegex("^[A-Za-z]+[0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^[#|!][A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
@@ -286,58 +165,7 @@ namespace mml2vgmIDE
             keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
             keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);
             keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
-            //keywordHighlighter.AddEnclosure("{", "}", CharClass.Comment, true);
-            azukiControl = new AzukiControl();
-            azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
-            azukiControl.Dock = DockStyle.Fill;
-            azukiControl.ShowsIconBar = true;
-            azukiControl.Highlighter = keywordHighlighter;
-            azukiControl.IconBarImageList = imglstIconBar;
-            azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
-            azukiControl.TextChanged += AzukiControl_TextChanged;
-            azukiControl.KeyDown += AzukiControl_KeyDown;
-            //azukiControl.HScroll += AzukiControl_CancelSien;
-            //azukiControl.VScroll += AzukiControl_CancelSien;
-            //azukiControl.LocationChanged += AzukiControl_CancelSien;
-            //azukiControl.SizeChanged += AzukiControl_CancelSien;
-            azukiControl.CaretMoved += AzukiControl_CaretMoved;
-            azukiControl.AllowDrop = true;
-            azukiControl.DragOver += AzukiControl_DragOver;
-            azukiControl.DragDrop += AzukiControl_DragDrop;
-            azukiControl.Silence = true;
-
-            azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
-            azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
-            azukiControl.ColorScheme.IconBarBack = Color.FromArgb(setting.ColorScheme.Azuki_IconBarBack);
-            azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
-            azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
-            azukiControl.ColorScheme.SelectionBack = Color.FromArgb(setting.ColorScheme.Azuki_SelectionBack_Normal);
-            azukiControl.ColorScheme.SelectionFore = Color.FromArgb(setting.ColorScheme.Azuki_SelectionFore_Normal);
-            azukiControl.ColorScheme.MatchedBracketBack = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketBack_Normal);
-            azukiControl.ColorScheme.MatchedBracketFore = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketFore_Normal);
-            azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(setting.ColorScheme.Azuki_Keyword), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(setting.ColorScheme.Azuki_Comment), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Delimiter, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
-
-            MarkingInfo info = new MarkingInfo(1, "TraceInfo");
-            Marking.Register(info);
-            TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
-            azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
-
-            info = new MarkingInfo(2, "TraceInfoAlies");
-            Marking.Register(info);
-            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
-            azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
-
-            info = new MarkingInfo(3, "Replace");
-            Marking.Register(info);
-            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
-            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
-
-            this.Controls.Add(azukiControl);
-
+            return keywordHighlighter;
         }
 
         private void AzukiControl_DragDrop(object sender, DragEventArgs e)
@@ -981,7 +809,7 @@ namespace mml2vgmIDE
             {
                 if (!forceClose && (document.isNew || document.edit))
                 {
-                    DialogResult res = MessageBox.Show("このファイルは未保存です。保存して閉じますか？"
+                    DialogResult res = MessageBox.Show(string.Format("このファイル\"{0}\"は未保存です。保存して閉じますか？", Path.GetFileName(document.gwiFullPath))
                         , "ファイル保存確認"
                         , MessageBoxButtons.YesNoCancel
                         , MessageBoxIcon.Question

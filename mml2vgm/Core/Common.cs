@@ -520,6 +520,7 @@ namespace Core
                 System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
                 p.WaitForExit();
                 Disp(p.StandardOutput.ReadToEnd().Replace("\r\r\n", "\n"));
+                Disp("SoX存在チェック完了");
 
             }
             catch //(Exception e)

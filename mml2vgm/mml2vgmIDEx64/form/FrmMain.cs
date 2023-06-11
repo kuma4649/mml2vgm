@@ -284,7 +284,7 @@ namespace mml2vgmIDE
                     disp, setting);
                 Audio.mucomManager = mucom;
 
-                disp("mucomDotNETを読み込みました");
+                disp("mucomDotNET読み込み完了");
             }
             catch (Exception ex)
             {
@@ -318,7 +318,7 @@ namespace mml2vgmIDE
                     disp, setting);
                 Audio.PMDManager = pmdmng;
 
-                disp("PMDDotNETを読み込みました");
+                disp("PMDDotNET読み込み完了");
             }
             catch (Exception ex)
             {
@@ -352,7 +352,7 @@ namespace mml2vgmIDE
                     disp, setting);
                 Audio.MoonDriverManager = mdmng;
 
-                disp("MoonDriverDotNETを読み込みました");
+                disp("MoonDriverDotNET読み込み完了");
             }
             catch (Exception ex)
             {
@@ -368,11 +368,13 @@ namespace mml2vgmIDE
         {
             int flg = 0;
             Document ad = null;
+            string fn = "";
             foreach (Document d in DocumentBox)
             {
                 if (d.isNew || d.edit)
                 {
                     flg++;
+                    fn = Path.GetFileName(d.gwiFullPath);
                     ad = d;
                 }
             }
@@ -392,7 +394,7 @@ namespace mml2vgmIDE
             }
             else if (flg == 1)
             {
-                DialogResult res = MessageBox.Show("このファイルは未保存です。保存して閉じますか？"
+                DialogResult res = MessageBox.Show(string.Format("このファイル\"{0}\"は未保存です。保存して閉じますか？", fn)
                     , "ファイル保存確認"
                     , MessageBoxButtons.YesNoCancel
                     , MessageBoxIcon.Question
@@ -4087,7 +4089,9 @@ namespace mml2vgmIDE
             tsmiTreeView = new ToolStripMenuItem();
             if (setting.other.UseScript)
             {
+                Disp("スクリプト読み込み中");
                 GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
+                Disp("スクリプト読み込み完了");
             }
 
             //frmSien = new FrmSien(setting);
