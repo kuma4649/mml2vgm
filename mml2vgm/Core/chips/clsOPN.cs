@@ -118,7 +118,8 @@ namespace Core
                 return;
             }
 
-            page.keyOn = false;
+            //if (page.waitKeyOnCounter != page.waitCounter)//q0のときはキーオフしない
+                page.keyOn = false;
 
             int port;
             int adr;

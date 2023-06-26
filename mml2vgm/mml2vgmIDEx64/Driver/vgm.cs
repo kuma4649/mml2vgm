@@ -291,8 +291,6 @@ namespace mml2vgmIDE
             //    }
             //}
 
-            //if (model == enmModel.VirtualModel)
-
             //for (long i = Counter; i < Audio.DriverSeqCounter; i++)
             //{
             //    oneFrameVGMStream(i);

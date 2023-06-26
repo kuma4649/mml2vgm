@@ -72,6 +72,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="c86ctl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="c86ctl.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Instruments\HuC\testHuC6280.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -145,6 +151,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PMDDotNETDriver.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scci.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="scciconfig.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Script\compileMuc.py">
