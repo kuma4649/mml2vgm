@@ -2157,8 +2157,16 @@ namespace Core
 
             page.clockCounter += page.waitCounter;
             SetDummyData(page, mml);
-            SetFNum(page, mml);
-            SetVolume(page, mml);
+            if (page.Type == enmChannelType.FMOPL
+                || page.Type == enmChannelType.FMOPN
+                || page.Type == enmChannelType.FMOPNex
+                || page.Type == enmChannelType.FMOPM
+                || page.Type == enmChannelType.FMOPX
+                )
+            {
+                SetFNum(page, mml);
+                SetVolume(page, mml);
+            }
 
             //RR15timeの決定
             if (page.RR15sw)
