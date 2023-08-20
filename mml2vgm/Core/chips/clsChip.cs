@@ -2157,6 +2157,8 @@ namespace Core
 
             page.clockCounter += page.waitCounter;
             SetDummyData(page, mml);
+            SetFNum(page, mml);
+            SetVolume(page, mml);
 
             //RR15timeの決定
             if (page.RR15sw)
