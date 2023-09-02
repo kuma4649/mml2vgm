@@ -912,11 +912,11 @@ namespace Core
                     if (algs[alg][i] == 0)
                     {
                         int n = GetTLOFS(page, mml, i);
-                        if (n == 0)
-                        {
-                            ope[i] = -1;
-                        }
-                        else
+                        //if (n == 0)
+                        //{
+                        //    ope[i] = -1;
+                        //}
+                        //else
                         {
                             ope[i] += n;
                             ope[i] = Common.CheckRange(ope[i], 0, 127);
@@ -2307,7 +2307,9 @@ namespace Core
 
         public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+            if (page.Type == enmChannelType.FMOPN 
+                || page.Type == enmChannelType.FMOPNex
+                || (page.Type == enmChannelType.FMPCMex && !page.pcm))
             {
                 return GetFmFNum(FNumTbl[0], octave, cmd, shift, pitchShift);
             }
@@ -3223,7 +3225,9 @@ namespace Core
 
         public override void CmdTLOFS(partPage page, MML mml)
         {
-            if (page.Type != enmChannelType.FMOPN && page.Type != enmChannelType.FMOPNex)
+            if (page.Type != enmChannelType.FMOPN 
+                && page.Type != enmChannelType.FMOPNex
+                && (page.Type != enmChannelType.FMPCMex || page.pcm))
             {
                 msgBox.setErrMsg(msg.get("E11012")
                         , mml.line.Lp);
