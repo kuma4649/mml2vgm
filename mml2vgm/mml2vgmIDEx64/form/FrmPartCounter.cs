@@ -567,6 +567,7 @@ namespace mml2vgmIDE
             r.Cells[dgvPartCounter.Columns["ClmCOunter"].Index].Value = cells[5];
             r.Cells[dgvPartCounter.Columns["ClmLoopCounter"].Index].Value = cells[6];
             r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value = cells[7];
+            r.Cells[dgvPartCounter.Columns["ClmPartType"].Index].Value = cells[8];
 
             muteStatus ms = muteManager.GetStatus((int)cells[7]);
             if (ms != null)
@@ -708,6 +709,7 @@ namespace mml2vgmIDE
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipNumber" ,"ChipNumber",false,DataGridViewContentAlignment.MiddleCenter),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartNumber" ,"PartNumber",false,DataGridViewContentAlignment.MiddleCenter),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPart"       ,"Part"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartType"   ,"PartType"   ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMIDICh"     ,"MIDI Ch"    ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChip"       ,"Chip"       ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmCounter"    ,"Counter"    ,true,DataGridViewContentAlignment.NotSet),

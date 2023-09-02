@@ -1,4 +1,8 @@
 更新履歴
+TAG699 2023/09/02 2nd
+  IDE:partcounter:gwi:音源のパート数が2桁の場合の調整
+  IDE:partcounter:パートごとの種類(partType)を表示できるようにした
+
 TAG698 2023/09/02
   IDE:gwi:opn系:TLOFSの変化値に0を指定した時それが反映できないのを修正
   IDE:gwi:opn2x:Ch6でTLOFSが使用出来ないのを修正

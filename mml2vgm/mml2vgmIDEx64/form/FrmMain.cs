@@ -2139,7 +2139,7 @@ namespace mml2vgmIDE
                 if (isSuccess)
                 {
                     frmPartCounter.ClearCounter();
-                    Object[] cells = new object[8];
+                    Object[] cells = new object[9];
 
                     //int trackNum = 0;
                     foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
@@ -2155,11 +2155,13 @@ namespace mml2vgmIDE
                                 cells[0] = int.Parse(pw[i].pg[0].PartName.Substring(2, 2));
                                 cells[1] = chip.ChipID;//ChipIndex
                                 cells[2] = pw[i].pg[0].chipNumber;//ChipNumber
-                                cells[3] = pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString();
+                                if (pw[i].pg[0].chip.ChMax > 9) cells[3] = pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + pw[i].pg[0].PartName.Substring(2, 2);// + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString();
+                                else cells[3] = pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString();
                                 cells[4] = pw[i].pg[0].chip.Name;//.ToUpper();
                                 cells[5] = pw[i].clockCounter;
                                 cells[6] = "-";
                                 cells[7] = muteManager.UpdateTrackInfo(doc, cells);
+                                cells[8] = pw[i].pg[0].Type.ToString();
                                 frmPartCounter.AddPartCounter(cells);
                             }
 
@@ -2342,12 +2344,16 @@ namespace mml2vgmIDE
                 if (isSuccess)
                 {
                     frmPartCounter.ClearCounter();
-                    Object[] cells = new object[8];
+                    Object[] cells = new object[9];
                     int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                     if (ci.formatType == "mub")
                     {
                         //int trackNum = 0;
                         pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
+                        string[] pt = new string[]
+                        {
+                            "FM","FM","FM", "SSG","SSG","SSG", "Rhythm", "FM","FM","FM", "ADPCM"
+                        };
                         for (int i = 0; i < 11; i++)
                         {
                             //if (pw[i].clockCounter == 0) continue;
@@ -2360,6 +2366,7 @@ namespace mml2vgmIDE
                             cells[5] = ci.totalCount[i];
                             cells[6] = ci.loopCount[i];
                             cells[7] = muteManager.UpdateTrackInfo(doc, cells);
+                            cells[8] = pt[i];
                             frmPartCounter.AddPartCounter(cells);
                         }
                     }
@@ -2367,6 +2374,14 @@ namespace mml2vgmIDE
                     {
                         //int trackNum = 0;
                         pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
+                        string[] pt = new string[]
+                        {
+                            "FM","FM","FM", "SSG","SSG","SSG", "Rhythm", "FM","FM","FM", "ADPCM",
+                            "FM","FM","FM", "SSG","SSG","SSG", "Rhythm", "FM","FM","FM", "ADPCM",
+                            "FM","FM","FM", "SSG","SSG","SSG", "ADPCM-A", "FM","FM","FM", "ADPCM-B",
+                            "FM","FM","FM", "SSG","SSG","SSG", "ADPCM-A", "FM","FM","FM", "ADPCM-B",
+                            "FM","FM","FM","FM","FM","FM","FM","FM"
+                        };
                         for (int i = 0; i < 52; i++)
                         {
                             for (int j = 0; j < 10; j++)
@@ -2380,6 +2395,7 @@ namespace mml2vgmIDE
                                 cells[4] = i < 22 ? "YM2608" : (i < 44 ? "YM2610B" : "YM2151");//.ToUpper();
                                 cells[5] = ci.totalCount[i * 10 + j];
                                 cells[6] = ci.loopCount[i * 10 + j];
+                                cells[8] = pt[i];
                                 if (ci.bufferCount[i * 10 + j] > 3)
                                 {
                                     cells[7] = muteManager.UpdateTrackInfo(doc, cells);
@@ -2513,7 +2529,7 @@ namespace mml2vgmIDE
                 if (isSuccess)
                 {
                     frmPartCounter.ClearCounter();
-                    Object[] cells = new object[8];
+                    Object[] cells = new object[9];
                     //int trackNum = 0;
 
                     try
@@ -2553,6 +2569,18 @@ namespace mml2vgmIDE
                             cells[5] = ci.totalCount[i];
                             cells[6] = ci.loopCount[i];
                             cells[7] = muteManager.UpdateTrackInfo(doc,  cells);
+                            cells[8] = (
+                                ci.partName[i][0] == 'G' 
+                                || ci.partName[i][0] == 'H' 
+                                || ci.partName[i][0] == 'I')
+                                ? "SSG"
+                                : (ci.partName[i][0] == 'J' 
+                                ? "ADPCM" 
+                                : (ci.partName[i][0] == 'K' 
+                                ? "K/R" 
+                                : ((string)cells[4] == "YM2608" 
+                                ? "FM" 
+                                : "PPZ8")));
                             frmPartCounter.AddPartCounter(cells);
                         }
                     }
@@ -2632,7 +2660,7 @@ namespace mml2vgmIDE
                 if (isSuccess)
                 {
                     frmPartCounter.ClearCounter();
-                    Object[] cells = new object[8];
+                    Object[] cells = new object[9];
                     //int trackNum = 0;
                     try
                     {
@@ -2652,6 +2680,7 @@ namespace mml2vgmIDE
                                 cells[5] = ci.totalCount[i];
                                 cells[6] = ci.loopCount[i];
                                 cells[7] = muteManager.UpdateTrackInfo(doc, cells);
+                                cells[8] = ci.partType[i];
                                 frmPartCounter.AddPartCounter(cells);
                             }
                         }
