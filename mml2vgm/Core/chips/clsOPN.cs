@@ -461,7 +461,14 @@ namespace Core
             SOutData(page, mml, page.port[port], (byte)(adr + 0 + vch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
+            if (page.chip is YM2609)
+            {
+                SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), (byte)(data | ((page.dutyCycle & 0xf) << 4)));
+            }
+            else
+            {
+                SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
+            }
 
             if (page.hardEnvelopeSync.sw)
             {

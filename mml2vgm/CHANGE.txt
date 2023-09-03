@@ -1,4 +1,7 @@
 更新履歴
+TAG700 2023/09/03
+  IDE:OPNA2:gwi:Dutycycleがリセットされてしまうケースがあるのを修正
+
 TAG699 2023/09/02 2nd
   IDE:partcounter:gwi:音源のパート数が2桁の場合の調整
   IDE:partcounter:パートごとの種類(partType)を表示できるようにした

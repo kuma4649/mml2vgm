@@ -3047,11 +3047,14 @@ namespace Core
                 page.spg.oldFreq = page.freq;
                 page.spg.oldDutyCycle = page.dutyCycle;
 
-                byte data = (byte)(page.freq & 0xff);
-                SOutData(page, mml, page.port[port], (byte)(adr + 0 + vch * 2), data);
+                if (page.freq != -1)
+                {
+                    byte data = (byte)(page.freq & 0xff);
+                    SOutData(page, mml, page.port[port], (byte)(adr + 0 + vch * 2), data);
 
-                data = (byte)(((page.freq & 0xf00) >> 8) | ((page.dutyCycle & 0xf) << 4));
-                SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
+                    data = (byte)(((page.freq & 0xf00) >> 8) | ((page.dutyCycle & 0xf) << 4));
+                    SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
+                }
             }
 
             if (page.keyOn)
