@@ -826,6 +826,7 @@ namespace Core
                 parent.huc6280[page.chipNumber].CurrentChannel = 255;
                 //setHuC6280CurrentChannel(pw);
                 page.beforeFNum = -1;
+                page.spg.freq = -1;
                 page.huc6280Envelope = -1;
                 page.huc6280Pan = -1;
             }
