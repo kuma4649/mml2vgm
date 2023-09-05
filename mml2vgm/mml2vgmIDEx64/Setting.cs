@@ -1958,6 +1958,8 @@ namespace mml2vgmIDE
             public float TextFontSize { get => _TextFontSize; set => _TextFontSize = value; }
             private FontStyle _TextFontStyle = FontStyle.Regular;
             public FontStyle TextFontStyle { get => _TextFontStyle; set => _TextFontStyle = value; }
+            public int TabWidth { get => _TabWidth; set => _TabWidth = value; }
+            private int _TabWidth = 8;
             private string[] _GwiFileHistory = null;
             private string _Tutorial = "Tutorial.txt";
             private string _CommandManual = "mml2vgm_MMLCommandMemo.txt";

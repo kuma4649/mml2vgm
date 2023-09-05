@@ -329,14 +329,14 @@ namespace mml2vgmIDE
                     , ucSI.rbSN76489P_Emu
                     , ucSI.rbSN76489P_SCCI
                     , ucSI.cmbSN76489P_SCCI
-                    , null,null,null
+                    , null, null, null
                     , ucSI.rbSN76489P_Emu2);
                 SetSCCIParam(setting.SN76489SType
                     , ucSI.rbSN76489S_Silent
                     , ucSI.rbSN76489S_Emu
                     , ucSI.rbSN76489S_SCCI
                     , ucSI.cmbSN76489S_SCCI
-                    , null,null,null
+                    , null, null, null
                     , ucSI.rbSN76489S_Emu2);
 
                 SetSCCIParam(setting.YM2151Type
@@ -505,6 +505,7 @@ namespace mml2vgmIDE
             rbLoglevelTRACE.Checked = setting.other.LogLevel == 32;
             cbUseHistoryBackUp.Checked = setting.other.UseHistoryBackUp;
             tbUseHistoryBackUp.Text = setting.other.HistoryBackUpKeepFileCount.ToString();
+            tbTABWidth.Text = setting.other.TabWidth.ToString();
 
             cbUseMIDIExport.Checked = setting.midiExport.UseMIDIExport;
             gbMIDIExport.Enabled = cbUseMIDIExport.Checked;
@@ -937,11 +938,11 @@ namespace mml2vgmIDE
             setting.outputDevice.WasapiShareMode = rbShare.Checked;
             setting.outputDevice.Latency = int.Parse(cmbLatency.SelectedItem.ToString());
             setting.outputDevice.WaitTime = int.Parse(cmbWaitTime.SelectedItem.ToString());
-            setting.outputDevice.SampleRate= int.Parse(cmbSampleRate.SelectedItem.ToString());
+            setting.outputDevice.SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
 
             setting.IsManualDetect = !rbAutoDetect.Checked;
             setting.AutoDetectModuleType = rbSCCIDetect.Checked ? 0 : 1;
-            
+
             int v;
             Setting.ChipType ct;
 
@@ -1350,7 +1351,7 @@ namespace mml2vgmIDE
             setting.other.ImageExt = tbImageExt.Text;
             setting.other.InitAlways = cbInitAlways.Checked;
             setting.other.EmptyPlayList = cbEmptyPlayList.Checked;
-            setting.other.ChangeEnterCode= cbChangeEnterCode.Checked;
+            setting.other.ChangeEnterCode = cbChangeEnterCode.Checked;
             setting.other.Opacity = tbOpacity.Value;
             setting.other.TextFontName = lblFontName.Text;
             setting.other.TextFontSize = float.Parse(lblFontSize.Text);
@@ -1380,6 +1381,10 @@ namespace mml2vgmIDE
                 setting.other.HistoryBackUpKeepFileCount = Math.Max(Math.Min(i, 20), 1);
             }
             setting.other.DispWarningMessage = cbDispWarningMessage.Checked;
+            if (int.TryParse(tbTABWidth.Text, out i))
+            {
+                setting.other.TabWidth = Math.Max(Math.Min(i, 100), 1);
+            }
 
             setting.midiExport.UseMIDIExport = cbUseMIDIExport.Checked;
             setting.midiExport.ExportPath = tbMIDIOutputPath.Text;
@@ -1514,7 +1519,7 @@ namespace mml2vgmIDE
             setting.pmdDotNET.driverArguments = tbPMDDriverArguments.Text;
             setting.pmdDotNET.usePPSDRVUseInterfaceDefaultFreq = rbPMDUsePPSDRVFreqDefault.Checked;
             int nn;
-            if (!int.TryParse(tbPMDPPSDRVFreq.Text, out nn)) nn= 2000;
+            if (!int.TryParse(tbPMDPPSDRVFreq.Text, out nn)) nn = 2000;
             setting.pmdDotNET.PPSDRVManualFreq = nn;
             if (!int.TryParse(tbPMDPPSDRVManualWait.Text, out nn)) nn = 1;
             nn = Math.Min(Math.Max(nn, 0), 100);
@@ -1567,7 +1572,7 @@ namespace mml2vgmIDE
                 setting.shortCutKey.Info[i++] = scki;
             }
 
-            setting.MMLParameter.dispInstrumentName= cbDispInstrumentName.Checked;
+            setting.MMLParameter.dispInstrumentName = cbDispInstrumentName.Checked;
 
             setting.export.FixedExportPlace = cbFixedExportPlace.Checked;
             setting.export.FixedExportPlacePath = tbFixedExportPlacePath.Text;
@@ -1613,9 +1618,9 @@ namespace mml2vgmIDE
                     {
                         string WaveDeviceName = cmbWaveOutDevice.SelectedItem.ToString();
                         int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
-                        for(int i = 0; i < WaveOut.DeviceCount; i++)
+                        for (int i = 0; i < WaveOut.DeviceCount; i++)
                         {
-                            WaveOutCapabilities woc= WaveOut.GetCapabilities(i);
+                            WaveOutCapabilities woc = WaveOut.GetCapabilities(i);
                             if (woc.ProductName == WaveDeviceName)
                             {
                                 bool support = false;
@@ -1698,8 +1703,8 @@ namespace mml2vgmIDE
                         try
                         {
                             using (WasapiOut wo = new WasapiOut(endPoint, AudioClientShareMode.Shared, false, 0))
-                        {
-                        }
+                            {
+                            }
                         }
                         catch
                         {
@@ -1719,13 +1724,13 @@ namespace mml2vgmIDE
             {
                 if (rbAsioOut.Checked)
                 {
-                    if (cmbAsioDevice.SelectedItem != null) 
+                    if (cmbAsioDevice.SelectedItem != null)
                     {
-                        string ASIODeviceName=cmbAsioDevice.SelectedItem.ToString();
+                        string ASIODeviceName = cmbAsioDevice.SelectedItem.ToString();
                         int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
 
                         //再生周波数サポートチェック
-                        using(AsioOut ao=new AsioOut(ASIODeviceName))
+                        using (AsioOut ao = new AsioOut(ASIODeviceName))
                         {
                             if (!ao.IsSampleRateSupported(SampleRate))
                             {
@@ -1737,7 +1742,7 @@ namespace mml2vgmIDE
                                 return false;
                             }
                         }
-                    } 
+                    }
                 }
             }
 

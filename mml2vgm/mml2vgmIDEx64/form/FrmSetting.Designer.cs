@@ -31,5526 +31,5841 @@ namespace mml2vgmIDE
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSetting));
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.gbWaveOut = new System.Windows.Forms.GroupBox();
-            this.cmbWaveOutDevice = new System.Windows.Forms.ComboBox();
-            this.rbWaveOut = new System.Windows.Forms.RadioButton();
-            this.rbAsioOut = new System.Windows.Forms.RadioButton();
-            this.rbWasapiOut = new System.Windows.Forms.RadioButton();
-            this.gbAsioOut = new System.Windows.Forms.GroupBox();
-            this.btnASIOControlPanel = new System.Windows.Forms.Button();
-            this.cmbAsioDevice = new System.Windows.Forms.ComboBox();
-            this.rbDirectSoundOut = new System.Windows.Forms.RadioButton();
-            this.gbWasapiOut = new System.Windows.Forms.GroupBox();
-            this.rbExclusive = new System.Windows.Forms.RadioButton();
-            this.rbShare = new System.Windows.Forms.RadioButton();
-            this.cmbWasapiDevice = new System.Windows.Forms.ComboBox();
-            this.gbDirectSound = new System.Windows.Forms.GroupBox();
-            this.cmbDirectSoundDevice = new System.Windows.Forms.ComboBox();
-            this.tcSetting = new System.Windows.Forms.TabControl();
-            this.tpOutput = new System.Windows.Forms.TabPage();
-            this.cbUseRealChip = new System.Windows.Forms.CheckBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage11 = new System.Windows.Forms.TabPage();
-            this.label55 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
-            this.cmbSampleRate = new System.Windows.Forms.ComboBox();
-            this.rbSPPCM = new System.Windows.Forms.RadioButton();
-            this.rbNullDevice = new System.Windows.Forms.RadioButton();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.tbLatencyEmu = new System.Windows.Forms.TextBox();
-            this.tbLatencySCCI = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.lblWaitTime = new System.Windows.Forms.Label();
-            this.lblLatencyUnit = new System.Windows.Forms.Label();
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.cmbSPPCMDevice = new System.Windows.Forms.ComboBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.lblLatency = new System.Windows.Forms.Label();
-            this.cmbWaitTime = new System.Windows.Forms.ComboBox();
-            this.cmbLatency = new System.Windows.Forms.ComboBox();
-            this.tabPage12 = new System.Windows.Forms.TabPage();
-            this.groupBox27 = new System.Windows.Forms.GroupBox();
-            this.rbManualDetect = new System.Windows.Forms.RadioButton();
-            this.rbAutoDetect = new System.Windows.Forms.RadioButton();
-            this.groupBox28 = new System.Windows.Forms.GroupBox();
-            this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
-            this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tabPage13 = new System.Windows.Forms.TabPage();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label16 = new System.Windows.Forms.Label();
-            this.dgvMIDIoutPallet = new System.Windows.Forms.DataGridView();
-            this.clmID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmDeviceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmManufacturer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tbcMIDIoutList = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListA = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmIsVST = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ClmBeforeSend = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnUP_A = new System.Windows.Forms.Button();
-            this.btnDOWN_A = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListB = new System.Windows.Forms.DataGridView();
-            this.btnUP_B = new System.Windows.Forms.Button();
-            this.btnDOWN_B = new System.Windows.Forms.Button();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListC = new System.Windows.Forms.DataGridView();
-            this.btnUP_C = new System.Windows.Forms.Button();
-            this.btnDOWN_C = new System.Windows.Forms.Button();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListD = new System.Windows.Forms.DataGridView();
-            this.btnUP_D = new System.Windows.Forms.Button();
-            this.btnDOWN_D = new System.Windows.Forms.Button();
-            this.btnAddVST = new System.Windows.Forms.Button();
-            this.label18 = new System.Windows.Forms.Label();
-            this.btnAddMIDIout = new System.Windows.Forms.Button();
-            this.btnSubMIDIout = new System.Windows.Forms.Button();
-            this.tpNuked = new System.Windows.Forms.TabPage();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage14 = new System.Windows.Forms.TabPage();
-            this.groupBox26 = new System.Windows.Forms.GroupBox();
-            this.rbNukedOPN2OptionYM2612u = new System.Windows.Forms.RadioButton();
-            this.rbNukedOPN2OptionYM2612 = new System.Windows.Forms.RadioButton();
-            this.rbNukedOPN2OptionDiscrete = new System.Windows.Forms.RadioButton();
-            this.rbNukedOPN2OptionASIClp = new System.Windows.Forms.RadioButton();
-            this.rbNukedOPN2OptionASIC = new System.Windows.Forms.RadioButton();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.groupBox34 = new System.Windows.Forms.GroupBox();
-            this.cbGensSSGEG = new System.Windows.Forms.CheckBox();
-            this.cbGensDACHPF = new System.Windows.Forms.CheckBox();
-            this.tpNSF = new System.Windows.Forms.TabPage();
-            this.tabControl3 = new System.Windows.Forms.TabControl();
-            this.tabPage15 = new System.Windows.Forms.TabPage();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.cbNFSNes_DutySwap = new System.Windows.Forms.CheckBox();
-            this.cbNFSNes_PhaseRefresh = new System.Windows.Forms.CheckBox();
-            this.cbNFSNes_NonLinearMixer = new System.Windows.Forms.CheckBox();
-            this.cbNFSNes_UnmuteOnReset = new System.Windows.Forms.CheckBox();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.cbNSFDmc_TriNull = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_TriMute = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_RandomizeNoise = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_DPCMAntiClick = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_EnablePNoise = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_Enable4011 = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_NonLinearMixer = new System.Windows.Forms.CheckBox();
-            this.cbNSFDmc_UnmuteOnReset = new System.Windows.Forms.CheckBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.tbNSFFds_LPF = new System.Windows.Forms.TextBox();
-            this.cbNFSFds_4085Reset = new System.Windows.Forms.CheckBox();
-            this.cbNSFFDSWriteDisable8000 = new System.Windows.Forms.CheckBox();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.cbNSFN160_Serial = new System.Windows.Forms.CheckBox();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.cbNSFMmc5_PhaseRefresh = new System.Windows.Forms.CheckBox();
-            this.cbNSFMmc5_NonLinearMixer = new System.Windows.Forms.CheckBox();
-            this.tabPage16 = new System.Windows.Forms.TabPage();
-            this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.rdSIDQ1 = new System.Windows.Forms.RadioButton();
-            this.rdSIDQ3 = new System.Windows.Forms.RadioButton();
-            this.rdSIDQ2 = new System.Windows.Forms.RadioButton();
-            this.rdSIDQ4 = new System.Windows.Forms.RadioButton();
-            this.groupBox13 = new System.Windows.Forms.GroupBox();
-            this.btnSIDBasic = new System.Windows.Forms.Button();
-            this.btnSIDCharacter = new System.Windows.Forms.Button();
-            this.btnSIDKernal = new System.Windows.Forms.Button();
-            this.tbSIDCharacter = new System.Windows.Forms.TextBox();
-            this.tbSIDBasic = new System.Windows.Forms.TextBox();
-            this.tbSIDKernal = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label51 = new System.Windows.Forms.Label();
-            this.tbSIDOutputBufferSize = new System.Windows.Forms.TextBox();
-            this.tabPage17 = new System.Windows.Forms.TabPage();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.btnBeforeSend_Default = new System.Windows.Forms.Button();
-            this.tbBeforeSend_Custom = new System.Windows.Forms.TextBox();
-            this.tbBeforeSend_XGReset = new System.Windows.Forms.TextBox();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.tbBeforeSend_GSReset = new System.Windows.Forms.TextBox();
-            this.label33 = new System.Windows.Forms.Label();
-            this.tbBeforeSend_GMReset = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.tpPMDDotNET = new System.Windows.Forms.TabPage();
-            this.rbPMDManual = new System.Windows.Forms.RadioButton();
-            this.rbPMDAuto = new System.Windows.Forms.RadioButton();
-            this.btnPMDResetDriverArguments = new System.Windows.Forms.Button();
-            this.label47 = new System.Windows.Forms.Label();
-            this.btnPMDResetCompilerArhguments = new System.Windows.Forms.Button();
-            this.tbPMDDriverArguments = new System.Windows.Forms.TextBox();
-            this.label37 = new System.Windows.Forms.Label();
-            this.tbPMDCompilerArguments = new System.Windows.Forms.TextBox();
-            this.gbPMDManual = new System.Windows.Forms.GroupBox();
-            this.cbPMDSetManualVolume = new System.Windows.Forms.CheckBox();
-            this.cbPMDUsePPZ8 = new System.Windows.Forms.CheckBox();
-            this.groupBox32 = new System.Windows.Forms.GroupBox();
-            this.rbPMD86B = new System.Windows.Forms.RadioButton();
-            this.rbPMDSpbB = new System.Windows.Forms.RadioButton();
-            this.rbPMDNrmB = new System.Windows.Forms.RadioButton();
-            this.cbPMDUsePPSDRV = new System.Windows.Forms.CheckBox();
-            this.gbPPSDRV = new System.Windows.Forms.GroupBox();
-            this.groupBox33 = new System.Windows.Forms.GroupBox();
-            this.rbPMDUsePPSDRVManualFreq = new System.Windows.Forms.RadioButton();
-            this.label38 = new System.Windows.Forms.Label();
-            this.rbPMDUsePPSDRVFreqDefault = new System.Windows.Forms.RadioButton();
-            this.btnPMDPPSDRVManualWait = new System.Windows.Forms.Button();
-            this.label40 = new System.Windows.Forms.Label();
-            this.tbPMDPPSDRVFreq = new System.Windows.Forms.TextBox();
-            this.label39 = new System.Windows.Forms.Label();
-            this.tbPMDPPSDRVManualWait = new System.Windows.Forms.TextBox();
-            this.gbPMDSetManualVolume = new System.Windows.Forms.GroupBox();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
-            this.tbPMDVolumeAdpcm = new System.Windows.Forms.TextBox();
-            this.label42 = new System.Windows.Forms.Label();
-            this.tbPMDVolumeRhythm = new System.Windows.Forms.TextBox();
-            this.label43 = new System.Windows.Forms.Label();
-            this.tbPMDVolumeSSG = new System.Windows.Forms.TextBox();
-            this.label44 = new System.Windows.Forms.Label();
-            this.tbPMDVolumeGIMICSSG = new System.Windows.Forms.TextBox();
-            this.label45 = new System.Windows.Forms.Label();
-            this.tbPMDVolumeFM = new System.Windows.Forms.TextBox();
-            this.tpExport = new System.Windows.Forms.TabPage();
-            this.cbAlwaysAskForLoopCount = new System.Windows.Forms.CheckBox();
-            this.cbFixedExportPlace = new System.Windows.Forms.CheckBox();
-            this.gpbFixedExportPlace = new System.Windows.Forms.GroupBox();
-            this.btnFixedExportPlace = new System.Windows.Forms.Button();
-            this.label57 = new System.Windows.Forms.Label();
-            this.tbFixedExportPlacePath = new System.Windows.Forms.TextBox();
-            this.label48 = new System.Windows.Forms.Label();
-            this.tbLoopTimes = new System.Windows.Forms.TextBox();
-            this.lblLoopTimes = new System.Windows.Forms.Label();
-            this.tpMIDIExp = new System.Windows.Forms.TabPage();
-            this.cbUseMIDIExport = new System.Windows.Forms.CheckBox();
-            this.gbMIDIExport = new System.Windows.Forms.GroupBox();
-            this.cbMIDIKeyOnFnum = new System.Windows.Forms.CheckBox();
-            this.cbMIDIUseVOPM = new System.Windows.Forms.CheckBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.cbMIDIYM2612 = new System.Windows.Forms.CheckBox();
-            this.cbMIDISN76489Sec = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2612Sec = new System.Windows.Forms.CheckBox();
-            this.cbMIDISN76489 = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2151 = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2610BSec = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2151Sec = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2610B = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2203 = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2608Sec = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2203Sec = new System.Windows.Forms.CheckBox();
-            this.cbMIDIYM2608 = new System.Windows.Forms.CheckBox();
-            this.cbMIDIPlayless = new System.Windows.Forms.CheckBox();
-            this.btnMIDIOutputPath = new System.Windows.Forms.Button();
-            this.lblOutputPath = new System.Windows.Forms.Label();
-            this.tbMIDIOutputPath = new System.Windows.Forms.TextBox();
-            this.tpMIDIKBD = new System.Windows.Forms.TabPage();
-            this.cbMIDIKbdAlwaysTop = new System.Windows.Forms.CheckBox();
-            this.cbUseMIDIKeyboard = new System.Windows.Forms.CheckBox();
-            this.gbMIDIKeyboard = new System.Windows.Forms.GroupBox();
-            this.pictureBox8 = new System.Windows.Forms.PictureBox();
-            this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tbCCFadeout = new System.Windows.Forms.TextBox();
-            this.tbCCPause = new System.Windows.Forms.TextBox();
-            this.tbCCSlow = new System.Windows.Forms.TextBox();
-            this.tbCCPrevious = new System.Windows.Forms.TextBox();
-            this.tbCCNext = new System.Windows.Forms.TextBox();
-            this.tbCCFast = new System.Windows.Forms.TextBox();
-            this.tbCCStop = new System.Windows.Forms.TextBox();
-            this.tbCCPlay = new System.Windows.Forms.TextBox();
-            this.tbCCCopyLog = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.tbCCDelLog = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.tbCCChCopy = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.gbUseChannel = new System.Windows.Forms.GroupBox();
-            this.rbMONO = new System.Windows.Forms.RadioButton();
-            this.rbPOLY = new System.Windows.Forms.RadioButton();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.rbFM6 = new System.Windows.Forms.RadioButton();
-            this.rbFM3 = new System.Windows.Forms.RadioButton();
-            this.rbFM5 = new System.Windows.Forms.RadioButton();
-            this.rbFM2 = new System.Windows.Forms.RadioButton();
-            this.rbFM4 = new System.Windows.Forms.RadioButton();
-            this.rbFM1 = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cbFM1 = new System.Windows.Forms.CheckBox();
-            this.cbFM6 = new System.Windows.Forms.CheckBox();
-            this.cbFM2 = new System.Windows.Forms.CheckBox();
-            this.cbFM5 = new System.Windows.Forms.CheckBox();
-            this.cbFM3 = new System.Windows.Forms.CheckBox();
-            this.cbFM4 = new System.Windows.Forms.CheckBox();
-            this.cmbMIDIIN = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tpKeyBoard = new System.Windows.Forms.TabPage();
-            this.btnInitializeShortCutKey = new System.Windows.Forms.Button();
-            this.lblSKKey = new System.Windows.Forms.Label();
-            this.dgvShortCutKey = new System.Windows.Forms.DataGridView();
-            this.clmNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmFunc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmShift = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmCtrl = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmAlt = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmSet = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.clmClr = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.clmKBDSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tpBalance = new System.Windows.Forms.TabPage();
-            this.groupBox25 = new System.Windows.Forms.GroupBox();
-            this.rbAutoBalanceNotSamePositionAsSongData = new System.Windows.Forms.RadioButton();
-            this.rbAutoBalanceSamePositionAsSongData = new System.Windows.Forms.RadioButton();
-            this.cbAutoBalanceUseThis = new System.Windows.Forms.CheckBox();
-            this.groupBox18 = new System.Windows.Forms.GroupBox();
-            this.groupBox24 = new System.Windows.Forms.GroupBox();
-            this.groupBox21 = new System.Windows.Forms.GroupBox();
-            this.rbAutoBalanceNotSaveSongBalance = new System.Windows.Forms.RadioButton();
-            this.rbAutoBalanceSaveSongBalance = new System.Windows.Forms.RadioButton();
-            this.groupBox22 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.groupBox23 = new System.Windows.Forms.GroupBox();
-            this.groupBox19 = new System.Windows.Forms.GroupBox();
-            this.rbAutoBalanceNotLoadSongBalance = new System.Windows.Forms.RadioButton();
-            this.rbAutoBalanceLoadSongBalance = new System.Windows.Forms.RadioButton();
-            this.groupBox20 = new System.Windows.Forms.GroupBox();
-            this.rbAutoBalanceNotLoadDriverBalance = new System.Windows.Forms.RadioButton();
-            this.rbAutoBalanceLoadDriverBalance = new System.Windows.Forms.RadioButton();
-            this.tpMMLParameter = new System.Windows.Forms.TabPage();
-            this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
-            this.tpOther2 = new System.Windows.Forms.TabPage();
-            this.tbUseHistoryBackUp = new System.Windows.Forms.TextBox();
-            this.cbUseHistoryBackUp = new System.Windows.Forms.CheckBox();
-            this.cbUseMoonDriverDotNET = new System.Windows.Forms.CheckBox();
-            this.cbUsePMDDotNET = new System.Windows.Forms.CheckBox();
-            this.cbUseMucomDotNET = new System.Windows.Forms.CheckBox();
-            this.cbUseScript = new System.Windows.Forms.CheckBox();
-            this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
-            this.cbClearHistory = new System.Windows.Forms.CheckBox();
-            this.tbOpacity = new System.Windows.Forms.TrackBar();
-            this.label52 = new System.Windows.Forms.Label();
-            this.groupBox29 = new System.Windows.Forms.GroupBox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.btFont = new System.Windows.Forms.Button();
-            this.label54 = new System.Windows.Forms.Label();
-            this.lblFontName = new System.Windows.Forms.Label();
-            this.label53 = new System.Windows.Forms.Label();
-            this.lblFontSize = new System.Windows.Forms.Label();
-            this.lblFontStyle = new System.Windows.Forms.Label();
-            this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
-            this.cbUseSIen = new System.Windows.Forms.CheckBox();
-            this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
-            this.tpOther = new System.Windows.Forms.TabPage();
-            this.cbWavSwitch = new System.Windows.Forms.CheckBox();
-            this.groupBox17 = new System.Windows.Forms.GroupBox();
-            this.tbImageExt = new System.Windows.Forms.TextBox();
-            this.tbMMLExt = new System.Windows.Forms.TextBox();
-            this.tbTextExt = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cbUseGetInst = new System.Windows.Forms.CheckBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.cmbInstFormat = new System.Windows.Forms.ComboBox();
-            this.lblInstFormat = new System.Windows.Forms.Label();
-            this.cbDumpSwitch = new System.Windows.Forms.CheckBox();
-            this.gbWav = new System.Windows.Forms.GroupBox();
-            this.btnWavPath = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.tbWavPath = new System.Windows.Forms.TextBox();
-            this.gbDump = new System.Windows.Forms.GroupBox();
-            this.btnDumpPath = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.tbDumpPath = new System.Windows.Forms.TextBox();
-            this.label30 = new System.Windows.Forms.Label();
-            this.tbScreenFrameRate = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.btnDataPath = new System.Windows.Forms.Button();
-            this.tbDataPath = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.btnResetPosition = new System.Windows.Forms.Button();
-            this.btnOpenSettingFolder = new System.Windows.Forms.Button();
-            this.cbEmptyPlayList = new System.Windows.Forms.CheckBox();
-            this.cbInitAlways = new System.Windows.Forms.CheckBox();
-            this.cbAutoOpen = new System.Windows.Forms.CheckBox();
-            this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
-            this.tpOmake = new System.Windows.Forms.TabPage();
-            this.groupBox31 = new System.Windows.Forms.GroupBox();
-            this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
-            this.rbLoglevelDEBUG = new System.Windows.Forms.RadioButton();
-            this.rbLoglevelTRACE = new System.Windows.Forms.RadioButton();
-            this.groupBox30 = new System.Windows.Forms.GroupBox();
-            this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
-            this.rbDateTime = new System.Windows.Forms.RadioButton();
-            this.rbStopWatch = new System.Windows.Forms.RadioButton();
-            this.label14 = new System.Windows.Forms.Label();
-            this.btVST = new System.Windows.Forms.Button();
-            this.tbVST = new System.Windows.Forms.TextBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cbSinWave = new System.Windows.Forms.CheckBox();
-            this.cbPlayDeviceCB = new System.Windows.Forms.CheckBox();
-            this.cbLogWarning = new System.Windows.Forms.CheckBox();
-            this.cbDispFrameCounter = new System.Windows.Forms.CheckBox();
-            this.tpAbout = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.logoPictureBox = new System.Windows.Forms.PictureBox();
-            this.labelProductName = new System.Windows.Forms.Label();
-            this.labelVersion = new System.Windows.Forms.Label();
-            this.labelCopyright = new System.Windows.Forms.Label();
-            this.labelCompanyName = new System.Windows.Forms.Label();
-            this.textBoxDescription = new System.Windows.Forms.TextBox();
-            this.llOpenGithub = new System.Windows.Forms.LinkLabel();
-            this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
-            this.cbDispWarningMessage = new System.Windows.Forms.CheckBox();
-            this.gbWaveOut.SuspendLayout();
-            this.gbAsioOut.SuspendLayout();
-            this.gbWasapiOut.SuspendLayout();
-            this.gbDirectSound.SuspendLayout();
-            this.tcSetting.SuspendLayout();
-            this.tpOutput.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage11.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox16.SuspendLayout();
-            this.tabPage12.SuspendLayout();
-            this.groupBox27.SuspendLayout();
-            this.groupBox28.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.tabPage13.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutPallet)).BeginInit();
-            this.tbcMIDIoutList.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListA)).BeginInit();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListB)).BeginInit();
-            this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListC)).BeginInit();
-            this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListD)).BeginInit();
-            this.tpNuked.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage14.SuspendLayout();
-            this.groupBox26.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            this.groupBox34.SuspendLayout();
-            this.tpNSF.SuspendLayout();
-            this.tabControl3.SuspendLayout();
-            this.tabPage15.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            this.groupBox10.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox12.SuspendLayout();
-            this.groupBox11.SuspendLayout();
-            this.tabPage16.SuspendLayout();
-            this.groupBox14.SuspendLayout();
-            this.groupBox13.SuspendLayout();
-            this.tabPage17.SuspendLayout();
-            this.groupBox15.SuspendLayout();
-            this.tpPMDDotNET.SuspendLayout();
-            this.gbPMDManual.SuspendLayout();
-            this.groupBox32.SuspendLayout();
-            this.gbPPSDRV.SuspendLayout();
-            this.groupBox33.SuspendLayout();
-            this.gbPMDSetManualVolume.SuspendLayout();
-            this.tpExport.SuspendLayout();
-            this.gpbFixedExportPlace.SuspendLayout();
-            this.tpMIDIExp.SuspendLayout();
-            this.gbMIDIExport.SuspendLayout();
-            this.groupBox6.SuspendLayout();
-            this.tpMIDIKBD.SuspendLayout();
-            this.gbMIDIKeyboard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.gbUseChannel.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.tpKeyBoard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvShortCutKey)).BeginInit();
-            this.tpBalance.SuspendLayout();
-            this.groupBox25.SuspendLayout();
-            this.groupBox18.SuspendLayout();
-            this.groupBox24.SuspendLayout();
-            this.groupBox21.SuspendLayout();
-            this.groupBox22.SuspendLayout();
-            this.groupBox23.SuspendLayout();
-            this.groupBox19.SuspendLayout();
-            this.groupBox20.SuspendLayout();
-            this.tpMMLParameter.SuspendLayout();
-            this.tpOther2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
-            this.groupBox29.SuspendLayout();
-            this.tpOther.SuspendLayout();
-            this.groupBox17.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.gbWav.SuspendLayout();
-            this.gbDump.SuspendLayout();
-            this.tpOmake.SuspendLayout();
-            this.groupBox31.SuspendLayout();
-            this.groupBox30.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.tpAbout.SuspendLayout();
-            this.tableLayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            this.SuspendLayout();
+            btnOK = new Button();
+            btnCancel = new Button();
+            gbWaveOut = new GroupBox();
+            cmbWaveOutDevice = new ComboBox();
+            rbWaveOut = new RadioButton();
+            rbAsioOut = new RadioButton();
+            rbWasapiOut = new RadioButton();
+            gbAsioOut = new GroupBox();
+            btnASIOControlPanel = new Button();
+            cmbAsioDevice = new ComboBox();
+            rbDirectSoundOut = new RadioButton();
+            gbWasapiOut = new GroupBox();
+            rbExclusive = new RadioButton();
+            rbShare = new RadioButton();
+            cmbWasapiDevice = new ComboBox();
+            gbDirectSound = new GroupBox();
+            cmbDirectSoundDevice = new ComboBox();
+            tcSetting = new TabControl();
+            tpOutput = new TabPage();
+            cbUseRealChip = new CheckBox();
+            tabControl1 = new TabControl();
+            tabPage11 = new TabPage();
+            label55 = new Label();
+            label50 = new Label();
+            cmbSampleRate = new ComboBox();
+            rbSPPCM = new RadioButton();
+            rbNullDevice = new RadioButton();
+            groupBox3 = new GroupBox();
+            label13 = new Label();
+            label12 = new Label();
+            label11 = new Label();
+            tbLatencyEmu = new TextBox();
+            tbLatencySCCI = new TextBox();
+            label10 = new Label();
+            lblWaitTime = new Label();
+            lblLatencyUnit = new Label();
+            groupBox16 = new GroupBox();
+            cmbSPPCMDevice = new ComboBox();
+            label28 = new Label();
+            lblLatency = new Label();
+            cmbWaitTime = new ComboBox();
+            cmbLatency = new ComboBox();
+            tabPage12 = new TabPage();
+            groupBox27 = new GroupBox();
+            rbManualDetect = new RadioButton();
+            rbAutoDetect = new RadioButton();
+            groupBox28 = new GroupBox();
+            rbSCCIDetect = new RadioButton();
+            rbC86ctlDetect = new RadioButton();
+            groupBox1 = new GroupBox();
+            ucSI = new ucSettingInstruments();
+            tabPage13 = new TabPage();
+            splitContainer1 = new SplitContainer();
+            label16 = new Label();
+            dgvMIDIoutPallet = new DataGridView();
+            clmID = new DataGridViewTextBoxColumn();
+            clmDeviceName = new DataGridViewTextBoxColumn();
+            clmManufacturer = new DataGridViewTextBoxColumn();
+            clmSpacer = new DataGridViewTextBoxColumn();
+            tbcMIDIoutList = new TabControl();
+            tabPage1 = new TabPage();
+            dgvMIDIoutListA = new DataGridView();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            clmIsVST = new DataGridViewCheckBoxColumn();
+            clmFileName = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            clmType = new DataGridViewComboBoxColumn();
+            ClmBeforeSend = new DataGridViewComboBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            btnUP_A = new Button();
+            btnDOWN_A = new Button();
+            tabPage2 = new TabPage();
+            dgvMIDIoutListB = new DataGridView();
+            btnUP_B = new Button();
+            btnDOWN_B = new Button();
+            tabPage3 = new TabPage();
+            dgvMIDIoutListC = new DataGridView();
+            btnUP_C = new Button();
+            btnDOWN_C = new Button();
+            tabPage4 = new TabPage();
+            dgvMIDIoutListD = new DataGridView();
+            btnUP_D = new Button();
+            btnDOWN_D = new Button();
+            btnAddVST = new Button();
+            label18 = new Label();
+            btnAddMIDIout = new Button();
+            btnSubMIDIout = new Button();
+            tpNuked = new TabPage();
+            tabControl2 = new TabControl();
+            tabPage14 = new TabPage();
+            groupBox26 = new GroupBox();
+            rbNukedOPN2OptionYM2612u = new RadioButton();
+            rbNukedOPN2OptionYM2612 = new RadioButton();
+            rbNukedOPN2OptionDiscrete = new RadioButton();
+            rbNukedOPN2OptionASIClp = new RadioButton();
+            rbNukedOPN2OptionASIC = new RadioButton();
+            tabPage5 = new TabPage();
+            groupBox34 = new GroupBox();
+            cbGensSSGEG = new CheckBox();
+            cbGensDACHPF = new CheckBox();
+            tpNSF = new TabPage();
+            tabControl3 = new TabControl();
+            tabPage15 = new TabPage();
+            groupBox9 = new GroupBox();
+            cbNFSNes_DutySwap = new CheckBox();
+            cbNFSNes_PhaseRefresh = new CheckBox();
+            cbNFSNes_NonLinearMixer = new CheckBox();
+            cbNFSNes_UnmuteOnReset = new CheckBox();
+            groupBox10 = new GroupBox();
+            cbNSFDmc_TriNull = new CheckBox();
+            cbNSFDmc_TriMute = new CheckBox();
+            cbNSFDmc_RandomizeNoise = new CheckBox();
+            cbNSFDmc_DPCMAntiClick = new CheckBox();
+            cbNSFDmc_EnablePNoise = new CheckBox();
+            cbNSFDmc_Enable4011 = new CheckBox();
+            cbNSFDmc_NonLinearMixer = new CheckBox();
+            cbNSFDmc_UnmuteOnReset = new CheckBox();
+            groupBox8 = new GroupBox();
+            label21 = new Label();
+            label20 = new Label();
+            tbNSFFds_LPF = new TextBox();
+            cbNFSFds_4085Reset = new CheckBox();
+            cbNSFFDSWriteDisable8000 = new CheckBox();
+            groupBox12 = new GroupBox();
+            cbNSFN160_Serial = new CheckBox();
+            groupBox11 = new GroupBox();
+            cbNSFMmc5_PhaseRefresh = new CheckBox();
+            cbNSFMmc5_NonLinearMixer = new CheckBox();
+            tabPage16 = new TabPage();
+            groupBox14 = new GroupBox();
+            label27 = new Label();
+            label26 = new Label();
+            label25 = new Label();
+            rdSIDQ1 = new RadioButton();
+            rdSIDQ3 = new RadioButton();
+            rdSIDQ2 = new RadioButton();
+            rdSIDQ4 = new RadioButton();
+            groupBox13 = new GroupBox();
+            btnSIDBasic = new Button();
+            btnSIDCharacter = new Button();
+            btnSIDKernal = new Button();
+            tbSIDCharacter = new TextBox();
+            tbSIDBasic = new TextBox();
+            tbSIDKernal = new TextBox();
+            label24 = new Label();
+            label23 = new Label();
+            label22 = new Label();
+            label49 = new Label();
+            label51 = new Label();
+            tbSIDOutputBufferSize = new TextBox();
+            tabPage17 = new TabPage();
+            groupBox15 = new GroupBox();
+            btnBeforeSend_Default = new Button();
+            tbBeforeSend_Custom = new TextBox();
+            tbBeforeSend_XGReset = new TextBox();
+            label35 = new Label();
+            label34 = new Label();
+            label32 = new Label();
+            tbBeforeSend_GSReset = new TextBox();
+            label33 = new Label();
+            tbBeforeSend_GMReset = new TextBox();
+            label31 = new Label();
+            tpPMDDotNET = new TabPage();
+            rbPMDManual = new RadioButton();
+            rbPMDAuto = new RadioButton();
+            btnPMDResetDriverArguments = new Button();
+            label47 = new Label();
+            btnPMDResetCompilerArhguments = new Button();
+            tbPMDDriverArguments = new TextBox();
+            label37 = new Label();
+            tbPMDCompilerArguments = new TextBox();
+            gbPMDManual = new GroupBox();
+            cbPMDSetManualVolume = new CheckBox();
+            cbPMDUsePPZ8 = new CheckBox();
+            groupBox32 = new GroupBox();
+            rbPMD86B = new RadioButton();
+            rbPMDSpbB = new RadioButton();
+            rbPMDNrmB = new RadioButton();
+            cbPMDUsePPSDRV = new CheckBox();
+            gbPPSDRV = new GroupBox();
+            groupBox33 = new GroupBox();
+            rbPMDUsePPSDRVManualFreq = new RadioButton();
+            label38 = new Label();
+            rbPMDUsePPSDRVFreqDefault = new RadioButton();
+            btnPMDPPSDRVManualWait = new Button();
+            label40 = new Label();
+            tbPMDPPSDRVFreq = new TextBox();
+            label39 = new Label();
+            tbPMDPPSDRVManualWait = new TextBox();
+            gbPMDSetManualVolume = new GroupBox();
+            label41 = new Label();
+            label46 = new Label();
+            tbPMDVolumeAdpcm = new TextBox();
+            label42 = new Label();
+            tbPMDVolumeRhythm = new TextBox();
+            label43 = new Label();
+            tbPMDVolumeSSG = new TextBox();
+            label44 = new Label();
+            tbPMDVolumeGIMICSSG = new TextBox();
+            label45 = new Label();
+            tbPMDVolumeFM = new TextBox();
+            tpExport = new TabPage();
+            cbAlwaysAskForLoopCount = new CheckBox();
+            cbFixedExportPlace = new CheckBox();
+            gpbFixedExportPlace = new GroupBox();
+            btnFixedExportPlace = new Button();
+            label57 = new Label();
+            tbFixedExportPlacePath = new TextBox();
+            label48 = new Label();
+            tbLoopTimes = new TextBox();
+            lblLoopTimes = new Label();
+            tpMIDIExp = new TabPage();
+            cbUseMIDIExport = new CheckBox();
+            gbMIDIExport = new GroupBox();
+            cbMIDIKeyOnFnum = new CheckBox();
+            cbMIDIUseVOPM = new CheckBox();
+            groupBox6 = new GroupBox();
+            cbMIDIYM2612 = new CheckBox();
+            cbMIDISN76489Sec = new CheckBox();
+            cbMIDIYM2612Sec = new CheckBox();
+            cbMIDISN76489 = new CheckBox();
+            cbMIDIYM2151 = new CheckBox();
+            cbMIDIYM2610BSec = new CheckBox();
+            cbMIDIYM2151Sec = new CheckBox();
+            cbMIDIYM2610B = new CheckBox();
+            cbMIDIYM2203 = new CheckBox();
+            cbMIDIYM2608Sec = new CheckBox();
+            cbMIDIYM2203Sec = new CheckBox();
+            cbMIDIYM2608 = new CheckBox();
+            cbMIDIPlayless = new CheckBox();
+            btnMIDIOutputPath = new Button();
+            lblOutputPath = new Label();
+            tbMIDIOutputPath = new TextBox();
+            tpMIDIKBD = new TabPage();
+            cbMIDIKbdAlwaysTop = new CheckBox();
+            cbUseMIDIKeyboard = new CheckBox();
+            gbMIDIKeyboard = new GroupBox();
+            pictureBox8 = new PictureBox();
+            pictureBox7 = new PictureBox();
+            pictureBox6 = new PictureBox();
+            pictureBox5 = new PictureBox();
+            pictureBox4 = new PictureBox();
+            pictureBox3 = new PictureBox();
+            pictureBox2 = new PictureBox();
+            pictureBox1 = new PictureBox();
+            tbCCFadeout = new TextBox();
+            tbCCPause = new TextBox();
+            tbCCSlow = new TextBox();
+            tbCCPrevious = new TextBox();
+            tbCCNext = new TextBox();
+            tbCCFast = new TextBox();
+            tbCCStop = new TextBox();
+            tbCCPlay = new TextBox();
+            tbCCCopyLog = new TextBox();
+            label17 = new Label();
+            tbCCDelLog = new TextBox();
+            label15 = new Label();
+            tbCCChCopy = new TextBox();
+            label8 = new Label();
+            label9 = new Label();
+            gbUseChannel = new GroupBox();
+            rbMONO = new RadioButton();
+            rbPOLY = new RadioButton();
+            groupBox7 = new GroupBox();
+            rbFM6 = new RadioButton();
+            rbFM3 = new RadioButton();
+            rbFM5 = new RadioButton();
+            rbFM2 = new RadioButton();
+            rbFM4 = new RadioButton();
+            rbFM1 = new RadioButton();
+            groupBox2 = new GroupBox();
+            cbFM1 = new CheckBox();
+            cbFM6 = new CheckBox();
+            cbFM2 = new CheckBox();
+            cbFM5 = new CheckBox();
+            cbFM3 = new CheckBox();
+            cbFM4 = new CheckBox();
+            cmbMIDIIN = new ComboBox();
+            label5 = new Label();
+            tpKeyBoard = new TabPage();
+            btnInitializeShortCutKey = new Button();
+            lblSKKey = new Label();
+            dgvShortCutKey = new DataGridView();
+            clmNumber = new DataGridViewTextBoxColumn();
+            clmFunc = new DataGridViewTextBoxColumn();
+            clmShift = new DataGridViewCheckBoxColumn();
+            clmCtrl = new DataGridViewCheckBoxColumn();
+            clmAlt = new DataGridViewCheckBoxColumn();
+            clmKey = new DataGridViewTextBoxColumn();
+            clmSet = new DataGridViewButtonColumn();
+            clmClr = new DataGridViewButtonColumn();
+            clmKBDSpacer = new DataGridViewTextBoxColumn();
+            tpBalance = new TabPage();
+            groupBox25 = new GroupBox();
+            rbAutoBalanceNotSamePositionAsSongData = new RadioButton();
+            rbAutoBalanceSamePositionAsSongData = new RadioButton();
+            cbAutoBalanceUseThis = new CheckBox();
+            groupBox18 = new GroupBox();
+            groupBox24 = new GroupBox();
+            groupBox21 = new GroupBox();
+            rbAutoBalanceNotSaveSongBalance = new RadioButton();
+            rbAutoBalanceSaveSongBalance = new RadioButton();
+            groupBox22 = new GroupBox();
+            label4 = new Label();
+            groupBox23 = new GroupBox();
+            groupBox19 = new GroupBox();
+            rbAutoBalanceNotLoadSongBalance = new RadioButton();
+            rbAutoBalanceLoadSongBalance = new RadioButton();
+            groupBox20 = new GroupBox();
+            rbAutoBalanceNotLoadDriverBalance = new RadioButton();
+            rbAutoBalanceLoadDriverBalance = new RadioButton();
+            tpMMLParameter = new TabPage();
+            cbDispInstrumentName = new CheckBox();
+            tpOther2 = new TabPage();
+            cbDispWarningMessage = new CheckBox();
+            tbUseHistoryBackUp = new TextBox();
+            cbUseHistoryBackUp = new CheckBox();
+            cbUseMoonDriverDotNET = new CheckBox();
+            cbUsePMDDotNET = new CheckBox();
+            cbUseMucomDotNET = new CheckBox();
+            cbUseScript = new CheckBox();
+            cbChangeEnterCode = new CheckBox();
+            cbClearHistory = new CheckBox();
+            tbOpacity = new TrackBar();
+            label52 = new Label();
+            groupBox29 = new GroupBox();
+            label36 = new Label();
+            btFont = new Button();
+            label54 = new Label();
+            lblFontName = new Label();
+            label53 = new Label();
+            lblFontSize = new Label();
+            lblFontStyle = new Label();
+            cbInfiniteOfflineMode = new CheckBox();
+            cbUseSIen = new CheckBox();
+            cbRequestCacheClear = new CheckBox();
+            tpOther = new TabPage();
+            cbWavSwitch = new CheckBox();
+            groupBox17 = new GroupBox();
+            tbImageExt = new TextBox();
+            tbMMLExt = new TextBox();
+            tbTextExt = new TextBox();
+            label1 = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            cbUseGetInst = new CheckBox();
+            groupBox4 = new GroupBox();
+            cmbInstFormat = new ComboBox();
+            lblInstFormat = new Label();
+            cbDumpSwitch = new CheckBox();
+            gbWav = new GroupBox();
+            btnWavPath = new Button();
+            label7 = new Label();
+            tbWavPath = new TextBox();
+            gbDump = new GroupBox();
+            btnDumpPath = new Button();
+            label6 = new Label();
+            tbDumpPath = new TextBox();
+            label30 = new Label();
+            tbScreenFrameRate = new TextBox();
+            label29 = new Label();
+            btnDataPath = new Button();
+            tbDataPath = new TextBox();
+            label19 = new Label();
+            btnResetPosition = new Button();
+            btnOpenSettingFolder = new Button();
+            cbEmptyPlayList = new CheckBox();
+            cbInitAlways = new CheckBox();
+            cbAutoOpen = new CheckBox();
+            cbUseLoopTimes = new CheckBox();
+            tpOmake = new TabPage();
+            groupBox31 = new GroupBox();
+            rbLoglevelINFO = new RadioButton();
+            rbLoglevelDEBUG = new RadioButton();
+            rbLoglevelTRACE = new RadioButton();
+            groupBox30 = new GroupBox();
+            rbQueryPerformanceCounter = new RadioButton();
+            rbDateTime = new RadioButton();
+            rbStopWatch = new RadioButton();
+            label14 = new Label();
+            btVST = new Button();
+            tbVST = new TextBox();
+            groupBox5 = new GroupBox();
+            cbSinWave = new CheckBox();
+            cbPlayDeviceCB = new CheckBox();
+            cbLogWarning = new CheckBox();
+            cbDispFrameCounter = new CheckBox();
+            tpAbout = new TabPage();
+            tableLayoutPanel = new TableLayoutPanel();
+            logoPictureBox = new PictureBox();
+            labelProductName = new Label();
+            labelVersion = new Label();
+            labelCopyright = new Label();
+            labelCompanyName = new Label();
+            textBoxDescription = new TextBox();
+            llOpenGithub = new LinkLabel();
+            cbHiyorimiMode = new CheckBox();
+            label56 = new Label();
+            tbTABWidth = new TextBox();
+            gbWaveOut.SuspendLayout();
+            gbAsioOut.SuspendLayout();
+            gbWasapiOut.SuspendLayout();
+            gbDirectSound.SuspendLayout();
+            tcSetting.SuspendLayout();
+            tpOutput.SuspendLayout();
+            tabControl1.SuspendLayout();
+            tabPage11.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox16.SuspendLayout();
+            tabPage12.SuspendLayout();
+            groupBox27.SuspendLayout();
+            groupBox28.SuspendLayout();
+            groupBox1.SuspendLayout();
+            tabPage13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutPallet).BeginInit();
+            tbcMIDIoutList.SuspendLayout();
+            tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListA).BeginInit();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListB).BeginInit();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListC).BeginInit();
+            tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListD).BeginInit();
+            tpNuked.SuspendLayout();
+            tabControl2.SuspendLayout();
+            tabPage14.SuspendLayout();
+            groupBox26.SuspendLayout();
+            tabPage5.SuspendLayout();
+            groupBox34.SuspendLayout();
+            tpNSF.SuspendLayout();
+            tabControl3.SuspendLayout();
+            tabPage15.SuspendLayout();
+            groupBox9.SuspendLayout();
+            groupBox10.SuspendLayout();
+            groupBox8.SuspendLayout();
+            groupBox12.SuspendLayout();
+            groupBox11.SuspendLayout();
+            tabPage16.SuspendLayout();
+            groupBox14.SuspendLayout();
+            groupBox13.SuspendLayout();
+            tabPage17.SuspendLayout();
+            groupBox15.SuspendLayout();
+            tpPMDDotNET.SuspendLayout();
+            gbPMDManual.SuspendLayout();
+            groupBox32.SuspendLayout();
+            gbPPSDRV.SuspendLayout();
+            groupBox33.SuspendLayout();
+            gbPMDSetManualVolume.SuspendLayout();
+            tpExport.SuspendLayout();
+            gpbFixedExportPlace.SuspendLayout();
+            tpMIDIExp.SuspendLayout();
+            gbMIDIExport.SuspendLayout();
+            groupBox6.SuspendLayout();
+            tpMIDIKBD.SuspendLayout();
+            gbMIDIKeyboard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            gbUseChannel.SuspendLayout();
+            groupBox7.SuspendLayout();
+            groupBox2.SuspendLayout();
+            tpKeyBoard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvShortCutKey).BeginInit();
+            tpBalance.SuspendLayout();
+            groupBox25.SuspendLayout();
+            groupBox18.SuspendLayout();
+            groupBox24.SuspendLayout();
+            groupBox21.SuspendLayout();
+            groupBox22.SuspendLayout();
+            groupBox23.SuspendLayout();
+            groupBox19.SuspendLayout();
+            groupBox20.SuspendLayout();
+            tpMMLParameter.SuspendLayout();
+            tpOther2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)tbOpacity).BeginInit();
+            groupBox29.SuspendLayout();
+            tpOther.SuspendLayout();
+            groupBox17.SuspendLayout();
+            groupBox4.SuspendLayout();
+            gbWav.SuspendLayout();
+            gbDump.SuspendLayout();
+            tpOmake.SuspendLayout();
+            groupBox31.SuspendLayout();
+            groupBox30.SuspendLayout();
+            groupBox5.SuspendLayout();
+            tpAbout.SuspendLayout();
+            tableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)logoPictureBox).BeginInit();
+            SuspendLayout();
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(296, 455);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOK.Location = new Point(345, 569);
+            btnOK.Margin = new Padding(4, 4, 4, 4);
+            btnOK.Name = "btnOK";
+            btnOK.Size = new Size(88, 29);
+            btnOK.TabIndex = 0;
+            btnOK.Text = "OK";
+            btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(377, 455);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "キャンセル";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.Location = new Point(440, 569);
+            btnCancel.Margin = new Padding(4, 4, 4, 4);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(88, 29);
+            btnCancel.TabIndex = 1;
+            btnCancel.Text = "キャンセル";
+            btnCancel.UseVisualStyleBackColor = true;
             // 
             // gbWaveOut
             // 
-            this.gbWaveOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbWaveOut.Controls.Add(this.cmbWaveOutDevice);
-            this.gbWaveOut.Location = new System.Drawing.Point(6, 10);
-            this.gbWaveOut.Name = "gbWaveOut";
-            this.gbWaveOut.Size = new System.Drawing.Size(320, 48);
-            this.gbWaveOut.TabIndex = 1;
-            this.gbWaveOut.TabStop = false;
+            gbWaveOut.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbWaveOut.Controls.Add(cmbWaveOutDevice);
+            gbWaveOut.Location = new Point(7, 12);
+            gbWaveOut.Margin = new Padding(4, 4, 4, 4);
+            gbWaveOut.Name = "gbWaveOut";
+            gbWaveOut.Padding = new Padding(4, 4, 4, 4);
+            gbWaveOut.Size = new Size(373, 60);
+            gbWaveOut.TabIndex = 1;
+            gbWaveOut.TabStop = false;
             // 
             // cmbWaveOutDevice
             // 
-            this.cmbWaveOutDevice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbWaveOutDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbWaveOutDevice.FormattingEnabled = true;
-            this.cmbWaveOutDevice.Location = new System.Drawing.Point(6, 18);
-            this.cmbWaveOutDevice.Name = "cmbWaveOutDevice";
-            this.cmbWaveOutDevice.Size = new System.Drawing.Size(308, 20);
-            this.cmbWaveOutDevice.TabIndex = 0;
+            cmbWaveOutDevice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbWaveOutDevice.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbWaveOutDevice.FormattingEnabled = true;
+            cmbWaveOutDevice.Location = new Point(7, 22);
+            cmbWaveOutDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbWaveOutDevice.Name = "cmbWaveOutDevice";
+            cmbWaveOutDevice.Size = new Size(359, 23);
+            cmbWaveOutDevice.TabIndex = 0;
             // 
             // rbWaveOut
             // 
-            this.rbWaveOut.AutoSize = true;
-            this.rbWaveOut.Checked = true;
-            this.rbWaveOut.Location = new System.Drawing.Point(12, 6);
-            this.rbWaveOut.Name = "rbWaveOut";
-            this.rbWaveOut.Size = new System.Drawing.Size(68, 16);
-            this.rbWaveOut.TabIndex = 0;
-            this.rbWaveOut.TabStop = true;
-            this.rbWaveOut.Text = "WaveOut";
-            this.rbWaveOut.UseVisualStyleBackColor = true;
-            this.rbWaveOut.CheckedChanged += new System.EventHandler(this.rbWaveOut_CheckedChanged);
+            rbWaveOut.AutoSize = true;
+            rbWaveOut.Checked = true;
+            rbWaveOut.Location = new Point(14, 8);
+            rbWaveOut.Margin = new Padding(4, 4, 4, 4);
+            rbWaveOut.Name = "rbWaveOut";
+            rbWaveOut.Size = new Size(74, 19);
+            rbWaveOut.TabIndex = 0;
+            rbWaveOut.TabStop = true;
+            rbWaveOut.Text = "WaveOut";
+            rbWaveOut.UseVisualStyleBackColor = true;
+            rbWaveOut.CheckedChanged += rbWaveOut_CheckedChanged;
             // 
             // rbAsioOut
             // 
-            this.rbAsioOut.AutoSize = true;
-            this.rbAsioOut.Location = new System.Drawing.Point(12, 174);
-            this.rbAsioOut.Name = "rbAsioOut";
-            this.rbAsioOut.Size = new System.Drawing.Size(64, 16);
-            this.rbAsioOut.TabIndex = 6;
-            this.rbAsioOut.Text = "AsioOut";
-            this.rbAsioOut.UseVisualStyleBackColor = true;
-            this.rbAsioOut.CheckedChanged += new System.EventHandler(this.rbAsioOut_CheckedChanged);
+            rbAsioOut.AutoSize = true;
+            rbAsioOut.Location = new Point(14, 218);
+            rbAsioOut.Margin = new Padding(4, 4, 4, 4);
+            rbAsioOut.Name = "rbAsioOut";
+            rbAsioOut.Size = new Size(68, 19);
+            rbAsioOut.TabIndex = 6;
+            rbAsioOut.Text = "AsioOut";
+            rbAsioOut.UseVisualStyleBackColor = true;
+            rbAsioOut.CheckedChanged += rbAsioOut_CheckedChanged;
             // 
             // rbWasapiOut
             // 
-            this.rbWasapiOut.AutoSize = true;
-            this.rbWasapiOut.Location = new System.Drawing.Point(12, 117);
-            this.rbWasapiOut.Name = "rbWasapiOut";
-            this.rbWasapiOut.Size = new System.Drawing.Size(77, 16);
-            this.rbWasapiOut.TabIndex = 4;
-            this.rbWasapiOut.Text = "WasapiOut";
-            this.rbWasapiOut.UseVisualStyleBackColor = true;
-            this.rbWasapiOut.CheckedChanged += new System.EventHandler(this.rbWasapiOut_CheckedChanged);
+            rbWasapiOut.AutoSize = true;
+            rbWasapiOut.Location = new Point(14, 146);
+            rbWasapiOut.Margin = new Padding(4, 4, 4, 4);
+            rbWasapiOut.Name = "rbWasapiOut";
+            rbWasapiOut.Size = new Size(83, 19);
+            rbWasapiOut.TabIndex = 4;
+            rbWasapiOut.Text = "WasapiOut";
+            rbWasapiOut.UseVisualStyleBackColor = true;
+            rbWasapiOut.CheckedChanged += rbWasapiOut_CheckedChanged;
             // 
             // gbAsioOut
             // 
-            this.gbAsioOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbAsioOut.Controls.Add(this.btnASIOControlPanel);
-            this.gbAsioOut.Controls.Add(this.cmbAsioDevice);
-            this.gbAsioOut.Location = new System.Drawing.Point(6, 177);
-            this.gbAsioOut.Name = "gbAsioOut";
-            this.gbAsioOut.Size = new System.Drawing.Size(414, 50);
-            this.gbAsioOut.TabIndex = 7;
-            this.gbAsioOut.TabStop = false;
+            gbAsioOut.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbAsioOut.Controls.Add(btnASIOControlPanel);
+            gbAsioOut.Controls.Add(cmbAsioDevice);
+            gbAsioOut.Location = new Point(7, 221);
+            gbAsioOut.Margin = new Padding(4, 4, 4, 4);
+            gbAsioOut.Name = "gbAsioOut";
+            gbAsioOut.Padding = new Padding(4, 4, 4, 4);
+            gbAsioOut.Size = new Size(483, 62);
+            gbAsioOut.TabIndex = 7;
+            gbAsioOut.TabStop = false;
             // 
             // btnASIOControlPanel
             // 
-            this.btnASIOControlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnASIOControlPanel.Location = new System.Drawing.Point(328, 8);
-            this.btnASIOControlPanel.Name = "btnASIOControlPanel";
-            this.btnASIOControlPanel.Size = new System.Drawing.Size(81, 39);
-            this.btnASIOControlPanel.TabIndex = 8;
-            this.btnASIOControlPanel.Text = "ASIO Control Panel";
-            this.btnASIOControlPanel.UseVisualStyleBackColor = true;
-            this.btnASIOControlPanel.Click += new System.EventHandler(this.btnASIOControlPanel_Click);
+            btnASIOControlPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnASIOControlPanel.Location = new Point(383, 10);
+            btnASIOControlPanel.Margin = new Padding(4, 4, 4, 4);
+            btnASIOControlPanel.Name = "btnASIOControlPanel";
+            btnASIOControlPanel.Size = new Size(94, 49);
+            btnASIOControlPanel.TabIndex = 8;
+            btnASIOControlPanel.Text = "ASIO Control Panel";
+            btnASIOControlPanel.UseVisualStyleBackColor = true;
+            btnASIOControlPanel.Click += btnASIOControlPanel_Click;
             // 
             // cmbAsioDevice
             // 
-            this.cmbAsioDevice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbAsioDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAsioDevice.FormattingEnabled = true;
-            this.cmbAsioDevice.Location = new System.Drawing.Point(6, 18);
-            this.cmbAsioDevice.Name = "cmbAsioDevice";
-            this.cmbAsioDevice.Size = new System.Drawing.Size(315, 20);
-            this.cmbAsioDevice.TabIndex = 6;
+            cmbAsioDevice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbAsioDevice.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAsioDevice.FormattingEnabled = true;
+            cmbAsioDevice.Location = new Point(7, 22);
+            cmbAsioDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbAsioDevice.Name = "cmbAsioDevice";
+            cmbAsioDevice.Size = new Size(367, 23);
+            cmbAsioDevice.TabIndex = 6;
             // 
             // rbDirectSoundOut
             // 
-            this.rbDirectSoundOut.AutoSize = true;
-            this.rbDirectSoundOut.Location = new System.Drawing.Point(12, 62);
-            this.rbDirectSoundOut.Name = "rbDirectSoundOut";
-            this.rbDirectSoundOut.Size = new System.Drawing.Size(85, 16);
-            this.rbDirectSoundOut.TabIndex = 2;
-            this.rbDirectSoundOut.Text = "DirectSound";
-            this.rbDirectSoundOut.UseVisualStyleBackColor = true;
-            this.rbDirectSoundOut.CheckedChanged += new System.EventHandler(this.rbDirectSoundOut_CheckedChanged);
+            rbDirectSoundOut.AutoSize = true;
+            rbDirectSoundOut.Location = new Point(14, 78);
+            rbDirectSoundOut.Margin = new Padding(4, 4, 4, 4);
+            rbDirectSoundOut.Name = "rbDirectSoundOut";
+            rbDirectSoundOut.Size = new Size(90, 19);
+            rbDirectSoundOut.TabIndex = 2;
+            rbDirectSoundOut.Text = "DirectSound";
+            rbDirectSoundOut.UseVisualStyleBackColor = true;
+            rbDirectSoundOut.CheckedChanged += rbDirectSoundOut_CheckedChanged;
             // 
             // gbWasapiOut
             // 
-            this.gbWasapiOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbWasapiOut.Controls.Add(this.rbExclusive);
-            this.gbWasapiOut.Controls.Add(this.rbShare);
-            this.gbWasapiOut.Controls.Add(this.cmbWasapiDevice);
-            this.gbWasapiOut.Location = new System.Drawing.Point(6, 121);
-            this.gbWasapiOut.Name = "gbWasapiOut";
-            this.gbWasapiOut.Size = new System.Drawing.Size(414, 50);
-            this.gbWasapiOut.TabIndex = 5;
-            this.gbWasapiOut.TabStop = false;
+            gbWasapiOut.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbWasapiOut.Controls.Add(rbExclusive);
+            gbWasapiOut.Controls.Add(rbShare);
+            gbWasapiOut.Controls.Add(cmbWasapiDevice);
+            gbWasapiOut.Location = new Point(7, 151);
+            gbWasapiOut.Margin = new Padding(4, 4, 4, 4);
+            gbWasapiOut.Name = "gbWasapiOut";
+            gbWasapiOut.Padding = new Padding(4, 4, 4, 4);
+            gbWasapiOut.Size = new Size(483, 62);
+            gbWasapiOut.TabIndex = 5;
+            gbWasapiOut.TabStop = false;
             // 
             // rbExclusive
             // 
-            this.rbExclusive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.rbExclusive.AutoSize = true;
-            this.rbExclusive.Location = new System.Drawing.Point(328, 31);
-            this.rbExclusive.Name = "rbExclusive";
-            this.rbExclusive.Size = new System.Drawing.Size(47, 16);
-            this.rbExclusive.TabIndex = 7;
-            this.rbExclusive.TabStop = true;
-            this.rbExclusive.Text = "排他";
-            this.rbExclusive.UseVisualStyleBackColor = true;
+            rbExclusive.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            rbExclusive.AutoSize = true;
+            rbExclusive.Location = new Point(388, 39);
+            rbExclusive.Margin = new Padding(4, 4, 4, 4);
+            rbExclusive.Name = "rbExclusive";
+            rbExclusive.Size = new Size(49, 19);
+            rbExclusive.TabIndex = 7;
+            rbExclusive.TabStop = true;
+            rbExclusive.Text = "排他";
+            rbExclusive.UseVisualStyleBackColor = true;
             // 
             // rbShare
             // 
-            this.rbShare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.rbShare.AutoSize = true;
-            this.rbShare.Location = new System.Drawing.Point(328, 9);
-            this.rbShare.Name = "rbShare";
-            this.rbShare.Size = new System.Drawing.Size(47, 16);
-            this.rbShare.TabIndex = 6;
-            this.rbShare.TabStop = true;
-            this.rbShare.Text = "共有";
-            this.rbShare.UseVisualStyleBackColor = true;
+            rbShare.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            rbShare.AutoSize = true;
+            rbShare.Location = new Point(388, 11);
+            rbShare.Margin = new Padding(4, 4, 4, 4);
+            rbShare.Name = "rbShare";
+            rbShare.Size = new Size(49, 19);
+            rbShare.TabIndex = 6;
+            rbShare.TabStop = true;
+            rbShare.Text = "共有";
+            rbShare.UseVisualStyleBackColor = true;
             // 
             // cmbWasapiDevice
             // 
-            this.cmbWasapiDevice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbWasapiDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbWasapiDevice.FormattingEnabled = true;
-            this.cmbWasapiDevice.Location = new System.Drawing.Point(6, 18);
-            this.cmbWasapiDevice.Name = "cmbWasapiDevice";
-            this.cmbWasapiDevice.Size = new System.Drawing.Size(315, 20);
-            this.cmbWasapiDevice.TabIndex = 4;
+            cmbWasapiDevice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbWasapiDevice.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbWasapiDevice.FormattingEnabled = true;
+            cmbWasapiDevice.Location = new Point(7, 22);
+            cmbWasapiDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbWasapiDevice.Name = "cmbWasapiDevice";
+            cmbWasapiDevice.Size = new Size(367, 23);
+            cmbWasapiDevice.TabIndex = 4;
             // 
             // gbDirectSound
             // 
-            this.gbDirectSound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbDirectSound.Controls.Add(this.cmbDirectSoundDevice);
-            this.gbDirectSound.Location = new System.Drawing.Point(6, 66);
-            this.gbDirectSound.Name = "gbDirectSound";
-            this.gbDirectSound.Size = new System.Drawing.Size(415, 48);
-            this.gbDirectSound.TabIndex = 3;
-            this.gbDirectSound.TabStop = false;
+            gbDirectSound.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbDirectSound.Controls.Add(cmbDirectSoundDevice);
+            gbDirectSound.Location = new Point(7, 82);
+            gbDirectSound.Margin = new Padding(4, 4, 4, 4);
+            gbDirectSound.Name = "gbDirectSound";
+            gbDirectSound.Padding = new Padding(4, 4, 4, 4);
+            gbDirectSound.Size = new Size(484, 60);
+            gbDirectSound.TabIndex = 3;
+            gbDirectSound.TabStop = false;
             // 
             // cmbDirectSoundDevice
             // 
-            this.cmbDirectSoundDevice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbDirectSoundDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDirectSoundDevice.FormattingEnabled = true;
-            this.cmbDirectSoundDevice.Location = new System.Drawing.Point(6, 18);
-            this.cmbDirectSoundDevice.Name = "cmbDirectSoundDevice";
-            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(404, 20);
-            this.cmbDirectSoundDevice.TabIndex = 2;
+            cmbDirectSoundDevice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbDirectSoundDevice.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDirectSoundDevice.FormattingEnabled = true;
+            cmbDirectSoundDevice.Location = new Point(7, 22);
+            cmbDirectSoundDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbDirectSoundDevice.Name = "cmbDirectSoundDevice";
+            cmbDirectSoundDevice.Size = new Size(471, 23);
+            cmbDirectSoundDevice.TabIndex = 2;
             // 
             // tcSetting
             // 
-            this.tcSetting.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tcSetting.Controls.Add(this.tpOutput);
-            this.tcSetting.Controls.Add(this.tpNuked);
-            this.tcSetting.Controls.Add(this.tpNSF);
-            this.tcSetting.Controls.Add(this.tpPMDDotNET);
-            this.tcSetting.Controls.Add(this.tpExport);
-            this.tcSetting.Controls.Add(this.tpMIDIExp);
-            this.tcSetting.Controls.Add(this.tpMIDIKBD);
-            this.tcSetting.Controls.Add(this.tpKeyBoard);
-            this.tcSetting.Controls.Add(this.tpBalance);
-            this.tcSetting.Controls.Add(this.tpMMLParameter);
-            this.tcSetting.Controls.Add(this.tpOther2);
-            this.tcSetting.Controls.Add(this.tpOther);
-            this.tcSetting.Controls.Add(this.tpOmake);
-            this.tcSetting.Controls.Add(this.tpAbout);
-            this.tcSetting.HotTrack = true;
-            this.tcSetting.Location = new System.Drawing.Point(1, 3);
-            this.tcSetting.Multiline = true;
-            this.tcSetting.Name = "tcSetting";
-            this.tcSetting.SelectedIndex = 0;
-            this.tcSetting.Size = new System.Drawing.Size(451, 446);
-            this.tcSetting.TabIndex = 2;
+            tcSetting.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tcSetting.Controls.Add(tpOutput);
+            tcSetting.Controls.Add(tpNuked);
+            tcSetting.Controls.Add(tpNSF);
+            tcSetting.Controls.Add(tpPMDDotNET);
+            tcSetting.Controls.Add(tpExport);
+            tcSetting.Controls.Add(tpMIDIExp);
+            tcSetting.Controls.Add(tpMIDIKBD);
+            tcSetting.Controls.Add(tpKeyBoard);
+            tcSetting.Controls.Add(tpBalance);
+            tcSetting.Controls.Add(tpMMLParameter);
+            tcSetting.Controls.Add(tpOther2);
+            tcSetting.Controls.Add(tpOther);
+            tcSetting.Controls.Add(tpOmake);
+            tcSetting.Controls.Add(tpAbout);
+            tcSetting.HotTrack = true;
+            tcSetting.Location = new Point(1, 4);
+            tcSetting.Margin = new Padding(4, 4, 4, 4);
+            tcSetting.Multiline = true;
+            tcSetting.Name = "tcSetting";
+            tcSetting.SelectedIndex = 0;
+            tcSetting.Size = new Size(526, 558);
+            tcSetting.TabIndex = 2;
             // 
             // tpOutput
             // 
-            this.tpOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpOutput.Controls.Add(this.cbUseRealChip);
-            this.tpOutput.Controls.Add(this.tabControl1);
-            this.tpOutput.Location = new System.Drawing.Point(4, 40);
-            this.tpOutput.Name = "tpOutput";
-            this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tpOutput.Size = new System.Drawing.Size(443, 402);
-            this.tpOutput.TabIndex = 0;
-            this.tpOutput.Text = "出力";
-            this.tpOutput.UseVisualStyleBackColor = true;
+            tpOutput.BorderStyle = BorderStyle.FixedSingle;
+            tpOutput.Controls.Add(cbUseRealChip);
+            tpOutput.Controls.Add(tabControl1);
+            tpOutput.Location = new Point(4, 44);
+            tpOutput.Margin = new Padding(4, 4, 4, 4);
+            tpOutput.Name = "tpOutput";
+            tpOutput.Padding = new Padding(4, 4, 4, 4);
+            tpOutput.Size = new Size(518, 510);
+            tpOutput.TabIndex = 0;
+            tpOutput.Text = "出力";
+            tpOutput.UseVisualStyleBackColor = true;
             // 
             // cbUseRealChip
             // 
-            this.cbUseRealChip.AutoSize = true;
-            this.cbUseRealChip.Location = new System.Drawing.Point(6, 6);
-            this.cbUseRealChip.Name = "cbUseRealChip";
-            this.cbUseRealChip.Size = new System.Drawing.Size(249, 16);
-            this.cbUseRealChip.TabIndex = 8;
-            this.cbUseRealChip.Text = "C86ctl/SCCIを使用しない(再起動が必要です)";
-            this.cbUseRealChip.UseVisualStyleBackColor = true;
+            cbUseRealChip.AutoSize = true;
+            cbUseRealChip.Location = new Point(7, 8);
+            cbUseRealChip.Margin = new Padding(4, 4, 4, 4);
+            cbUseRealChip.Name = "cbUseRealChip";
+            cbUseRealChip.Size = new Size(245, 19);
+            cbUseRealChip.TabIndex = 8;
+            cbUseRealChip.Text = "C86ctl/SCCIを使用しない(再起動が必要です)";
+            cbUseRealChip.UseVisualStyleBackColor = true;
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage11);
-            this.tabControl1.Controls.Add(this.tabPage12);
-            this.tabControl1.Controls.Add(this.tabPage13);
-            this.tabControl1.HotTrack = true;
-            this.tabControl1.Location = new System.Drawing.Point(3, 30);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(435, 367);
-            this.tabControl1.TabIndex = 7;
+            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControl1.Controls.Add(tabPage11);
+            tabControl1.Controls.Add(tabPage12);
+            tabControl1.Controls.Add(tabPage13);
+            tabControl1.HotTrack = true;
+            tabControl1.Location = new Point(4, 38);
+            tabControl1.Margin = new Padding(4, 4, 4, 4);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(507, 479);
+            tabControl1.TabIndex = 7;
             // 
             // tabPage11
             // 
-            this.tabPage11.Controls.Add(this.label55);
-            this.tabPage11.Controls.Add(this.label50);
-            this.tabPage11.Controls.Add(this.cmbSampleRate);
-            this.tabPage11.Controls.Add(this.rbWasapiOut);
-            this.tabPage11.Controls.Add(this.rbSPPCM);
-            this.tabPage11.Controls.Add(this.rbDirectSoundOut);
-            this.tabPage11.Controls.Add(this.rbAsioOut);
-            this.tabPage11.Controls.Add(this.rbWaveOut);
-            this.tabPage11.Controls.Add(this.rbNullDevice);
-            this.tabPage11.Controls.Add(this.groupBox3);
-            this.tabPage11.Controls.Add(this.gbWasapiOut);
-            this.tabPage11.Controls.Add(this.gbDirectSound);
-            this.tabPage11.Controls.Add(this.lblWaitTime);
-            this.tabPage11.Controls.Add(this.gbAsioOut);
-            this.tabPage11.Controls.Add(this.lblLatencyUnit);
-            this.tabPage11.Controls.Add(this.groupBox16);
-            this.tabPage11.Controls.Add(this.label28);
-            this.tabPage11.Controls.Add(this.lblLatency);
-            this.tabPage11.Controls.Add(this.cmbWaitTime);
-            this.tabPage11.Controls.Add(this.cmbLatency);
-            this.tabPage11.Controls.Add(this.gbWaveOut);
-            this.tabPage11.Location = new System.Drawing.Point(4, 22);
-            this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(427, 341);
-            this.tabPage11.TabIndex = 0;
-            this.tabPage11.Text = "Emulation";
-            this.tabPage11.UseVisualStyleBackColor = true;
+            tabPage11.Controls.Add(label55);
+            tabPage11.Controls.Add(label50);
+            tabPage11.Controls.Add(cmbSampleRate);
+            tabPage11.Controls.Add(rbWasapiOut);
+            tabPage11.Controls.Add(rbSPPCM);
+            tabPage11.Controls.Add(rbDirectSoundOut);
+            tabPage11.Controls.Add(rbAsioOut);
+            tabPage11.Controls.Add(rbWaveOut);
+            tabPage11.Controls.Add(rbNullDevice);
+            tabPage11.Controls.Add(groupBox3);
+            tabPage11.Controls.Add(gbWasapiOut);
+            tabPage11.Controls.Add(gbDirectSound);
+            tabPage11.Controls.Add(lblWaitTime);
+            tabPage11.Controls.Add(gbAsioOut);
+            tabPage11.Controls.Add(lblLatencyUnit);
+            tabPage11.Controls.Add(groupBox16);
+            tabPage11.Controls.Add(label28);
+            tabPage11.Controls.Add(lblLatency);
+            tabPage11.Controls.Add(cmbWaitTime);
+            tabPage11.Controls.Add(cmbLatency);
+            tabPage11.Controls.Add(gbWaveOut);
+            tabPage11.Location = new Point(4, 24);
+            tabPage11.Margin = new Padding(4, 4, 4, 4);
+            tabPage11.Name = "tabPage11";
+            tabPage11.Padding = new Padding(4, 4, 4, 4);
+            tabPage11.Size = new Size(499, 451);
+            tabPage11.TabIndex = 0;
+            tabPage11.Text = "Emulation";
+            tabPage11.UseVisualStyleBackColor = true;
             // 
             // label55
             // 
-            this.label55.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(398, 50);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(18, 12);
-            this.label55.TabIndex = 12;
-            this.label55.Text = "Hz";
+            label55.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label55.AutoSize = true;
+            label55.Location = new Point(464, 62);
+            label55.Margin = new Padding(4, 0, 4, 0);
+            label55.Name = "label55";
+            label55.Size = new Size(21, 15);
+            label55.TabIndex = 12;
+            label55.Text = "Hz";
             // 
             // label50
             // 
-            this.label50.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(334, 10);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(66, 12);
-            this.label50.TabIndex = 11;
-            this.label50.Text = "SampleRate";
+            label50.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label50.AutoSize = true;
+            label50.Location = new Point(390, 12);
+            label50.Margin = new Padding(4, 0, 4, 0);
+            label50.Name = "label50";
+            label50.Size = new Size(68, 15);
+            label50.TabIndex = 11;
+            label50.Text = "SampleRate";
             // 
             // cmbSampleRate
             // 
-            this.cmbSampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSampleRate.FormattingEnabled = true;
-            this.cmbSampleRate.Items.AddRange(new object[] {
-            "44100",
-            "48000",
-            "96000",
-            "192000"});
-            this.cmbSampleRate.Location = new System.Drawing.Point(332, 26);
-            this.cmbSampleRate.Name = "cmbSampleRate";
-            this.cmbSampleRate.Size = new System.Drawing.Size(86, 20);
-            this.cmbSampleRate.TabIndex = 10;
+            cmbSampleRate.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cmbSampleRate.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSampleRate.FormattingEnabled = true;
+            cmbSampleRate.Items.AddRange(new object[] { "44100", "48000", "96000", "192000" });
+            cmbSampleRate.Location = new Point(387, 32);
+            cmbSampleRate.Margin = new Padding(4, 4, 4, 4);
+            cmbSampleRate.Name = "cmbSampleRate";
+            cmbSampleRate.Size = new Size(100, 23);
+            cmbSampleRate.TabIndex = 10;
             // 
             // rbSPPCM
             // 
-            this.rbSPPCM.AutoSize = true;
-            this.rbSPPCM.Enabled = false;
-            this.rbSPPCM.Location = new System.Drawing.Point(12, 230);
-            this.rbSPPCM.Name = "rbSPPCM";
-            this.rbSPPCM.Size = new System.Drawing.Size(61, 16);
-            this.rbSPPCM.TabIndex = 2;
-            this.rbSPPCM.Text = "SPPCM";
-            this.rbSPPCM.UseVisualStyleBackColor = true;
-            this.rbSPPCM.CheckedChanged += new System.EventHandler(this.rbDirectSoundOut_CheckedChanged);
+            rbSPPCM.AutoSize = true;
+            rbSPPCM.Enabled = false;
+            rbSPPCM.Location = new Point(14, 288);
+            rbSPPCM.Margin = new Padding(4, 4, 4, 4);
+            rbSPPCM.Name = "rbSPPCM";
+            rbSPPCM.Size = new Size(63, 19);
+            rbSPPCM.TabIndex = 2;
+            rbSPPCM.Text = "SPPCM";
+            rbSPPCM.UseVisualStyleBackColor = true;
+            rbSPPCM.CheckedChanged += rbDirectSoundOut_CheckedChanged;
             // 
             // rbNullDevice
             // 
-            this.rbNullDevice.Location = new System.Drawing.Point(225, 243);
-            this.rbNullDevice.Name = "rbNullDevice";
-            this.rbNullDevice.Size = new System.Drawing.Size(158, 29);
-            this.rbNullDevice.TabIndex = 2;
-            this.rbNullDevice.Text = "NULL(サウンドデバイスを使用しない)";
-            this.rbNullDevice.UseVisualStyleBackColor = true;
-            this.rbNullDevice.CheckedChanged += new System.EventHandler(this.rbDirectSoundOut_CheckedChanged);
+            rbNullDevice.Location = new Point(262, 304);
+            rbNullDevice.Margin = new Padding(4, 4, 4, 4);
+            rbNullDevice.Name = "rbNullDevice";
+            rbNullDevice.Size = new Size(184, 36);
+            rbNullDevice.TabIndex = 2;
+            rbNullDevice.Text = "NULL(サウンドデバイスを使用しない)";
+            rbNullDevice.UseVisualStyleBackColor = true;
+            rbNullDevice.CheckedChanged += rbDirectSoundOut_CheckedChanged;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.label13);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Controls.Add(this.label11);
-            this.groupBox3.Controls.Add(this.tbLatencyEmu);
-            this.groupBox3.Controls.Add(this.tbLatencySCCI);
-            this.groupBox3.Controls.Add(this.label10);
-            this.groupBox3.Location = new System.Drawing.Point(258, 272);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(158, 62);
-            this.groupBox3.TabIndex = 6;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "遅延演奏";
+            groupBox3.Controls.Add(label13);
+            groupBox3.Controls.Add(label12);
+            groupBox3.Controls.Add(label11);
+            groupBox3.Controls.Add(tbLatencyEmu);
+            groupBox3.Controls.Add(tbLatencySCCI);
+            groupBox3.Controls.Add(label10);
+            groupBox3.Location = new Point(301, 340);
+            groupBox3.Margin = new Padding(4, 4, 4, 4);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Padding = new Padding(4, 4, 4, 4);
+            groupBox3.Size = new Size(184, 78);
+            groupBox3.TabIndex = 6;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "遅延演奏";
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 18);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(29, 12);
-            this.label13.TabIndex = 0;
-            this.label13.Text = "EMU";
+            label13.AutoSize = true;
+            label13.Location = new Point(7, 22);
+            label13.Margin = new Padding(4, 0, 4, 0);
+            label13.Name = "label13";
+            label13.Size = new Size(32, 15);
+            label13.TabIndex = 0;
+            label13.Text = "EMU";
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 40);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(28, 12);
-            this.label12.TabIndex = 3;
-            this.label12.Text = "Real";
+            label12.AutoSize = true;
+            label12.Location = new Point(7, 50);
+            label12.Margin = new Padding(4, 0, 4, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(29, 15);
+            label12.TabIndex = 3;
+            label12.Text = "Real";
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(132, 40);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(20, 12);
-            this.label11.TabIndex = 5;
-            this.label11.Text = "ms";
+            label11.AutoSize = true;
+            label11.Location = new Point(154, 50);
+            label11.Margin = new Padding(4, 0, 4, 0);
+            label11.Name = "label11";
+            label11.Size = new Size(22, 15);
+            label11.TabIndex = 5;
+            label11.Text = "ms";
             // 
             // tbLatencyEmu
             // 
-            this.tbLatencyEmu.Location = new System.Drawing.Point(41, 15);
-            this.tbLatencyEmu.Name = "tbLatencyEmu";
-            this.tbLatencyEmu.Size = new System.Drawing.Size(85, 19);
-            this.tbLatencyEmu.TabIndex = 1;
+            tbLatencyEmu.Location = new Point(48, 19);
+            tbLatencyEmu.Margin = new Padding(4, 4, 4, 4);
+            tbLatencyEmu.Name = "tbLatencyEmu";
+            tbLatencyEmu.Size = new Size(98, 23);
+            tbLatencyEmu.TabIndex = 1;
             // 
             // tbLatencySCCI
             // 
-            this.tbLatencySCCI.Location = new System.Drawing.Point(41, 37);
-            this.tbLatencySCCI.Name = "tbLatencySCCI";
-            this.tbLatencySCCI.Size = new System.Drawing.Size(85, 19);
-            this.tbLatencySCCI.TabIndex = 4;
+            tbLatencySCCI.Location = new Point(48, 46);
+            tbLatencySCCI.Margin = new Padding(4, 4, 4, 4);
+            tbLatencySCCI.Name = "tbLatencySCCI";
+            tbLatencySCCI.Size = new Size(98, 23);
+            tbLatencySCCI.TabIndex = 4;
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(132, 18);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(20, 12);
-            this.label10.TabIndex = 2;
-            this.label10.Text = "ms";
+            label10.AutoSize = true;
+            label10.Location = new Point(154, 22);
+            label10.Margin = new Padding(4, 0, 4, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(22, 15);
+            label10.TabIndex = 2;
+            label10.Text = "ms";
             // 
             // lblWaitTime
             // 
-            this.lblWaitTime.AutoSize = true;
-            this.lblWaitTime.Location = new System.Drawing.Point(234, 316);
-            this.lblWaitTime.Name = "lblWaitTime";
-            this.lblWaitTime.Size = new System.Drawing.Size(20, 12);
-            this.lblWaitTime.TabIndex = 9;
-            this.lblWaitTime.Text = "ms";
+            lblWaitTime.AutoSize = true;
+            lblWaitTime.Location = new Point(273, 395);
+            lblWaitTime.Margin = new Padding(4, 0, 4, 0);
+            lblWaitTime.Name = "lblWaitTime";
+            lblWaitTime.Size = new Size(22, 15);
+            lblWaitTime.TabIndex = 9;
+            lblWaitTime.Text = "ms";
             // 
             // lblLatencyUnit
             // 
-            this.lblLatencyUnit.AutoSize = true;
-            this.lblLatencyUnit.Location = new System.Drawing.Point(234, 290);
-            this.lblLatencyUnit.Name = "lblLatencyUnit";
-            this.lblLatencyUnit.Size = new System.Drawing.Size(20, 12);
-            this.lblLatencyUnit.TabIndex = 9;
-            this.lblLatencyUnit.Text = "ms";
+            lblLatencyUnit.AutoSize = true;
+            lblLatencyUnit.Location = new Point(273, 362);
+            lblLatencyUnit.Margin = new Padding(4, 0, 4, 0);
+            lblLatencyUnit.Name = "lblLatencyUnit";
+            lblLatencyUnit.Size = new Size(22, 15);
+            lblLatencyUnit.TabIndex = 9;
+            lblLatencyUnit.Text = "ms";
             // 
             // groupBox16
             // 
-            this.groupBox16.Controls.Add(this.cmbSPPCMDevice);
-            this.groupBox16.Enabled = false;
-            this.groupBox16.Location = new System.Drawing.Point(6, 233);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(213, 48);
-            this.groupBox16.TabIndex = 3;
-            this.groupBox16.TabStop = false;
+            groupBox16.Controls.Add(cmbSPPCMDevice);
+            groupBox16.Enabled = false;
+            groupBox16.Location = new Point(7, 291);
+            groupBox16.Margin = new Padding(4, 4, 4, 4);
+            groupBox16.Name = "groupBox16";
+            groupBox16.Padding = new Padding(4, 4, 4, 4);
+            groupBox16.Size = new Size(248, 60);
+            groupBox16.TabIndex = 3;
+            groupBox16.TabStop = false;
             // 
             // cmbSPPCMDevice
             // 
-            this.cmbSPPCMDevice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSPPCMDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSPPCMDevice.FormattingEnabled = true;
-            this.cmbSPPCMDevice.Location = new System.Drawing.Point(6, 19);
-            this.cmbSPPCMDevice.Name = "cmbSPPCMDevice";
-            this.cmbSPPCMDevice.Size = new System.Drawing.Size(201, 20);
-            this.cmbSPPCMDevice.TabIndex = 2;
+            cmbSPPCMDevice.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSPPCMDevice.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSPPCMDevice.FormattingEnabled = true;
+            cmbSPPCMDevice.Location = new Point(7, 24);
+            cmbSPPCMDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbSPPCMDevice.Name = "cmbSPPCMDevice";
+            cmbSPPCMDevice.Size = new Size(234, 23);
+            cmbSPPCMDevice.TabIndex = 2;
             // 
             // label28
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 316);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(98, 12);
-            this.label28.TabIndex = 9;
-            this.label28.Text = "演奏開始待ち時間";
+            label28.AutoSize = true;
+            label28.Location = new Point(7, 395);
+            label28.Margin = new Padding(4, 0, 4, 0);
+            label28.Name = "label28";
+            label28.Size = new Size(100, 15);
+            label28.TabIndex = 9;
+            label28.Text = "演奏開始待ち時間";
             // 
             // lblLatency
             // 
-            this.lblLatency.AutoSize = true;
-            this.lblLatency.Location = new System.Drawing.Point(5, 283);
-            this.lblLatency.Name = "lblLatency";
-            this.lblLatency.Size = new System.Drawing.Size(97, 24);
-            this.lblLatency.TabIndex = 9;
-            this.lblLatency.Text = "遅延時間\r\n(レンダリングバッファ)";
+            lblLatency.AutoSize = true;
+            lblLatency.Location = new Point(6, 354);
+            lblLatency.Margin = new Padding(4, 0, 4, 0);
+            lblLatency.Name = "lblLatency";
+            lblLatency.Size = new Size(100, 30);
+            lblLatency.TabIndex = 9;
+            lblLatency.Text = "遅延時間\r\n(レンダリングバッファ)";
             // 
             // cmbWaitTime
             // 
-            this.cmbWaitTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbWaitTime.FormattingEnabled = true;
-            this.cmbWaitTime.Items.AddRange(new object[] {
-            "0",
-            "500",
-            "1000",
-            "1500",
-            "2000",
-            "2500",
-            "3000",
-            "3500",
-            "4000",
-            "4500",
-            "5000"});
-            this.cmbWaitTime.Location = new System.Drawing.Point(107, 313);
-            this.cmbWaitTime.Name = "cmbWaitTime";
-            this.cmbWaitTime.Size = new System.Drawing.Size(121, 20);
-            this.cmbWaitTime.TabIndex = 8;
+            cmbWaitTime.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbWaitTime.FormattingEnabled = true;
+            cmbWaitTime.Items.AddRange(new object[] { "0", "500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000" });
+            cmbWaitTime.Location = new Point(125, 391);
+            cmbWaitTime.Margin = new Padding(4, 4, 4, 4);
+            cmbWaitTime.Name = "cmbWaitTime";
+            cmbWaitTime.Size = new Size(140, 23);
+            cmbWaitTime.TabIndex = 8;
             // 
             // cmbLatency
             // 
-            this.cmbLatency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLatency.FormattingEnabled = true;
-            this.cmbLatency.Items.AddRange(new object[] {
-            "25",
-            "50",
-            "100",
-            "150",
-            "200",
-            "300",
-            "400",
-            "500"});
-            this.cmbLatency.Location = new System.Drawing.Point(107, 287);
-            this.cmbLatency.Name = "cmbLatency";
-            this.cmbLatency.Size = new System.Drawing.Size(121, 20);
-            this.cmbLatency.TabIndex = 8;
+            cmbLatency.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbLatency.FormattingEnabled = true;
+            cmbLatency.Items.AddRange(new object[] { "25", "50", "100", "150", "200", "300", "400", "500" });
+            cmbLatency.Location = new Point(125, 359);
+            cmbLatency.Margin = new Padding(4, 4, 4, 4);
+            cmbLatency.Name = "cmbLatency";
+            cmbLatency.Size = new Size(140, 23);
+            cmbLatency.TabIndex = 8;
             // 
             // tabPage12
             // 
-            this.tabPage12.Controls.Add(this.groupBox27);
-            this.tabPage12.Location = new System.Drawing.Point(4, 22);
-            this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage12.Size = new System.Drawing.Size(427, 341);
-            this.tabPage12.TabIndex = 1;
-            this.tabPage12.Text = "音源割り当て";
-            this.tabPage12.UseVisualStyleBackColor = true;
+            tabPage12.Controls.Add(groupBox27);
+            tabPage12.Location = new Point(4, 24);
+            tabPage12.Margin = new Padding(4, 4, 4, 4);
+            tabPage12.Name = "tabPage12";
+            tabPage12.Padding = new Padding(4, 4, 4, 4);
+            tabPage12.Size = new Size(499, 431);
+            tabPage12.TabIndex = 1;
+            tabPage12.Text = "音源割り当て";
+            tabPage12.UseVisualStyleBackColor = true;
             // 
             // groupBox27
             // 
-            this.groupBox27.Controls.Add(this.rbManualDetect);
-            this.groupBox27.Controls.Add(this.rbAutoDetect);
-            this.groupBox27.Controls.Add(this.groupBox28);
-            this.groupBox27.Controls.Add(this.groupBox1);
-            this.groupBox27.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox27.Location = new System.Drawing.Point(3, 3);
-            this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(421, 335);
-            this.groupBox27.TabIndex = 9;
-            this.groupBox27.TabStop = false;
-            this.groupBox27.Text = "音源の割り当て";
+            groupBox27.Controls.Add(rbManualDetect);
+            groupBox27.Controls.Add(rbAutoDetect);
+            groupBox27.Controls.Add(groupBox28);
+            groupBox27.Controls.Add(groupBox1);
+            groupBox27.Dock = DockStyle.Fill;
+            groupBox27.Location = new Point(4, 4);
+            groupBox27.Margin = new Padding(4, 4, 4, 4);
+            groupBox27.Name = "groupBox27";
+            groupBox27.Padding = new Padding(4, 4, 4, 4);
+            groupBox27.Size = new Size(491, 423);
+            groupBox27.TabIndex = 9;
+            groupBox27.TabStop = false;
+            groupBox27.Text = "音源の割り当て";
             // 
             // rbManualDetect
             // 
-            this.rbManualDetect.AutoSize = true;
-            this.rbManualDetect.Location = new System.Drawing.Point(12, 71);
-            this.rbManualDetect.Name = "rbManualDetect";
-            this.rbManualDetect.Size = new System.Drawing.Size(47, 16);
-            this.rbManualDetect.TabIndex = 10;
-            this.rbManualDetect.Text = "手動";
-            this.rbManualDetect.UseVisualStyleBackColor = true;
+            rbManualDetect.AutoSize = true;
+            rbManualDetect.Location = new Point(14, 89);
+            rbManualDetect.Margin = new Padding(4, 4, 4, 4);
+            rbManualDetect.Name = "rbManualDetect";
+            rbManualDetect.Size = new Size(49, 19);
+            rbManualDetect.TabIndex = 10;
+            rbManualDetect.Text = "手動";
+            rbManualDetect.UseVisualStyleBackColor = true;
             // 
             // rbAutoDetect
             // 
-            this.rbAutoDetect.AutoSize = true;
-            this.rbAutoDetect.Checked = true;
-            this.rbAutoDetect.Location = new System.Drawing.Point(12, 17);
-            this.rbAutoDetect.Name = "rbAutoDetect";
-            this.rbAutoDetect.Size = new System.Drawing.Size(47, 16);
-            this.rbAutoDetect.TabIndex = 10;
-            this.rbAutoDetect.TabStop = true;
-            this.rbAutoDetect.Text = "自動";
-            this.rbAutoDetect.UseVisualStyleBackColor = true;
+            rbAutoDetect.AutoSize = true;
+            rbAutoDetect.Checked = true;
+            rbAutoDetect.Location = new Point(14, 21);
+            rbAutoDetect.Margin = new Padding(4, 4, 4, 4);
+            rbAutoDetect.Name = "rbAutoDetect";
+            rbAutoDetect.Size = new Size(49, 19);
+            rbAutoDetect.TabIndex = 10;
+            rbAutoDetect.TabStop = true;
+            rbAutoDetect.Text = "自動";
+            rbAutoDetect.UseVisualStyleBackColor = true;
             // 
             // groupBox28
             // 
-            this.groupBox28.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox28.Controls.Add(this.rbSCCIDetect);
-            this.groupBox28.Controls.Add(this.rbC86ctlDetect);
-            this.groupBox28.Location = new System.Drawing.Point(6, 18);
-            this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Size = new System.Drawing.Size(409, 46);
-            this.groupBox28.TabIndex = 9;
-            this.groupBox28.TabStop = false;
+            groupBox28.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox28.Controls.Add(rbSCCIDetect);
+            groupBox28.Controls.Add(rbC86ctlDetect);
+            groupBox28.Location = new Point(7, 22);
+            groupBox28.Margin = new Padding(4, 4, 4, 4);
+            groupBox28.Name = "groupBox28";
+            groupBox28.Padding = new Padding(4, 4, 4, 4);
+            groupBox28.Size = new Size(477, 58);
+            groupBox28.TabIndex = 9;
+            groupBox28.TabStop = false;
             // 
             // rbSCCIDetect
             // 
-            this.rbSCCIDetect.AutoSize = true;
-            this.rbSCCIDetect.Location = new System.Drawing.Point(212, 21);
-            this.rbSCCIDetect.Name = "rbSCCIDetect";
-            this.rbSCCIDetect.Size = new System.Drawing.Size(158, 16);
-            this.rbSCCIDetect.TabIndex = 0;
-            this.rbSCCIDetect.Text = "SCCIのモジュールを優先する";
-            this.rbSCCIDetect.UseVisualStyleBackColor = true;
+            rbSCCIDetect.AutoSize = true;
+            rbSCCIDetect.Location = new Point(247, 26);
+            rbSCCIDetect.Margin = new Padding(4, 4, 4, 4);
+            rbSCCIDetect.Name = "rbSCCIDetect";
+            rbSCCIDetect.Size = new Size(155, 19);
+            rbSCCIDetect.TabIndex = 0;
+            rbSCCIDetect.Text = "SCCIのモジュールを優先する";
+            rbSCCIDetect.UseVisualStyleBackColor = true;
             // 
             // rbC86ctlDetect
             // 
-            this.rbC86ctlDetect.AutoSize = true;
-            this.rbC86ctlDetect.Checked = true;
-            this.rbC86ctlDetect.Location = new System.Drawing.Point(21, 21);
-            this.rbC86ctlDetect.Name = "rbC86ctlDetect";
-            this.rbC86ctlDetect.Size = new System.Drawing.Size(165, 16);
-            this.rbC86ctlDetect.TabIndex = 0;
-            this.rbC86ctlDetect.TabStop = true;
-            this.rbC86ctlDetect.Text = "C86ctlのモジュールを優先する";
-            this.rbC86ctlDetect.UseVisualStyleBackColor = true;
+            rbC86ctlDetect.AutoSize = true;
+            rbC86ctlDetect.Checked = true;
+            rbC86ctlDetect.Location = new Point(24, 26);
+            rbC86ctlDetect.Margin = new Padding(4, 4, 4, 4);
+            rbC86ctlDetect.Name = "rbC86ctlDetect";
+            rbC86ctlDetect.Size = new Size(164, 19);
+            rbC86ctlDetect.TabIndex = 0;
+            rbC86ctlDetect.TabStop = true;
+            rbC86ctlDetect.Text = "C86ctlのモジュールを優先する";
+            rbC86ctlDetect.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.ucSI);
-            this.groupBox1.Location = new System.Drawing.Point(6, 71);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(409, 258);
-            this.groupBox1.TabIndex = 8;
-            this.groupBox1.TabStop = false;
-            // 
-            // tabPage13
-            // 
-            this.tabPage13.Controls.Add(this.splitContainer1);
-            this.tabPage13.Location = new System.Drawing.Point(4, 22);
-            this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(427, 341);
-            this.tabPage13.TabIndex = 2;
-            this.tabPage13.Text = "MIDI";
-            this.tabPage13.UseVisualStyleBackColor = true;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.label16);
-            this.splitContainer1.Panel1.Controls.Add(this.dgvMIDIoutPallet);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.tbcMIDIoutList);
-            this.splitContainer1.Panel2.Controls.Add(this.btnAddVST);
-            this.splitContainer1.Panel2.Controls.Add(this.label18);
-            this.splitContainer1.Panel2.Controls.Add(this.btnAddMIDIout);
-            this.splitContainer1.Panel2.Controls.Add(this.btnSubMIDIout);
-            this.splitContainer1.Size = new System.Drawing.Size(427, 341);
-            this.splitContainer1.SplitterDistance = 136;
-            this.splitContainer1.TabIndex = 6;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(3, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(126, 12);
-            this.label16.TabIndex = 0;
-            this.label16.Text = "MIDI Outデバイス パレット";
-            // 
-            // dgvMIDIoutPallet
-            // 
-            this.dgvMIDIoutPallet.AllowUserToAddRows = false;
-            this.dgvMIDIoutPallet.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutPallet.AllowUserToResizeRows = false;
-            this.dgvMIDIoutPallet.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutPallet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutPallet.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clmID,
-            this.clmDeviceName,
-            this.clmManufacturer,
-            this.clmSpacer});
-            this.dgvMIDIoutPallet.Location = new System.Drawing.Point(2, 15);
-            this.dgvMIDIoutPallet.MultiSelect = false;
-            this.dgvMIDIoutPallet.Name = "dgvMIDIoutPallet";
-            this.dgvMIDIoutPallet.RowHeadersVisible = false;
-            this.dgvMIDIoutPallet.RowTemplate.Height = 21;
-            this.dgvMIDIoutPallet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutPallet.Size = new System.Drawing.Size(420, 118);
-            this.dgvMIDIoutPallet.TabIndex = 1;
-            // 
-            // clmID
-            // 
-            this.clmID.Frozen = true;
-            this.clmID.HeaderText = "ID";
-            this.clmID.Name = "clmID";
-            this.clmID.ReadOnly = true;
-            this.clmID.Visible = false;
-            this.clmID.Width = 40;
-            // 
-            // clmDeviceName
-            // 
-            this.clmDeviceName.Frozen = true;
-            this.clmDeviceName.HeaderText = "Device Name";
-            this.clmDeviceName.Name = "clmDeviceName";
-            this.clmDeviceName.ReadOnly = true;
-            this.clmDeviceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.clmDeviceName.Width = 200;
-            // 
-            // clmManufacturer
-            // 
-            this.clmManufacturer.Frozen = true;
-            this.clmManufacturer.HeaderText = "Manufacturer";
-            this.clmManufacturer.Name = "clmManufacturer";
-            this.clmManufacturer.ReadOnly = true;
-            this.clmManufacturer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // clmSpacer
-            // 
-            this.clmSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.clmSpacer.HeaderText = "";
-            this.clmSpacer.Name = "clmSpacer";
-            this.clmSpacer.ReadOnly = true;
-            this.clmSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tbcMIDIoutList
-            // 
-            this.tbcMIDIoutList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbcMIDIoutList.Controls.Add(this.tabPage1);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage2);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage3);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage4);
-            this.tbcMIDIoutList.Location = new System.Drawing.Point(3, 31);
-            this.tbcMIDIoutList.Name = "tbcMIDIoutList";
-            this.tbcMIDIoutList.SelectedIndex = 0;
-            this.tbcMIDIoutList.Size = new System.Drawing.Size(420, 167);
-            this.tbcMIDIoutList.TabIndex = 4;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.dgvMIDIoutListA);
-            this.tabPage1.Controls.Add(this.btnUP_A);
-            this.tabPage1.Controls.Add(this.btnDOWN_A);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(412, 141);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Tag = "0";
-            this.tabPage1.Text = "GM";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListA
-            // 
-            this.dgvMIDIoutListA.AllowUserToAddRows = false;
-            this.dgvMIDIoutListA.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListA.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListA.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListA.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.clmIsVST,
-            this.clmFileName,
-            this.dataGridViewTextBoxColumn2,
-            this.clmType,
-            this.ClmBeforeSend,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4});
-            this.dgvMIDIoutListA.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListA.MultiSelect = false;
-            this.dgvMIDIoutListA.Name = "dgvMIDIoutListA";
-            this.dgvMIDIoutListA.RowHeadersVisible = false;
-            this.dgvMIDIoutListA.RowTemplate.Height = 21;
-            this.dgvMIDIoutListA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListA.Size = new System.Drawing.Size(382, 136);
-            this.dgvMIDIoutListA.TabIndex = 1;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.Frozen = true;
-            this.dataGridViewTextBoxColumn1.HeaderText = "ID";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn1.Visible = false;
-            this.dataGridViewTextBoxColumn1.Width = 40;
-            // 
-            // clmIsVST
-            // 
-            this.clmIsVST.HeaderText = "IsVST";
-            this.clmIsVST.Name = "clmIsVST";
-            this.clmIsVST.Visible = false;
-            // 
-            // clmFileName
-            // 
-            this.clmFileName.HeaderText = "fileName";
-            this.clmFileName.Name = "clmFileName";
-            this.clmFileName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmFileName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.clmFileName.Visible = false;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Device Name";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn2.Width = 180;
-            // 
-            // clmType
-            // 
-            this.clmType.HeaderText = "Type";
-            this.clmType.Items.AddRange(new object[] {
-            "GM"});
-            this.clmType.Name = "clmType";
-            this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmType.Width = 70;
-            // 
-            // ClmBeforeSend
-            // 
-            this.ClmBeforeSend.HeaderText = "Before Send";
-            this.ClmBeforeSend.Items.AddRange(new object[] {
-            "None",
-            "GM Reset",
-            "XG Reset",
-            "GS Reset",
-            "Custom"});
-            this.ClmBeforeSend.Name = "ClmBeforeSend";
-            this.ClmBeforeSend.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ClmBeforeSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Manufacturer";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.HeaderText = "";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // btnUP_A
-            // 
-            this.btnUP_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_A.Location = new System.Drawing.Point(388, 0);
-            this.btnUP_A.Name = "btnUP_A";
-            this.btnUP_A.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_A.TabIndex = 3;
-            this.btnUP_A.Text = "↑";
-            this.btnUP_A.UseVisualStyleBackColor = true;
-            this.btnUP_A.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_A
-            // 
-            this.btnDOWN_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_A.Location = new System.Drawing.Point(388, 78);
-            this.btnDOWN_A.Name = "btnDOWN_A";
-            this.btnDOWN_A.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_A.TabIndex = 3;
-            this.btnDOWN_A.Text = "↓";
-            this.btnDOWN_A.UseVisualStyleBackColor = true;
-            this.btnDOWN_A.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.dgvMIDIoutListB);
-            this.tabPage2.Controls.Add(this.btnUP_B);
-            this.tabPage2.Controls.Add(this.btnDOWN_B);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(412, 141);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Tag = "1";
-            this.tabPage2.Text = "GS";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListB
-            // 
-            this.dgvMIDIoutListB.AllowUserToAddRows = false;
-            this.dgvMIDIoutListB.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListB.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListB.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListB.MultiSelect = false;
-            this.dgvMIDIoutListB.Name = "dgvMIDIoutListB";
-            this.dgvMIDIoutListB.RowHeadersVisible = false;
-            this.dgvMIDIoutListB.RowTemplate.Height = 21;
-            this.dgvMIDIoutListB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListB.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListB.TabIndex = 7;
-            // 
-            // btnUP_B
-            // 
-            this.btnUP_B.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_B.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_B.Name = "btnUP_B";
-            this.btnUP_B.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_B.TabIndex = 5;
-            this.btnUP_B.Text = "↑";
-            this.btnUP_B.UseVisualStyleBackColor = true;
-            this.btnUP_B.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_B
-            // 
-            this.btnDOWN_B.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_B.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_B.Name = "btnDOWN_B";
-            this.btnDOWN_B.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_B.TabIndex = 6;
-            this.btnDOWN_B.Text = "↓";
-            this.btnDOWN_B.UseVisualStyleBackColor = true;
-            this.btnDOWN_B.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.dgvMIDIoutListC);
-            this.tabPage3.Controls.Add(this.btnUP_C);
-            this.tabPage3.Controls.Add(this.btnDOWN_C);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(412, 141);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Tag = "2";
-            this.tabPage3.Text = "XG";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListC
-            // 
-            this.dgvMIDIoutListC.AllowUserToAddRows = false;
-            this.dgvMIDIoutListC.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListC.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListC.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListC.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListC.MultiSelect = false;
-            this.dgvMIDIoutListC.Name = "dgvMIDIoutListC";
-            this.dgvMIDIoutListC.RowHeadersVisible = false;
-            this.dgvMIDIoutListC.RowTemplate.Height = 21;
-            this.dgvMIDIoutListC.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListC.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListC.TabIndex = 7;
-            // 
-            // btnUP_C
-            // 
-            this.btnUP_C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_C.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_C.Name = "btnUP_C";
-            this.btnUP_C.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_C.TabIndex = 5;
-            this.btnUP_C.Text = "↑";
-            this.btnUP_C.UseVisualStyleBackColor = true;
-            this.btnUP_C.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_C
-            // 
-            this.btnDOWN_C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_C.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_C.Name = "btnDOWN_C";
-            this.btnDOWN_C.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_C.TabIndex = 6;
-            this.btnDOWN_C.Text = "↓";
-            this.btnDOWN_C.UseVisualStyleBackColor = true;
-            this.btnDOWN_C.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.dgvMIDIoutListD);
-            this.tabPage4.Controls.Add(this.btnUP_D);
-            this.tabPage4.Controls.Add(this.btnDOWN_D);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(412, 141);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Tag = "3";
-            this.tabPage4.Text = "VSTi";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListD
-            // 
-            this.dgvMIDIoutListD.AllowUserToAddRows = false;
-            this.dgvMIDIoutListD.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListD.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListD.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListD.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListD.MultiSelect = false;
-            this.dgvMIDIoutListD.Name = "dgvMIDIoutListD";
-            this.dgvMIDIoutListD.RowHeadersVisible = false;
-            this.dgvMIDIoutListD.RowTemplate.Height = 21;
-            this.dgvMIDIoutListD.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListD.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListD.TabIndex = 7;
-            // 
-            // btnUP_D
-            // 
-            this.btnUP_D.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_D.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_D.Name = "btnUP_D";
-            this.btnUP_D.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_D.TabIndex = 5;
-            this.btnUP_D.Text = "↑";
-            this.btnUP_D.UseVisualStyleBackColor = true;
-            this.btnUP_D.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_D
-            // 
-            this.btnDOWN_D.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_D.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_D.Name = "btnDOWN_D";
-            this.btnDOWN_D.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_D.TabIndex = 6;
-            this.btnDOWN_D.Text = "↓";
-            this.btnDOWN_D.UseVisualStyleBackColor = true;
-            this.btnDOWN_D.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // btnAddVST
-            // 
-            this.btnAddVST.Enabled = false;
-            this.btnAddVST.Location = new System.Drawing.Point(263, 4);
-            this.btnAddVST.Name = "btnAddVST";
-            this.btnAddVST.Size = new System.Drawing.Size(75, 23);
-            this.btnAddVST.TabIndex = 5;
-            this.btnAddVST.Text = "Add VST";
-            this.btnAddVST.UseVisualStyleBackColor = true;
-            this.btnAddVST.Click += new System.EventHandler(this.btnAddVST_Click);
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 16);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(74, 12);
-            this.label18.TabIndex = 2;
-            this.label18.Text = "MIDI Outリスト";
-            // 
-            // btnAddMIDIout
-            // 
-            this.btnAddMIDIout.Location = new System.Drawing.Point(118, 4);
-            this.btnAddMIDIout.Name = "btnAddMIDIout";
-            this.btnAddMIDIout.Size = new System.Drawing.Size(66, 24);
-            this.btnAddMIDIout.TabIndex = 3;
-            this.btnAddMIDIout.Text = "↓ +";
-            this.btnAddMIDIout.UseVisualStyleBackColor = true;
-            this.btnAddMIDIout.Click += new System.EventHandler(this.btnAddMIDIout_Click);
-            // 
-            // btnSubMIDIout
-            // 
-            this.btnSubMIDIout.Location = new System.Drawing.Point(190, 4);
-            this.btnSubMIDIout.Name = "btnSubMIDIout";
-            this.btnSubMIDIout.Size = new System.Drawing.Size(66, 24);
-            this.btnSubMIDIout.TabIndex = 3;
-            this.btnSubMIDIout.Text = "-";
-            this.btnSubMIDIout.UseVisualStyleBackColor = true;
-            this.btnSubMIDIout.Click += new System.EventHandler(this.btnSubMIDIout_Click);
-            // 
-            // tpNuked
-            // 
-            this.tpNuked.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpNuked.Controls.Add(this.tabControl2);
-            this.tpNuked.Location = new System.Drawing.Point(4, 40);
-            this.tpNuked.Name = "tpNuked";
-            this.tpNuked.Size = new System.Drawing.Size(443, 402);
-            this.tpNuked.TabIndex = 14;
-            this.tpNuked.Text = "チップ別";
-            this.tpNuked.UseVisualStyleBackColor = true;
-            // 
-            // tabControl2
-            // 
-            this.tabControl2.Controls.Add(this.tabPage14);
-            this.tabControl2.Controls.Add(this.tabPage5);
-            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl2.HotTrack = true;
-            this.tabControl2.Location = new System.Drawing.Point(0, 0);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(441, 400);
-            this.tabControl2.TabIndex = 1;
-            // 
-            // tabPage14
-            // 
-            this.tabPage14.Controls.Add(this.groupBox26);
-            this.tabPage14.Location = new System.Drawing.Point(4, 22);
-            this.tabPage14.Name = "tabPage14";
-            this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage14.Size = new System.Drawing.Size(433, 374);
-            this.tabPage14.TabIndex = 0;
-            this.tabPage14.Text = "Nuked-OPN2";
-            this.tabPage14.UseVisualStyleBackColor = true;
-            // 
-            // groupBox26
-            // 
-            this.groupBox26.Controls.Add(this.rbNukedOPN2OptionYM2612u);
-            this.groupBox26.Controls.Add(this.rbNukedOPN2OptionYM2612);
-            this.groupBox26.Controls.Add(this.rbNukedOPN2OptionDiscrete);
-            this.groupBox26.Controls.Add(this.rbNukedOPN2OptionASIClp);
-            this.groupBox26.Controls.Add(this.rbNukedOPN2OptionASIC);
-            this.groupBox26.Location = new System.Drawing.Point(6, 6);
-            this.groupBox26.Name = "groupBox26";
-            this.groupBox26.Size = new System.Drawing.Size(318, 128);
-            this.groupBox26.TabIndex = 0;
-            this.groupBox26.TabStop = false;
-            this.groupBox26.Text = "Emulation type";
-            // 
-            // rbNukedOPN2OptionYM2612u
-            // 
-            this.rbNukedOPN2OptionYM2612u.AutoSize = true;
-            this.rbNukedOPN2OptionYM2612u.Location = new System.Drawing.Point(6, 84);
-            this.rbNukedOPN2OptionYM2612u.Name = "rbNukedOPN2OptionYM2612u";
-            this.rbNukedOPN2OptionYM2612u.Size = new System.Drawing.Size(189, 16);
-            this.rbNukedOPN2OptionYM2612u.TabIndex = 0;
-            this.rbNukedOPN2OptionYM2612u.TabStop = true;
-            this.rbNukedOPN2OptionYM2612u.Text = "YM2612(without filter emulation)";
-            this.rbNukedOPN2OptionYM2612u.UseVisualStyleBackColor = true;
-            // 
-            // rbNukedOPN2OptionYM2612
-            // 
-            this.rbNukedOPN2OptionYM2612.AutoSize = true;
-            this.rbNukedOPN2OptionYM2612.Location = new System.Drawing.Point(6, 62);
-            this.rbNukedOPN2OptionYM2612.Name = "rbNukedOPN2OptionYM2612";
-            this.rbNukedOPN2OptionYM2612.Size = new System.Drawing.Size(188, 16);
-            this.rbNukedOPN2OptionYM2612.TabIndex = 0;
-            this.rbNukedOPN2OptionYM2612.TabStop = true;
-            this.rbNukedOPN2OptionYM2612.Text = "YM2612(MD1,MD2 VA2)(default)";
-            this.rbNukedOPN2OptionYM2612.UseVisualStyleBackColor = true;
-            // 
-            // rbNukedOPN2OptionDiscrete
-            // 
-            this.rbNukedOPN2OptionDiscrete.AutoSize = true;
-            this.rbNukedOPN2OptionDiscrete.Location = new System.Drawing.Point(6, 18);
-            this.rbNukedOPN2OptionDiscrete.Name = "rbNukedOPN2OptionDiscrete";
-            this.rbNukedOPN2OptionDiscrete.Size = new System.Drawing.Size(122, 16);
-            this.rbNukedOPN2OptionDiscrete.TabIndex = 0;
-            this.rbNukedOPN2OptionDiscrete.TabStop = true;
-            this.rbNukedOPN2OptionDiscrete.Text = "Discrete(Teradrive)";
-            this.rbNukedOPN2OptionDiscrete.UseVisualStyleBackColor = true;
-            // 
-            // rbNukedOPN2OptionASIClp
-            // 
-            this.rbNukedOPN2OptionASIClp.AutoSize = true;
-            this.rbNukedOPN2OptionASIClp.Location = new System.Drawing.Point(6, 106);
-            this.rbNukedOPN2OptionASIClp.Name = "rbNukedOPN2OptionASIClp";
-            this.rbNukedOPN2OptionASIClp.Size = new System.Drawing.Size(151, 16);
-            this.rbNukedOPN2OptionASIClp.TabIndex = 0;
-            this.rbNukedOPN2OptionASIClp.TabStop = true;
-            this.rbNukedOPN2OptionASIClp.Text = "ASIC(with lowpass filter)";
-            this.rbNukedOPN2OptionASIClp.UseVisualStyleBackColor = true;
-            // 
-            // rbNukedOPN2OptionASIC
-            // 
-            this.rbNukedOPN2OptionASIC.AutoSize = true;
-            this.rbNukedOPN2OptionASIC.Location = new System.Drawing.Point(6, 40);
-            this.rbNukedOPN2OptionASIC.Name = "rbNukedOPN2OptionASIC";
-            this.rbNukedOPN2OptionASIC.Size = new System.Drawing.Size(174, 16);
-            this.rbNukedOPN2OptionASIC.TabIndex = 0;
-            this.rbNukedOPN2OptionASIC.TabStop = true;
-            this.rbNukedOPN2OptionASIC.Text = "ASIC(MD1 VA7,MD2,MD3,etc)";
-            this.rbNukedOPN2OptionASIC.UseVisualStyleBackColor = true;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.groupBox34);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(433, 392);
-            this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "Gens";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // groupBox34
-            // 
-            this.groupBox34.Controls.Add(this.cbGensSSGEG);
-            this.groupBox34.Controls.Add(this.cbGensDACHPF);
-            this.groupBox34.Location = new System.Drawing.Point(6, 6);
-            this.groupBox34.Name = "groupBox34";
-            this.groupBox34.Size = new System.Drawing.Size(318, 66);
-            this.groupBox34.TabIndex = 1;
-            this.groupBox34.TabStop = false;
-            this.groupBox34.Text = "Gens Emulation option";
-            // 
-            // cbGensSSGEG
-            // 
-            this.cbGensSSGEG.AutoSize = true;
-            this.cbGensSSGEG.Location = new System.Drawing.Point(6, 40);
-            this.cbGensSSGEG.Name = "cbGensSSGEG";
-            this.cbGensSSGEG.Size = new System.Drawing.Size(105, 16);
-            this.cbGensSSGEG.TabIndex = 1;
-            this.cbGensSSGEG.Text = "SSG-EG Enable";
-            this.cbGensSSGEG.UseVisualStyleBackColor = true;
-            // 
-            // cbGensDACHPF
-            // 
-            this.cbGensDACHPF.AutoSize = true;
-            this.cbGensDACHPF.Location = new System.Drawing.Point(6, 18);
-            this.cbGensDACHPF.Name = "cbGensDACHPF";
-            this.cbGensDACHPF.Size = new System.Drawing.Size(137, 16);
-            this.cbGensDACHPF.TabIndex = 0;
-            this.cbGensDACHPF.Text = "DAC Highpass Enable";
-            this.cbGensDACHPF.UseVisualStyleBackColor = true;
-            // 
-            // tpNSF
-            // 
-            this.tpNSF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpNSF.Controls.Add(this.tabControl3);
-            this.tpNSF.Location = new System.Drawing.Point(4, 40);
-            this.tpNSF.Name = "tpNSF";
-            this.tpNSF.Size = new System.Drawing.Size(443, 402);
-            this.tpNSF.TabIndex = 9;
-            this.tpNSF.Text = "MIDI詳細";
-            this.tpNSF.UseVisualStyleBackColor = true;
-            // 
-            // tabControl3
-            // 
-            this.tabControl3.Controls.Add(this.tabPage15);
-            this.tabControl3.Controls.Add(this.tabPage16);
-            this.tabControl3.Controls.Add(this.tabPage17);
-            this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl3.HotTrack = true;
-            this.tabControl3.Location = new System.Drawing.Point(0, 0);
-            this.tabControl3.Multiline = true;
-            this.tabControl3.Name = "tabControl3";
-            this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(441, 400);
-            this.tabControl3.TabIndex = 9;
-            // 
-            // tabPage15
-            // 
-            this.tabPage15.Controls.Add(this.groupBox9);
-            this.tabPage15.Controls.Add(this.groupBox10);
-            this.tabPage15.Controls.Add(this.groupBox8);
-            this.tabPage15.Controls.Add(this.groupBox12);
-            this.tabPage15.Controls.Add(this.groupBox11);
-            this.tabPage15.Location = new System.Drawing.Point(4, 22);
-            this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(433, 374);
-            this.tabPage15.TabIndex = 0;
-            this.tabPage15.Text = ".NSF";
-            this.tabPage15.UseVisualStyleBackColor = true;
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.cbNFSNes_DutySwap);
-            this.groupBox9.Controls.Add(this.cbNFSNes_PhaseRefresh);
-            this.groupBox9.Controls.Add(this.cbNFSNes_NonLinearMixer);
-            this.groupBox9.Controls.Add(this.cbNFSNes_UnmuteOnReset);
-            this.groupBox9.Location = new System.Drawing.Point(3, 3);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(210, 107);
-            this.groupBox9.TabIndex = 8;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "NES";
-            // 
-            // cbNFSNes_DutySwap
-            // 
-            this.cbNFSNes_DutySwap.AutoSize = true;
-            this.cbNFSNes_DutySwap.Location = new System.Drawing.Point(6, 84);
-            this.cbNFSNes_DutySwap.Name = "cbNFSNes_DutySwap";
-            this.cbNFSNes_DutySwap.Size = new System.Drawing.Size(78, 16);
-            this.cbNFSNes_DutySwap.TabIndex = 7;
-            this.cbNFSNes_DutySwap.Text = "Duty swap";
-            this.cbNFSNes_DutySwap.UseVisualStyleBackColor = true;
-            // 
-            // cbNFSNes_PhaseRefresh
-            // 
-            this.cbNFSNes_PhaseRefresh.AutoSize = true;
-            this.cbNFSNes_PhaseRefresh.Location = new System.Drawing.Point(6, 62);
-            this.cbNFSNes_PhaseRefresh.Name = "cbNFSNes_PhaseRefresh";
-            this.cbNFSNes_PhaseRefresh.Size = new System.Drawing.Size(95, 16);
-            this.cbNFSNes_PhaseRefresh.TabIndex = 7;
-            this.cbNFSNes_PhaseRefresh.Text = "Phase refresh";
-            this.cbNFSNes_PhaseRefresh.UseVisualStyleBackColor = true;
-            // 
-            // cbNFSNes_NonLinearMixer
-            // 
-            this.cbNFSNes_NonLinearMixer.AutoSize = true;
-            this.cbNFSNes_NonLinearMixer.Location = new System.Drawing.Point(6, 40);
-            this.cbNFSNes_NonLinearMixer.Name = "cbNFSNes_NonLinearMixer";
-            this.cbNFSNes_NonLinearMixer.Size = new System.Drawing.Size(110, 16);
-            this.cbNFSNes_NonLinearMixer.TabIndex = 7;
-            this.cbNFSNes_NonLinearMixer.Text = "Non-linear mixer";
-            this.cbNFSNes_NonLinearMixer.UseVisualStyleBackColor = true;
-            // 
-            // cbNFSNes_UnmuteOnReset
-            // 
-            this.cbNFSNes_UnmuteOnReset.AutoSize = true;
-            this.cbNFSNes_UnmuteOnReset.Location = new System.Drawing.Point(6, 18);
-            this.cbNFSNes_UnmuteOnReset.Name = "cbNFSNes_UnmuteOnReset";
-            this.cbNFSNes_UnmuteOnReset.Size = new System.Drawing.Size(109, 16);
-            this.cbNFSNes_UnmuteOnReset.TabIndex = 7;
-            this.cbNFSNes_UnmuteOnReset.Text = "Unmute on reset";
-            this.cbNFSNes_UnmuteOnReset.UseVisualStyleBackColor = true;
-            // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.cbNSFDmc_TriNull);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_TriMute);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_RandomizeNoise);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_DPCMAntiClick);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_EnablePNoise);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_Enable4011);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_NonLinearMixer);
-            this.groupBox10.Controls.Add(this.cbNSFDmc_UnmuteOnReset);
-            this.groupBox10.Location = new System.Drawing.Point(220, 3);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(210, 200);
-            this.groupBox10.TabIndex = 8;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "DMC";
-            // 
-            // cbNSFDmc_TriNull
-            // 
-            this.cbNSFDmc_TriNull.AutoSize = true;
-            this.cbNSFDmc_TriNull.Location = new System.Drawing.Point(6, 171);
-            this.cbNSFDmc_TriNull.Name = "cbNSFDmc_TriNull";
-            this.cbNSFDmc_TriNull.Size = new System.Drawing.Size(64, 16);
-            this.cbNSFDmc_TriNull.TabIndex = 7;
-            this.cbNSFDmc_TriNull.Text = "TRI null";
-            this.cbNSFDmc_TriNull.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_TriMute
-            // 
-            this.cbNSFDmc_TriMute.AutoSize = true;
-            this.cbNSFDmc_TriMute.Location = new System.Drawing.Point(6, 149);
-            this.cbNSFDmc_TriMute.Name = "cbNSFDmc_TriMute";
-            this.cbNSFDmc_TriMute.Size = new System.Drawing.Size(71, 16);
-            this.cbNSFDmc_TriMute.TabIndex = 7;
-            this.cbNSFDmc_TriMute.Text = "TRI mute";
-            this.cbNSFDmc_TriMute.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_RandomizeNoise
-            // 
-            this.cbNSFDmc_RandomizeNoise.AutoSize = true;
-            this.cbNSFDmc_RandomizeNoise.Location = new System.Drawing.Point(6, 128);
-            this.cbNSFDmc_RandomizeNoise.Name = "cbNSFDmc_RandomizeNoise";
-            this.cbNSFDmc_RandomizeNoise.Size = new System.Drawing.Size(110, 16);
-            this.cbNSFDmc_RandomizeNoise.TabIndex = 7;
-            this.cbNSFDmc_RandomizeNoise.Text = "Randomize noise";
-            this.cbNSFDmc_RandomizeNoise.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_DPCMAntiClick
-            // 
-            this.cbNSFDmc_DPCMAntiClick.AutoSize = true;
-            this.cbNSFDmc_DPCMAntiClick.Location = new System.Drawing.Point(6, 106);
-            this.cbNSFDmc_DPCMAntiClick.Name = "cbNSFDmc_DPCMAntiClick";
-            this.cbNSFDmc_DPCMAntiClick.Size = new System.Drawing.Size(107, 16);
-            this.cbNSFDmc_DPCMAntiClick.TabIndex = 7;
-            this.cbNSFDmc_DPCMAntiClick.Text = "DPCM anti click";
-            this.cbNSFDmc_DPCMAntiClick.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_EnablePNoise
-            // 
-            this.cbNSFDmc_EnablePNoise.AutoSize = true;
-            this.cbNSFDmc_EnablePNoise.Location = new System.Drawing.Point(6, 84);
-            this.cbNSFDmc_EnablePNoise.Name = "cbNSFDmc_EnablePNoise";
-            this.cbNSFDmc_EnablePNoise.Size = new System.Drawing.Size(96, 16);
-            this.cbNSFDmc_EnablePNoise.TabIndex = 7;
-            this.cbNSFDmc_EnablePNoise.Text = "Enable Pnoise";
-            this.cbNSFDmc_EnablePNoise.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_Enable4011
-            // 
-            this.cbNSFDmc_Enable4011.AutoSize = true;
-            this.cbNSFDmc_Enable4011.Location = new System.Drawing.Point(6, 62);
-            this.cbNSFDmc_Enable4011.Name = "cbNSFDmc_Enable4011";
-            this.cbNSFDmc_Enable4011.Size = new System.Drawing.Size(92, 16);
-            this.cbNSFDmc_Enable4011.TabIndex = 7;
-            this.cbNSFDmc_Enable4011.Text = "Enable $4011";
-            this.cbNSFDmc_Enable4011.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_NonLinearMixer
-            // 
-            this.cbNSFDmc_NonLinearMixer.AutoSize = true;
-            this.cbNSFDmc_NonLinearMixer.Location = new System.Drawing.Point(6, 40);
-            this.cbNSFDmc_NonLinearMixer.Name = "cbNSFDmc_NonLinearMixer";
-            this.cbNSFDmc_NonLinearMixer.Size = new System.Drawing.Size(110, 16);
-            this.cbNSFDmc_NonLinearMixer.TabIndex = 7;
-            this.cbNSFDmc_NonLinearMixer.Text = "Non-linear mixer";
-            this.cbNSFDmc_NonLinearMixer.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFDmc_UnmuteOnReset
-            // 
-            this.cbNSFDmc_UnmuteOnReset.AutoSize = true;
-            this.cbNSFDmc_UnmuteOnReset.Location = new System.Drawing.Point(6, 18);
-            this.cbNSFDmc_UnmuteOnReset.Name = "cbNSFDmc_UnmuteOnReset";
-            this.cbNSFDmc_UnmuteOnReset.Size = new System.Drawing.Size(109, 16);
-            this.cbNSFDmc_UnmuteOnReset.TabIndex = 7;
-            this.cbNSFDmc_UnmuteOnReset.Text = "Unmute on reset";
-            this.cbNSFDmc_UnmuteOnReset.UseVisualStyleBackColor = true;
-            // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.label21);
-            this.groupBox8.Controls.Add(this.label20);
-            this.groupBox8.Controls.Add(this.tbNSFFds_LPF);
-            this.groupBox8.Controls.Add(this.cbNFSFds_4085Reset);
-            this.groupBox8.Controls.Add(this.cbNSFFDSWriteDisable8000);
-            this.groupBox8.Location = new System.Drawing.Point(3, 116);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(210, 87);
-            this.groupBox8.TabIndex = 8;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "FDS";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(143, 16);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(18, 12);
-            this.label21.TabIndex = 10;
-            this.label21.Text = "Hz";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 16);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(25, 12);
-            this.label20.TabIndex = 10;
-            this.label20.Text = "LPF";
-            // 
-            // tbNSFFds_LPF
-            // 
-            this.tbNSFFds_LPF.Location = new System.Drawing.Point(37, 13);
-            this.tbNSFFds_LPF.Name = "tbNSFFds_LPF";
-            this.tbNSFFds_LPF.Size = new System.Drawing.Size(100, 19);
-            this.tbNSFFds_LPF.TabIndex = 9;
-            // 
-            // cbNFSFds_4085Reset
-            // 
-            this.cbNFSFds_4085Reset.AutoSize = true;
-            this.cbNFSFds_4085Reset.Location = new System.Drawing.Point(6, 38);
-            this.cbNFSFds_4085Reset.Name = "cbNFSFds_4085Reset";
-            this.cbNFSFds_4085Reset.Size = new System.Drawing.Size(84, 16);
-            this.cbNFSFds_4085Reset.TabIndex = 7;
-            this.cbNFSFds_4085Reset.Text = "$4085 reset";
-            this.cbNFSFds_4085Reset.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFFDSWriteDisable8000
-            // 
-            this.cbNSFFDSWriteDisable8000.AutoSize = true;
-            this.cbNSFFDSWriteDisable8000.Location = new System.Drawing.Point(6, 60);
-            this.cbNSFFDSWriteDisable8000.Name = "cbNSFFDSWriteDisable8000";
-            this.cbNSFFDSWriteDisable8000.Size = new System.Drawing.Size(177, 16);
-            this.cbNSFFDSWriteDisable8000.TabIndex = 7;
-            this.cbNSFFDSWriteDisable8000.Text = "Write disable($8000 - $DFFF)";
-            this.cbNSFFDSWriteDisable8000.UseVisualStyleBackColor = true;
-            // 
-            // groupBox12
-            // 
-            this.groupBox12.Controls.Add(this.cbNSFN160_Serial);
-            this.groupBox12.Location = new System.Drawing.Point(220, 209);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(210, 62);
-            this.groupBox12.TabIndex = 8;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "N160";
-            // 
-            // cbNSFN160_Serial
-            // 
-            this.cbNSFN160_Serial.AutoSize = true;
-            this.cbNSFN160_Serial.Location = new System.Drawing.Point(6, 18);
-            this.cbNSFN160_Serial.Name = "cbNSFN160_Serial";
-            this.cbNSFN160_Serial.Size = new System.Drawing.Size(53, 16);
-            this.cbNSFN160_Serial.TabIndex = 7;
-            this.cbNSFN160_Serial.Text = "Serial";
-            this.cbNSFN160_Serial.UseVisualStyleBackColor = true;
-            // 
-            // groupBox11
-            // 
-            this.groupBox11.Controls.Add(this.cbNSFMmc5_PhaseRefresh);
-            this.groupBox11.Controls.Add(this.cbNSFMmc5_NonLinearMixer);
-            this.groupBox11.Location = new System.Drawing.Point(3, 209);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(210, 62);
-            this.groupBox11.TabIndex = 8;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "MMC5";
-            // 
-            // cbNSFMmc5_PhaseRefresh
-            // 
-            this.cbNSFMmc5_PhaseRefresh.AutoSize = true;
-            this.cbNSFMmc5_PhaseRefresh.Location = new System.Drawing.Point(6, 40);
-            this.cbNSFMmc5_PhaseRefresh.Name = "cbNSFMmc5_PhaseRefresh";
-            this.cbNSFMmc5_PhaseRefresh.Size = new System.Drawing.Size(95, 16);
-            this.cbNSFMmc5_PhaseRefresh.TabIndex = 7;
-            this.cbNSFMmc5_PhaseRefresh.Text = "Phase refresh";
-            this.cbNSFMmc5_PhaseRefresh.UseVisualStyleBackColor = true;
-            // 
-            // cbNSFMmc5_NonLinearMixer
-            // 
-            this.cbNSFMmc5_NonLinearMixer.AutoSize = true;
-            this.cbNSFMmc5_NonLinearMixer.Location = new System.Drawing.Point(6, 18);
-            this.cbNSFMmc5_NonLinearMixer.Name = "cbNSFMmc5_NonLinearMixer";
-            this.cbNSFMmc5_NonLinearMixer.Size = new System.Drawing.Size(110, 16);
-            this.cbNSFMmc5_NonLinearMixer.TabIndex = 7;
-            this.cbNSFMmc5_NonLinearMixer.Text = "Non-linear Mixer";
-            this.cbNSFMmc5_NonLinearMixer.UseVisualStyleBackColor = true;
-            // 
-            // tabPage16
-            // 
-            this.tabPage16.Controls.Add(this.groupBox14);
-            this.tabPage16.Controls.Add(this.groupBox13);
-            this.tabPage16.Controls.Add(this.label49);
-            this.tabPage16.Controls.Add(this.label51);
-            this.tabPage16.Controls.Add(this.tbSIDOutputBufferSize);
-            this.tabPage16.Location = new System.Drawing.Point(4, 22);
-            this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(433, 392);
-            this.tabPage16.TabIndex = 1;
-            this.tabPage16.Text = ".SID";
-            this.tabPage16.UseVisualStyleBackColor = true;
-            // 
-            // groupBox14
-            // 
-            this.groupBox14.Controls.Add(this.label27);
-            this.groupBox14.Controls.Add(this.label26);
-            this.groupBox14.Controls.Add(this.label25);
-            this.groupBox14.Controls.Add(this.rdSIDQ1);
-            this.groupBox14.Controls.Add(this.rdSIDQ3);
-            this.groupBox14.Controls.Add(this.rdSIDQ2);
-            this.groupBox14.Controls.Add(this.rdSIDQ4);
-            this.groupBox14.Location = new System.Drawing.Point(3, 109);
-            this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(280, 111);
-            this.groupBox14.TabIndex = 2;
-            this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "Quality";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(162, 86);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(58, 12);
-            this.label27.TabIndex = 2;
-            this.label27.Text = "Low(Light)";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(162, 54);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(38, 12);
-            this.label26.TabIndex = 2;
-            this.label26.Text = "Middle";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(162, 20);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(68, 12);
-            this.label25.TabIndex = 2;
-            this.label25.Text = "High(Heavy)";
-            // 
-            // rdSIDQ1
-            // 
-            this.rdSIDQ1.AutoSize = true;
-            this.rdSIDQ1.Checked = true;
-            this.rdSIDQ1.Location = new System.Drawing.Point(6, 84);
-            this.rdSIDQ1.Name = "rdSIDQ1";
-            this.rdSIDQ1.Size = new System.Drawing.Size(111, 16);
-            this.rdSIDQ1.TabIndex = 1;
-            this.rdSIDQ1.TabStop = true;
-            this.rdSIDQ1.Text = "Interpolate - fast";
-            this.rdSIDQ1.UseVisualStyleBackColor = true;
-            // 
-            // rdSIDQ3
-            // 
-            this.rdSIDQ3.AutoSize = true;
-            this.rdSIDQ3.Location = new System.Drawing.Point(6, 40);
-            this.rdSIDQ3.Name = "rdSIDQ3";
-            this.rdSIDQ3.Size = new System.Drawing.Size(107, 16);
-            this.rdSIDQ3.TabIndex = 1;
-            this.rdSIDQ3.Text = "Resample - fast";
-            this.rdSIDQ3.UseVisualStyleBackColor = true;
-            // 
-            // rdSIDQ2
-            // 
-            this.rdSIDQ2.AutoSize = true;
-            this.rdSIDQ2.Location = new System.Drawing.Point(6, 62);
-            this.rdSIDQ2.Name = "rdSIDQ2";
-            this.rdSIDQ2.Size = new System.Drawing.Size(77, 16);
-            this.rdSIDQ2.TabIndex = 1;
-            this.rdSIDQ2.Text = "Interpolate";
-            this.rdSIDQ2.UseVisualStyleBackColor = true;
-            // 
-            // rdSIDQ4
-            // 
-            this.rdSIDQ4.AutoSize = true;
-            this.rdSIDQ4.Location = new System.Drawing.Point(6, 18);
-            this.rdSIDQ4.Name = "rdSIDQ4";
-            this.rdSIDQ4.Size = new System.Drawing.Size(73, 16);
-            this.rdSIDQ4.TabIndex = 1;
-            this.rdSIDQ4.Text = "Resample";
-            this.rdSIDQ4.UseVisualStyleBackColor = true;
-            // 
-            // groupBox13
-            // 
-            this.groupBox13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox13.Controls.Add(this.btnSIDBasic);
-            this.groupBox13.Controls.Add(this.btnSIDCharacter);
-            this.groupBox13.Controls.Add(this.btnSIDKernal);
-            this.groupBox13.Controls.Add(this.tbSIDCharacter);
-            this.groupBox13.Controls.Add(this.tbSIDBasic);
-            this.groupBox13.Controls.Add(this.tbSIDKernal);
-            this.groupBox13.Controls.Add(this.label24);
-            this.groupBox13.Controls.Add(this.label23);
-            this.groupBox13.Controls.Add(this.label22);
-            this.groupBox13.Location = new System.Drawing.Point(3, 3);
-            this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(426, 100);
-            this.groupBox13.TabIndex = 0;
-            this.groupBox13.TabStop = false;
-            this.groupBox13.Text = "ROM Image";
-            // 
-            // btnSIDBasic
-            // 
-            this.btnSIDBasic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDBasic.Location = new System.Drawing.Point(398, 44);
-            this.btnSIDBasic.Name = "btnSIDBasic";
-            this.btnSIDBasic.Size = new System.Drawing.Size(23, 23);
-            this.btnSIDBasic.TabIndex = 2;
-            this.btnSIDBasic.Text = "...";
-            this.btnSIDBasic.UseVisualStyleBackColor = true;
-            this.btnSIDBasic.Click += new System.EventHandler(this.btnSIDBasic_Click);
-            // 
-            // btnSIDCharacter
-            // 
-            this.btnSIDCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDCharacter.Location = new System.Drawing.Point(398, 69);
-            this.btnSIDCharacter.Name = "btnSIDCharacter";
-            this.btnSIDCharacter.Size = new System.Drawing.Size(23, 23);
-            this.btnSIDCharacter.TabIndex = 2;
-            this.btnSIDCharacter.Text = "...";
-            this.btnSIDCharacter.UseVisualStyleBackColor = true;
-            this.btnSIDCharacter.Click += new System.EventHandler(this.btnSIDCharacter_Click);
-            // 
-            // btnSIDKernal
-            // 
-            this.btnSIDKernal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDKernal.Location = new System.Drawing.Point(398, 19);
-            this.btnSIDKernal.Name = "btnSIDKernal";
-            this.btnSIDKernal.Size = new System.Drawing.Size(23, 23);
-            this.btnSIDKernal.TabIndex = 2;
-            this.btnSIDKernal.Text = "...";
-            this.btnSIDKernal.UseVisualStyleBackColor = true;
-            this.btnSIDKernal.Click += new System.EventHandler(this.btnSIDKernal_Click);
-            // 
-            // tbSIDCharacter
-            // 
-            this.tbSIDCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSIDCharacter.Location = new System.Drawing.Point(67, 71);
-            this.tbSIDCharacter.Name = "tbSIDCharacter";
-            this.tbSIDCharacter.Size = new System.Drawing.Size(325, 19);
-            this.tbSIDCharacter.TabIndex = 1;
-            // 
-            // tbSIDBasic
-            // 
-            this.tbSIDBasic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSIDBasic.Location = new System.Drawing.Point(67, 46);
-            this.tbSIDBasic.Name = "tbSIDBasic";
-            this.tbSIDBasic.Size = new System.Drawing.Size(325, 19);
-            this.tbSIDBasic.TabIndex = 1;
-            // 
-            // tbSIDKernal
-            // 
-            this.tbSIDKernal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSIDKernal.Location = new System.Drawing.Point(67, 21);
-            this.tbSIDKernal.Name = "tbSIDKernal";
-            this.tbSIDKernal.Size = new System.Drawing.Size(325, 19);
-            this.tbSIDKernal.TabIndex = 1;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(6, 74);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(55, 12);
-            this.label24.TabIndex = 0;
-            this.label24.Text = "Character";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 49);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(34, 12);
-            this.label23.TabIndex = 0;
-            this.label23.Text = "Basic";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(6, 24);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(37, 12);
-            this.label22.TabIndex = 0;
-            this.label22.Text = "Kernal";
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(9, 229);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(95, 12);
-            this.label49.TabIndex = 0;
-            this.label49.Text = "OutputBuffer size";
-            // 
-            // label51
-            // 
-            this.label51.Location = new System.Drawing.Point(209, 224);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(223, 38);
-            this.label51.TabIndex = 0;
-            this.label51.Text = "テンポが速かったり、音が途切れる場合に調整すると改善することがあります。通常は5000。";
-            // 
-            // tbSIDOutputBufferSize
-            // 
-            this.tbSIDOutputBufferSize.Location = new System.Drawing.Point(110, 226);
-            this.tbSIDOutputBufferSize.MaxLength = 10;
-            this.tbSIDOutputBufferSize.Name = "tbSIDOutputBufferSize";
-            this.tbSIDOutputBufferSize.Size = new System.Drawing.Size(93, 19);
-            this.tbSIDOutputBufferSize.TabIndex = 1;
-            // 
-            // tabPage17
-            // 
-            this.tabPage17.Controls.Add(this.groupBox15);
-            this.tabPage17.Location = new System.Drawing.Point(4, 22);
-            this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(433, 392);
-            this.tabPage17.TabIndex = 2;
-            this.tabPage17.Text = "Resetコマンド";
-            this.tabPage17.UseVisualStyleBackColor = true;
-            // 
-            // groupBox15
-            // 
-            this.groupBox15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox15.Controls.Add(this.btnBeforeSend_Default);
-            this.groupBox15.Controls.Add(this.tbBeforeSend_Custom);
-            this.groupBox15.Controls.Add(this.tbBeforeSend_XGReset);
-            this.groupBox15.Controls.Add(this.label35);
-            this.groupBox15.Controls.Add(this.label34);
-            this.groupBox15.Controls.Add(this.label32);
-            this.groupBox15.Controls.Add(this.tbBeforeSend_GSReset);
-            this.groupBox15.Controls.Add(this.label33);
-            this.groupBox15.Controls.Add(this.tbBeforeSend_GMReset);
-            this.groupBox15.Controls.Add(this.label31);
-            this.groupBox15.Location = new System.Drawing.Point(3, 3);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(426, 199);
-            this.groupBox15.TabIndex = 0;
-            this.groupBox15.TabStop = false;
-            this.groupBox15.Text = "Before Send";
-            // 
-            // btnBeforeSend_Default
-            // 
-            this.btnBeforeSend_Default.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBeforeSend_Default.Location = new System.Drawing.Point(346, 123);
-            this.btnBeforeSend_Default.Name = "btnBeforeSend_Default";
-            this.btnBeforeSend_Default.Size = new System.Drawing.Size(75, 23);
-            this.btnBeforeSend_Default.TabIndex = 2;
-            this.btnBeforeSend_Default.Text = "元に戻す";
-            this.btnBeforeSend_Default.UseVisualStyleBackColor = true;
-            this.btnBeforeSend_Default.Click += new System.EventHandler(this.btnBeforeSend_Default_Click);
-            // 
-            // tbBeforeSend_Custom
-            // 
-            this.tbBeforeSend_Custom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_Custom.Location = new System.Drawing.Point(90, 98);
-            this.tbBeforeSend_Custom.Name = "tbBeforeSend_Custom";
-            this.tbBeforeSend_Custom.Size = new System.Drawing.Size(331, 19);
-            this.tbBeforeSend_Custom.TabIndex = 1;
-            // 
-            // tbBeforeSend_XGReset
-            // 
-            this.tbBeforeSend_XGReset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_XGReset.Location = new System.Drawing.Point(90, 48);
-            this.tbBeforeSend_XGReset.Name = "tbBeforeSend_XGReset";
-            this.tbBeforeSend_XGReset.Size = new System.Drawing.Size(331, 19);
-            this.tbBeforeSend_XGReset.TabIndex = 1;
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(6, 128);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(329, 28);
-            this.label35.TabIndex = 0;
-            this.label35.Text = "Format:\r\n  (delayTime(dec)):(command data(hex)),...;...\r\n";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(6, 101);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(44, 12);
-            this.label34.TabIndex = 0;
-            this.label34.Text = "Custom";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(6, 51);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(76, 12);
-            this.label32.TabIndex = 0;
-            this.label32.Text = "XG SystemOn";
-            // 
-            // tbBeforeSend_GSReset
-            // 
-            this.tbBeforeSend_GSReset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_GSReset.Location = new System.Drawing.Point(90, 73);
-            this.tbBeforeSend_GSReset.Name = "tbBeforeSend_GSReset";
-            this.tbBeforeSend_GSReset.Size = new System.Drawing.Size(331, 19);
-            this.tbBeforeSend_GSReset.TabIndex = 1;
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(6, 76);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(54, 12);
-            this.label33.TabIndex = 0;
-            this.label33.Text = "GS Reset";
-            // 
-            // tbBeforeSend_GMReset
-            // 
-            this.tbBeforeSend_GMReset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_GMReset.Location = new System.Drawing.Point(90, 23);
-            this.tbBeforeSend_GMReset.Name = "tbBeforeSend_GMReset";
-            this.tbBeforeSend_GMReset.Size = new System.Drawing.Size(331, 19);
-            this.tbBeforeSend_GMReset.TabIndex = 1;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(6, 26);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(78, 12);
-            this.label31.TabIndex = 0;
-            this.label31.Text = "GM SystemOn";
-            // 
-            // tpPMDDotNET
-            // 
-            this.tpPMDDotNET.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpPMDDotNET.Controls.Add(this.rbPMDManual);
-            this.tpPMDDotNET.Controls.Add(this.rbPMDAuto);
-            this.tpPMDDotNET.Controls.Add(this.btnPMDResetDriverArguments);
-            this.tpPMDDotNET.Controls.Add(this.label47);
-            this.tpPMDDotNET.Controls.Add(this.btnPMDResetCompilerArhguments);
-            this.tpPMDDotNET.Controls.Add(this.tbPMDDriverArguments);
-            this.tpPMDDotNET.Controls.Add(this.label37);
-            this.tpPMDDotNET.Controls.Add(this.tbPMDCompilerArguments);
-            this.tpPMDDotNET.Controls.Add(this.gbPMDManual);
-            this.tpPMDDotNET.Location = new System.Drawing.Point(4, 40);
-            this.tpPMDDotNET.Name = "tpPMDDotNET";
-            this.tpPMDDotNET.Size = new System.Drawing.Size(443, 402);
-            this.tpPMDDotNET.TabIndex = 15;
-            this.tpPMDDotNET.Text = "PMDDotNET";
-            this.tpPMDDotNET.UseVisualStyleBackColor = true;
-            // 
-            // rbPMDManual
-            // 
-            this.rbPMDManual.AutoSize = true;
-            this.rbPMDManual.Location = new System.Drawing.Point(9, 58);
-            this.rbPMDManual.Name = "rbPMDManual";
-            this.rbPMDManual.Size = new System.Drawing.Size(59, 16);
-            this.rbPMDManual.TabIndex = 3;
-            this.rbPMDManual.TabStop = true;
-            this.rbPMDManual.Text = "Manual";
-            this.rbPMDManual.UseVisualStyleBackColor = true;
-            this.rbPMDManual.CheckedChanged += new System.EventHandler(this.rbPMDManual_CheckedChanged);
-            // 
-            // rbPMDAuto
-            // 
-            this.rbPMDAuto.AutoSize = true;
-            this.rbPMDAuto.Location = new System.Drawing.Point(9, 35);
-            this.rbPMDAuto.Name = "rbPMDAuto";
-            this.rbPMDAuto.Size = new System.Drawing.Size(47, 16);
-            this.rbPMDAuto.TabIndex = 3;
-            this.rbPMDAuto.TabStop = true;
-            this.rbPMDAuto.Text = "Auto";
-            this.rbPMDAuto.UseVisualStyleBackColor = true;
-            // 
-            // btnPMDResetDriverArguments
-            // 
-            this.btnPMDResetDriverArguments.Location = new System.Drawing.Point(376, 371);
-            this.btnPMDResetDriverArguments.Name = "btnPMDResetDriverArguments";
-            this.btnPMDResetDriverArguments.Size = new System.Drawing.Size(64, 23);
-            this.btnPMDResetDriverArguments.TabIndex = 2;
-            this.btnPMDResetDriverArguments.Text = "clear";
-            this.btnPMDResetDriverArguments.UseVisualStyleBackColor = true;
-            this.btnPMDResetDriverArguments.Click += new System.EventHandler(this.btnPMDResetDriverArguments_Click);
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(7, 376);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(93, 12);
-            this.label47.TabIndex = 1;
-            this.label47.Text = "Driver arguments";
-            // 
-            // btnPMDResetCompilerArhguments
-            // 
-            this.btnPMDResetCompilerArhguments.Location = new System.Drawing.Point(376, 8);
-            this.btnPMDResetCompilerArhguments.Name = "btnPMDResetCompilerArhguments";
-            this.btnPMDResetCompilerArhguments.Size = new System.Drawing.Size(64, 23);
-            this.btnPMDResetCompilerArhguments.TabIndex = 2;
-            this.btnPMDResetCompilerArhguments.Text = "reset";
-            this.btnPMDResetCompilerArhguments.UseVisualStyleBackColor = true;
-            this.btnPMDResetCompilerArhguments.Click += new System.EventHandler(this.btnPMDResetCompilerArhguments_Click);
-            // 
-            // tbPMDDriverArguments
-            // 
-            this.tbPMDDriverArguments.Location = new System.Drawing.Point(120, 373);
-            this.tbPMDDriverArguments.Name = "tbPMDDriverArguments";
-            this.tbPMDDriverArguments.Size = new System.Drawing.Size(250, 19);
-            this.tbPMDDriverArguments.TabIndex = 0;
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(7, 13);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(107, 12);
-            this.label37.TabIndex = 1;
-            this.label37.Text = "Compiler arguments";
-            // 
-            // tbPMDCompilerArguments
-            // 
-            this.tbPMDCompilerArguments.Location = new System.Drawing.Point(120, 10);
-            this.tbPMDCompilerArguments.Name = "tbPMDCompilerArguments";
-            this.tbPMDCompilerArguments.Size = new System.Drawing.Size(250, 19);
-            this.tbPMDCompilerArguments.TabIndex = 0;
-            // 
-            // gbPMDManual
-            // 
-            this.gbPMDManual.Controls.Add(this.cbPMDSetManualVolume);
-            this.gbPMDManual.Controls.Add(this.cbPMDUsePPZ8);
-            this.gbPMDManual.Controls.Add(this.groupBox32);
-            this.gbPMDManual.Controls.Add(this.cbPMDUsePPSDRV);
-            this.gbPMDManual.Controls.Add(this.gbPPSDRV);
-            this.gbPMDManual.Controls.Add(this.gbPMDSetManualVolume);
-            this.gbPMDManual.Location = new System.Drawing.Point(16, 60);
-            this.gbPMDManual.Name = "gbPMDManual";
-            this.gbPMDManual.Size = new System.Drawing.Size(424, 303);
-            this.gbPMDManual.TabIndex = 9;
-            this.gbPMDManual.TabStop = false;
-            // 
-            // cbPMDSetManualVolume
-            // 
-            this.cbPMDSetManualVolume.AutoSize = true;
-            this.cbPMDSetManualVolume.Location = new System.Drawing.Point(8, 55);
-            this.cbPMDSetManualVolume.Name = "cbPMDSetManualVolume";
-            this.cbPMDSetManualVolume.Size = new System.Drawing.Size(125, 16);
-            this.cbPMDSetManualVolume.TabIndex = 10;
-            this.cbPMDSetManualVolume.Text = "Set volume(manual)";
-            this.cbPMDSetManualVolume.UseVisualStyleBackColor = true;
-            this.cbPMDSetManualVolume.CheckedChanged += new System.EventHandler(this.cbPMDSetManualVolume_CheckedChanged);
-            // 
-            // cbPMDUsePPZ8
-            // 
-            this.cbPMDUsePPZ8.AutoSize = true;
-            this.cbPMDUsePPZ8.Location = new System.Drawing.Point(6, 281);
-            this.cbPMDUsePPZ8.Name = "cbPMDUsePPZ8";
-            this.cbPMDUsePPZ8.Size = new System.Drawing.Size(75, 16);
-            this.cbPMDUsePPZ8.TabIndex = 6;
-            this.cbPMDUsePPZ8.Text = "Use PPZ8";
-            this.cbPMDUsePPZ8.UseVisualStyleBackColor = true;
-            // 
-            // groupBox32
-            // 
-            this.groupBox32.Controls.Add(this.rbPMD86B);
-            this.groupBox32.Controls.Add(this.rbPMDSpbB);
-            this.groupBox32.Controls.Add(this.rbPMDNrmB);
-            this.groupBox32.Location = new System.Drawing.Point(6, 18);
-            this.groupBox32.Name = "groupBox32";
-            this.groupBox32.Size = new System.Drawing.Size(285, 36);
-            this.groupBox32.TabIndex = 4;
-            this.groupBox32.TabStop = false;
-            this.groupBox32.Text = "Select board";
-            // 
-            // rbPMD86B
-            // 
-            this.rbPMD86B.AutoSize = true;
-            this.rbPMD86B.Enabled = false;
-            this.rbPMD86B.Location = new System.Drawing.Point(195, 14);
-            this.rbPMD86B.Name = "rbPMD86B";
-            this.rbPMD86B.Size = new System.Drawing.Size(67, 16);
-            this.rbPMD86B.TabIndex = 0;
-            this.rbPMD86B.TabStop = true;
-            this.rbPMD86B.Text = "86 board";
-            this.rbPMD86B.UseVisualStyleBackColor = true;
-            // 
-            // rbPMDSpbB
-            // 
-            this.rbPMDSpbB.AutoSize = true;
-            this.rbPMDSpbB.Location = new System.Drawing.Point(103, 14);
-            this.rbPMDSpbB.Name = "rbPMDSpbB";
-            this.rbPMDSpbB.Size = new System.Drawing.Size(86, 16);
-            this.rbPMDSpbB.TabIndex = 0;
-            this.rbPMDSpbB.TabStop = true;
-            this.rbPMDSpbB.Text = "Speak board";
-            this.rbPMDSpbB.UseVisualStyleBackColor = true;
-            // 
-            // rbPMDNrmB
-            // 
-            this.rbPMDNrmB.AutoSize = true;
-            this.rbPMDNrmB.Location = new System.Drawing.Point(6, 14);
-            this.rbPMDNrmB.Name = "rbPMDNrmB";
-            this.rbPMDNrmB.Size = new System.Drawing.Size(91, 16);
-            this.rbPMDNrmB.TabIndex = 0;
-            this.rbPMDNrmB.TabStop = true;
-            this.rbPMDNrmB.Text = "Normal board";
-            this.rbPMDNrmB.UseVisualStyleBackColor = true;
-            // 
-            // cbPMDUsePPSDRV
-            // 
-            this.cbPMDUsePPSDRV.AutoSize = true;
-            this.cbPMDUsePPSDRV.Location = new System.Drawing.Point(6, 150);
-            this.cbPMDUsePPSDRV.Name = "cbPMDUsePPSDRV";
-            this.cbPMDUsePPSDRV.Size = new System.Drawing.Size(93, 16);
-            this.cbPMDUsePPSDRV.TabIndex = 5;
-            this.cbPMDUsePPSDRV.Text = "Use PPSDRV";
-            this.cbPMDUsePPSDRV.UseVisualStyleBackColor = true;
-            this.cbPMDUsePPSDRV.CheckedChanged += new System.EventHandler(this.cbPMDUsePPSDRV_CheckedChanged);
-            // 
-            // gbPPSDRV
-            // 
-            this.gbPPSDRV.Controls.Add(this.groupBox33);
-            this.gbPPSDRV.Location = new System.Drawing.Point(12, 150);
-            this.gbPPSDRV.Name = "gbPPSDRV";
-            this.gbPPSDRV.Size = new System.Drawing.Size(406, 125);
-            this.gbPPSDRV.TabIndex = 8;
-            this.gbPPSDRV.TabStop = false;
-            // 
-            // groupBox33
-            // 
-            this.groupBox33.Controls.Add(this.rbPMDUsePPSDRVManualFreq);
-            this.groupBox33.Controls.Add(this.label38);
-            this.groupBox33.Controls.Add(this.rbPMDUsePPSDRVFreqDefault);
-            this.groupBox33.Controls.Add(this.btnPMDPPSDRVManualWait);
-            this.groupBox33.Controls.Add(this.label40);
-            this.groupBox33.Controls.Add(this.tbPMDPPSDRVFreq);
-            this.groupBox33.Controls.Add(this.label39);
-            this.groupBox33.Controls.Add(this.tbPMDPPSDRVManualWait);
-            this.groupBox33.Enabled = false;
-            this.groupBox33.Location = new System.Drawing.Point(6, 18);
-            this.groupBox33.Name = "groupBox33";
-            this.groupBox33.Size = new System.Drawing.Size(394, 100);
-            this.groupBox33.TabIndex = 12;
-            this.groupBox33.TabStop = false;
-            this.groupBox33.Text = "TBD";
-            // 
-            // rbPMDUsePPSDRVManualFreq
-            // 
-            this.rbPMDUsePPSDRVManualFreq.AutoSize = true;
-            this.rbPMDUsePPSDRVManualFreq.Location = new System.Drawing.Point(221, 44);
-            this.rbPMDUsePPSDRVManualFreq.Name = "rbPMDUsePPSDRVManualFreq";
-            this.rbPMDUsePPSDRVManualFreq.Size = new System.Drawing.Size(14, 13);
-            this.rbPMDUsePPSDRVManualFreq.TabIndex = 8;
-            this.rbPMDUsePPSDRVManualFreq.TabStop = true;
-            this.rbPMDUsePPSDRVManualFreq.UseVisualStyleBackColor = true;
-            this.rbPMDUsePPSDRVManualFreq.CheckedChanged += new System.EventHandler(this.rbPMDUsePPSDRVManualFreq_CheckedChanged);
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(12, 19);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(175, 12);
-            this.label38.TabIndex = 1;
-            this.label38.Text = "(Real Chip) Rendering Frequency";
-            // 
-            // rbPMDUsePPSDRVFreqDefault
-            // 
-            this.rbPMDUsePPSDRVFreqDefault.AutoSize = true;
-            this.rbPMDUsePPSDRVFreqDefault.Location = new System.Drawing.Point(221, 17);
-            this.rbPMDUsePPSDRVFreqDefault.Name = "rbPMDUsePPSDRVFreqDefault";
-            this.rbPMDUsePPSDRVFreqDefault.Size = new System.Drawing.Size(131, 16);
-            this.rbPMDUsePPSDRVFreqDefault.TabIndex = 8;
-            this.rbPMDUsePPSDRVFreqDefault.TabStop = true;
-            this.rbPMDUsePPSDRVFreqDefault.Text = "Use interface default";
-            this.rbPMDUsePPSDRVFreqDefault.UseVisualStyleBackColor = true;
-            // 
-            // btnPMDPPSDRVManualWait
-            // 
-            this.btnPMDPPSDRVManualWait.Location = new System.Drawing.Point(298, 71);
-            this.btnPMDPPSDRVManualWait.Name = "btnPMDPPSDRVManualWait";
-            this.btnPMDPPSDRVManualWait.Size = new System.Drawing.Size(64, 23);
-            this.btnPMDPPSDRVManualWait.TabIndex = 2;
-            this.btnPMDPPSDRVManualWait.Text = "reset";
-            this.btnPMDPPSDRVManualWait.UseVisualStyleBackColor = true;
-            this.btnPMDPPSDRVManualWait.Click += new System.EventHandler(this.btnPMDPPSDRVManualWait_Click);
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(347, 44);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(18, 12);
-            this.label40.TabIndex = 1;
-            this.label40.Text = "Hz";
-            // 
-            // tbPMDPPSDRVFreq
-            // 
-            this.tbPMDPPSDRVFreq.Location = new System.Drawing.Point(241, 41);
-            this.tbPMDPPSDRVFreq.Name = "tbPMDPPSDRVFreq";
-            this.tbPMDPPSDRVFreq.Size = new System.Drawing.Size(100, 19);
-            this.tbPMDPPSDRVFreq.TabIndex = 7;
-            this.tbPMDPPSDRVFreq.Click += new System.EventHandler(this.tbPMDPPSDRVFreq_Click);
-            this.tbPMDPPSDRVFreq.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tbPMDPPSDRVFreq_MouseClick);
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(12, 76);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(182, 12);
-            this.label39.TabIndex = 1;
-            this.label39.Text = "(SCCI) Send syncronize wait value";
-            // 
-            // tbPMDPPSDRVManualWait
-            // 
-            this.tbPMDPPSDRVManualWait.Location = new System.Drawing.Point(241, 73);
-            this.tbPMDPPSDRVManualWait.Name = "tbPMDPPSDRVManualWait";
-            this.tbPMDPPSDRVManualWait.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDPPSDRVManualWait.TabIndex = 7;
-            // 
-            // gbPMDSetManualVolume
-            // 
-            this.gbPMDSetManualVolume.Controls.Add(this.label41);
-            this.gbPMDSetManualVolume.Controls.Add(this.label46);
-            this.gbPMDSetManualVolume.Controls.Add(this.tbPMDVolumeAdpcm);
-            this.gbPMDSetManualVolume.Controls.Add(this.label42);
-            this.gbPMDSetManualVolume.Controls.Add(this.tbPMDVolumeRhythm);
-            this.gbPMDSetManualVolume.Controls.Add(this.label43);
-            this.gbPMDSetManualVolume.Controls.Add(this.tbPMDVolumeSSG);
-            this.gbPMDSetManualVolume.Controls.Add(this.label44);
-            this.gbPMDSetManualVolume.Controls.Add(this.tbPMDVolumeGIMICSSG);
-            this.gbPMDSetManualVolume.Controls.Add(this.label45);
-            this.gbPMDSetManualVolume.Controls.Add(this.tbPMDVolumeFM);
-            this.gbPMDSetManualVolume.Location = new System.Drawing.Point(13, 55);
-            this.gbPMDSetManualVolume.Name = "gbPMDSetManualVolume";
-            this.gbPMDSetManualVolume.Size = new System.Drawing.Size(405, 93);
-            this.gbPMDSetManualVolume.TabIndex = 11;
-            this.gbPMDSetManualVolume.TabStop = false;
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(5, 18);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(219, 12);
-            this.label41.TabIndex = 1;
-            this.label41.Text = "OPNA emulator volume(Min:-191  Max:20)";
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(6, 64);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(189, 12);
-            this.label46.TabIndex = 1;
-            this.label46.Text = "(GIMIC) SSG volume(Min:0 Max:127)";
-            // 
-            // tbPMDVolumeAdpcm
-            // 
-            this.tbPMDVolumeAdpcm.Location = new System.Drawing.Point(342, 33);
-            this.tbPMDVolumeAdpcm.Name = "tbPMDVolumeAdpcm";
-            this.tbPMDVolumeAdpcm.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDVolumeAdpcm.TabIndex = 9;
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(10, 36);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(21, 12);
-            this.label42.TabIndex = 1;
-            this.label42.Text = "FM";
-            // 
-            // tbPMDVolumeRhythm
-            // 
-            this.tbPMDVolumeRhythm.Location = new System.Drawing.Point(234, 33);
-            this.tbPMDVolumeRhythm.Name = "tbPMDVolumeRhythm";
-            this.tbPMDVolumeRhythm.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDVolumeRhythm.TabIndex = 9;
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(94, 36);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(27, 12);
-            this.label43.TabIndex = 1;
-            this.label43.Text = "SSG";
-            // 
-            // tbPMDVolumeSSG
-            // 
-            this.tbPMDVolumeSSG.Location = new System.Drawing.Point(127, 33);
-            this.tbPMDVolumeSSG.Name = "tbPMDVolumeSSG";
-            this.tbPMDVolumeSSG.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDVolumeSSG.TabIndex = 9;
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(184, 36);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(44, 12);
-            this.label44.TabIndex = 1;
-            this.label44.Text = "Rhythm";
-            // 
-            // tbPMDVolumeGIMICSSG
-            // 
-            this.tbPMDVolumeGIMICSSG.Location = new System.Drawing.Point(201, 61);
-            this.tbPMDVolumeGIMICSSG.Name = "tbPMDVolumeGIMICSSG";
-            this.tbPMDVolumeGIMICSSG.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDVolumeGIMICSSG.TabIndex = 9;
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(291, 36);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(45, 12);
-            this.label45.TabIndex = 1;
-            this.label45.Text = "ADPCM";
-            // 
-            // tbPMDVolumeFM
-            // 
-            this.tbPMDVolumeFM.Location = new System.Drawing.Point(37, 33);
-            this.tbPMDVolumeFM.Name = "tbPMDVolumeFM";
-            this.tbPMDVolumeFM.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDVolumeFM.TabIndex = 9;
-            // 
-            // tpExport
-            // 
-            this.tpExport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpExport.Controls.Add(this.cbAlwaysAskForLoopCount);
-            this.tpExport.Controls.Add(this.cbFixedExportPlace);
-            this.tpExport.Controls.Add(this.gpbFixedExportPlace);
-            this.tpExport.Controls.Add(this.label48);
-            this.tpExport.Controls.Add(this.tbLoopTimes);
-            this.tpExport.Controls.Add(this.lblLoopTimes);
-            this.tpExport.Location = new System.Drawing.Point(4, 40);
-            this.tpExport.Name = "tpExport";
-            this.tpExport.Size = new System.Drawing.Size(443, 402);
-            this.tpExport.TabIndex = 17;
-            this.tpExport.Text = "Export";
-            this.tpExport.UseVisualStyleBackColor = true;
-            // 
-            // cbAlwaysAskForLoopCount
-            // 
-            this.cbAlwaysAskForLoopCount.AutoSize = true;
-            this.cbAlwaysAskForLoopCount.Location = new System.Drawing.Point(14, 89);
-            this.cbAlwaysAskForLoopCount.Name = "cbAlwaysAskForLoopCount";
-            this.cbAlwaysAskForLoopCount.Size = new System.Drawing.Size(224, 16);
-            this.cbAlwaysAskForLoopCount.TabIndex = 28;
-            this.cbAlwaysAskForLoopCount.Text = "エクスポート時にループ回数を問い合わせる";
-            this.cbAlwaysAskForLoopCount.UseVisualStyleBackColor = true;
-            this.cbAlwaysAskForLoopCount.CheckedChanged += new System.EventHandler(this.cbFixedExportPlace_CheckedChanged);
-            // 
-            // cbFixedExportPlace
-            // 
-            this.cbFixedExportPlace.AutoSize = true;
-            this.cbFixedExportPlace.Location = new System.Drawing.Point(14, 35);
-            this.cbFixedExportPlace.Name = "cbFixedExportPlace";
-            this.cbFixedExportPlace.Size = new System.Drawing.Size(154, 16);
-            this.cbFixedExportPlace.TabIndex = 28;
-            this.cbFixedExportPlace.Text = "エクスポート場所を固定する";
-            this.cbFixedExportPlace.UseVisualStyleBackColor = true;
-            this.cbFixedExportPlace.CheckedChanged += new System.EventHandler(this.cbFixedExportPlace_CheckedChanged);
-            // 
-            // gpbFixedExportPlace
-            // 
-            this.gpbFixedExportPlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gpbFixedExportPlace.Controls.Add(this.btnFixedExportPlace);
-            this.gpbFixedExportPlace.Controls.Add(this.label57);
-            this.gpbFixedExportPlace.Controls.Add(this.tbFixedExportPlacePath);
-            this.gpbFixedExportPlace.Location = new System.Drawing.Point(7, 38);
-            this.gpbFixedExportPlace.Name = "gpbFixedExportPlace";
-            this.gpbFixedExportPlace.Size = new System.Drawing.Size(431, 45);
-            this.gpbFixedExportPlace.TabIndex = 29;
-            this.gpbFixedExportPlace.TabStop = false;
-            // 
-            // btnFixedExportPlace
-            // 
-            this.btnFixedExportPlace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFixedExportPlace.Location = new System.Drawing.Point(402, 16);
-            this.btnFixedExportPlace.Name = "btnFixedExportPlace";
-            this.btnFixedExportPlace.Size = new System.Drawing.Size(23, 23);
-            this.btnFixedExportPlace.TabIndex = 16;
-            this.btnFixedExportPlace.Text = "...";
-            this.btnFixedExportPlace.UseVisualStyleBackColor = true;
-            this.btnFixedExportPlace.Click += new System.EventHandler(this.btnFixedExportPlace_Click);
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(6, 21);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(52, 12);
-            this.label57.TabIndex = 14;
-            this.label57.Text = "出力Path";
-            // 
-            // tbFixedExportPlacePath
-            // 
-            this.tbFixedExportPlacePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbFixedExportPlacePath.Location = new System.Drawing.Point(73, 18);
-            this.tbFixedExportPlacePath.Name = "tbFixedExportPlacePath";
-            this.tbFixedExportPlacePath.Size = new System.Drawing.Size(323, 19);
-            this.tbFixedExportPlacePath.TabIndex = 15;
-            // 
-            // label48
-            // 
-            this.label48.Location = new System.Drawing.Point(7, 13);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(201, 19);
-            this.label48.TabIndex = 27;
-            this.label48.Text = "ファイルエクスポート時のループ回数";
-            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tbLoopTimes
-            // 
-            this.tbLoopTimes.Location = new System.Drawing.Point(214, 13);
-            this.tbLoopTimes.Name = "tbLoopTimes";
-            this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
-            this.tbLoopTimes.TabIndex = 0;
-            // 
-            // lblLoopTimes
-            // 
-            this.lblLoopTimes.AutoSize = true;
-            this.lblLoopTimes.Location = new System.Drawing.Point(272, 16);
-            this.lblLoopTimes.Name = "lblLoopTimes";
-            this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
-            this.lblLoopTimes.TabIndex = 1;
-            this.lblLoopTimes.Text = "回";
-            // 
-            // tpMIDIExp
-            // 
-            this.tpMIDIExp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpMIDIExp.Controls.Add(this.cbUseMIDIExport);
-            this.tpMIDIExp.Controls.Add(this.gbMIDIExport);
-            this.tpMIDIExp.Location = new System.Drawing.Point(4, 40);
-            this.tpMIDIExp.Name = "tpMIDIExp";
-            this.tpMIDIExp.Size = new System.Drawing.Size(443, 402);
-            this.tpMIDIExp.TabIndex = 6;
-            this.tpMIDIExp.Text = "MIDIExport";
-            this.tpMIDIExp.UseVisualStyleBackColor = true;
-            // 
-            // cbUseMIDIExport
-            // 
-            this.cbUseMIDIExport.AutoSize = true;
-            this.cbUseMIDIExport.Location = new System.Drawing.Point(15, 3);
-            this.cbUseMIDIExport.Name = "cbUseMIDIExport";
-            this.cbUseMIDIExport.Size = new System.Drawing.Size(177, 16);
-            this.cbUseMIDIExport.TabIndex = 1;
-            this.cbUseMIDIExport.Text = "演奏時MIDIファイルをexportする";
-            this.cbUseMIDIExport.UseVisualStyleBackColor = true;
-            this.cbUseMIDIExport.CheckedChanged += new System.EventHandler(this.cbUseMIDIExport_CheckedChanged);
-            // 
-            // gbMIDIExport
-            // 
-            this.gbMIDIExport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbMIDIExport.Controls.Add(this.cbMIDIKeyOnFnum);
-            this.gbMIDIExport.Controls.Add(this.cbMIDIUseVOPM);
-            this.gbMIDIExport.Controls.Add(this.groupBox6);
-            this.gbMIDIExport.Controls.Add(this.cbMIDIPlayless);
-            this.gbMIDIExport.Controls.Add(this.btnMIDIOutputPath);
-            this.gbMIDIExport.Controls.Add(this.lblOutputPath);
-            this.gbMIDIExport.Controls.Add(this.tbMIDIOutputPath);
-            this.gbMIDIExport.Location = new System.Drawing.Point(7, 3);
-            this.gbMIDIExport.Name = "gbMIDIExport";
-            this.gbMIDIExport.Size = new System.Drawing.Size(431, 466);
-            this.gbMIDIExport.TabIndex = 0;
-            this.gbMIDIExport.TabStop = false;
-            // 
-            // cbMIDIKeyOnFnum
-            // 
-            this.cbMIDIKeyOnFnum.AutoSize = true;
-            this.cbMIDIKeyOnFnum.Location = new System.Drawing.Point(21, 66);
-            this.cbMIDIKeyOnFnum.Name = "cbMIDIKeyOnFnum";
-            this.cbMIDIKeyOnFnum.Size = new System.Drawing.Size(169, 16);
-            this.cbMIDIKeyOnFnum.TabIndex = 23;
-            this.cbMIDIKeyOnFnum.Text = "KeyON時のみfnumを評価する";
-            this.cbMIDIKeyOnFnum.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIUseVOPM
-            // 
-            this.cbMIDIUseVOPM.AutoSize = true;
-            this.cbMIDIUseVOPM.Location = new System.Drawing.Point(21, 44);
-            this.cbMIDIUseVOPM.Name = "cbMIDIUseVOPM";
-            this.cbMIDIUseVOPM.Size = new System.Drawing.Size(196, 16);
-            this.cbMIDIUseVOPM.TabIndex = 23;
-            this.cbMIDIUseVOPM.Text = "VOPMex向けコントロールを出力する";
-            this.cbMIDIUseVOPM.UseVisualStyleBackColor = true;
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.cbMIDIYM2612);
-            this.groupBox6.Controls.Add(this.cbMIDISN76489Sec);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2612Sec);
-            this.groupBox6.Controls.Add(this.cbMIDISN76489);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2151);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2610BSec);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2151Sec);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2610B);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2203);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2608Sec);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2203Sec);
-            this.groupBox6.Controls.Add(this.cbMIDIYM2608);
-            this.groupBox6.Location = new System.Drawing.Point(20, 113);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(188, 152);
-            this.groupBox6.TabIndex = 22;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "出力対象音源";
-            // 
-            // cbMIDIYM2612
-            // 
-            this.cbMIDIYM2612.AutoSize = true;
-            this.cbMIDIYM2612.Checked = true;
-            this.cbMIDIYM2612.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMIDIYM2612.Location = new System.Drawing.Point(6, 18);
-            this.cbMIDIYM2612.Name = "cbMIDIYM2612";
-            this.cbMIDIYM2612.Size = new System.Drawing.Size(64, 16);
-            this.cbMIDIYM2612.TabIndex = 21;
-            this.cbMIDIYM2612.Text = "YM2612";
-            this.cbMIDIYM2612.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDISN76489Sec
-            // 
-            this.cbMIDISN76489Sec.AutoSize = true;
-            this.cbMIDISN76489Sec.Enabled = false;
-            this.cbMIDISN76489Sec.Location = new System.Drawing.Point(84, 128);
-            this.cbMIDISN76489Sec.Name = "cbMIDISN76489Sec";
-            this.cbMIDISN76489Sec.Size = new System.Drawing.Size(96, 16);
-            this.cbMIDISN76489Sec.TabIndex = 21;
-            this.cbMIDISN76489Sec.Text = "SN76489(Sec)";
-            this.cbMIDISN76489Sec.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2612Sec
-            // 
-            this.cbMIDIYM2612Sec.AutoSize = true;
-            this.cbMIDIYM2612Sec.Enabled = false;
-            this.cbMIDIYM2612Sec.Location = new System.Drawing.Point(84, 18);
-            this.cbMIDIYM2612Sec.Name = "cbMIDIYM2612Sec";
-            this.cbMIDIYM2612Sec.Size = new System.Drawing.Size(91, 16);
-            this.cbMIDIYM2612Sec.TabIndex = 21;
-            this.cbMIDIYM2612Sec.Text = "YM2612(Sec)";
-            this.cbMIDIYM2612Sec.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDISN76489
-            // 
-            this.cbMIDISN76489.AutoSize = true;
-            this.cbMIDISN76489.Enabled = false;
-            this.cbMIDISN76489.Location = new System.Drawing.Point(6, 128);
-            this.cbMIDISN76489.Name = "cbMIDISN76489";
-            this.cbMIDISN76489.Size = new System.Drawing.Size(69, 16);
-            this.cbMIDISN76489.TabIndex = 21;
-            this.cbMIDISN76489.Text = "SN76489";
-            this.cbMIDISN76489.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2151
-            // 
-            this.cbMIDIYM2151.AutoSize = true;
-            this.cbMIDIYM2151.Location = new System.Drawing.Point(6, 40);
-            this.cbMIDIYM2151.Name = "cbMIDIYM2151";
-            this.cbMIDIYM2151.Size = new System.Drawing.Size(64, 16);
-            this.cbMIDIYM2151.TabIndex = 21;
-            this.cbMIDIYM2151.Text = "YM2151";
-            this.cbMIDIYM2151.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2610BSec
-            // 
-            this.cbMIDIYM2610BSec.AutoSize = true;
-            this.cbMIDIYM2610BSec.Enabled = false;
-            this.cbMIDIYM2610BSec.Location = new System.Drawing.Point(84, 106);
-            this.cbMIDIYM2610BSec.Name = "cbMIDIYM2610BSec";
-            this.cbMIDIYM2610BSec.Size = new System.Drawing.Size(99, 16);
-            this.cbMIDIYM2610BSec.TabIndex = 21;
-            this.cbMIDIYM2610BSec.Text = "YM2610B(Sec)";
-            this.cbMIDIYM2610BSec.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2151Sec
-            // 
-            this.cbMIDIYM2151Sec.AutoSize = true;
-            this.cbMIDIYM2151Sec.Enabled = false;
-            this.cbMIDIYM2151Sec.Location = new System.Drawing.Point(84, 40);
-            this.cbMIDIYM2151Sec.Name = "cbMIDIYM2151Sec";
-            this.cbMIDIYM2151Sec.Size = new System.Drawing.Size(91, 16);
-            this.cbMIDIYM2151Sec.TabIndex = 21;
-            this.cbMIDIYM2151Sec.Text = "YM2151(Sec)";
-            this.cbMIDIYM2151Sec.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2610B
-            // 
-            this.cbMIDIYM2610B.AutoSize = true;
-            this.cbMIDIYM2610B.Enabled = false;
-            this.cbMIDIYM2610B.Location = new System.Drawing.Point(6, 106);
-            this.cbMIDIYM2610B.Name = "cbMIDIYM2610B";
-            this.cbMIDIYM2610B.Size = new System.Drawing.Size(72, 16);
-            this.cbMIDIYM2610B.TabIndex = 21;
-            this.cbMIDIYM2610B.Text = "YM2610B";
-            this.cbMIDIYM2610B.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2203
-            // 
-            this.cbMIDIYM2203.AutoSize = true;
-            this.cbMIDIYM2203.Enabled = false;
-            this.cbMIDIYM2203.Location = new System.Drawing.Point(6, 62);
-            this.cbMIDIYM2203.Name = "cbMIDIYM2203";
-            this.cbMIDIYM2203.Size = new System.Drawing.Size(64, 16);
-            this.cbMIDIYM2203.TabIndex = 21;
-            this.cbMIDIYM2203.Text = "YM2203";
-            this.cbMIDIYM2203.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2608Sec
-            // 
-            this.cbMIDIYM2608Sec.AutoSize = true;
-            this.cbMIDIYM2608Sec.Enabled = false;
-            this.cbMIDIYM2608Sec.Location = new System.Drawing.Point(84, 84);
-            this.cbMIDIYM2608Sec.Name = "cbMIDIYM2608Sec";
-            this.cbMIDIYM2608Sec.Size = new System.Drawing.Size(91, 16);
-            this.cbMIDIYM2608Sec.TabIndex = 21;
-            this.cbMIDIYM2608Sec.Text = "YM2608(Sec)";
-            this.cbMIDIYM2608Sec.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2203Sec
-            // 
-            this.cbMIDIYM2203Sec.AutoSize = true;
-            this.cbMIDIYM2203Sec.Enabled = false;
-            this.cbMIDIYM2203Sec.Location = new System.Drawing.Point(84, 62);
-            this.cbMIDIYM2203Sec.Name = "cbMIDIYM2203Sec";
-            this.cbMIDIYM2203Sec.Size = new System.Drawing.Size(91, 16);
-            this.cbMIDIYM2203Sec.TabIndex = 21;
-            this.cbMIDIYM2203Sec.Text = "YM2203(Sec)";
-            this.cbMIDIYM2203Sec.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIYM2608
-            // 
-            this.cbMIDIYM2608.AutoSize = true;
-            this.cbMIDIYM2608.Enabled = false;
-            this.cbMIDIYM2608.Location = new System.Drawing.Point(6, 84);
-            this.cbMIDIYM2608.Name = "cbMIDIYM2608";
-            this.cbMIDIYM2608.Size = new System.Drawing.Size(64, 16);
-            this.cbMIDIYM2608.TabIndex = 21;
-            this.cbMIDIYM2608.Text = "YM2608";
-            this.cbMIDIYM2608.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIPlayless
-            // 
-            this.cbMIDIPlayless.AutoSize = true;
-            this.cbMIDIPlayless.Enabled = false;
-            this.cbMIDIPlayless.Location = new System.Drawing.Point(21, 22);
-            this.cbMIDIPlayless.Name = "cbMIDIPlayless";
-            this.cbMIDIPlayless.Size = new System.Drawing.Size(141, 16);
-            this.cbMIDIPlayless.TabIndex = 20;
-            this.cbMIDIPlayless.Text = "演奏を行わずに出力する";
-            this.cbMIDIPlayless.UseVisualStyleBackColor = true;
-            // 
-            // btnMIDIOutputPath
-            // 
-            this.btnMIDIOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMIDIOutputPath.Location = new System.Drawing.Point(401, 86);
-            this.btnMIDIOutputPath.Name = "btnMIDIOutputPath";
-            this.btnMIDIOutputPath.Size = new System.Drawing.Size(23, 23);
-            this.btnMIDIOutputPath.TabIndex = 19;
-            this.btnMIDIOutputPath.Text = "...";
-            this.btnMIDIOutputPath.UseVisualStyleBackColor = true;
-            this.btnMIDIOutputPath.Click += new System.EventHandler(this.btnMIDIOutputPath_Click);
-            // 
-            // lblOutputPath
-            // 
-            this.lblOutputPath.AutoSize = true;
-            this.lblOutputPath.Location = new System.Drawing.Point(19, 91);
-            this.lblOutputPath.Name = "lblOutputPath";
-            this.lblOutputPath.Size = new System.Drawing.Size(52, 12);
-            this.lblOutputPath.TabIndex = 17;
-            this.lblOutputPath.Text = "出力Path";
-            // 
-            // tbMIDIOutputPath
-            // 
-            this.tbMIDIOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbMIDIOutputPath.Location = new System.Drawing.Point(77, 88);
-            this.tbMIDIOutputPath.Name = "tbMIDIOutputPath";
-            this.tbMIDIOutputPath.Size = new System.Drawing.Size(318, 19);
-            this.tbMIDIOutputPath.TabIndex = 18;
-            // 
-            // tpMIDIKBD
-            // 
-            this.tpMIDIKBD.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpMIDIKBD.Controls.Add(this.cbMIDIKbdAlwaysTop);
-            this.tpMIDIKBD.Controls.Add(this.cbUseMIDIKeyboard);
-            this.tpMIDIKBD.Controls.Add(this.gbMIDIKeyboard);
-            this.tpMIDIKBD.Location = new System.Drawing.Point(4, 40);
-            this.tpMIDIKBD.Name = "tpMIDIKBD";
-            this.tpMIDIKBD.Size = new System.Drawing.Size(443, 402);
-            this.tpMIDIKBD.TabIndex = 5;
-            this.tpMIDIKBD.Text = "MIDI鍵盤";
-            this.tpMIDIKBD.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIKbdAlwaysTop
-            // 
-            this.cbMIDIKbdAlwaysTop.AutoSize = true;
-            this.cbMIDIKbdAlwaysTop.Location = new System.Drawing.Point(12, 64);
-            this.cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
-            this.cbMIDIKbdAlwaysTop.Size = new System.Drawing.Size(154, 16);
-            this.cbMIDIKbdAlwaysTop.TabIndex = 2;
-            this.cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
-            this.cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
-            // 
-            // cbUseMIDIKeyboard
-            // 
-            this.cbUseMIDIKeyboard.AutoSize = true;
-            this.cbUseMIDIKeyboard.Location = new System.Drawing.Point(11, 4);
-            this.cbUseMIDIKeyboard.Name = "cbUseMIDIKeyboard";
-            this.cbUseMIDIKeyboard.Size = new System.Drawing.Size(124, 16);
-            this.cbUseMIDIKeyboard.TabIndex = 1;
-            this.cbUseMIDIKeyboard.Text = "MIDIキーボードを使う";
-            this.cbUseMIDIKeyboard.UseVisualStyleBackColor = true;
-            this.cbUseMIDIKeyboard.CheckedChanged += new System.EventHandler(this.cbUseMIDIKeyboard_CheckedChanged);
-            // 
-            // gbMIDIKeyboard
-            // 
-            this.gbMIDIKeyboard.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox8);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox7);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox6);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox5);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox4);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox3);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox2);
-            this.gbMIDIKeyboard.Controls.Add(this.pictureBox1);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCFadeout);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCPause);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCSlow);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCPrevious);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCNext);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCFast);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCStop);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCPlay);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCCopyLog);
-            this.gbMIDIKeyboard.Controls.Add(this.label17);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCDelLog);
-            this.gbMIDIKeyboard.Controls.Add(this.label15);
-            this.gbMIDIKeyboard.Controls.Add(this.tbCCChCopy);
-            this.gbMIDIKeyboard.Controls.Add(this.label8);
-            this.gbMIDIKeyboard.Controls.Add(this.label9);
-            this.gbMIDIKeyboard.Controls.Add(this.gbUseChannel);
-            this.gbMIDIKeyboard.Controls.Add(this.cmbMIDIIN);
-            this.gbMIDIKeyboard.Controls.Add(this.label5);
-            this.gbMIDIKeyboard.Enabled = false;
-            this.gbMIDIKeyboard.Location = new System.Drawing.Point(3, 6);
-            this.gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            this.gbMIDIKeyboard.Size = new System.Drawing.Size(435, 148);
-            this.gbMIDIKeyboard.TabIndex = 0;
-            this.gbMIDIKeyboard.TabStop = false;
-            // 
-            // pictureBox8
-            // 
-            this.pictureBox8.Image = Resources.ccNext;
-            this.pictureBox8.Location = new System.Drawing.Point(371, 257);
-            this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox8.TabIndex = 4;
-            this.pictureBox8.TabStop = false;
-            this.pictureBox8.Visible = false;
-            // 
-            // pictureBox7
-            // 
-            this.pictureBox7.Image = Resources.ccFast;
-            this.pictureBox7.Location = new System.Drawing.Point(261, 257);
-            this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox7.TabIndex = 4;
-            this.pictureBox7.TabStop = false;
-            this.pictureBox7.Visible = false;
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.Image = Resources.ccPlay;
-            this.pictureBox6.Location = new System.Drawing.Point(152, 258);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox6.TabIndex = 4;
-            this.pictureBox6.TabStop = false;
-            this.pictureBox6.Visible = false;
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.Image = Resources.ccSlow;
-            this.pictureBox5.Location = new System.Drawing.Point(42, 258);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox5.TabIndex = 4;
-            this.pictureBox5.TabStop = false;
-            this.pictureBox5.Visible = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = Resources.ccStop;
-            this.pictureBox4.Location = new System.Drawing.Point(42, 234);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox4.TabIndex = 4;
-            this.pictureBox4.TabStop = false;
-            this.pictureBox4.Visible = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = Resources.ccPause;
-            this.pictureBox3.Location = new System.Drawing.Point(152, 234);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox3.TabIndex = 4;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Visible = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = Resources.ccPrevious;
-            this.pictureBox2.Location = new System.Drawing.Point(371, 234);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox2.TabIndex = 4;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Visible = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = Resources.ccFadeout;
-            this.pictureBox1.Location = new System.Drawing.Point(261, 234);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
-            // 
-            // tbCCFadeout
-            // 
-            this.tbCCFadeout.Location = new System.Drawing.Point(225, 232);
-            this.tbCCFadeout.MaxLength = 3;
-            this.tbCCFadeout.Name = "tbCCFadeout";
-            this.tbCCFadeout.Size = new System.Drawing.Size(30, 19);
-            this.tbCCFadeout.TabIndex = 12;
-            this.tbCCFadeout.Visible = false;
-            // 
-            // tbCCPause
-            // 
-            this.tbCCPause.Location = new System.Drawing.Point(116, 232);
-            this.tbCCPause.MaxLength = 3;
-            this.tbCCPause.Name = "tbCCPause";
-            this.tbCCPause.Size = new System.Drawing.Size(30, 19);
-            this.tbCCPause.TabIndex = 11;
-            this.tbCCPause.Visible = false;
-            // 
-            // tbCCSlow
-            // 
-            this.tbCCSlow.Location = new System.Drawing.Point(6, 257);
-            this.tbCCSlow.MaxLength = 3;
-            this.tbCCSlow.Name = "tbCCSlow";
-            this.tbCCSlow.Size = new System.Drawing.Size(30, 19);
-            this.tbCCSlow.TabIndex = 14;
-            this.tbCCSlow.Visible = false;
-            // 
-            // tbCCPrevious
-            // 
-            this.tbCCPrevious.Location = new System.Drawing.Point(335, 232);
-            this.tbCCPrevious.MaxLength = 3;
-            this.tbCCPrevious.Name = "tbCCPrevious";
-            this.tbCCPrevious.Size = new System.Drawing.Size(30, 19);
-            this.tbCCPrevious.TabIndex = 13;
-            this.tbCCPrevious.Visible = false;
-            // 
-            // tbCCNext
-            // 
-            this.tbCCNext.Location = new System.Drawing.Point(335, 257);
-            this.tbCCNext.MaxLength = 3;
-            this.tbCCNext.Name = "tbCCNext";
-            this.tbCCNext.Size = new System.Drawing.Size(30, 19);
-            this.tbCCNext.TabIndex = 17;
-            this.tbCCNext.Visible = false;
-            // 
-            // tbCCFast
-            // 
-            this.tbCCFast.Location = new System.Drawing.Point(225, 257);
-            this.tbCCFast.MaxLength = 3;
-            this.tbCCFast.Name = "tbCCFast";
-            this.tbCCFast.Size = new System.Drawing.Size(30, 19);
-            this.tbCCFast.TabIndex = 16;
-            this.tbCCFast.Visible = false;
-            // 
-            // tbCCStop
-            // 
-            this.tbCCStop.Location = new System.Drawing.Point(6, 232);
-            this.tbCCStop.MaxLength = 3;
-            this.tbCCStop.Name = "tbCCStop";
-            this.tbCCStop.Size = new System.Drawing.Size(30, 19);
-            this.tbCCStop.TabIndex = 10;
-            this.tbCCStop.Visible = false;
-            // 
-            // tbCCPlay
-            // 
-            this.tbCCPlay.Location = new System.Drawing.Point(116, 257);
-            this.tbCCPlay.MaxLength = 3;
-            this.tbCCPlay.Name = "tbCCPlay";
-            this.tbCCPlay.Size = new System.Drawing.Size(30, 19);
-            this.tbCCPlay.TabIndex = 15;
-            this.tbCCPlay.Visible = false;
-            // 
-            // tbCCCopyLog
-            // 
-            this.tbCCCopyLog.Location = new System.Drawing.Point(6, 207);
-            this.tbCCCopyLog.MaxLength = 3;
-            this.tbCCCopyLog.Name = "tbCCCopyLog";
-            this.tbCCCopyLog.Size = new System.Drawing.Size(30, 19);
-            this.tbCCCopyLog.TabIndex = 8;
-            this.tbCCCopyLog.Visible = false;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(42, 210);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(230, 12);
-            this.label17.TabIndex = 9;
-            this.label17.Text = "MONOモード時、選択ログをクリップボードに設定";
-            this.label17.Visible = false;
-            // 
-            // tbCCDelLog
-            // 
-            this.tbCCDelLog.Location = new System.Drawing.Point(6, 182);
-            this.tbCCDelLog.MaxLength = 3;
-            this.tbCCDelLog.Name = "tbCCDelLog";
-            this.tbCCDelLog.Size = new System.Drawing.Size(30, 19);
-            this.tbCCDelLog.TabIndex = 6;
-            this.tbCCDelLog.Visible = false;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(42, 185);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(117, 12);
-            this.label15.TabIndex = 7;
-            this.label15.Text = "直近のログをひとつ削除";
-            this.label15.Visible = false;
-            // 
-            // tbCCChCopy
-            // 
-            this.tbCCChCopy.Location = new System.Drawing.Point(6, 157);
-            this.tbCCChCopy.MaxLength = 3;
-            this.tbCCChCopy.Name = "tbCCChCopy";
-            this.tbCCChCopy.Size = new System.Drawing.Size(30, 19);
-            this.tbCCChCopy.TabIndex = 4;
-            this.tbCCChCopy.Visible = false;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 142);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(159, 12);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "CC(Control Change)による操作";
-            this.label8.Visible = false;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(42, 160);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(261, 12);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "1Chの音色を全てのチャンネルにコピー(選択状況無視)";
-            this.label9.Visible = false;
-            // 
-            // gbUseChannel
-            // 
-            this.gbUseChannel.Controls.Add(this.rbMONO);
-            this.gbUseChannel.Controls.Add(this.rbPOLY);
-            this.gbUseChannel.Controls.Add(this.groupBox7);
-            this.gbUseChannel.Controls.Add(this.groupBox2);
-            this.gbUseChannel.Location = new System.Drawing.Point(6, 44);
-            this.gbUseChannel.Name = "gbUseChannel";
-            this.gbUseChannel.Size = new System.Drawing.Size(425, 86);
-            this.gbUseChannel.TabIndex = 2;
-            this.gbUseChannel.TabStop = false;
-            this.gbUseChannel.Text = "use channel";
-            this.gbUseChannel.Visible = false;
-            // 
-            // rbMONO
-            // 
-            this.rbMONO.AutoSize = true;
-            this.rbMONO.Checked = true;
-            this.rbMONO.Location = new System.Drawing.Point(12, 17);
-            this.rbMONO.Name = "rbMONO";
-            this.rbMONO.Size = new System.Drawing.Size(56, 16);
-            this.rbMONO.TabIndex = 1;
-            this.rbMONO.TabStop = true;
-            this.rbMONO.Text = "MONO";
-            this.rbMONO.UseVisualStyleBackColor = true;
-            // 
-            // rbPOLY
-            // 
-            this.rbPOLY.AutoSize = true;
-            this.rbPOLY.Location = new System.Drawing.Point(215, 17);
-            this.rbPOLY.Name = "rbPOLY";
-            this.rbPOLY.Size = new System.Drawing.Size(51, 16);
-            this.rbPOLY.TabIndex = 3;
-            this.rbPOLY.Text = "POLY";
-            this.rbPOLY.UseVisualStyleBackColor = true;
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.rbFM6);
-            this.groupBox7.Controls.Add(this.rbFM3);
-            this.groupBox7.Controls.Add(this.rbFM5);
-            this.groupBox7.Controls.Add(this.rbFM2);
-            this.groupBox7.Controls.Add(this.rbFM4);
-            this.groupBox7.Controls.Add(this.rbFM1);
-            this.groupBox7.Location = new System.Drawing.Point(6, 18);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(197, 62);
-            this.groupBox7.TabIndex = 0;
-            this.groupBox7.TabStop = false;
-            // 
-            // rbFM6
-            // 
-            this.rbFM6.AutoSize = true;
-            this.rbFM6.Location = new System.Drawing.Point(108, 40);
-            this.rbFM6.Name = "rbFM6";
-            this.rbFM6.Size = new System.Drawing.Size(45, 16);
-            this.rbFM6.TabIndex = 5;
-            this.rbFM6.Text = "FM6";
-            this.rbFM6.UseVisualStyleBackColor = true;
-            // 
-            // rbFM3
-            // 
-            this.rbFM3.AutoSize = true;
-            this.rbFM3.Location = new System.Drawing.Point(108, 18);
-            this.rbFM3.Name = "rbFM3";
-            this.rbFM3.Size = new System.Drawing.Size(45, 16);
-            this.rbFM3.TabIndex = 2;
-            this.rbFM3.Text = "FM3";
-            this.rbFM3.UseVisualStyleBackColor = true;
-            // 
-            // rbFM5
-            // 
-            this.rbFM5.AutoSize = true;
-            this.rbFM5.Location = new System.Drawing.Point(57, 40);
-            this.rbFM5.Name = "rbFM5";
-            this.rbFM5.Size = new System.Drawing.Size(45, 16);
-            this.rbFM5.TabIndex = 4;
-            this.rbFM5.Text = "FM5";
-            this.rbFM5.UseVisualStyleBackColor = true;
-            // 
-            // rbFM2
-            // 
-            this.rbFM2.AutoSize = true;
-            this.rbFM2.Location = new System.Drawing.Point(57, 18);
-            this.rbFM2.Name = "rbFM2";
-            this.rbFM2.Size = new System.Drawing.Size(45, 16);
-            this.rbFM2.TabIndex = 1;
-            this.rbFM2.Text = "FM2";
-            this.rbFM2.UseVisualStyleBackColor = true;
-            // 
-            // rbFM4
-            // 
-            this.rbFM4.AutoSize = true;
-            this.rbFM4.Location = new System.Drawing.Point(6, 40);
-            this.rbFM4.Name = "rbFM4";
-            this.rbFM4.Size = new System.Drawing.Size(45, 16);
-            this.rbFM4.TabIndex = 3;
-            this.rbFM4.Text = "FM4";
-            this.rbFM4.UseVisualStyleBackColor = true;
-            // 
-            // rbFM1
-            // 
-            this.rbFM1.AutoSize = true;
-            this.rbFM1.Checked = true;
-            this.rbFM1.Location = new System.Drawing.Point(6, 18);
-            this.rbFM1.Name = "rbFM1";
-            this.rbFM1.Size = new System.Drawing.Size(45, 16);
-            this.rbFM1.TabIndex = 0;
-            this.rbFM1.TabStop = true;
-            this.rbFM1.Text = "FM1";
-            this.rbFM1.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.cbFM1);
-            this.groupBox2.Controls.Add(this.cbFM6);
-            this.groupBox2.Controls.Add(this.cbFM2);
-            this.groupBox2.Controls.Add(this.cbFM5);
-            this.groupBox2.Controls.Add(this.cbFM3);
-            this.groupBox2.Controls.Add(this.cbFM4);
-            this.groupBox2.Location = new System.Drawing.Point(209, 18);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(210, 62);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            // 
-            // cbFM1
-            // 
-            this.cbFM1.AutoSize = true;
-            this.cbFM1.Checked = true;
-            this.cbFM1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM1.Location = new System.Drawing.Point(6, 18);
-            this.cbFM1.Name = "cbFM1";
-            this.cbFM1.Size = new System.Drawing.Size(46, 16);
-            this.cbFM1.TabIndex = 0;
-            this.cbFM1.Text = "FM1";
-            this.cbFM1.UseVisualStyleBackColor = true;
-            // 
-            // cbFM6
-            // 
-            this.cbFM6.AutoSize = true;
-            this.cbFM6.Checked = true;
-            this.cbFM6.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM6.Location = new System.Drawing.Point(110, 40);
-            this.cbFM6.Name = "cbFM6";
-            this.cbFM6.Size = new System.Drawing.Size(46, 16);
-            this.cbFM6.TabIndex = 5;
-            this.cbFM6.Text = "FM6";
-            this.cbFM6.UseVisualStyleBackColor = true;
-            // 
-            // cbFM2
-            // 
-            this.cbFM2.AutoSize = true;
-            this.cbFM2.Checked = true;
-            this.cbFM2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM2.Location = new System.Drawing.Point(58, 18);
-            this.cbFM2.Name = "cbFM2";
-            this.cbFM2.Size = new System.Drawing.Size(46, 16);
-            this.cbFM2.TabIndex = 1;
-            this.cbFM2.Text = "FM2";
-            this.cbFM2.UseVisualStyleBackColor = true;
-            // 
-            // cbFM5
-            // 
-            this.cbFM5.AutoSize = true;
-            this.cbFM5.Checked = true;
-            this.cbFM5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM5.Location = new System.Drawing.Point(58, 40);
-            this.cbFM5.Name = "cbFM5";
-            this.cbFM5.Size = new System.Drawing.Size(46, 16);
-            this.cbFM5.TabIndex = 4;
-            this.cbFM5.Text = "FM5";
-            this.cbFM5.UseVisualStyleBackColor = true;
-            // 
-            // cbFM3
-            // 
-            this.cbFM3.AutoSize = true;
-            this.cbFM3.Checked = true;
-            this.cbFM3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM3.Location = new System.Drawing.Point(110, 18);
-            this.cbFM3.Name = "cbFM3";
-            this.cbFM3.Size = new System.Drawing.Size(46, 16);
-            this.cbFM3.TabIndex = 2;
-            this.cbFM3.Text = "FM3";
-            this.cbFM3.UseVisualStyleBackColor = true;
-            // 
-            // cbFM4
-            // 
-            this.cbFM4.AutoSize = true;
-            this.cbFM4.Checked = true;
-            this.cbFM4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM4.Location = new System.Drawing.Point(6, 40);
-            this.cbFM4.Name = "cbFM4";
-            this.cbFM4.Size = new System.Drawing.Size(46, 16);
-            this.cbFM4.TabIndex = 3;
-            this.cbFM4.Text = "FM4";
-            this.cbFM4.UseVisualStyleBackColor = true;
-            // 
-            // cmbMIDIIN
-            // 
-            this.cmbMIDIIN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbMIDIIN.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMIDIIN.FormattingEnabled = true;
-            this.cmbMIDIIN.Location = new System.Drawing.Point(72, 18);
-            this.cmbMIDIIN.Name = "cmbMIDIIN";
-            this.cmbMIDIIN.Size = new System.Drawing.Size(357, 20);
-            this.cmbMIDIIN.TabIndex = 1;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 21);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(43, 12);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "MIDI IN";
-            // 
-            // tpKeyBoard
-            // 
-            this.tpKeyBoard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpKeyBoard.Controls.Add(this.btnInitializeShortCutKey);
-            this.tpKeyBoard.Controls.Add(this.lblSKKey);
-            this.tpKeyBoard.Controls.Add(this.dgvShortCutKey);
-            this.tpKeyBoard.Location = new System.Drawing.Point(4, 40);
-            this.tpKeyBoard.Name = "tpKeyBoard";
-            this.tpKeyBoard.Size = new System.Drawing.Size(443, 402);
-            this.tpKeyBoard.TabIndex = 13;
-            this.tpKeyBoard.Text = "ショートカットキー";
-            this.tpKeyBoard.UseVisualStyleBackColor = true;
-            // 
-            // btnInitializeShortCutKey
-            // 
-            this.btnInitializeShortCutKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInitializeShortCutKey.Location = new System.Drawing.Point(334, 369);
-            this.btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
-            this.btnInitializeShortCutKey.Size = new System.Drawing.Size(104, 23);
-            this.btnInitializeShortCutKey.TabIndex = 31;
-            this.btnInitializeShortCutKey.Text = "初期状態に戻す";
-            this.btnInitializeShortCutKey.UseVisualStyleBackColor = true;
-            this.btnInitializeShortCutKey.Click += new System.EventHandler(this.btnInitializeShortCutKey_Click);
-            // 
-            // lblSKKey
-            // 
-            this.lblSKKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSKKey.AutoSize = true;
-            this.lblSKKey.Location = new System.Drawing.Point(42, 374);
-            this.lblSKKey.Name = "lblSKKey";
-            this.lblSKKey.Size = new System.Drawing.Size(0, 12);
-            this.lblSKKey.TabIndex = 30;
-            // 
-            // dgvShortCutKey
-            // 
-            this.dgvShortCutKey.AllowUserToAddRows = false;
-            this.dgvShortCutKey.AllowUserToDeleteRows = false;
-            this.dgvShortCutKey.AllowUserToOrderColumns = true;
-            this.dgvShortCutKey.AllowUserToResizeRows = false;
-            this.dgvShortCutKey.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvShortCutKey.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvShortCutKey.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clmNumber,
-            this.clmFunc,
-            this.clmShift,
-            this.clmCtrl,
-            this.clmAlt,
-            this.clmKey,
-            this.clmSet,
-            this.clmClr,
-            this.clmKBDSpacer});
-            this.dgvShortCutKey.Location = new System.Drawing.Point(3, 3);
-            this.dgvShortCutKey.MultiSelect = false;
-            this.dgvShortCutKey.Name = "dgvShortCutKey";
-            this.dgvShortCutKey.RowHeadersVisible = false;
-            this.dgvShortCutKey.RowTemplate.Height = 21;
-            this.dgvShortCutKey.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvShortCutKey.Size = new System.Drawing.Size(435, 353);
-            this.dgvShortCutKey.TabIndex = 29;
-            this.dgvShortCutKey.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvShortCutKey_CellContentClick);
-            // 
-            // clmNumber
-            // 
-            this.clmNumber.HeaderText = "Number";
-            this.clmNumber.Name = "clmNumber";
-            this.clmNumber.Visible = false;
-            // 
-            // clmFunc
-            // 
-            this.clmFunc.HeaderText = "機能";
-            this.clmFunc.Name = "clmFunc";
-            this.clmFunc.ReadOnly = true;
-            this.clmFunc.Width = 150;
-            // 
-            // clmShift
-            // 
-            this.clmShift.HeaderText = "Shift";
-            this.clmShift.Name = "clmShift";
-            this.clmShift.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.clmShift.Width = 40;
-            // 
-            // clmCtrl
-            // 
-            this.clmCtrl.HeaderText = "Ctrl";
-            this.clmCtrl.Name = "clmCtrl";
-            this.clmCtrl.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.clmCtrl.Width = 40;
-            // 
-            // clmAlt
-            // 
-            this.clmAlt.HeaderText = "Alt";
-            this.clmAlt.Name = "clmAlt";
-            this.clmAlt.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.clmAlt.Width = 40;
-            // 
-            // clmKey
-            // 
-            this.clmKey.HeaderText = "Key";
-            this.clmKey.Name = "clmKey";
-            this.clmKey.ReadOnly = true;
-            this.clmKey.Width = 50;
-            // 
-            // clmSet
-            // 
-            this.clmSet.HeaderText = "Set";
-            this.clmSet.Name = "clmSet";
-            this.clmSet.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.clmSet.Text = "Set";
-            this.clmSet.Width = 40;
-            // 
-            // clmClr
-            // 
-            this.clmClr.HeaderText = "Clr";
-            this.clmClr.Name = "clmClr";
-            this.clmClr.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.clmClr.Text = "Clr";
-            this.clmClr.Width = 40;
-            // 
-            // clmKBDSpacer
-            // 
-            this.clmKBDSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.clmKBDSpacer.HeaderText = "";
-            this.clmKBDSpacer.Name = "clmKBDSpacer";
-            this.clmKBDSpacer.ReadOnly = true;
-            this.clmKBDSpacer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmKBDSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tpBalance
-            // 
-            this.tpBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpBalance.Controls.Add(this.groupBox25);
-            this.tpBalance.Controls.Add(this.cbAutoBalanceUseThis);
-            this.tpBalance.Controls.Add(this.groupBox18);
-            this.tpBalance.Location = new System.Drawing.Point(4, 40);
-            this.tpBalance.Name = "tpBalance";
-            this.tpBalance.Size = new System.Drawing.Size(443, 402);
-            this.tpBalance.TabIndex = 12;
-            this.tpBalance.Text = "ミキサーバランス";
-            this.tpBalance.UseVisualStyleBackColor = true;
-            // 
-            // groupBox25
-            // 
-            this.groupBox25.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox25.Controls.Add(this.rbAutoBalanceNotSamePositionAsSongData);
-            this.groupBox25.Controls.Add(this.rbAutoBalanceSamePositionAsSongData);
-            this.groupBox25.Location = new System.Drawing.Point(7, 327);
-            this.groupBox25.Name = "groupBox25";
-            this.groupBox25.Size = new System.Drawing.Size(431, 41);
-            this.groupBox25.TabIndex = 1;
-            this.groupBox25.TabStop = false;
-            this.groupBox25.Text = "ソングミキサーバランス参照フォルダー";
-            // 
-            // rbAutoBalanceNotSamePositionAsSongData
-            // 
-            this.rbAutoBalanceNotSamePositionAsSongData.AutoSize = true;
-            this.rbAutoBalanceNotSamePositionAsSongData.Checked = true;
-            this.rbAutoBalanceNotSamePositionAsSongData.Location = new System.Drawing.Point(6, 18);
-            this.rbAutoBalanceNotSamePositionAsSongData.Name = "rbAutoBalanceNotSamePositionAsSongData";
-            this.rbAutoBalanceNotSamePositionAsSongData.Size = new System.Drawing.Size(110, 16);
-            this.rbAutoBalanceNotSamePositionAsSongData.TabIndex = 0;
-            this.rbAutoBalanceNotSamePositionAsSongData.TabStop = true;
-            this.rbAutoBalanceNotSamePositionAsSongData.Text = "設定ファイルと同じ";
-            this.rbAutoBalanceNotSamePositionAsSongData.UseVisualStyleBackColor = true;
-            // 
-            // rbAutoBalanceSamePositionAsSongData
-            // 
-            this.rbAutoBalanceSamePositionAsSongData.AutoSize = true;
-            this.rbAutoBalanceSamePositionAsSongData.Location = new System.Drawing.Point(122, 18);
-            this.rbAutoBalanceSamePositionAsSongData.Name = "rbAutoBalanceSamePositionAsSongData";
-            this.rbAutoBalanceSamePositionAsSongData.Size = new System.Drawing.Size(92, 16);
-            this.rbAutoBalanceSamePositionAsSongData.TabIndex = 0;
-            this.rbAutoBalanceSamePositionAsSongData.Text = "曲データと同じ";
-            this.rbAutoBalanceSamePositionAsSongData.UseVisualStyleBackColor = true;
-            // 
-            // cbAutoBalanceUseThis
-            // 
-            this.cbAutoBalanceUseThis.AutoSize = true;
-            this.cbAutoBalanceUseThis.Checked = true;
-            this.cbAutoBalanceUseThis.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAutoBalanceUseThis.Location = new System.Drawing.Point(13, 3);
-            this.cbAutoBalanceUseThis.Name = "cbAutoBalanceUseThis";
-            this.cbAutoBalanceUseThis.Size = new System.Drawing.Size(221, 16);
-            this.cbAutoBalanceUseThis.TabIndex = 1;
-            this.cbAutoBalanceUseThis.Text = "ミキサーバランス自動設定機能を使用する";
-            this.cbAutoBalanceUseThis.UseVisualStyleBackColor = true;
-            // 
-            // groupBox18
-            // 
-            this.groupBox18.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox18.Controls.Add(this.groupBox24);
-            this.groupBox18.Controls.Add(this.groupBox23);
-            this.groupBox18.Location = new System.Drawing.Point(7, 3);
-            this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(431, 318);
-            this.groupBox18.TabIndex = 0;
-            this.groupBox18.TabStop = false;
-            // 
-            // groupBox24
-            // 
-            this.groupBox24.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox24.Controls.Add(this.groupBox21);
-            this.groupBox24.Controls.Add(this.groupBox22);
-            this.groupBox24.Location = new System.Drawing.Point(6, 185);
-            this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(419, 127);
-            this.groupBox24.TabIndex = 1;
-            this.groupBox24.TabStop = false;
-            this.groupBox24.Text = "保存";
-            // 
-            // groupBox21
-            // 
-            this.groupBox21.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox21.Controls.Add(this.rbAutoBalanceNotSaveSongBalance);
-            this.groupBox21.Controls.Add(this.rbAutoBalanceSaveSongBalance);
-            this.groupBox21.Location = new System.Drawing.Point(6, 18);
-            this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(407, 62);
-            this.groupBox21.TabIndex = 0;
-            this.groupBox21.TabStop = false;
-            this.groupBox21.Text = "ソングミキサーバランス(曲データ毎)";
-            // 
-            // rbAutoBalanceNotSaveSongBalance
-            // 
-            this.rbAutoBalanceNotSaveSongBalance.AutoSize = true;
-            this.rbAutoBalanceNotSaveSongBalance.Checked = true;
-            this.rbAutoBalanceNotSaveSongBalance.Location = new System.Drawing.Point(6, 40);
-            this.rbAutoBalanceNotSaveSongBalance.Name = "rbAutoBalanceNotSaveSongBalance";
-            this.rbAutoBalanceNotSaveSongBalance.Size = new System.Drawing.Size(153, 16);
-            this.rbAutoBalanceNotSaveSongBalance.TabIndex = 0;
-            this.rbAutoBalanceNotSaveSongBalance.TabStop = true;
-            this.rbAutoBalanceNotSaveSongBalance.Text = "保存しない(手動保存のみ)";
-            this.rbAutoBalanceNotSaveSongBalance.UseVisualStyleBackColor = true;
-            // 
-            // rbAutoBalanceSaveSongBalance
-            // 
-            this.rbAutoBalanceSaveSongBalance.AutoSize = true;
-            this.rbAutoBalanceSaveSongBalance.Location = new System.Drawing.Point(6, 18);
-            this.rbAutoBalanceSaveSongBalance.Name = "rbAutoBalanceSaveSongBalance";
-            this.rbAutoBalanceSaveSongBalance.Size = new System.Drawing.Size(150, 16);
-            this.rbAutoBalanceSaveSongBalance.TabIndex = 0;
-            this.rbAutoBalanceSaveSongBalance.Text = "演奏停止時に自動で保存";
-            this.rbAutoBalanceSaveSongBalance.UseVisualStyleBackColor = true;
-            // 
-            // groupBox22
-            // 
-            this.groupBox22.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox22.Controls.Add(this.label4);
-            this.groupBox22.Location = new System.Drawing.Point(6, 86);
-            this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(407, 35);
-            this.groupBox22.TabIndex = 0;
-            this.groupBox22.TabStop = false;
-            this.groupBox22.Text = "ドライバーミキサーバランス(ドライバ毎)";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 15);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 12);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "手動保存のみ";
-            // 
-            // groupBox23
-            // 
-            this.groupBox23.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox23.Controls.Add(this.groupBox19);
-            this.groupBox23.Controls.Add(this.groupBox20);
-            this.groupBox23.Location = new System.Drawing.Point(6, 22);
-            this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(419, 157);
-            this.groupBox23.TabIndex = 1;
-            this.groupBox23.TabStop = false;
-            this.groupBox23.Text = "読み込み";
-            // 
-            // groupBox19
-            // 
-            this.groupBox19.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox19.Controls.Add(this.rbAutoBalanceNotLoadSongBalance);
-            this.groupBox19.Controls.Add(this.rbAutoBalanceLoadSongBalance);
-            this.groupBox19.Location = new System.Drawing.Point(6, 18);
-            this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(407, 63);
-            this.groupBox19.TabIndex = 0;
-            this.groupBox19.TabStop = false;
-            this.groupBox19.Text = "ソングミキサーバランス(曲データ毎)";
-            // 
-            // rbAutoBalanceNotLoadSongBalance
-            // 
-            this.rbAutoBalanceNotLoadSongBalance.AutoSize = true;
-            this.rbAutoBalanceNotLoadSongBalance.Checked = true;
-            this.rbAutoBalanceNotLoadSongBalance.Location = new System.Drawing.Point(6, 40);
-            this.rbAutoBalanceNotLoadSongBalance.Name = "rbAutoBalanceNotLoadSongBalance";
-            this.rbAutoBalanceNotLoadSongBalance.Size = new System.Drawing.Size(102, 16);
-            this.rbAutoBalanceNotLoadSongBalance.TabIndex = 0;
-            this.rbAutoBalanceNotLoadSongBalance.TabStop = true;
-            this.rbAutoBalanceNotLoadSongBalance.Text = "手動で読み込む";
-            this.rbAutoBalanceNotLoadSongBalance.UseVisualStyleBackColor = true;
-            // 
-            // rbAutoBalanceLoadSongBalance
-            // 
-            this.rbAutoBalanceLoadSongBalance.AutoSize = true;
-            this.rbAutoBalanceLoadSongBalance.Location = new System.Drawing.Point(6, 18);
-            this.rbAutoBalanceLoadSongBalance.Name = "rbAutoBalanceLoadSongBalance";
-            this.rbAutoBalanceLoadSongBalance.Size = new System.Drawing.Size(147, 16);
-            this.rbAutoBalanceLoadSongBalance.TabIndex = 0;
-            this.rbAutoBalanceLoadSongBalance.Text = "再生時に自動で読み込む";
-            this.rbAutoBalanceLoadSongBalance.UseVisualStyleBackColor = true;
-            // 
-            // groupBox20
-            // 
-            this.groupBox20.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox20.Controls.Add(this.rbAutoBalanceNotLoadDriverBalance);
-            this.groupBox20.Controls.Add(this.rbAutoBalanceLoadDriverBalance);
-            this.groupBox20.Location = new System.Drawing.Point(6, 87);
-            this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(407, 63);
-            this.groupBox20.TabIndex = 0;
-            this.groupBox20.TabStop = false;
-            this.groupBox20.Text = "ドライバーミキサーバランス(ドライバ毎)";
-            // 
-            // rbAutoBalanceNotLoadDriverBalance
-            // 
-            this.rbAutoBalanceNotLoadDriverBalance.AutoSize = true;
-            this.rbAutoBalanceNotLoadDriverBalance.Location = new System.Drawing.Point(6, 40);
-            this.rbAutoBalanceNotLoadDriverBalance.Name = "rbAutoBalanceNotLoadDriverBalance";
-            this.rbAutoBalanceNotLoadDriverBalance.Size = new System.Drawing.Size(102, 16);
-            this.rbAutoBalanceNotLoadDriverBalance.TabIndex = 0;
-            this.rbAutoBalanceNotLoadDriverBalance.Text = "手動で読み込む";
-            this.rbAutoBalanceNotLoadDriverBalance.UseVisualStyleBackColor = true;
-            // 
-            // rbAutoBalanceLoadDriverBalance
-            // 
-            this.rbAutoBalanceLoadDriverBalance.AutoSize = true;
-            this.rbAutoBalanceLoadDriverBalance.Checked = true;
-            this.rbAutoBalanceLoadDriverBalance.Location = new System.Drawing.Point(6, 18);
-            this.rbAutoBalanceLoadDriverBalance.Name = "rbAutoBalanceLoadDriverBalance";
-            this.rbAutoBalanceLoadDriverBalance.Size = new System.Drawing.Size(343, 16);
-            this.rbAutoBalanceLoadDriverBalance.TabIndex = 0;
-            this.rbAutoBalanceLoadDriverBalance.TabStop = true;
-            this.rbAutoBalanceLoadDriverBalance.Text = "再生時に自動で読み込む(曲データ毎のバランスファイルが無い場合)";
-            this.rbAutoBalanceLoadDriverBalance.UseVisualStyleBackColor = true;
-            // 
-            // tpMMLParameter
-            // 
-            this.tpMMLParameter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpMMLParameter.Controls.Add(this.cbDispInstrumentName);
-            this.tpMMLParameter.Location = new System.Drawing.Point(4, 40);
-            this.tpMMLParameter.Name = "tpMMLParameter";
-            this.tpMMLParameter.Size = new System.Drawing.Size(443, 402);
-            this.tpMMLParameter.TabIndex = 16;
-            this.tpMMLParameter.Text = "MMLParameter";
-            this.tpMMLParameter.UseVisualStyleBackColor = true;
-            // 
-            // cbDispInstrumentName
-            // 
-            this.cbDispInstrumentName.AutoSize = true;
-            this.cbDispInstrumentName.Location = new System.Drawing.Point(23, 19);
-            this.cbDispInstrumentName.Name = "cbDispInstrumentName";
-            this.cbDispInstrumentName.Size = new System.Drawing.Size(134, 16);
-            this.cbDispInstrumentName.TabIndex = 0;
-            this.cbDispInstrumentName.Text = "disp Instrument name";
-            this.cbDispInstrumentName.UseVisualStyleBackColor = true;
-            // 
-            // tpOther2
-            // 
-            this.tpOther2.Controls.Add(this.cbDispWarningMessage);
-            this.tpOther2.Controls.Add(this.tbUseHistoryBackUp);
-            this.tpOther2.Controls.Add(this.cbUseHistoryBackUp);
-            this.tpOther2.Controls.Add(this.cbUseMoonDriverDotNET);
-            this.tpOther2.Controls.Add(this.cbUsePMDDotNET);
-            this.tpOther2.Controls.Add(this.cbUseMucomDotNET);
-            this.tpOther2.Controls.Add(this.cbUseScript);
-            this.tpOther2.Controls.Add(this.cbChangeEnterCode);
-            this.tpOther2.Controls.Add(this.cbClearHistory);
-            this.tpOther2.Controls.Add(this.tbOpacity);
-            this.tpOther2.Controls.Add(this.label52);
-            this.tpOther2.Controls.Add(this.groupBox29);
-            this.tpOther2.Controls.Add(this.cbInfiniteOfflineMode);
-            this.tpOther2.Controls.Add(this.cbUseSIen);
-            this.tpOther2.Controls.Add(this.cbRequestCacheClear);
-            this.tpOther2.Location = new System.Drawing.Point(4, 40);
-            this.tpOther2.Name = "tpOther2";
-            this.tpOther2.Size = new System.Drawing.Size(443, 402);
-            this.tpOther2.TabIndex = 18;
-            this.tpOther2.Text = "Other";
-            this.tpOther2.UseVisualStyleBackColor = true;
-            // 
-            // tbUseHistoryBackUp
-            // 
-            this.tbUseHistoryBackUp.Location = new System.Drawing.Point(345, 199);
-            this.tbUseHistoryBackUp.Name = "tbUseHistoryBackUp";
-            this.tbUseHistoryBackUp.Size = new System.Drawing.Size(53, 19);
-            this.tbUseHistoryBackUp.TabIndex = 29;
-            // 
-            // cbUseHistoryBackUp
-            // 
-            this.cbUseHistoryBackUp.AutoSize = true;
-            this.cbUseHistoryBackUp.Location = new System.Drawing.Point(7, 201);
-            this.cbUseHistoryBackUp.Name = "cbUseHistoryBackUp";
-            this.cbUseHistoryBackUp.Size = new System.Drawing.Size(332, 16);
-            this.cbUseHistoryBackUp.TabIndex = 28;
-            this.cbUseHistoryBackUp.Text = "保存時に既にファイルがある場合はバックアップする。バックアップ数：";
-            this.cbUseHistoryBackUp.UseVisualStyleBackColor = true;
-            // 
-            // cbUseMoonDriverDotNET
-            // 
-            this.cbUseMoonDriverDotNET.AutoSize = true;
-            this.cbUseMoonDriverDotNET.Location = new System.Drawing.Point(7, 179);
-            this.cbUseMoonDriverDotNET.Name = "cbUseMoonDriverDotNET";
-            this.cbUseMoonDriverDotNET.Size = new System.Drawing.Size(230, 16);
-            this.cbUseMoonDriverDotNET.TabIndex = 27;
-            this.cbUseMoonDriverDotNET.Text = "MoonDriverDotNETを使用する(要再起動)";
-            this.cbUseMoonDriverDotNET.UseVisualStyleBackColor = true;
-            // 
-            // cbUsePMDDotNET
-            // 
-            this.cbUsePMDDotNET.AutoSize = true;
-            this.cbUsePMDDotNET.Location = new System.Drawing.Point(7, 157);
-            this.cbUsePMDDotNET.Name = "cbUsePMDDotNET";
-            this.cbUsePMDDotNET.Size = new System.Drawing.Size(196, 16);
-            this.cbUsePMDDotNET.TabIndex = 27;
-            this.cbUsePMDDotNET.Text = "PMDDotNETを使用する(要再起動)";
-            this.cbUsePMDDotNET.UseVisualStyleBackColor = true;
-            // 
-            // cbUseMucomDotNET
-            // 
-            this.cbUseMucomDotNET.AutoSize = true;
-            this.cbUseMucomDotNET.Location = new System.Drawing.Point(7, 135);
-            this.cbUseMucomDotNET.Name = "cbUseMucomDotNET";
-            this.cbUseMucomDotNET.Size = new System.Drawing.Size(208, 16);
-            this.cbUseMucomDotNET.TabIndex = 27;
-            this.cbUseMucomDotNET.Text = "mucomDotNETを使用する(要再起動)";
-            this.cbUseMucomDotNET.UseVisualStyleBackColor = true;
-            // 
-            // cbUseScript
-            // 
-            this.cbUseScript.AutoSize = true;
-            this.cbUseScript.Location = new System.Drawing.Point(7, 113);
-            this.cbUseScript.Name = "cbUseScript";
-            this.cbUseScript.Size = new System.Drawing.Size(173, 16);
-            this.cbUseScript.TabIndex = 27;
-            this.cbUseScript.Text = "スクリプトを使用する(要再起動)";
-            this.cbUseScript.UseVisualStyleBackColor = true;
-            // 
-            // cbChangeEnterCode
-            // 
-            this.cbChangeEnterCode.AutoSize = true;
-            this.cbChangeEnterCode.Location = new System.Drawing.Point(7, 25);
-            this.cbChangeEnterCode.Name = "cbChangeEnterCode";
-            this.cbChangeEnterCode.Size = new System.Drawing.Size(257, 16);
-            this.cbChangeEnterCode.TabIndex = 24;
-            this.cbChangeEnterCode.Text = "テキストファイルを開いた時、改行コード変換を行う";
-            this.cbChangeEnterCode.UseVisualStyleBackColor = true;
-            // 
-            // cbClearHistory
-            // 
-            this.cbClearHistory.AutoSize = true;
-            this.cbClearHistory.Location = new System.Drawing.Point(7, 3);
-            this.cbClearHistory.Name = "cbClearHistory";
-            this.cbClearHistory.Size = new System.Drawing.Size(228, 16);
-            this.cbClearHistory.TabIndex = 26;
-            this.cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
-            this.cbClearHistory.UseVisualStyleBackColor = true;
-            // 
-            // tbOpacity
-            // 
-            this.tbOpacity.Location = new System.Drawing.Point(107, 333);
-            this.tbOpacity.Maximum = 100;
-            this.tbOpacity.Minimum = 1;
-            this.tbOpacity.Name = "tbOpacity";
-            this.tbOpacity.Size = new System.Drawing.Size(143, 45);
-            this.tbOpacity.TabIndex = 20;
-            this.tbOpacity.TickFrequency = 10;
-            this.tbOpacity.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.tbOpacity.Value = 1;
-            this.tbOpacity.Scroll += new System.EventHandler(this.tbOpacity_Scroll);
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(5, 349);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(96, 12);
-            this.label52.TabIndex = 19;
-            this.label52.Text = "ウィンドウ不透明度";
-            // 
-            // groupBox29
-            // 
-            this.groupBox29.Controls.Add(this.label36);
-            this.groupBox29.Controls.Add(this.btFont);
-            this.groupBox29.Controls.Add(this.label54);
-            this.groupBox29.Controls.Add(this.lblFontName);
-            this.groupBox29.Controls.Add(this.label53);
-            this.groupBox29.Controls.Add(this.lblFontSize);
-            this.groupBox29.Controls.Add(this.lblFontStyle);
-            this.groupBox29.Location = new System.Drawing.Point(256, 314);
-            this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(184, 85);
-            this.groupBox29.TabIndex = 21;
-            this.groupBox29.TabStop = false;
-            this.groupBox29.Text = "フォント";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(5, 15);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(34, 12);
-            this.label36.TabIndex = 19;
-            this.label36.Text = "Name";
-            // 
-            // btFont
-            // 
-            this.btFont.Location = new System.Drawing.Point(155, 55);
-            this.btFont.Name = "btFont";
-            this.btFont.Size = new System.Drawing.Size(23, 23);
-            this.btFont.TabIndex = 18;
-            this.btFont.Text = "...";
-            this.btFont.UseVisualStyleBackColor = true;
-            this.btFont.Click += new System.EventHandler(this.BtFont_Click);
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(5, 60);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(31, 12);
-            this.label54.TabIndex = 19;
-            this.label54.Text = "Style";
-            // 
-            // lblFontName
-            // 
-            this.lblFontName.AutoSize = true;
-            this.lblFontName.Location = new System.Drawing.Point(55, 15);
-            this.lblFontName.Name = "lblFontName";
-            this.lblFontName.Size = new System.Drawing.Size(52, 12);
-            this.lblFontName.TabIndex = 19;
-            this.lblFontName.Text = "Consolas";
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(5, 38);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(26, 12);
-            this.label53.TabIndex = 19;
-            this.label53.Text = "Size";
-            // 
-            // lblFontSize
-            // 
-            this.lblFontSize.AutoSize = true;
-            this.lblFontSize.Location = new System.Drawing.Point(55, 38);
-            this.lblFontSize.Name = "lblFontSize";
-            this.lblFontSize.Size = new System.Drawing.Size(17, 12);
-            this.lblFontSize.TabIndex = 19;
-            this.lblFontSize.Text = "12";
-            // 
-            // lblFontStyle
-            // 
-            this.lblFontStyle.AutoSize = true;
-            this.lblFontStyle.Location = new System.Drawing.Point(55, 60);
-            this.lblFontStyle.Name = "lblFontStyle";
-            this.lblFontStyle.Size = new System.Drawing.Size(44, 12);
-            this.lblFontStyle.TabIndex = 19;
-            this.lblFontStyle.Text = "Regular";
-            // 
-            // cbInfiniteOfflineMode
-            // 
-            this.cbInfiniteOfflineMode.AutoSize = true;
-            this.cbInfiniteOfflineMode.Location = new System.Drawing.Point(7, 91);
-            this.cbInfiniteOfflineMode.Name = "cbInfiniteOfflineMode";
-            this.cbInfiniteOfflineMode.Size = new System.Drawing.Size(140, 16);
-            this.cbInfiniteOfflineMode.TabIndex = 23;
-            this.cbInfiniteOfflineMode.Text = "永続的にオフラインモード";
-            this.cbInfiniteOfflineMode.UseVisualStyleBackColor = true;
-            // 
-            // cbUseSIen
-            // 
-            this.cbUseSIen.AutoSize = true;
-            this.cbUseSIen.Location = new System.Drawing.Point(7, 69);
-            this.cbUseSIen.Name = "cbUseSIen";
-            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
-            this.cbUseSIen.TabIndex = 23;
-            this.cbUseSIen.Text = "入力支援機能を使用する";
-            this.cbUseSIen.UseVisualStyleBackColor = true;
-            // 
-            // cbRequestCacheClear
-            // 
-            this.cbRequestCacheClear.AutoSize = true;
-            this.cbRequestCacheClear.Location = new System.Drawing.Point(7, 47);
-            this.cbRequestCacheClear.Name = "cbRequestCacheClear";
-            this.cbRequestCacheClear.Size = new System.Drawing.Size(209, 16);
-            this.cbRequestCacheClear.TabIndex = 23;
-            this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
-            this.cbRequestCacheClear.UseVisualStyleBackColor = true;
-            // 
-            // tpOther
-            // 
-            this.tpOther.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpOther.Controls.Add(this.cbWavSwitch);
-            this.tpOther.Controls.Add(this.groupBox17);
-            this.tpOther.Controls.Add(this.cbUseGetInst);
-            this.tpOther.Controls.Add(this.groupBox4);
-            this.tpOther.Controls.Add(this.cbDumpSwitch);
-            this.tpOther.Controls.Add(this.gbWav);
-            this.tpOther.Controls.Add(this.gbDump);
-            this.tpOther.Controls.Add(this.label30);
-            this.tpOther.Controls.Add(this.tbScreenFrameRate);
-            this.tpOther.Controls.Add(this.label29);
-            this.tpOther.Controls.Add(this.btnDataPath);
-            this.tpOther.Controls.Add(this.tbDataPath);
-            this.tpOther.Controls.Add(this.label19);
-            this.tpOther.Controls.Add(this.btnResetPosition);
-            this.tpOther.Controls.Add(this.btnOpenSettingFolder);
-            this.tpOther.Controls.Add(this.cbEmptyPlayList);
-            this.tpOther.Controls.Add(this.cbInitAlways);
-            this.tpOther.Controls.Add(this.cbAutoOpen);
-            this.tpOther.Controls.Add(this.cbUseLoopTimes);
-            this.tpOther.Location = new System.Drawing.Point(4, 40);
-            this.tpOther.Name = "tpOther";
-            this.tpOther.Size = new System.Drawing.Size(443, 402);
-            this.tpOther.TabIndex = 2;
-            this.tpOther.Text = "Other";
-            this.tpOther.UseVisualStyleBackColor = true;
-            // 
-            // cbWavSwitch
-            // 
-            this.cbWavSwitch.AutoSize = true;
-            this.cbWavSwitch.Location = new System.Drawing.Point(14, 202);
-            this.cbWavSwitch.Name = "cbWavSwitch";
-            this.cbWavSwitch.Size = new System.Drawing.Size(177, 16);
-            this.cbWavSwitch.TabIndex = 0;
-            this.cbWavSwitch.Text = "演奏時に.wavファイルを出力する";
-            this.cbWavSwitch.UseVisualStyleBackColor = true;
-            this.cbWavSwitch.CheckedChanged += new System.EventHandler(this.cbWavSwitch_CheckedChanged);
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox17.Controls.Add(this.tbImageExt);
-            this.groupBox17.Controls.Add(this.tbMMLExt);
-            this.groupBox17.Controls.Add(this.tbTextExt);
-            this.groupBox17.Controls.Add(this.label1);
-            this.groupBox17.Controls.Add(this.label3);
-            this.groupBox17.Controls.Add(this.label2);
-            this.groupBox17.Location = new System.Drawing.Point(7, 256);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(225, 83);
-            this.groupBox17.TabIndex = 1;
-            this.groupBox17.TabStop = false;
-            this.groupBox17.Text = "File Extension";
-            // 
-            // tbImageExt
-            // 
-            this.tbImageExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbImageExt.Location = new System.Drawing.Point(52, 58);
-            this.tbImageExt.Name = "tbImageExt";
-            this.tbImageExt.Size = new System.Drawing.Size(162, 19);
-            this.tbImageExt.TabIndex = 1;
-            // 
-            // tbMMLExt
-            // 
-            this.tbMMLExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbMMLExt.Location = new System.Drawing.Point(52, 35);
-            this.tbMMLExt.Name = "tbMMLExt";
-            this.tbMMLExt.Size = new System.Drawing.Size(162, 19);
-            this.tbMMLExt.TabIndex = 1;
-            // 
-            // tbTextExt
-            // 
-            this.tbTextExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbTextExt.Location = new System.Drawing.Point(52, 12);
-            this.tbTextExt.Name = "tbTextExt";
-            this.tbTextExt.Size = new System.Drawing.Size(162, 19);
-            this.tbTextExt.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Text";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 61);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Image";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 38);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "MML";
-            // 
-            // cbUseGetInst
-            // 
-            this.cbUseGetInst.AutoSize = true;
-            this.cbUseGetInst.Location = new System.Drawing.Point(14, 31);
-            this.cbUseGetInst.Name = "cbUseGetInst";
-            this.cbUseGetInst.Size = new System.Drawing.Size(286, 16);
-            this.cbUseGetInst.TabIndex = 12;
-            this.cbUseGetInst.Text = "音色欄をクリック時、その音色をクリップボードにコピーする";
-            this.cbUseGetInst.UseVisualStyleBackColor = true;
-            this.cbUseGetInst.CheckedChanged += new System.EventHandler(this.cbUseGetInst_CheckedChanged);
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.cmbInstFormat);
-            this.groupBox4.Controls.Add(this.lblInstFormat);
-            this.groupBox4.Location = new System.Drawing.Point(7, 31);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(431, 45);
-            this.groupBox4.TabIndex = 23;
-            this.groupBox4.TabStop = false;
-            // 
-            // cmbInstFormat
-            // 
-            this.cmbInstFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbInstFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbInstFormat.FormattingEnabled = true;
-            this.cmbInstFormat.Items.AddRange(new object[] {
-            "FMP7",
-            "MDX",
-            ".TFI(ファイル出力)",
-            "MUSIC LALF #1",
-            "MUSIC LALF #2",
-            "MML2VGM",
-            "NRTDRV",
-            "HuSIC"});
-            this.cmbInstFormat.Location = new System.Drawing.Point(298, 19);
-            this.cmbInstFormat.Name = "cmbInstFormat";
-            this.cmbInstFormat.Size = new System.Drawing.Size(127, 20);
-            this.cmbInstFormat.TabIndex = 18;
-            // 
-            // lblInstFormat
-            // 
-            this.lblInstFormat.AutoSize = true;
-            this.lblInstFormat.Location = new System.Drawing.Point(237, 22);
-            this.lblInstFormat.Name = "lblInstFormat";
-            this.lblInstFormat.Size = new System.Drawing.Size(55, 12);
-            this.lblInstFormat.TabIndex = 17;
-            this.lblInstFormat.Text = "フォーマット";
-            // 
-            // cbDumpSwitch
-            // 
-            this.cbDumpSwitch.AutoSize = true;
-            this.cbDumpSwitch.Location = new System.Drawing.Point(14, 152);
-            this.cbDumpSwitch.Name = "cbDumpSwitch";
-            this.cbDumpSwitch.Size = new System.Drawing.Size(220, 16);
-            this.cbDumpSwitch.TabIndex = 0;
-            this.cbDumpSwitch.Text = "DataBlock処理時にその内容をダンプする";
-            this.cbDumpSwitch.UseVisualStyleBackColor = true;
-            this.cbDumpSwitch.CheckedChanged += new System.EventHandler(this.cbDumpSwitch_CheckedChanged);
-            // 
-            // gbWav
-            // 
-            this.gbWav.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbWav.Controls.Add(this.btnWavPath);
-            this.gbWav.Controls.Add(this.label7);
-            this.gbWav.Controls.Add(this.tbWavPath);
-            this.gbWav.Location = new System.Drawing.Point(7, 205);
-            this.gbWav.Name = "gbWav";
-            this.gbWav.Size = new System.Drawing.Size(431, 45);
-            this.gbWav.TabIndex = 22;
-            this.gbWav.TabStop = false;
-            // 
-            // btnWavPath
-            // 
-            this.btnWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnWavPath.Location = new System.Drawing.Point(402, 16);
-            this.btnWavPath.Name = "btnWavPath";
-            this.btnWavPath.Size = new System.Drawing.Size(23, 23);
-            this.btnWavPath.TabIndex = 16;
-            this.btnWavPath.Text = "...";
-            this.btnWavPath.UseVisualStyleBackColor = true;
-            this.btnWavPath.Click += new System.EventHandler(this.btnWavPath_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 21);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(52, 12);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "出力Path";
-            // 
-            // tbWavPath
-            // 
-            this.tbWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbWavPath.Location = new System.Drawing.Point(73, 18);
-            this.tbWavPath.Name = "tbWavPath";
-            this.tbWavPath.Size = new System.Drawing.Size(323, 19);
-            this.tbWavPath.TabIndex = 15;
-            // 
-            // gbDump
-            // 
-            this.gbDump.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbDump.Controls.Add(this.btnDumpPath);
-            this.gbDump.Controls.Add(this.label6);
-            this.gbDump.Controls.Add(this.tbDumpPath);
-            this.gbDump.Location = new System.Drawing.Point(7, 154);
-            this.gbDump.Name = "gbDump";
-            this.gbDump.Size = new System.Drawing.Size(431, 45);
-            this.gbDump.TabIndex = 22;
-            this.gbDump.TabStop = false;
-            // 
-            // btnDumpPath
-            // 
-            this.btnDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDumpPath.Location = new System.Drawing.Point(402, 16);
-            this.btnDumpPath.Name = "btnDumpPath";
-            this.btnDumpPath.Size = new System.Drawing.Size(23, 23);
-            this.btnDumpPath.TabIndex = 16;
-            this.btnDumpPath.Text = "...";
-            this.btnDumpPath.UseVisualStyleBackColor = true;
-            this.btnDumpPath.Click += new System.EventHandler(this.btnDumpPath_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 21);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 12);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "出力Path";
-            // 
-            // tbDumpPath
-            // 
-            this.tbDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDumpPath.Location = new System.Drawing.Point(73, 18);
-            this.tbDumpPath.Name = "tbDumpPath";
-            this.tbDumpPath.Size = new System.Drawing.Size(323, 19);
-            this.tbDumpPath.TabIndex = 15;
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(136, 132);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(30, 12);
-            this.label30.TabIndex = 21;
-            this.label30.Text = "Hz/s";
-            // 
-            // tbScreenFrameRate
-            // 
-            this.tbScreenFrameRate.Location = new System.Drawing.Point(80, 129);
-            this.tbScreenFrameRate.Name = "tbScreenFrameRate";
-            this.tbScreenFrameRate.Size = new System.Drawing.Size(50, 19);
-            this.tbScreenFrameRate.TabIndex = 20;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(5, 132);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(69, 12);
-            this.label29.TabIndex = 19;
-            this.label29.Text = "フレームレート";
-            // 
-            // btnDataPath
-            // 
-            this.btnDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDataPath.Location = new System.Drawing.Point(409, 102);
-            this.btnDataPath.Name = "btnDataPath";
-            this.btnDataPath.Size = new System.Drawing.Size(23, 23);
-            this.btnDataPath.TabIndex = 16;
-            this.btnDataPath.Text = "...";
-            this.btnDataPath.UseVisualStyleBackColor = true;
-            this.btnDataPath.Click += new System.EventHandler(this.btnDataPath_Click);
-            // 
-            // tbDataPath
-            // 
-            this.tbDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDataPath.Location = new System.Drawing.Point(80, 104);
-            this.tbDataPath.Name = "tbDataPath";
-            this.tbDataPath.Size = new System.Drawing.Size(323, 19);
-            this.tbDataPath.TabIndex = 15;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(5, 107);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(56, 12);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "データPath";
-            // 
-            // btnResetPosition
-            // 
-            this.btnResetPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetPosition.Location = new System.Drawing.Point(165, 374);
-            this.btnResetPosition.Name = "btnResetPosition";
-            this.btnResetPosition.Size = new System.Drawing.Size(142, 23);
-            this.btnResetPosition.TabIndex = 13;
-            this.btnResetPosition.Text = "ウィンドウ位置をリセット";
-            this.btnResetPosition.UseVisualStyleBackColor = true;
-            this.btnResetPosition.Click += new System.EventHandler(this.btnResetPosition_Click);
-            // 
-            // btnOpenSettingFolder
-            // 
-            this.btnOpenSettingFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenSettingFolder.Location = new System.Drawing.Point(313, 374);
-            this.btnOpenSettingFolder.Name = "btnOpenSettingFolder";
-            this.btnOpenSettingFolder.Size = new System.Drawing.Size(125, 23);
-            this.btnOpenSettingFolder.TabIndex = 13;
-            this.btnOpenSettingFolder.Text = "設定フォルダーを開く";
-            this.btnOpenSettingFolder.UseVisualStyleBackColor = true;
-            this.btnOpenSettingFolder.Click += new System.EventHandler(this.btnOpenSettingFolder_Click);
-            // 
-            // cbEmptyPlayList
-            // 
-            this.cbEmptyPlayList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbEmptyPlayList.AutoSize = true;
-            this.cbEmptyPlayList.Location = new System.Drawing.Point(238, 308);
-            this.cbEmptyPlayList.Name = "cbEmptyPlayList";
-            this.cbEmptyPlayList.Size = new System.Drawing.Size(177, 16);
-            this.cbEmptyPlayList.TabIndex = 0;
-            this.cbEmptyPlayList.Text = "起動時にプレイリストを空にする。";
-            this.cbEmptyPlayList.UseVisualStyleBackColor = true;
-            this.cbEmptyPlayList.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // cbInitAlways
-            // 
-            this.cbInitAlways.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbInitAlways.Location = new System.Drawing.Point(238, 263);
-            this.cbInitAlways.Name = "cbInitAlways";
-            this.cbInitAlways.Size = new System.Drawing.Size(194, 39);
-            this.cbInitAlways.TabIndex = 0;
-            this.cbInitAlways.Text = "再生開始時に必ずデバイスを初期化する。";
-            this.cbInitAlways.UseVisualStyleBackColor = true;
-            this.cbInitAlways.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // cbAutoOpen
-            // 
-            this.cbAutoOpen.AutoSize = true;
-            this.cbAutoOpen.Location = new System.Drawing.Point(7, 82);
-            this.cbAutoOpen.Name = "cbAutoOpen";
-            this.cbAutoOpen.Size = new System.Drawing.Size(167, 16);
-            this.cbAutoOpen.TabIndex = 0;
-            this.cbAutoOpen.Text = "使用音源の画面を自動で開く";
-            this.cbAutoOpen.UseVisualStyleBackColor = true;
-            this.cbAutoOpen.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // cbUseLoopTimes
-            // 
-            this.cbUseLoopTimes.AutoSize = true;
-            this.cbUseLoopTimes.Location = new System.Drawing.Point(7, 7);
-            this.cbUseLoopTimes.Name = "cbUseLoopTimes";
-            this.cbUseLoopTimes.Size = new System.Drawing.Size(216, 16);
-            this.cbUseLoopTimes.TabIndex = 0;
-            this.cbUseLoopTimes.Text = "無限ループ時、指定の回数だけ繰り返す";
-            this.cbUseLoopTimes.UseVisualStyleBackColor = true;
-            this.cbUseLoopTimes.CheckedChanged += new System.EventHandler(this.cbUseLoopTimes_CheckedChanged);
-            // 
-            // tpOmake
-            // 
-            this.tpOmake.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpOmake.Controls.Add(this.groupBox31);
-            this.tpOmake.Controls.Add(this.groupBox30);
-            this.tpOmake.Controls.Add(this.label14);
-            this.tpOmake.Controls.Add(this.btVST);
-            this.tpOmake.Controls.Add(this.tbVST);
-            this.tpOmake.Controls.Add(this.groupBox5);
-            this.tpOmake.Location = new System.Drawing.Point(4, 40);
-            this.tpOmake.Name = "tpOmake";
-            this.tpOmake.Size = new System.Drawing.Size(443, 402);
-            this.tpOmake.TabIndex = 7;
-            this.tpOmake.Text = "おまけ";
-            this.tpOmake.UseVisualStyleBackColor = true;
-            // 
-            // groupBox31
-            // 
-            this.groupBox31.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox31.Controls.Add(this.rbLoglevelINFO);
-            this.groupBox31.Controls.Add(this.rbLoglevelDEBUG);
-            this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
-            this.groupBox31.Location = new System.Drawing.Point(7, 121);
-            this.groupBox31.Name = "groupBox31";
-            this.groupBox31.Size = new System.Drawing.Size(431, 43);
-            this.groupBox31.TabIndex = 25;
-            this.groupBox31.TabStop = false;
-            this.groupBox31.Text = "Log level";
-            // 
-            // rbLoglevelINFO
-            // 
-            this.rbLoglevelINFO.AutoSize = true;
-            this.rbLoglevelINFO.Checked = true;
-            this.rbLoglevelINFO.Location = new System.Drawing.Point(11, 16);
-            this.rbLoglevelINFO.Name = "rbLoglevelINFO";
-            this.rbLoglevelINFO.Size = new System.Drawing.Size(49, 16);
-            this.rbLoglevelINFO.TabIndex = 3;
-            this.rbLoglevelINFO.TabStop = true;
-            this.rbLoglevelINFO.Text = "INFO";
-            this.rbLoglevelINFO.UseVisualStyleBackColor = true;
-            // 
-            // rbLoglevelDEBUG
-            // 
-            this.rbLoglevelDEBUG.AutoSize = true;
-            this.rbLoglevelDEBUG.Location = new System.Drawing.Point(66, 16);
-            this.rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
-            this.rbLoglevelDEBUG.Size = new System.Drawing.Size(62, 16);
-            this.rbLoglevelDEBUG.TabIndex = 3;
-            this.rbLoglevelDEBUG.Text = "DEBUG";
-            this.rbLoglevelDEBUG.UseVisualStyleBackColor = true;
-            // 
-            // rbLoglevelTRACE
-            // 
-            this.rbLoglevelTRACE.AutoSize = true;
-            this.rbLoglevelTRACE.Location = new System.Drawing.Point(134, 16);
-            this.rbLoglevelTRACE.Name = "rbLoglevelTRACE";
-            this.rbLoglevelTRACE.Size = new System.Drawing.Size(61, 16);
-            this.rbLoglevelTRACE.TabIndex = 3;
-            this.rbLoglevelTRACE.Text = "TRACE";
-            this.rbLoglevelTRACE.UseVisualStyleBackColor = true;
-            // 
-            // groupBox30
-            // 
-            this.groupBox30.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
-            this.groupBox30.Controls.Add(this.rbDateTime);
-            this.groupBox30.Controls.Add(this.rbStopWatch);
-            this.groupBox30.Location = new System.Drawing.Point(7, 170);
-            this.groupBox30.Name = "groupBox30";
-            this.groupBox30.Size = new System.Drawing.Size(431, 85);
-            this.groupBox30.TabIndex = 24;
-            this.groupBox30.TabStop = false;
-            this.groupBox30.Text = "Music Interrupt Timer";
-            // 
-            // rbQueryPerformanceCounter
-            // 
-            this.rbQueryPerformanceCounter.AutoSize = true;
-            this.rbQueryPerformanceCounter.Location = new System.Drawing.Point(6, 62);
-            this.rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
-            this.rbQueryPerformanceCounter.Size = new System.Drawing.Size(213, 16);
-            this.rbQueryPerformanceCounter.TabIndex = 2;
-            this.rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
-            this.rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
-            // 
-            // rbDateTime
-            // 
-            this.rbDateTime.AutoSize = true;
-            this.rbDateTime.Location = new System.Drawing.Point(6, 40);
-            this.rbDateTime.Name = "rbDateTime";
-            this.rbDateTime.Size = new System.Drawing.Size(94, 16);
-            this.rbDateTime.TabIndex = 1;
-            this.rbDateTime.Text = "DateTime(C#)";
-            this.rbDateTime.UseVisualStyleBackColor = true;
-            // 
-            // rbStopWatch
-            // 
-            this.rbStopWatch.AutoSize = true;
-            this.rbStopWatch.Checked = true;
-            this.rbStopWatch.Location = new System.Drawing.Point(6, 18);
-            this.rbStopWatch.Name = "rbStopWatch";
-            this.rbStopWatch.Size = new System.Drawing.Size(137, 16);
-            this.rbStopWatch.TabIndex = 0;
-            this.rbStopWatch.TabStop = true;
-            this.rbStopWatch.Text = "Stopwatch(C#) default";
-            this.rbStopWatch.UseVisualStyleBackColor = true;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(7, 379);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(61, 12);
-            this.label14.TabIndex = 19;
-            this.label14.Text = "VST effect";
-            this.label14.Visible = false;
-            // 
-            // btVST
-            // 
-            this.btVST.Location = new System.Drawing.Point(417, 374);
-            this.btVST.Name = "btVST";
-            this.btVST.Size = new System.Drawing.Size(23, 23);
-            this.btVST.TabIndex = 18;
-            this.btVST.Text = "...";
-            this.btVST.UseVisualStyleBackColor = true;
-            this.btVST.Visible = false;
-            this.btVST.Click += new System.EventHandler(this.btVST_Click);
-            // 
-            // tbVST
-            // 
-            this.tbVST.Location = new System.Drawing.Point(88, 376);
-            this.tbVST.Name = "tbVST";
-            this.tbVST.Size = new System.Drawing.Size(323, 19);
-            this.tbVST.TabIndex = 17;
-            this.tbVST.Visible = false;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.cbSinWave);
-            this.groupBox5.Controls.Add(this.cbPlayDeviceCB);
-            this.groupBox5.Controls.Add(this.cbLogWarning);
-            this.groupBox5.Controls.Add(this.cbDispFrameCounter);
-            this.groupBox5.Location = new System.Drawing.Point(7, 3);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(431, 112);
-            this.groupBox5.TabIndex = 3;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Debug Mode";
-            // 
-            // cbSinWave
-            // 
-            this.cbSinWave.AutoSize = true;
-            this.cbSinWave.Location = new System.Drawing.Point(7, 85);
-            this.cbSinWave.Name = "cbSinWave";
-            this.cbSinWave.Size = new System.Drawing.Size(91, 16);
-            this.cbSinWave.TabIndex = 2;
-            this.cbSinWave.Text = "440Hz正弦波";
-            this.cbSinWave.UseVisualStyleBackColor = true;
-            // 
-            // cbPlayDeviceCB
-            // 
-            this.cbPlayDeviceCB.AutoSize = true;
-            this.cbPlayDeviceCB.Location = new System.Drawing.Point(6, 63);
-            this.cbPlayDeviceCB.Name = "cbPlayDeviceCB";
-            this.cbPlayDeviceCB.Size = new System.Drawing.Size(159, 16);
-            this.cbPlayDeviceCB.TabIndex = 2;
-            this.cbPlayDeviceCB.Text = "デバイスのコールバックで演奏";
-            this.cbPlayDeviceCB.UseVisualStyleBackColor = true;
-            // 
-            // cbLogWarning
-            // 
-            this.cbLogWarning.AutoSize = true;
-            this.cbLogWarning.Location = new System.Drawing.Point(6, 39);
-            this.cbLogWarning.Name = "cbLogWarning";
-            this.cbLogWarning.Size = new System.Drawing.Size(143, 16);
-            this.cbLogWarning.TabIndex = 2;
-            this.cbLogWarning.Text = "ログにWarningを出力する";
-            this.cbLogWarning.UseVisualStyleBackColor = true;
-            // 
-            // cbDispFrameCounter
-            // 
-            this.cbDispFrameCounter.AutoSize = true;
-            this.cbDispFrameCounter.Location = new System.Drawing.Point(6, 17);
-            this.cbDispFrameCounter.Name = "cbDispFrameCounter";
-            this.cbDispFrameCounter.Size = new System.Drawing.Size(123, 16);
-            this.cbDispFrameCounter.TabIndex = 2;
-            this.cbDispFrameCounter.Text = "Debugウィンドウ表示";
-            this.cbDispFrameCounter.UseVisualStyleBackColor = true;
-            // 
-            // tpAbout
-            // 
-            this.tpAbout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tpAbout.Controls.Add(this.tableLayoutPanel);
-            this.tpAbout.Location = new System.Drawing.Point(4, 40);
-            this.tpAbout.Name = "tpAbout";
-            this.tpAbout.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAbout.Size = new System.Drawing.Size(443, 402);
-            this.tpAbout.TabIndex = 1;
-            this.tpAbout.Text = "About";
-            this.tpAbout.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel
-            // 
-            this.tableLayoutPanel.ColumnCount = 2;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67F));
-            this.tableLayoutPanel.Controls.Add(this.logoPictureBox, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.labelProductName, 1, 0);
-            this.tableLayoutPanel.Controls.Add(this.labelVersion, 1, 1);
-            this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
-            this.tableLayoutPanel.Controls.Add(this.labelCompanyName, 1, 3);
-            this.tableLayoutPanel.Controls.Add(this.textBoxDescription, 1, 4);
-            this.tableLayoutPanel.Controls.Add(this.llOpenGithub, 1, 5);
-            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 6;
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.070175F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.33333F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.421053F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(435, 394);
-            this.tableLayoutPanel.TabIndex = 1;
-            // 
-            // logoPictureBox
-            // 
-            this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logoPictureBox.Image = Resources.ccPlay;
-            this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
-            this.logoPictureBox.Name = "logoPictureBox";
-            this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
-            this.logoPictureBox.Size = new System.Drawing.Size(137, 388);
-            this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.logoPictureBox.TabIndex = 12;
-            this.logoPictureBox.TabStop = false;
-            // 
-            // labelProductName
-            // 
-            this.labelProductName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelProductName.Location = new System.Drawing.Point(149, 0);
-            this.labelProductName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
-            this.labelProductName.MaximumSize = new System.Drawing.Size(0, 16);
-            this.labelProductName.Name = "labelProductName";
-            this.labelProductName.Size = new System.Drawing.Size(283, 16);
-            this.labelProductName.TabIndex = 19;
-            this.labelProductName.Text = "製品名";
-            this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelVersion
-            // 
-            this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(149, 39);
-            this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
-            this.labelVersion.MaximumSize = new System.Drawing.Size(0, 16);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(283, 16);
-            this.labelVersion.TabIndex = 0;
-            this.labelVersion.Text = "バージョン";
-            this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelCopyright
-            // 
-            this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(149, 78);
-            this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
-            this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 16);
-            this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(283, 16);
-            this.labelCopyright.TabIndex = 21;
-            this.labelCopyright.Text = "著作権";
-            this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelCompanyName
-            // 
-            this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(149, 117);
-            this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
-            this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 16);
-            this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(283, 16);
-            this.labelCompanyName.TabIndex = 22;
-            this.labelCompanyName.Text = "会社名";
-            this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBoxDescription
-            // 
-            this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDescription.Location = new System.Drawing.Point(149, 151);
-            this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
-            this.textBoxDescription.Multiline = true;
-            this.textBoxDescription.Name = "textBoxDescription";
-            this.textBoxDescription.ReadOnly = true;
-            this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(283, 204);
-            this.textBoxDescription.TabIndex = 23;
-            this.textBoxDescription.TabStop = false;
-            this.textBoxDescription.Text = "説明";
-            // 
-            // llOpenGithub
-            // 
-            this.llOpenGithub.AutoSize = true;
-            this.llOpenGithub.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.llOpenGithub.Location = new System.Drawing.Point(146, 358);
-            this.llOpenGithub.Name = "llOpenGithub";
-            this.llOpenGithub.Size = new System.Drawing.Size(286, 36);
-            this.llOpenGithub.TabIndex = 24;
-            this.llOpenGithub.TabStop = true;
-            this.llOpenGithub.Text = "Open latest version page of Github.";
-            this.llOpenGithub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.llOpenGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llOpenGithub_LinkClicked);
-            // 
-            // cbHiyorimiMode
-            // 
-            this.cbHiyorimiMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cbHiyorimiMode.AutoSize = true;
-            this.cbHiyorimiMode.Location = new System.Drawing.Point(11, 455);
-            this.cbHiyorimiMode.Name = "cbHiyorimiMode";
-            this.cbHiyorimiMode.Size = new System.Drawing.Size(220, 28);
-            this.cbHiyorimiMode.TabIndex = 6;
-            this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
-            this.cbHiyorimiMode.UseVisualStyleBackColor = true;
-            this.cbHiyorimiMode.Visible = false;
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.Controls.Add(ucSI);
+            groupBox1.Location = new Point(7, 89);
+            groupBox1.Margin = new Padding(4, 4, 4, 4);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new Padding(4, 4, 4, 4);
+            groupBox1.Size = new Size(477, 327);
+            groupBox1.TabIndex = 8;
+            groupBox1.TabStop = false;
             // 
             // ucSI
             // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(403, 237);
-            this.ucSI.TabIndex = 7;
+            ucSI.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            ucSI.AutoScroll = true;
+            ucSI.Location = new Point(4, 22);
+            ucSI.Margin = new Padding(5, 5, 5, 5);
+            ucSI.Name = "ucSI";
+            ucSI.Size = new Size(470, 301);
+            ucSI.TabIndex = 7;
+            // 
+            // tabPage13
+            // 
+            tabPage13.Controls.Add(splitContainer1);
+            tabPage13.Location = new Point(4, 24);
+            tabPage13.Margin = new Padding(4, 4, 4, 4);
+            tabPage13.Name = "tabPage13";
+            tabPage13.Size = new Size(499, 431);
+            tabPage13.TabIndex = 2;
+            tabPage13.Text = "MIDI";
+            tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Margin = new Padding(4, 4, 4, 4);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(label16);
+            splitContainer1.Panel1.Controls.Add(dgvMIDIoutPallet);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(tbcMIDIoutList);
+            splitContainer1.Panel2.Controls.Add(btnAddVST);
+            splitContainer1.Panel2.Controls.Add(label18);
+            splitContainer1.Panel2.Controls.Add(btnAddMIDIout);
+            splitContainer1.Panel2.Controls.Add(btnSubMIDIout);
+            splitContainer1.Size = new Size(499, 431);
+            splitContainer1.SplitterDistance = 171;
+            splitContainer1.SplitterWidth = 5;
+            splitContainer1.TabIndex = 6;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(4, 0);
+            label16.Margin = new Padding(4, 0, 4, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(130, 15);
+            label16.TabIndex = 0;
+            label16.Text = "MIDI Outデバイス パレット";
+            // 
+            // dgvMIDIoutPallet
+            // 
+            dgvMIDIoutPallet.AllowUserToAddRows = false;
+            dgvMIDIoutPallet.AllowUserToDeleteRows = false;
+            dgvMIDIoutPallet.AllowUserToResizeRows = false;
+            dgvMIDIoutPallet.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMIDIoutPallet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMIDIoutPallet.Columns.AddRange(new DataGridViewColumn[] { clmID, clmDeviceName, clmManufacturer, clmSpacer });
+            dgvMIDIoutPallet.Location = new Point(2, 19);
+            dgvMIDIoutPallet.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutPallet.MultiSelect = false;
+            dgvMIDIoutPallet.Name = "dgvMIDIoutPallet";
+            dgvMIDIoutPallet.RowHeadersVisible = false;
+            dgvMIDIoutPallet.RowTemplate.Height = 21;
+            dgvMIDIoutPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMIDIoutPallet.Size = new Size(491, 148);
+            dgvMIDIoutPallet.TabIndex = 1;
+            // 
+            // clmID
+            // 
+            clmID.Frozen = true;
+            clmID.HeaderText = "ID";
+            clmID.Name = "clmID";
+            clmID.ReadOnly = true;
+            clmID.Visible = false;
+            clmID.Width = 40;
+            // 
+            // clmDeviceName
+            // 
+            clmDeviceName.Frozen = true;
+            clmDeviceName.HeaderText = "Device Name";
+            clmDeviceName.Name = "clmDeviceName";
+            clmDeviceName.ReadOnly = true;
+            clmDeviceName.SortMode = DataGridViewColumnSortMode.NotSortable;
+            clmDeviceName.Width = 200;
+            // 
+            // clmManufacturer
+            // 
+            clmManufacturer.Frozen = true;
+            clmManufacturer.HeaderText = "Manufacturer";
+            clmManufacturer.Name = "clmManufacturer";
+            clmManufacturer.ReadOnly = true;
+            clmManufacturer.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // clmSpacer
+            // 
+            clmSpacer.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            clmSpacer.HeaderText = "";
+            clmSpacer.Name = "clmSpacer";
+            clmSpacer.ReadOnly = true;
+            clmSpacer.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tbcMIDIoutList
+            // 
+            tbcMIDIoutList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tbcMIDIoutList.Controls.Add(tabPage1);
+            tbcMIDIoutList.Controls.Add(tabPage2);
+            tbcMIDIoutList.Controls.Add(tabPage3);
+            tbcMIDIoutList.Controls.Add(tabPage4);
+            tbcMIDIoutList.Location = new Point(4, 39);
+            tbcMIDIoutList.Margin = new Padding(4, 4, 4, 4);
+            tbcMIDIoutList.Name = "tbcMIDIoutList";
+            tbcMIDIoutList.SelectedIndex = 0;
+            tbcMIDIoutList.Size = new Size(491, 213);
+            tbcMIDIoutList.TabIndex = 4;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(dgvMIDIoutListA);
+            tabPage1.Controls.Add(btnUP_A);
+            tabPage1.Controls.Add(btnDOWN_A);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Margin = new Padding(4, 4, 4, 4);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(4, 4, 4, 4);
+            tabPage1.Size = new Size(483, 185);
+            tabPage1.TabIndex = 0;
+            tabPage1.Tag = "0";
+            tabPage1.Text = "GM";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // dgvMIDIoutListA
+            // 
+            dgvMIDIoutListA.AllowUserToAddRows = false;
+            dgvMIDIoutListA.AllowUserToDeleteRows = false;
+            dgvMIDIoutListA.AllowUserToResizeRows = false;
+            dgvMIDIoutListA.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMIDIoutListA.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMIDIoutListA.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, clmIsVST, clmFileName, dataGridViewTextBoxColumn2, clmType, ClmBeforeSend, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4 });
+            dgvMIDIoutListA.Location = new Point(0, 0);
+            dgvMIDIoutListA.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListA.MultiSelect = false;
+            dgvMIDIoutListA.Name = "dgvMIDIoutListA";
+            dgvMIDIoutListA.RowHeadersVisible = false;
+            dgvMIDIoutListA.RowTemplate.Height = 21;
+            dgvMIDIoutListA.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMIDIoutListA.Size = new Size(447, 171);
+            dgvMIDIoutListA.TabIndex = 1;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.Frozen = true;
+            dataGridViewTextBoxColumn1.HeaderText = "ID";
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            dataGridViewTextBoxColumn1.ReadOnly = true;
+            dataGridViewTextBoxColumn1.SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridViewTextBoxColumn1.Visible = false;
+            dataGridViewTextBoxColumn1.Width = 40;
+            // 
+            // clmIsVST
+            // 
+            clmIsVST.HeaderText = "IsVST";
+            clmIsVST.Name = "clmIsVST";
+            clmIsVST.Visible = false;
+            // 
+            // clmFileName
+            // 
+            clmFileName.HeaderText = "fileName";
+            clmFileName.Name = "clmFileName";
+            clmFileName.Resizable = DataGridViewTriState.True;
+            clmFileName.SortMode = DataGridViewColumnSortMode.NotSortable;
+            clmFileName.Visible = false;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.HeaderText = "Device Name";
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridViewTextBoxColumn2.ReadOnly = true;
+            dataGridViewTextBoxColumn2.SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridViewTextBoxColumn2.Width = 180;
+            // 
+            // clmType
+            // 
+            clmType.HeaderText = "Type";
+            clmType.Items.AddRange(new object[] { "GM" });
+            clmType.Name = "clmType";
+            clmType.Resizable = DataGridViewTriState.True;
+            clmType.Width = 70;
+            // 
+            // ClmBeforeSend
+            // 
+            ClmBeforeSend.HeaderText = "Before Send";
+            ClmBeforeSend.Items.AddRange(new object[] { "None", "GM Reset", "XG Reset", "GS Reset", "Custom" });
+            ClmBeforeSend.Name = "ClmBeforeSend";
+            ClmBeforeSend.Resizable = DataGridViewTriState.True;
+            ClmBeforeSend.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.HeaderText = "Manufacturer";
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dataGridViewTextBoxColumn3.ReadOnly = true;
+            dataGridViewTextBoxColumn3.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewTextBoxColumn4.HeaderText = "";
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            dataGridViewTextBoxColumn4.ReadOnly = true;
+            dataGridViewTextBoxColumn4.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // btnUP_A
+            // 
+            btnUP_A.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUP_A.Location = new Point(454, 0);
+            btnUP_A.Margin = new Padding(4, 4, 4, 4);
+            btnUP_A.Name = "btnUP_A";
+            btnUP_A.Size = new Size(26, 72);
+            btnUP_A.TabIndex = 3;
+            btnUP_A.Text = "↑";
+            btnUP_A.UseVisualStyleBackColor = true;
+            btnUP_A.Click += btnUP_Click;
+            // 
+            // btnDOWN_A
+            // 
+            btnDOWN_A.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDOWN_A.Location = new Point(454, 99);
+            btnDOWN_A.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_A.Name = "btnDOWN_A";
+            btnDOWN_A.Size = new Size(26, 72);
+            btnDOWN_A.TabIndex = 3;
+            btnDOWN_A.Text = "↓";
+            btnDOWN_A.UseVisualStyleBackColor = true;
+            btnDOWN_A.Click += btnDOWN_Click;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(dgvMIDIoutListB);
+            tabPage2.Controls.Add(btnUP_B);
+            tabPage2.Controls.Add(btnDOWN_B);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Margin = new Padding(4, 4, 4, 4);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(4, 4, 4, 4);
+            tabPage2.Size = new Size(482, 180);
+            tabPage2.TabIndex = 1;
+            tabPage2.Tag = "1";
+            tabPage2.Text = "GS";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgvMIDIoutListB
+            // 
+            dgvMIDIoutListB.AllowUserToAddRows = false;
+            dgvMIDIoutListB.AllowUserToDeleteRows = false;
+            dgvMIDIoutListB.AllowUserToResizeRows = false;
+            dgvMIDIoutListB.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMIDIoutListB.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMIDIoutListB.Location = new Point(0, 0);
+            dgvMIDIoutListB.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListB.MultiSelect = false;
+            dgvMIDIoutListB.Name = "dgvMIDIoutListB";
+            dgvMIDIoutListB.RowHeadersVisible = false;
+            dgvMIDIoutListB.RowTemplate.Height = 21;
+            dgvMIDIoutListB.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMIDIoutListB.Size = new Size(448, 188);
+            dgvMIDIoutListB.TabIndex = 7;
+            // 
+            // btnUP_B
+            // 
+            btnUP_B.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUP_B.Location = new Point(455, 0);
+            btnUP_B.Margin = new Padding(4, 4, 4, 4);
+            btnUP_B.Name = "btnUP_B";
+            btnUP_B.Size = new Size(26, 72);
+            btnUP_B.TabIndex = 5;
+            btnUP_B.Text = "↑";
+            btnUP_B.UseVisualStyleBackColor = true;
+            btnUP_B.Click += btnUP_Click;
+            // 
+            // btnDOWN_B
+            // 
+            btnDOWN_B.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDOWN_B.Location = new Point(455, 115);
+            btnDOWN_B.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_B.Name = "btnDOWN_B";
+            btnDOWN_B.Size = new Size(26, 72);
+            btnDOWN_B.TabIndex = 6;
+            btnDOWN_B.Text = "↓";
+            btnDOWN_B.UseVisualStyleBackColor = true;
+            btnDOWN_B.Click += btnDOWN_Click;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(dgvMIDIoutListC);
+            tabPage3.Controls.Add(btnUP_C);
+            tabPage3.Controls.Add(btnDOWN_C);
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Margin = new Padding(4, 4, 4, 4);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Size = new Size(482, 180);
+            tabPage3.TabIndex = 2;
+            tabPage3.Tag = "2";
+            tabPage3.Text = "XG";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dgvMIDIoutListC
+            // 
+            dgvMIDIoutListC.AllowUserToAddRows = false;
+            dgvMIDIoutListC.AllowUserToDeleteRows = false;
+            dgvMIDIoutListC.AllowUserToResizeRows = false;
+            dgvMIDIoutListC.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMIDIoutListC.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMIDIoutListC.Location = new Point(0, 0);
+            dgvMIDIoutListC.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListC.MultiSelect = false;
+            dgvMIDIoutListC.Name = "dgvMIDIoutListC";
+            dgvMIDIoutListC.RowHeadersVisible = false;
+            dgvMIDIoutListC.RowTemplate.Height = 21;
+            dgvMIDIoutListC.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMIDIoutListC.Size = new Size(448, 188);
+            dgvMIDIoutListC.TabIndex = 7;
+            // 
+            // btnUP_C
+            // 
+            btnUP_C.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUP_C.Location = new Point(455, 0);
+            btnUP_C.Margin = new Padding(4, 4, 4, 4);
+            btnUP_C.Name = "btnUP_C";
+            btnUP_C.Size = new Size(26, 72);
+            btnUP_C.TabIndex = 5;
+            btnUP_C.Text = "↑";
+            btnUP_C.UseVisualStyleBackColor = true;
+            btnUP_C.Click += btnUP_Click;
+            // 
+            // btnDOWN_C
+            // 
+            btnDOWN_C.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDOWN_C.Location = new Point(455, 115);
+            btnDOWN_C.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_C.Name = "btnDOWN_C";
+            btnDOWN_C.Size = new Size(26, 72);
+            btnDOWN_C.TabIndex = 6;
+            btnDOWN_C.Text = "↓";
+            btnDOWN_C.UseVisualStyleBackColor = true;
+            btnDOWN_C.Click += btnDOWN_Click;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(dgvMIDIoutListD);
+            tabPage4.Controls.Add(btnUP_D);
+            tabPage4.Controls.Add(btnDOWN_D);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Margin = new Padding(4, 4, 4, 4);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(482, 180);
+            tabPage4.TabIndex = 3;
+            tabPage4.Tag = "3";
+            tabPage4.Text = "VSTi";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // dgvMIDIoutListD
+            // 
+            dgvMIDIoutListD.AllowUserToAddRows = false;
+            dgvMIDIoutListD.AllowUserToDeleteRows = false;
+            dgvMIDIoutListD.AllowUserToResizeRows = false;
+            dgvMIDIoutListD.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvMIDIoutListD.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMIDIoutListD.Location = new Point(0, 0);
+            dgvMIDIoutListD.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListD.MultiSelect = false;
+            dgvMIDIoutListD.Name = "dgvMIDIoutListD";
+            dgvMIDIoutListD.RowHeadersVisible = false;
+            dgvMIDIoutListD.RowTemplate.Height = 21;
+            dgvMIDIoutListD.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMIDIoutListD.Size = new Size(448, 188);
+            dgvMIDIoutListD.TabIndex = 7;
+            // 
+            // btnUP_D
+            // 
+            btnUP_D.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUP_D.Location = new Point(455, 0);
+            btnUP_D.Margin = new Padding(4, 4, 4, 4);
+            btnUP_D.Name = "btnUP_D";
+            btnUP_D.Size = new Size(26, 72);
+            btnUP_D.TabIndex = 5;
+            btnUP_D.Text = "↑";
+            btnUP_D.UseVisualStyleBackColor = true;
+            btnUP_D.Click += btnUP_Click;
+            // 
+            // btnDOWN_D
+            // 
+            btnDOWN_D.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDOWN_D.Location = new Point(455, 115);
+            btnDOWN_D.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_D.Name = "btnDOWN_D";
+            btnDOWN_D.Size = new Size(26, 72);
+            btnDOWN_D.TabIndex = 6;
+            btnDOWN_D.Text = "↓";
+            btnDOWN_D.UseVisualStyleBackColor = true;
+            btnDOWN_D.Click += btnDOWN_Click;
+            // 
+            // btnAddVST
+            // 
+            btnAddVST.Enabled = false;
+            btnAddVST.Location = new Point(307, 5);
+            btnAddVST.Margin = new Padding(4, 4, 4, 4);
+            btnAddVST.Name = "btnAddVST";
+            btnAddVST.Size = new Size(88, 29);
+            btnAddVST.TabIndex = 5;
+            btnAddVST.Text = "Add VST";
+            btnAddVST.UseVisualStyleBackColor = true;
+            btnAddVST.Click += btnAddVST_Click;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(7, 20);
+            label18.Margin = new Padding(4, 0, 4, 0);
+            label18.Name = "label18";
+            label18.Size = new Size(80, 15);
+            label18.TabIndex = 2;
+            label18.Text = "MIDI Outリスト";
+            // 
+            // btnAddMIDIout
+            // 
+            btnAddMIDIout.Location = new Point(138, 5);
+            btnAddMIDIout.Margin = new Padding(4, 4, 4, 4);
+            btnAddMIDIout.Name = "btnAddMIDIout";
+            btnAddMIDIout.Size = new Size(77, 30);
+            btnAddMIDIout.TabIndex = 3;
+            btnAddMIDIout.Text = "↓ +";
+            btnAddMIDIout.UseVisualStyleBackColor = true;
+            btnAddMIDIout.Click += btnAddMIDIout_Click;
+            // 
+            // btnSubMIDIout
+            // 
+            btnSubMIDIout.Location = new Point(222, 5);
+            btnSubMIDIout.Margin = new Padding(4, 4, 4, 4);
+            btnSubMIDIout.Name = "btnSubMIDIout";
+            btnSubMIDIout.Size = new Size(77, 30);
+            btnSubMIDIout.TabIndex = 3;
+            btnSubMIDIout.Text = "-";
+            btnSubMIDIout.UseVisualStyleBackColor = true;
+            btnSubMIDIout.Click += btnSubMIDIout_Click;
+            // 
+            // tpNuked
+            // 
+            tpNuked.BorderStyle = BorderStyle.FixedSingle;
+            tpNuked.Controls.Add(tabControl2);
+            tpNuked.Location = new Point(4, 64);
+            tpNuked.Margin = new Padding(4, 4, 4, 4);
+            tpNuked.Name = "tpNuked";
+            tpNuked.Size = new Size(518, 490);
+            tpNuked.TabIndex = 14;
+            tpNuked.Text = "チップ別";
+            tpNuked.UseVisualStyleBackColor = true;
+            // 
+            // tabControl2
+            // 
+            tabControl2.Controls.Add(tabPage14);
+            tabControl2.Controls.Add(tabPage5);
+            tabControl2.Dock = DockStyle.Fill;
+            tabControl2.HotTrack = true;
+            tabControl2.Location = new Point(0, 0);
+            tabControl2.Margin = new Padding(4, 4, 4, 4);
+            tabControl2.Name = "tabControl2";
+            tabControl2.SelectedIndex = 0;
+            tabControl2.Size = new Size(516, 488);
+            tabControl2.TabIndex = 1;
+            // 
+            // tabPage14
+            // 
+            tabPage14.Controls.Add(groupBox26);
+            tabPage14.Location = new Point(4, 24);
+            tabPage14.Margin = new Padding(4, 4, 4, 4);
+            tabPage14.Name = "tabPage14";
+            tabPage14.Padding = new Padding(4, 4, 4, 4);
+            tabPage14.Size = new Size(508, 460);
+            tabPage14.TabIndex = 0;
+            tabPage14.Text = "Nuked-OPN2";
+            tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // groupBox26
+            // 
+            groupBox26.Controls.Add(rbNukedOPN2OptionYM2612u);
+            groupBox26.Controls.Add(rbNukedOPN2OptionYM2612);
+            groupBox26.Controls.Add(rbNukedOPN2OptionDiscrete);
+            groupBox26.Controls.Add(rbNukedOPN2OptionASIClp);
+            groupBox26.Controls.Add(rbNukedOPN2OptionASIC);
+            groupBox26.Location = new Point(7, 8);
+            groupBox26.Margin = new Padding(4, 4, 4, 4);
+            groupBox26.Name = "groupBox26";
+            groupBox26.Padding = new Padding(4, 4, 4, 4);
+            groupBox26.Size = new Size(371, 160);
+            groupBox26.TabIndex = 0;
+            groupBox26.TabStop = false;
+            groupBox26.Text = "Emulation type";
+            // 
+            // rbNukedOPN2OptionYM2612u
+            // 
+            rbNukedOPN2OptionYM2612u.AutoSize = true;
+            rbNukedOPN2OptionYM2612u.Location = new Point(7, 105);
+            rbNukedOPN2OptionYM2612u.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionYM2612u.Name = "rbNukedOPN2OptionYM2612u";
+            rbNukedOPN2OptionYM2612u.Size = new Size(198, 19);
+            rbNukedOPN2OptionYM2612u.TabIndex = 0;
+            rbNukedOPN2OptionYM2612u.TabStop = true;
+            rbNukedOPN2OptionYM2612u.Text = "YM2612(without filter emulation)";
+            rbNukedOPN2OptionYM2612u.UseVisualStyleBackColor = true;
+            // 
+            // rbNukedOPN2OptionYM2612
+            // 
+            rbNukedOPN2OptionYM2612.AutoSize = true;
+            rbNukedOPN2OptionYM2612.Location = new Point(7, 78);
+            rbNukedOPN2OptionYM2612.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionYM2612.Name = "rbNukedOPN2OptionYM2612";
+            rbNukedOPN2OptionYM2612.Size = new Size(197, 19);
+            rbNukedOPN2OptionYM2612.TabIndex = 0;
+            rbNukedOPN2OptionYM2612.TabStop = true;
+            rbNukedOPN2OptionYM2612.Text = "YM2612(MD1,MD2 VA2)(default)";
+            rbNukedOPN2OptionYM2612.UseVisualStyleBackColor = true;
+            // 
+            // rbNukedOPN2OptionDiscrete
+            // 
+            rbNukedOPN2OptionDiscrete.AutoSize = true;
+            rbNukedOPN2OptionDiscrete.Location = new Point(7, 22);
+            rbNukedOPN2OptionDiscrete.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionDiscrete.Name = "rbNukedOPN2OptionDiscrete";
+            rbNukedOPN2OptionDiscrete.Size = new Size(122, 19);
+            rbNukedOPN2OptionDiscrete.TabIndex = 0;
+            rbNukedOPN2OptionDiscrete.TabStop = true;
+            rbNukedOPN2OptionDiscrete.Text = "Discrete(Teradrive)";
+            rbNukedOPN2OptionDiscrete.UseVisualStyleBackColor = true;
+            // 
+            // rbNukedOPN2OptionASIClp
+            // 
+            rbNukedOPN2OptionASIClp.AutoSize = true;
+            rbNukedOPN2OptionASIClp.Location = new Point(7, 132);
+            rbNukedOPN2OptionASIClp.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionASIClp.Name = "rbNukedOPN2OptionASIClp";
+            rbNukedOPN2OptionASIClp.Size = new Size(151, 19);
+            rbNukedOPN2OptionASIClp.TabIndex = 0;
+            rbNukedOPN2OptionASIClp.TabStop = true;
+            rbNukedOPN2OptionASIClp.Text = "ASIC(with lowpass filter)";
+            rbNukedOPN2OptionASIClp.UseVisualStyleBackColor = true;
+            // 
+            // rbNukedOPN2OptionASIC
+            // 
+            rbNukedOPN2OptionASIC.AutoSize = true;
+            rbNukedOPN2OptionASIC.Location = new Point(7, 50);
+            rbNukedOPN2OptionASIC.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionASIC.Name = "rbNukedOPN2OptionASIC";
+            rbNukedOPN2OptionASIC.Size = new Size(181, 19);
+            rbNukedOPN2OptionASIC.TabIndex = 0;
+            rbNukedOPN2OptionASIC.TabStop = true;
+            rbNukedOPN2OptionASIC.Text = "ASIC(MD1 VA7,MD2,MD3,etc)";
+            rbNukedOPN2OptionASIC.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            tabPage5.Controls.Add(groupBox34);
+            tabPage5.Location = new Point(4, 24);
+            tabPage5.Margin = new Padding(4, 4, 4, 4);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Padding = new Padding(4, 4, 4, 4);
+            tabPage5.Size = new Size(506, 472);
+            tabPage5.TabIndex = 1;
+            tabPage5.Text = "Gens";
+            tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox34
+            // 
+            groupBox34.Controls.Add(cbGensSSGEG);
+            groupBox34.Controls.Add(cbGensDACHPF);
+            groupBox34.Location = new Point(7, 8);
+            groupBox34.Margin = new Padding(4, 4, 4, 4);
+            groupBox34.Name = "groupBox34";
+            groupBox34.Padding = new Padding(4, 4, 4, 4);
+            groupBox34.Size = new Size(371, 82);
+            groupBox34.TabIndex = 1;
+            groupBox34.TabStop = false;
+            groupBox34.Text = "Gens Emulation option";
+            // 
+            // cbGensSSGEG
+            // 
+            cbGensSSGEG.AutoSize = true;
+            cbGensSSGEG.Location = new Point(7, 50);
+            cbGensSSGEG.Margin = new Padding(4, 4, 4, 4);
+            cbGensSSGEG.Name = "cbGensSSGEG";
+            cbGensSSGEG.Size = new Size(103, 19);
+            cbGensSSGEG.TabIndex = 1;
+            cbGensSSGEG.Text = "SSG-EG Enable";
+            cbGensSSGEG.UseVisualStyleBackColor = true;
+            // 
+            // cbGensDACHPF
+            // 
+            cbGensDACHPF.AutoSize = true;
+            cbGensDACHPF.Location = new Point(7, 22);
+            cbGensDACHPF.Margin = new Padding(4, 4, 4, 4);
+            cbGensDACHPF.Name = "cbGensDACHPF";
+            cbGensDACHPF.Size = new Size(139, 19);
+            cbGensDACHPF.TabIndex = 0;
+            cbGensDACHPF.Text = "DAC Highpass Enable";
+            cbGensDACHPF.UseVisualStyleBackColor = true;
+            // 
+            // tpNSF
+            // 
+            tpNSF.BorderStyle = BorderStyle.FixedSingle;
+            tpNSF.Controls.Add(tabControl3);
+            tpNSF.Location = new Point(4, 64);
+            tpNSF.Margin = new Padding(4, 4, 4, 4);
+            tpNSF.Name = "tpNSF";
+            tpNSF.Size = new Size(518, 490);
+            tpNSF.TabIndex = 9;
+            tpNSF.Text = "MIDI詳細";
+            tpNSF.UseVisualStyleBackColor = true;
+            // 
+            // tabControl3
+            // 
+            tabControl3.Controls.Add(tabPage15);
+            tabControl3.Controls.Add(tabPage16);
+            tabControl3.Controls.Add(tabPage17);
+            tabControl3.Dock = DockStyle.Fill;
+            tabControl3.HotTrack = true;
+            tabControl3.Location = new Point(0, 0);
+            tabControl3.Margin = new Padding(4, 4, 4, 4);
+            tabControl3.Multiline = true;
+            tabControl3.Name = "tabControl3";
+            tabControl3.SelectedIndex = 0;
+            tabControl3.Size = new Size(516, 488);
+            tabControl3.TabIndex = 9;
+            // 
+            // tabPage15
+            // 
+            tabPage15.Controls.Add(groupBox9);
+            tabPage15.Controls.Add(groupBox10);
+            tabPage15.Controls.Add(groupBox8);
+            tabPage15.Controls.Add(groupBox12);
+            tabPage15.Controls.Add(groupBox11);
+            tabPage15.Location = new Point(4, 24);
+            tabPage15.Margin = new Padding(4, 4, 4, 4);
+            tabPage15.Name = "tabPage15";
+            tabPage15.Padding = new Padding(4, 4, 4, 4);
+            tabPage15.Size = new Size(508, 460);
+            tabPage15.TabIndex = 0;
+            tabPage15.Text = ".NSF";
+            tabPage15.UseVisualStyleBackColor = true;
+            // 
+            // groupBox9
+            // 
+            groupBox9.Controls.Add(cbNFSNes_DutySwap);
+            groupBox9.Controls.Add(cbNFSNes_PhaseRefresh);
+            groupBox9.Controls.Add(cbNFSNes_NonLinearMixer);
+            groupBox9.Controls.Add(cbNFSNes_UnmuteOnReset);
+            groupBox9.Location = new Point(4, 4);
+            groupBox9.Margin = new Padding(4, 4, 4, 4);
+            groupBox9.Name = "groupBox9";
+            groupBox9.Padding = new Padding(4, 4, 4, 4);
+            groupBox9.Size = new Size(245, 134);
+            groupBox9.TabIndex = 8;
+            groupBox9.TabStop = false;
+            groupBox9.Text = "NES";
+            // 
+            // cbNFSNes_DutySwap
+            // 
+            cbNFSNes_DutySwap.AutoSize = true;
+            cbNFSNes_DutySwap.Location = new Point(7, 105);
+            cbNFSNes_DutySwap.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_DutySwap.Name = "cbNFSNes_DutySwap";
+            cbNFSNes_DutySwap.Size = new Size(81, 19);
+            cbNFSNes_DutySwap.TabIndex = 7;
+            cbNFSNes_DutySwap.Text = "Duty swap";
+            cbNFSNes_DutySwap.UseVisualStyleBackColor = true;
+            // 
+            // cbNFSNes_PhaseRefresh
+            // 
+            cbNFSNes_PhaseRefresh.AutoSize = true;
+            cbNFSNes_PhaseRefresh.Location = new Point(7, 78);
+            cbNFSNes_PhaseRefresh.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_PhaseRefresh.Name = "cbNFSNes_PhaseRefresh";
+            cbNFSNes_PhaseRefresh.Size = new Size(96, 19);
+            cbNFSNes_PhaseRefresh.TabIndex = 7;
+            cbNFSNes_PhaseRefresh.Text = "Phase refresh";
+            cbNFSNes_PhaseRefresh.UseVisualStyleBackColor = true;
+            // 
+            // cbNFSNes_NonLinearMixer
+            // 
+            cbNFSNes_NonLinearMixer.AutoSize = true;
+            cbNFSNes_NonLinearMixer.Location = new Point(7, 50);
+            cbNFSNes_NonLinearMixer.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_NonLinearMixer.Name = "cbNFSNes_NonLinearMixer";
+            cbNFSNes_NonLinearMixer.Size = new Size(115, 19);
+            cbNFSNes_NonLinearMixer.TabIndex = 7;
+            cbNFSNes_NonLinearMixer.Text = "Non-linear mixer";
+            cbNFSNes_NonLinearMixer.UseVisualStyleBackColor = true;
+            // 
+            // cbNFSNes_UnmuteOnReset
+            // 
+            cbNFSNes_UnmuteOnReset.AutoSize = true;
+            cbNFSNes_UnmuteOnReset.Location = new Point(7, 22);
+            cbNFSNes_UnmuteOnReset.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_UnmuteOnReset.Name = "cbNFSNes_UnmuteOnReset";
+            cbNFSNes_UnmuteOnReset.Size = new Size(113, 19);
+            cbNFSNes_UnmuteOnReset.TabIndex = 7;
+            cbNFSNes_UnmuteOnReset.Text = "Unmute on reset";
+            cbNFSNes_UnmuteOnReset.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            groupBox10.Controls.Add(cbNSFDmc_TriNull);
+            groupBox10.Controls.Add(cbNSFDmc_TriMute);
+            groupBox10.Controls.Add(cbNSFDmc_RandomizeNoise);
+            groupBox10.Controls.Add(cbNSFDmc_DPCMAntiClick);
+            groupBox10.Controls.Add(cbNSFDmc_EnablePNoise);
+            groupBox10.Controls.Add(cbNSFDmc_Enable4011);
+            groupBox10.Controls.Add(cbNSFDmc_NonLinearMixer);
+            groupBox10.Controls.Add(cbNSFDmc_UnmuteOnReset);
+            groupBox10.Location = new Point(257, 4);
+            groupBox10.Margin = new Padding(4, 4, 4, 4);
+            groupBox10.Name = "groupBox10";
+            groupBox10.Padding = new Padding(4, 4, 4, 4);
+            groupBox10.Size = new Size(245, 250);
+            groupBox10.TabIndex = 8;
+            groupBox10.TabStop = false;
+            groupBox10.Text = "DMC";
+            // 
+            // cbNSFDmc_TriNull
+            // 
+            cbNSFDmc_TriNull.AutoSize = true;
+            cbNSFDmc_TriNull.Location = new Point(7, 214);
+            cbNSFDmc_TriNull.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_TriNull.Name = "cbNSFDmc_TriNull";
+            cbNSFDmc_TriNull.Size = new Size(65, 19);
+            cbNSFDmc_TriNull.TabIndex = 7;
+            cbNSFDmc_TriNull.Text = "TRI null";
+            cbNSFDmc_TriNull.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_TriMute
+            // 
+            cbNSFDmc_TriMute.AutoSize = true;
+            cbNSFDmc_TriMute.Location = new Point(7, 186);
+            cbNSFDmc_TriMute.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_TriMute.Name = "cbNSFDmc_TriMute";
+            cbNSFDmc_TriMute.Size = new Size(72, 19);
+            cbNSFDmc_TriMute.TabIndex = 7;
+            cbNSFDmc_TriMute.Text = "TRI mute";
+            cbNSFDmc_TriMute.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_RandomizeNoise
+            // 
+            cbNSFDmc_RandomizeNoise.AutoSize = true;
+            cbNSFDmc_RandomizeNoise.Location = new Point(7, 160);
+            cbNSFDmc_RandomizeNoise.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_RandomizeNoise.Name = "cbNSFDmc_RandomizeNoise";
+            cbNSFDmc_RandomizeNoise.Size = new Size(115, 19);
+            cbNSFDmc_RandomizeNoise.TabIndex = 7;
+            cbNSFDmc_RandomizeNoise.Text = "Randomize noise";
+            cbNSFDmc_RandomizeNoise.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_DPCMAntiClick
+            // 
+            cbNSFDmc_DPCMAntiClick.AutoSize = true;
+            cbNSFDmc_DPCMAntiClick.Location = new Point(7, 132);
+            cbNSFDmc_DPCMAntiClick.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_DPCMAntiClick.Name = "cbNSFDmc_DPCMAntiClick";
+            cbNSFDmc_DPCMAntiClick.Size = new Size(109, 19);
+            cbNSFDmc_DPCMAntiClick.TabIndex = 7;
+            cbNSFDmc_DPCMAntiClick.Text = "DPCM anti click";
+            cbNSFDmc_DPCMAntiClick.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_EnablePNoise
+            // 
+            cbNSFDmc_EnablePNoise.AutoSize = true;
+            cbNSFDmc_EnablePNoise.Location = new Point(7, 105);
+            cbNSFDmc_EnablePNoise.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_EnablePNoise.Name = "cbNSFDmc_EnablePNoise";
+            cbNSFDmc_EnablePNoise.Size = new Size(99, 19);
+            cbNSFDmc_EnablePNoise.TabIndex = 7;
+            cbNSFDmc_EnablePNoise.Text = "Enable Pnoise";
+            cbNSFDmc_EnablePNoise.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_Enable4011
+            // 
+            cbNSFDmc_Enable4011.AutoSize = true;
+            cbNSFDmc_Enable4011.Location = new Point(7, 78);
+            cbNSFDmc_Enable4011.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_Enable4011.Name = "cbNSFDmc_Enable4011";
+            cbNSFDmc_Enable4011.Size = new Size(94, 19);
+            cbNSFDmc_Enable4011.TabIndex = 7;
+            cbNSFDmc_Enable4011.Text = "Enable $4011";
+            cbNSFDmc_Enable4011.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_NonLinearMixer
+            // 
+            cbNSFDmc_NonLinearMixer.AutoSize = true;
+            cbNSFDmc_NonLinearMixer.Location = new Point(7, 50);
+            cbNSFDmc_NonLinearMixer.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_NonLinearMixer.Name = "cbNSFDmc_NonLinearMixer";
+            cbNSFDmc_NonLinearMixer.Size = new Size(115, 19);
+            cbNSFDmc_NonLinearMixer.TabIndex = 7;
+            cbNSFDmc_NonLinearMixer.Text = "Non-linear mixer";
+            cbNSFDmc_NonLinearMixer.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFDmc_UnmuteOnReset
+            // 
+            cbNSFDmc_UnmuteOnReset.AutoSize = true;
+            cbNSFDmc_UnmuteOnReset.Location = new Point(7, 22);
+            cbNSFDmc_UnmuteOnReset.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_UnmuteOnReset.Name = "cbNSFDmc_UnmuteOnReset";
+            cbNSFDmc_UnmuteOnReset.Size = new Size(113, 19);
+            cbNSFDmc_UnmuteOnReset.TabIndex = 7;
+            cbNSFDmc_UnmuteOnReset.Text = "Unmute on reset";
+            cbNSFDmc_UnmuteOnReset.UseVisualStyleBackColor = true;
+            // 
+            // groupBox8
+            // 
+            groupBox8.Controls.Add(label21);
+            groupBox8.Controls.Add(label20);
+            groupBox8.Controls.Add(tbNSFFds_LPF);
+            groupBox8.Controls.Add(cbNFSFds_4085Reset);
+            groupBox8.Controls.Add(cbNSFFDSWriteDisable8000);
+            groupBox8.Location = new Point(4, 145);
+            groupBox8.Margin = new Padding(4, 4, 4, 4);
+            groupBox8.Name = "groupBox8";
+            groupBox8.Padding = new Padding(4, 4, 4, 4);
+            groupBox8.Size = new Size(245, 109);
+            groupBox8.TabIndex = 8;
+            groupBox8.TabStop = false;
+            groupBox8.Text = "FDS";
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(167, 20);
+            label21.Margin = new Padding(4, 0, 4, 0);
+            label21.Name = "label21";
+            label21.Size = new Size(21, 15);
+            label21.TabIndex = 10;
+            label21.Text = "Hz";
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new Point(7, 20);
+            label20.Margin = new Padding(4, 0, 4, 0);
+            label20.Name = "label20";
+            label20.Size = new Size(26, 15);
+            label20.TabIndex = 10;
+            label20.Text = "LPF";
+            // 
+            // tbNSFFds_LPF
+            // 
+            tbNSFFds_LPF.Location = new Point(43, 16);
+            tbNSFFds_LPF.Margin = new Padding(4, 4, 4, 4);
+            tbNSFFds_LPF.Name = "tbNSFFds_LPF";
+            tbNSFFds_LPF.Size = new Size(116, 23);
+            tbNSFFds_LPF.TabIndex = 9;
+            // 
+            // cbNFSFds_4085Reset
+            // 
+            cbNFSFds_4085Reset.AutoSize = true;
+            cbNFSFds_4085Reset.Location = new Point(7, 48);
+            cbNFSFds_4085Reset.Margin = new Padding(4, 4, 4, 4);
+            cbNFSFds_4085Reset.Name = "cbNFSFds_4085Reset";
+            cbNFSFds_4085Reset.Size = new Size(84, 19);
+            cbNFSFds_4085Reset.TabIndex = 7;
+            cbNFSFds_4085Reset.Text = "$4085 reset";
+            cbNFSFds_4085Reset.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFFDSWriteDisable8000
+            // 
+            cbNSFFDSWriteDisable8000.AutoSize = true;
+            cbNSFFDSWriteDisable8000.Location = new Point(7, 75);
+            cbNSFFDSWriteDisable8000.Margin = new Padding(4, 4, 4, 4);
+            cbNSFFDSWriteDisable8000.Name = "cbNSFFDSWriteDisable8000";
+            cbNSFFDSWriteDisable8000.Size = new Size(175, 19);
+            cbNSFFDSWriteDisable8000.TabIndex = 7;
+            cbNSFFDSWriteDisable8000.Text = "Write disable($8000 - $DFFF)";
+            cbNSFFDSWriteDisable8000.UseVisualStyleBackColor = true;
+            // 
+            // groupBox12
+            // 
+            groupBox12.Controls.Add(cbNSFN160_Serial);
+            groupBox12.Location = new Point(257, 261);
+            groupBox12.Margin = new Padding(4, 4, 4, 4);
+            groupBox12.Name = "groupBox12";
+            groupBox12.Padding = new Padding(4, 4, 4, 4);
+            groupBox12.Size = new Size(245, 78);
+            groupBox12.TabIndex = 8;
+            groupBox12.TabStop = false;
+            groupBox12.Text = "N160";
+            // 
+            // cbNSFN160_Serial
+            // 
+            cbNSFN160_Serial.AutoSize = true;
+            cbNSFN160_Serial.Location = new Point(7, 22);
+            cbNSFN160_Serial.Margin = new Padding(4, 4, 4, 4);
+            cbNSFN160_Serial.Name = "cbNSFN160_Serial";
+            cbNSFN160_Serial.Size = new Size(54, 19);
+            cbNSFN160_Serial.TabIndex = 7;
+            cbNSFN160_Serial.Text = "Serial";
+            cbNSFN160_Serial.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            groupBox11.Controls.Add(cbNSFMmc5_PhaseRefresh);
+            groupBox11.Controls.Add(cbNSFMmc5_NonLinearMixer);
+            groupBox11.Location = new Point(4, 261);
+            groupBox11.Margin = new Padding(4, 4, 4, 4);
+            groupBox11.Name = "groupBox11";
+            groupBox11.Padding = new Padding(4, 4, 4, 4);
+            groupBox11.Size = new Size(245, 78);
+            groupBox11.TabIndex = 8;
+            groupBox11.TabStop = false;
+            groupBox11.Text = "MMC5";
+            // 
+            // cbNSFMmc5_PhaseRefresh
+            // 
+            cbNSFMmc5_PhaseRefresh.AutoSize = true;
+            cbNSFMmc5_PhaseRefresh.Location = new Point(7, 50);
+            cbNSFMmc5_PhaseRefresh.Margin = new Padding(4, 4, 4, 4);
+            cbNSFMmc5_PhaseRefresh.Name = "cbNSFMmc5_PhaseRefresh";
+            cbNSFMmc5_PhaseRefresh.Size = new Size(96, 19);
+            cbNSFMmc5_PhaseRefresh.TabIndex = 7;
+            cbNSFMmc5_PhaseRefresh.Text = "Phase refresh";
+            cbNSFMmc5_PhaseRefresh.UseVisualStyleBackColor = true;
+            // 
+            // cbNSFMmc5_NonLinearMixer
+            // 
+            cbNSFMmc5_NonLinearMixer.AutoSize = true;
+            cbNSFMmc5_NonLinearMixer.Location = new Point(7, 22);
+            cbNSFMmc5_NonLinearMixer.Margin = new Padding(4, 4, 4, 4);
+            cbNSFMmc5_NonLinearMixer.Name = "cbNSFMmc5_NonLinearMixer";
+            cbNSFMmc5_NonLinearMixer.Size = new Size(116, 19);
+            cbNSFMmc5_NonLinearMixer.TabIndex = 7;
+            cbNSFMmc5_NonLinearMixer.Text = "Non-linear Mixer";
+            cbNSFMmc5_NonLinearMixer.UseVisualStyleBackColor = true;
+            // 
+            // tabPage16
+            // 
+            tabPage16.Controls.Add(groupBox14);
+            tabPage16.Controls.Add(groupBox13);
+            tabPage16.Controls.Add(label49);
+            tabPage16.Controls.Add(label51);
+            tabPage16.Controls.Add(tbSIDOutputBufferSize);
+            tabPage16.Location = new Point(4, 24);
+            tabPage16.Margin = new Padding(4, 4, 4, 4);
+            tabPage16.Name = "tabPage16";
+            tabPage16.Padding = new Padding(4, 4, 4, 4);
+            tabPage16.Size = new Size(506, 472);
+            tabPage16.TabIndex = 1;
+            tabPage16.Text = ".SID";
+            tabPage16.UseVisualStyleBackColor = true;
+            // 
+            // groupBox14
+            // 
+            groupBox14.Controls.Add(label27);
+            groupBox14.Controls.Add(label26);
+            groupBox14.Controls.Add(label25);
+            groupBox14.Controls.Add(rdSIDQ1);
+            groupBox14.Controls.Add(rdSIDQ3);
+            groupBox14.Controls.Add(rdSIDQ2);
+            groupBox14.Controls.Add(rdSIDQ4);
+            groupBox14.Location = new Point(4, 136);
+            groupBox14.Margin = new Padding(4, 4, 4, 4);
+            groupBox14.Name = "groupBox14";
+            groupBox14.Padding = new Padding(4, 4, 4, 4);
+            groupBox14.Size = new Size(327, 139);
+            groupBox14.TabIndex = 2;
+            groupBox14.TabStop = false;
+            groupBox14.Text = "Quality";
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Location = new Point(189, 108);
+            label27.Margin = new Padding(4, 0, 4, 0);
+            label27.Name = "label27";
+            label27.Size = new Size(64, 15);
+            label27.TabIndex = 2;
+            label27.Text = "Low(Light)";
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Location = new Point(189, 68);
+            label26.Margin = new Padding(4, 0, 4, 0);
+            label26.Name = "label26";
+            label26.Size = new Size(44, 15);
+            label26.TabIndex = 2;
+            label26.Text = "Middle";
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(189, 25);
+            label25.Margin = new Padding(4, 0, 4, 0);
+            label25.Name = "label25";
+            label25.Size = new Size(74, 15);
+            label25.TabIndex = 2;
+            label25.Text = "High(Heavy)";
+            // 
+            // rdSIDQ1
+            // 
+            rdSIDQ1.AutoSize = true;
+            rdSIDQ1.Checked = true;
+            rdSIDQ1.Location = new Point(7, 105);
+            rdSIDQ1.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ1.Name = "rdSIDQ1";
+            rdSIDQ1.Size = new Size(112, 19);
+            rdSIDQ1.TabIndex = 1;
+            rdSIDQ1.TabStop = true;
+            rdSIDQ1.Text = "Interpolate - fast";
+            rdSIDQ1.UseVisualStyleBackColor = true;
+            // 
+            // rdSIDQ3
+            // 
+            rdSIDQ3.AutoSize = true;
+            rdSIDQ3.Location = new Point(7, 50);
+            rdSIDQ3.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ3.Name = "rdSIDQ3";
+            rdSIDQ3.Size = new Size(105, 19);
+            rdSIDQ3.TabIndex = 1;
+            rdSIDQ3.Text = "Resample - fast";
+            rdSIDQ3.UseVisualStyleBackColor = true;
+            // 
+            // rdSIDQ2
+            // 
+            rdSIDQ2.AutoSize = true;
+            rdSIDQ2.Location = new Point(7, 78);
+            rdSIDQ2.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ2.Name = "rdSIDQ2";
+            rdSIDQ2.Size = new Size(82, 19);
+            rdSIDQ2.TabIndex = 1;
+            rdSIDQ2.Text = "Interpolate";
+            rdSIDQ2.UseVisualStyleBackColor = true;
+            // 
+            // rdSIDQ4
+            // 
+            rdSIDQ4.AutoSize = true;
+            rdSIDQ4.Location = new Point(7, 22);
+            rdSIDQ4.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ4.Name = "rdSIDQ4";
+            rdSIDQ4.Size = new Size(75, 19);
+            rdSIDQ4.TabIndex = 1;
+            rdSIDQ4.Text = "Resample";
+            rdSIDQ4.UseVisualStyleBackColor = true;
+            // 
+            // groupBox13
+            // 
+            groupBox13.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox13.Controls.Add(btnSIDBasic);
+            groupBox13.Controls.Add(btnSIDCharacter);
+            groupBox13.Controls.Add(btnSIDKernal);
+            groupBox13.Controls.Add(tbSIDCharacter);
+            groupBox13.Controls.Add(tbSIDBasic);
+            groupBox13.Controls.Add(tbSIDKernal);
+            groupBox13.Controls.Add(label24);
+            groupBox13.Controls.Add(label23);
+            groupBox13.Controls.Add(label22);
+            groupBox13.Location = new Point(4, 4);
+            groupBox13.Margin = new Padding(4, 4, 4, 4);
+            groupBox13.Name = "groupBox13";
+            groupBox13.Padding = new Padding(4, 4, 4, 4);
+            groupBox13.Size = new Size(497, 125);
+            groupBox13.TabIndex = 0;
+            groupBox13.TabStop = false;
+            groupBox13.Text = "ROM Image";
+            // 
+            // btnSIDBasic
+            // 
+            btnSIDBasic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSIDBasic.Location = new Point(464, 55);
+            btnSIDBasic.Margin = new Padding(4, 4, 4, 4);
+            btnSIDBasic.Name = "btnSIDBasic";
+            btnSIDBasic.Size = new Size(27, 29);
+            btnSIDBasic.TabIndex = 2;
+            btnSIDBasic.Text = "...";
+            btnSIDBasic.UseVisualStyleBackColor = true;
+            btnSIDBasic.Click += btnSIDBasic_Click;
+            // 
+            // btnSIDCharacter
+            // 
+            btnSIDCharacter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSIDCharacter.Location = new Point(464, 86);
+            btnSIDCharacter.Margin = new Padding(4, 4, 4, 4);
+            btnSIDCharacter.Name = "btnSIDCharacter";
+            btnSIDCharacter.Size = new Size(27, 29);
+            btnSIDCharacter.TabIndex = 2;
+            btnSIDCharacter.Text = "...";
+            btnSIDCharacter.UseVisualStyleBackColor = true;
+            btnSIDCharacter.Click += btnSIDCharacter_Click;
+            // 
+            // btnSIDKernal
+            // 
+            btnSIDKernal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSIDKernal.Location = new Point(464, 24);
+            btnSIDKernal.Margin = new Padding(4, 4, 4, 4);
+            btnSIDKernal.Name = "btnSIDKernal";
+            btnSIDKernal.Size = new Size(27, 29);
+            btnSIDKernal.TabIndex = 2;
+            btnSIDKernal.Text = "...";
+            btnSIDKernal.UseVisualStyleBackColor = true;
+            btnSIDKernal.Click += btnSIDKernal_Click;
+            // 
+            // tbSIDCharacter
+            // 
+            tbSIDCharacter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbSIDCharacter.Location = new Point(78, 89);
+            tbSIDCharacter.Margin = new Padding(4, 4, 4, 4);
+            tbSIDCharacter.Name = "tbSIDCharacter";
+            tbSIDCharacter.Size = new Size(378, 23);
+            tbSIDCharacter.TabIndex = 1;
+            // 
+            // tbSIDBasic
+            // 
+            tbSIDBasic.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbSIDBasic.Location = new Point(78, 58);
+            tbSIDBasic.Margin = new Padding(4, 4, 4, 4);
+            tbSIDBasic.Name = "tbSIDBasic";
+            tbSIDBasic.Size = new Size(378, 23);
+            tbSIDBasic.TabIndex = 1;
+            // 
+            // tbSIDKernal
+            // 
+            tbSIDKernal.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbSIDKernal.Location = new Point(78, 26);
+            tbSIDKernal.Margin = new Padding(4, 4, 4, 4);
+            tbSIDKernal.Name = "tbSIDKernal";
+            tbSIDKernal.Size = new Size(378, 23);
+            tbSIDKernal.TabIndex = 1;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Location = new Point(7, 92);
+            label24.Margin = new Padding(4, 0, 4, 0);
+            label24.Name = "label24";
+            label24.Size = new Size(57, 15);
+            label24.TabIndex = 0;
+            label24.Text = "Character";
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(7, 61);
+            label23.Margin = new Padding(4, 0, 4, 0);
+            label23.Name = "label23";
+            label23.Size = new Size(34, 15);
+            label23.TabIndex = 0;
+            label23.Text = "Basic";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(7, 30);
+            label22.Margin = new Padding(4, 0, 4, 0);
+            label22.Name = "label22";
+            label22.Size = new Size(40, 15);
+            label22.TabIndex = 0;
+            label22.Text = "Kernal";
+            // 
+            // label49
+            // 
+            label49.AutoSize = true;
+            label49.Location = new Point(10, 286);
+            label49.Margin = new Padding(4, 0, 4, 0);
+            label49.Name = "label49";
+            label49.Size = new Size(98, 15);
+            label49.TabIndex = 0;
+            label49.Text = "OutputBuffer size";
+            // 
+            // label51
+            // 
+            label51.Location = new Point(244, 280);
+            label51.Margin = new Padding(4, 0, 4, 0);
+            label51.Name = "label51";
+            label51.Size = new Size(260, 48);
+            label51.TabIndex = 0;
+            label51.Text = "テンポが速かったり、音が途切れる場合に調整すると改善することがあります。通常は5000。";
+            // 
+            // tbSIDOutputBufferSize
+            // 
+            tbSIDOutputBufferSize.Location = new Point(128, 282);
+            tbSIDOutputBufferSize.Margin = new Padding(4, 4, 4, 4);
+            tbSIDOutputBufferSize.MaxLength = 10;
+            tbSIDOutputBufferSize.Name = "tbSIDOutputBufferSize";
+            tbSIDOutputBufferSize.Size = new Size(108, 23);
+            tbSIDOutputBufferSize.TabIndex = 1;
+            // 
+            // tabPage17
+            // 
+            tabPage17.Controls.Add(groupBox15);
+            tabPage17.Location = new Point(4, 24);
+            tabPage17.Margin = new Padding(4, 4, 4, 4);
+            tabPage17.Name = "tabPage17";
+            tabPage17.Size = new Size(506, 472);
+            tabPage17.TabIndex = 2;
+            tabPage17.Text = "Resetコマンド";
+            tabPage17.UseVisualStyleBackColor = true;
+            // 
+            // groupBox15
+            // 
+            groupBox15.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox15.Controls.Add(btnBeforeSend_Default);
+            groupBox15.Controls.Add(tbBeforeSend_Custom);
+            groupBox15.Controls.Add(tbBeforeSend_XGReset);
+            groupBox15.Controls.Add(label35);
+            groupBox15.Controls.Add(label34);
+            groupBox15.Controls.Add(label32);
+            groupBox15.Controls.Add(tbBeforeSend_GSReset);
+            groupBox15.Controls.Add(label33);
+            groupBox15.Controls.Add(tbBeforeSend_GMReset);
+            groupBox15.Controls.Add(label31);
+            groupBox15.Location = new Point(4, 4);
+            groupBox15.Margin = new Padding(4, 4, 4, 4);
+            groupBox15.Name = "groupBox15";
+            groupBox15.Padding = new Padding(4, 4, 4, 4);
+            groupBox15.Size = new Size(497, 249);
+            groupBox15.TabIndex = 0;
+            groupBox15.TabStop = false;
+            groupBox15.Text = "Before Send";
+            // 
+            // btnBeforeSend_Default
+            // 
+            btnBeforeSend_Default.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnBeforeSend_Default.Location = new Point(404, 154);
+            btnBeforeSend_Default.Margin = new Padding(4, 4, 4, 4);
+            btnBeforeSend_Default.Name = "btnBeforeSend_Default";
+            btnBeforeSend_Default.Size = new Size(88, 29);
+            btnBeforeSend_Default.TabIndex = 2;
+            btnBeforeSend_Default.Text = "元に戻す";
+            btnBeforeSend_Default.UseVisualStyleBackColor = true;
+            btnBeforeSend_Default.Click += btnBeforeSend_Default_Click;
+            // 
+            // tbBeforeSend_Custom
+            // 
+            tbBeforeSend_Custom.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbBeforeSend_Custom.Location = new Point(105, 122);
+            tbBeforeSend_Custom.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_Custom.Name = "tbBeforeSend_Custom";
+            tbBeforeSend_Custom.Size = new Size(386, 23);
+            tbBeforeSend_Custom.TabIndex = 1;
+            // 
+            // tbBeforeSend_XGReset
+            // 
+            tbBeforeSend_XGReset.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbBeforeSend_XGReset.Location = new Point(105, 60);
+            tbBeforeSend_XGReset.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_XGReset.Name = "tbBeforeSend_XGReset";
+            tbBeforeSend_XGReset.Size = new Size(386, 23);
+            tbBeforeSend_XGReset.TabIndex = 1;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            label35.Location = new Point(7, 160);
+            label35.Margin = new Padding(4, 0, 4, 0);
+            label35.Name = "label35";
+            label35.Size = new Size(329, 28);
+            label35.TabIndex = 0;
+            label35.Text = "Format:\r\n  (delayTime(dec)):(command data(hex)),...;...\r\n";
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Location = new Point(7, 126);
+            label34.Margin = new Padding(4, 0, 4, 0);
+            label34.Name = "label34";
+            label34.Size = new Size(47, 15);
+            label34.TabIndex = 0;
+            label34.Text = "Custom";
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(7, 64);
+            label32.Margin = new Padding(4, 0, 4, 0);
+            label32.Name = "label32";
+            label32.Size = new Size(78, 15);
+            label32.TabIndex = 0;
+            label32.Text = "XG SystemOn";
+            // 
+            // tbBeforeSend_GSReset
+            // 
+            tbBeforeSend_GSReset.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbBeforeSend_GSReset.Location = new Point(105, 91);
+            tbBeforeSend_GSReset.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_GSReset.Name = "tbBeforeSend_GSReset";
+            tbBeforeSend_GSReset.Size = new Size(386, 23);
+            tbBeforeSend_GSReset.TabIndex = 1;
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Location = new Point(7, 95);
+            label33.Margin = new Padding(4, 0, 4, 0);
+            label33.Name = "label33";
+            label33.Size = new Size(52, 15);
+            label33.TabIndex = 0;
+            label33.Text = "GS Reset";
+            // 
+            // tbBeforeSend_GMReset
+            // 
+            tbBeforeSend_GMReset.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbBeforeSend_GMReset.Location = new Point(105, 29);
+            tbBeforeSend_GMReset.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_GMReset.Name = "tbBeforeSend_GMReset";
+            tbBeforeSend_GMReset.Size = new Size(386, 23);
+            tbBeforeSend_GMReset.TabIndex = 1;
+            // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(7, 32);
+            label31.Margin = new Padding(4, 0, 4, 0);
+            label31.Name = "label31";
+            label31.Size = new Size(82, 15);
+            label31.TabIndex = 0;
+            label31.Text = "GM SystemOn";
+            // 
+            // tpPMDDotNET
+            // 
+            tpPMDDotNET.BorderStyle = BorderStyle.FixedSingle;
+            tpPMDDotNET.Controls.Add(rbPMDManual);
+            tpPMDDotNET.Controls.Add(rbPMDAuto);
+            tpPMDDotNET.Controls.Add(btnPMDResetDriverArguments);
+            tpPMDDotNET.Controls.Add(label47);
+            tpPMDDotNET.Controls.Add(btnPMDResetCompilerArhguments);
+            tpPMDDotNET.Controls.Add(tbPMDDriverArguments);
+            tpPMDDotNET.Controls.Add(label37);
+            tpPMDDotNET.Controls.Add(tbPMDCompilerArguments);
+            tpPMDDotNET.Controls.Add(gbPMDManual);
+            tpPMDDotNET.Location = new Point(4, 64);
+            tpPMDDotNET.Margin = new Padding(4, 4, 4, 4);
+            tpPMDDotNET.Name = "tpPMDDotNET";
+            tpPMDDotNET.Size = new Size(518, 490);
+            tpPMDDotNET.TabIndex = 15;
+            tpPMDDotNET.Text = "PMDDotNET";
+            tpPMDDotNET.UseVisualStyleBackColor = true;
+            // 
+            // rbPMDManual
+            // 
+            rbPMDManual.AutoSize = true;
+            rbPMDManual.Location = new Point(10, 72);
+            rbPMDManual.Margin = new Padding(4, 4, 4, 4);
+            rbPMDManual.Name = "rbPMDManual";
+            rbPMDManual.Size = new Size(65, 19);
+            rbPMDManual.TabIndex = 3;
+            rbPMDManual.TabStop = true;
+            rbPMDManual.Text = "Manual";
+            rbPMDManual.UseVisualStyleBackColor = true;
+            rbPMDManual.CheckedChanged += rbPMDManual_CheckedChanged;
+            // 
+            // rbPMDAuto
+            // 
+            rbPMDAuto.AutoSize = true;
+            rbPMDAuto.Location = new Point(10, 44);
+            rbPMDAuto.Margin = new Padding(4, 4, 4, 4);
+            rbPMDAuto.Name = "rbPMDAuto";
+            rbPMDAuto.Size = new Size(51, 19);
+            rbPMDAuto.TabIndex = 3;
+            rbPMDAuto.TabStop = true;
+            rbPMDAuto.Text = "Auto";
+            rbPMDAuto.UseVisualStyleBackColor = true;
+            // 
+            // btnPMDResetDriverArguments
+            // 
+            btnPMDResetDriverArguments.Location = new Point(439, 464);
+            btnPMDResetDriverArguments.Margin = new Padding(4, 4, 4, 4);
+            btnPMDResetDriverArguments.Name = "btnPMDResetDriverArguments";
+            btnPMDResetDriverArguments.Size = new Size(75, 29);
+            btnPMDResetDriverArguments.TabIndex = 2;
+            btnPMDResetDriverArguments.Text = "clear";
+            btnPMDResetDriverArguments.UseVisualStyleBackColor = true;
+            btnPMDResetDriverArguments.Click += btnPMDResetDriverArguments_Click;
+            // 
+            // label47
+            // 
+            label47.AutoSize = true;
+            label47.Location = new Point(8, 470);
+            label47.Margin = new Padding(4, 0, 4, 0);
+            label47.Name = "label47";
+            label47.Size = new Size(97, 15);
+            label47.TabIndex = 1;
+            label47.Text = "Driver arguments";
+            // 
+            // btnPMDResetCompilerArhguments
+            // 
+            btnPMDResetCompilerArhguments.Location = new Point(439, 10);
+            btnPMDResetCompilerArhguments.Margin = new Padding(4, 4, 4, 4);
+            btnPMDResetCompilerArhguments.Name = "btnPMDResetCompilerArhguments";
+            btnPMDResetCompilerArhguments.Size = new Size(75, 29);
+            btnPMDResetCompilerArhguments.TabIndex = 2;
+            btnPMDResetCompilerArhguments.Text = "reset";
+            btnPMDResetCompilerArhguments.UseVisualStyleBackColor = true;
+            btnPMDResetCompilerArhguments.Click += btnPMDResetCompilerArhguments_Click;
+            // 
+            // tbPMDDriverArguments
+            // 
+            tbPMDDriverArguments.Location = new Point(140, 466);
+            tbPMDDriverArguments.Margin = new Padding(4, 4, 4, 4);
+            tbPMDDriverArguments.Name = "tbPMDDriverArguments";
+            tbPMDDriverArguments.Size = new Size(291, 23);
+            tbPMDDriverArguments.TabIndex = 0;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(8, 16);
+            label37.Margin = new Padding(4, 0, 4, 0);
+            label37.Name = "label37";
+            label37.Size = new Size(113, 15);
+            label37.TabIndex = 1;
+            label37.Text = "Compiler arguments";
+            // 
+            // tbPMDCompilerArguments
+            // 
+            tbPMDCompilerArguments.Location = new Point(140, 12);
+            tbPMDCompilerArguments.Margin = new Padding(4, 4, 4, 4);
+            tbPMDCompilerArguments.Name = "tbPMDCompilerArguments";
+            tbPMDCompilerArguments.Size = new Size(291, 23);
+            tbPMDCompilerArguments.TabIndex = 0;
+            // 
+            // gbPMDManual
+            // 
+            gbPMDManual.Controls.Add(cbPMDSetManualVolume);
+            gbPMDManual.Controls.Add(cbPMDUsePPZ8);
+            gbPMDManual.Controls.Add(groupBox32);
+            gbPMDManual.Controls.Add(cbPMDUsePPSDRV);
+            gbPMDManual.Controls.Add(gbPPSDRV);
+            gbPMDManual.Controls.Add(gbPMDSetManualVolume);
+            gbPMDManual.Location = new Point(19, 75);
+            gbPMDManual.Margin = new Padding(4, 4, 4, 4);
+            gbPMDManual.Name = "gbPMDManual";
+            gbPMDManual.Padding = new Padding(4, 4, 4, 4);
+            gbPMDManual.Size = new Size(495, 379);
+            gbPMDManual.TabIndex = 9;
+            gbPMDManual.TabStop = false;
+            // 
+            // cbPMDSetManualVolume
+            // 
+            cbPMDSetManualVolume.AutoSize = true;
+            cbPMDSetManualVolume.Location = new Point(9, 69);
+            cbPMDSetManualVolume.Margin = new Padding(4, 4, 4, 4);
+            cbPMDSetManualVolume.Name = "cbPMDSetManualVolume";
+            cbPMDSetManualVolume.Size = new Size(131, 19);
+            cbPMDSetManualVolume.TabIndex = 10;
+            cbPMDSetManualVolume.Text = "Set volume(manual)";
+            cbPMDSetManualVolume.UseVisualStyleBackColor = true;
+            cbPMDSetManualVolume.CheckedChanged += cbPMDSetManualVolume_CheckedChanged;
+            // 
+            // cbPMDUsePPZ8
+            // 
+            cbPMDUsePPZ8.AutoSize = true;
+            cbPMDUsePPZ8.Location = new Point(7, 351);
+            cbPMDUsePPZ8.Margin = new Padding(4, 4, 4, 4);
+            cbPMDUsePPZ8.Name = "cbPMDUsePPZ8";
+            cbPMDUsePPZ8.Size = new Size(75, 19);
+            cbPMDUsePPZ8.TabIndex = 6;
+            cbPMDUsePPZ8.Text = "Use PPZ8";
+            cbPMDUsePPZ8.UseVisualStyleBackColor = true;
+            // 
+            // groupBox32
+            // 
+            groupBox32.Controls.Add(rbPMD86B);
+            groupBox32.Controls.Add(rbPMDSpbB);
+            groupBox32.Controls.Add(rbPMDNrmB);
+            groupBox32.Location = new Point(7, 22);
+            groupBox32.Margin = new Padding(4, 4, 4, 4);
+            groupBox32.Name = "groupBox32";
+            groupBox32.Padding = new Padding(4, 4, 4, 4);
+            groupBox32.Size = new Size(332, 45);
+            groupBox32.TabIndex = 4;
+            groupBox32.TabStop = false;
+            groupBox32.Text = "Select board";
+            // 
+            // rbPMD86B
+            // 
+            rbPMD86B.AutoSize = true;
+            rbPMD86B.Enabled = false;
+            rbPMD86B.Location = new Point(227, 18);
+            rbPMD86B.Margin = new Padding(4, 4, 4, 4);
+            rbPMD86B.Name = "rbPMD86B";
+            rbPMD86B.Size = new Size(71, 19);
+            rbPMD86B.TabIndex = 0;
+            rbPMD86B.TabStop = true;
+            rbPMD86B.Text = "86 board";
+            rbPMD86B.UseVisualStyleBackColor = true;
+            // 
+            // rbPMDSpbB
+            // 
+            rbPMDSpbB.AutoSize = true;
+            rbPMDSpbB.Location = new Point(120, 18);
+            rbPMDSpbB.Margin = new Padding(4, 4, 4, 4);
+            rbPMDSpbB.Name = "rbPMDSpbB";
+            rbPMDSpbB.Size = new Size(90, 19);
+            rbPMDSpbB.TabIndex = 0;
+            rbPMDSpbB.TabStop = true;
+            rbPMDSpbB.Text = "Speak board";
+            rbPMDSpbB.UseVisualStyleBackColor = true;
+            // 
+            // rbPMDNrmB
+            // 
+            rbPMDNrmB.AutoSize = true;
+            rbPMDNrmB.Location = new Point(7, 18);
+            rbPMDNrmB.Margin = new Padding(4, 4, 4, 4);
+            rbPMDNrmB.Name = "rbPMDNrmB";
+            rbPMDNrmB.Size = new Size(98, 19);
+            rbPMDNrmB.TabIndex = 0;
+            rbPMDNrmB.TabStop = true;
+            rbPMDNrmB.Text = "Normal board";
+            rbPMDNrmB.UseVisualStyleBackColor = true;
+            // 
+            // cbPMDUsePPSDRV
+            // 
+            cbPMDUsePPSDRV.AutoSize = true;
+            cbPMDUsePPSDRV.Location = new Point(7, 188);
+            cbPMDUsePPSDRV.Margin = new Padding(4, 4, 4, 4);
+            cbPMDUsePPSDRV.Name = "cbPMDUsePPSDRV";
+            cbPMDUsePPSDRV.Size = new Size(90, 19);
+            cbPMDUsePPSDRV.TabIndex = 5;
+            cbPMDUsePPSDRV.Text = "Use PPSDRV";
+            cbPMDUsePPSDRV.UseVisualStyleBackColor = true;
+            cbPMDUsePPSDRV.CheckedChanged += cbPMDUsePPSDRV_CheckedChanged;
+            // 
+            // gbPPSDRV
+            // 
+            gbPPSDRV.Controls.Add(groupBox33);
+            gbPPSDRV.Location = new Point(14, 188);
+            gbPPSDRV.Margin = new Padding(4, 4, 4, 4);
+            gbPPSDRV.Name = "gbPPSDRV";
+            gbPPSDRV.Padding = new Padding(4, 4, 4, 4);
+            gbPPSDRV.Size = new Size(474, 156);
+            gbPPSDRV.TabIndex = 8;
+            gbPPSDRV.TabStop = false;
+            // 
+            // groupBox33
+            // 
+            groupBox33.Controls.Add(rbPMDUsePPSDRVManualFreq);
+            groupBox33.Controls.Add(label38);
+            groupBox33.Controls.Add(rbPMDUsePPSDRVFreqDefault);
+            groupBox33.Controls.Add(btnPMDPPSDRVManualWait);
+            groupBox33.Controls.Add(label40);
+            groupBox33.Controls.Add(tbPMDPPSDRVFreq);
+            groupBox33.Controls.Add(label39);
+            groupBox33.Controls.Add(tbPMDPPSDRVManualWait);
+            groupBox33.Enabled = false;
+            groupBox33.Location = new Point(7, 22);
+            groupBox33.Margin = new Padding(4, 4, 4, 4);
+            groupBox33.Name = "groupBox33";
+            groupBox33.Padding = new Padding(4, 4, 4, 4);
+            groupBox33.Size = new Size(460, 125);
+            groupBox33.TabIndex = 12;
+            groupBox33.TabStop = false;
+            groupBox33.Text = "TBD";
+            // 
+            // rbPMDUsePPSDRVManualFreq
+            // 
+            rbPMDUsePPSDRVManualFreq.AutoSize = true;
+            rbPMDUsePPSDRVManualFreq.Location = new Point(258, 55);
+            rbPMDUsePPSDRVManualFreq.Margin = new Padding(4, 4, 4, 4);
+            rbPMDUsePPSDRVManualFreq.Name = "rbPMDUsePPSDRVManualFreq";
+            rbPMDUsePPSDRVManualFreq.Size = new Size(14, 13);
+            rbPMDUsePPSDRVManualFreq.TabIndex = 8;
+            rbPMDUsePPSDRVManualFreq.TabStop = true;
+            rbPMDUsePPSDRVManualFreq.UseVisualStyleBackColor = true;
+            rbPMDUsePPSDRVManualFreq.CheckedChanged += rbPMDUsePPSDRVManualFreq_CheckedChanged;
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(14, 24);
+            label38.Margin = new Padding(4, 0, 4, 0);
+            label38.Name = "label38";
+            label38.Size = new Size(178, 15);
+            label38.TabIndex = 1;
+            label38.Text = "(Real Chip) Rendering Frequency";
+            // 
+            // rbPMDUsePPSDRVFreqDefault
+            // 
+            rbPMDUsePPSDRVFreqDefault.AutoSize = true;
+            rbPMDUsePPSDRVFreqDefault.Location = new Point(258, 21);
+            rbPMDUsePPSDRVFreqDefault.Margin = new Padding(4, 4, 4, 4);
+            rbPMDUsePPSDRVFreqDefault.Name = "rbPMDUsePPSDRVFreqDefault";
+            rbPMDUsePPSDRVFreqDefault.Size = new Size(133, 19);
+            rbPMDUsePPSDRVFreqDefault.TabIndex = 8;
+            rbPMDUsePPSDRVFreqDefault.TabStop = true;
+            rbPMDUsePPSDRVFreqDefault.Text = "Use interface default";
+            rbPMDUsePPSDRVFreqDefault.UseVisualStyleBackColor = true;
+            // 
+            // btnPMDPPSDRVManualWait
+            // 
+            btnPMDPPSDRVManualWait.Location = new Point(348, 89);
+            btnPMDPPSDRVManualWait.Margin = new Padding(4, 4, 4, 4);
+            btnPMDPPSDRVManualWait.Name = "btnPMDPPSDRVManualWait";
+            btnPMDPPSDRVManualWait.Size = new Size(75, 29);
+            btnPMDPPSDRVManualWait.TabIndex = 2;
+            btnPMDPPSDRVManualWait.Text = "reset";
+            btnPMDPPSDRVManualWait.UseVisualStyleBackColor = true;
+            btnPMDPPSDRVManualWait.Click += btnPMDPPSDRVManualWait_Click;
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Location = new Point(405, 55);
+            label40.Margin = new Padding(4, 0, 4, 0);
+            label40.Name = "label40";
+            label40.Size = new Size(21, 15);
+            label40.TabIndex = 1;
+            label40.Text = "Hz";
+            // 
+            // tbPMDPPSDRVFreq
+            // 
+            tbPMDPPSDRVFreq.Location = new Point(281, 51);
+            tbPMDPPSDRVFreq.Margin = new Padding(4, 4, 4, 4);
+            tbPMDPPSDRVFreq.Name = "tbPMDPPSDRVFreq";
+            tbPMDPPSDRVFreq.Size = new Size(116, 23);
+            tbPMDPPSDRVFreq.TabIndex = 7;
+            tbPMDPPSDRVFreq.Click += tbPMDPPSDRVFreq_Click;
+            tbPMDPPSDRVFreq.MouseClick += tbPMDPPSDRVFreq_MouseClick;
+            // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(14, 95);
+            label39.Margin = new Padding(4, 0, 4, 0);
+            label39.Name = "label39";
+            label39.Size = new Size(182, 15);
+            label39.TabIndex = 1;
+            label39.Text = "(SCCI) Send syncronize wait value";
+            // 
+            // tbPMDPPSDRVManualWait
+            // 
+            tbPMDPPSDRVManualWait.Location = new Point(281, 91);
+            tbPMDPPSDRVManualWait.Margin = new Padding(4, 4, 4, 4);
+            tbPMDPPSDRVManualWait.Name = "tbPMDPPSDRVManualWait";
+            tbPMDPPSDRVManualWait.Size = new Size(59, 23);
+            tbPMDPPSDRVManualWait.TabIndex = 7;
+            // 
+            // gbPMDSetManualVolume
+            // 
+            gbPMDSetManualVolume.Controls.Add(label41);
+            gbPMDSetManualVolume.Controls.Add(label46);
+            gbPMDSetManualVolume.Controls.Add(tbPMDVolumeAdpcm);
+            gbPMDSetManualVolume.Controls.Add(label42);
+            gbPMDSetManualVolume.Controls.Add(tbPMDVolumeRhythm);
+            gbPMDSetManualVolume.Controls.Add(label43);
+            gbPMDSetManualVolume.Controls.Add(tbPMDVolumeSSG);
+            gbPMDSetManualVolume.Controls.Add(label44);
+            gbPMDSetManualVolume.Controls.Add(tbPMDVolumeGIMICSSG);
+            gbPMDSetManualVolume.Controls.Add(label45);
+            gbPMDSetManualVolume.Controls.Add(tbPMDVolumeFM);
+            gbPMDSetManualVolume.Location = new Point(15, 69);
+            gbPMDSetManualVolume.Margin = new Padding(4, 4, 4, 4);
+            gbPMDSetManualVolume.Name = "gbPMDSetManualVolume";
+            gbPMDSetManualVolume.Padding = new Padding(4, 4, 4, 4);
+            gbPMDSetManualVolume.Size = new Size(472, 116);
+            gbPMDSetManualVolume.TabIndex = 11;
+            gbPMDSetManualVolume.TabStop = false;
+            // 
+            // label41
+            // 
+            label41.AutoSize = true;
+            label41.Location = new Point(6, 22);
+            label41.Margin = new Padding(4, 0, 4, 0);
+            label41.Name = "label41";
+            label41.Size = new Size(231, 15);
+            label41.TabIndex = 1;
+            label41.Text = "OPNA emulator volume(Min:-191  Max:20)";
+            // 
+            // label46
+            // 
+            label46.AutoSize = true;
+            label46.Location = new Point(7, 80);
+            label46.Margin = new Padding(4, 0, 4, 0);
+            label46.Name = "label46";
+            label46.Size = new Size(197, 15);
+            label46.TabIndex = 1;
+            label46.Text = "(GIMIC) SSG volume(Min:0 Max:127)";
+            // 
+            // tbPMDVolumeAdpcm
+            // 
+            tbPMDVolumeAdpcm.Location = new Point(399, 41);
+            tbPMDVolumeAdpcm.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeAdpcm.Name = "tbPMDVolumeAdpcm";
+            tbPMDVolumeAdpcm.Size = new Size(59, 23);
+            tbPMDVolumeAdpcm.TabIndex = 9;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Location = new Point(12, 45);
+            label42.Margin = new Padding(4, 0, 4, 0);
+            label42.Name = "label42";
+            label42.Size = new Size(24, 15);
+            label42.TabIndex = 1;
+            label42.Text = "FM";
+            // 
+            // tbPMDVolumeRhythm
+            // 
+            tbPMDVolumeRhythm.Location = new Point(273, 41);
+            tbPMDVolumeRhythm.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeRhythm.Name = "tbPMDVolumeRhythm";
+            tbPMDVolumeRhythm.Size = new Size(59, 23);
+            tbPMDVolumeRhythm.TabIndex = 9;
+            // 
+            // label43
+            // 
+            label43.AutoSize = true;
+            label43.Location = new Point(110, 45);
+            label43.Margin = new Padding(4, 0, 4, 0);
+            label43.Name = "label43";
+            label43.Size = new Size(27, 15);
+            label43.TabIndex = 1;
+            label43.Text = "SSG";
+            // 
+            // tbPMDVolumeSSG
+            // 
+            tbPMDVolumeSSG.Location = new Point(148, 41);
+            tbPMDVolumeSSG.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeSSG.Name = "tbPMDVolumeSSG";
+            tbPMDVolumeSSG.Size = new Size(59, 23);
+            tbPMDVolumeSSG.TabIndex = 9;
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Location = new Point(215, 45);
+            label44.Margin = new Padding(4, 0, 4, 0);
+            label44.Name = "label44";
+            label44.Size = new Size(48, 15);
+            label44.TabIndex = 1;
+            label44.Text = "Rhythm";
+            // 
+            // tbPMDVolumeGIMICSSG
+            // 
+            tbPMDVolumeGIMICSSG.Location = new Point(234, 76);
+            tbPMDVolumeGIMICSSG.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeGIMICSSG.Name = "tbPMDVolumeGIMICSSG";
+            tbPMDVolumeGIMICSSG.Size = new Size(59, 23);
+            tbPMDVolumeGIMICSSG.TabIndex = 9;
+            // 
+            // label45
+            // 
+            label45.AutoSize = true;
+            label45.Location = new Point(340, 45);
+            label45.Margin = new Padding(4, 0, 4, 0);
+            label45.Name = "label45";
+            label45.Size = new Size(48, 15);
+            label45.TabIndex = 1;
+            label45.Text = "ADPCM";
+            // 
+            // tbPMDVolumeFM
+            // 
+            tbPMDVolumeFM.Location = new Point(43, 41);
+            tbPMDVolumeFM.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeFM.Name = "tbPMDVolumeFM";
+            tbPMDVolumeFM.Size = new Size(59, 23);
+            tbPMDVolumeFM.TabIndex = 9;
+            // 
+            // tpExport
+            // 
+            tpExport.BorderStyle = BorderStyle.FixedSingle;
+            tpExport.Controls.Add(cbAlwaysAskForLoopCount);
+            tpExport.Controls.Add(cbFixedExportPlace);
+            tpExport.Controls.Add(gpbFixedExportPlace);
+            tpExport.Controls.Add(label48);
+            tpExport.Controls.Add(tbLoopTimes);
+            tpExport.Controls.Add(lblLoopTimes);
+            tpExport.Location = new Point(4, 64);
+            tpExport.Margin = new Padding(4, 4, 4, 4);
+            tpExport.Name = "tpExport";
+            tpExport.Size = new Size(518, 490);
+            tpExport.TabIndex = 17;
+            tpExport.Text = "Export";
+            tpExport.UseVisualStyleBackColor = true;
+            // 
+            // cbAlwaysAskForLoopCount
+            // 
+            cbAlwaysAskForLoopCount.AutoSize = true;
+            cbAlwaysAskForLoopCount.Location = new Point(16, 111);
+            cbAlwaysAskForLoopCount.Margin = new Padding(4, 4, 4, 4);
+            cbAlwaysAskForLoopCount.Name = "cbAlwaysAskForLoopCount";
+            cbAlwaysAskForLoopCount.Size = new Size(223, 19);
+            cbAlwaysAskForLoopCount.TabIndex = 28;
+            cbAlwaysAskForLoopCount.Text = "エクスポート時にループ回数を問い合わせる";
+            cbAlwaysAskForLoopCount.UseVisualStyleBackColor = true;
+            cbAlwaysAskForLoopCount.CheckedChanged += cbFixedExportPlace_CheckedChanged;
+            // 
+            // cbFixedExportPlace
+            // 
+            cbFixedExportPlace.AutoSize = true;
+            cbFixedExportPlace.Location = new Point(16, 44);
+            cbFixedExportPlace.Margin = new Padding(4, 4, 4, 4);
+            cbFixedExportPlace.Name = "cbFixedExportPlace";
+            cbFixedExportPlace.Size = new Size(155, 19);
+            cbFixedExportPlace.TabIndex = 28;
+            cbFixedExportPlace.Text = "エクスポート場所を固定する";
+            cbFixedExportPlace.UseVisualStyleBackColor = true;
+            cbFixedExportPlace.CheckedChanged += cbFixedExportPlace_CheckedChanged;
+            // 
+            // gpbFixedExportPlace
+            // 
+            gpbFixedExportPlace.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gpbFixedExportPlace.Controls.Add(btnFixedExportPlace);
+            gpbFixedExportPlace.Controls.Add(label57);
+            gpbFixedExportPlace.Controls.Add(tbFixedExportPlacePath);
+            gpbFixedExportPlace.Location = new Point(8, 48);
+            gpbFixedExportPlace.Margin = new Padding(4, 4, 4, 4);
+            gpbFixedExportPlace.Name = "gpbFixedExportPlace";
+            gpbFixedExportPlace.Padding = new Padding(4, 4, 4, 4);
+            gpbFixedExportPlace.Size = new Size(503, 56);
+            gpbFixedExportPlace.TabIndex = 29;
+            gpbFixedExportPlace.TabStop = false;
+            // 
+            // btnFixedExportPlace
+            // 
+            btnFixedExportPlace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnFixedExportPlace.Location = new Point(469, 20);
+            btnFixedExportPlace.Margin = new Padding(4, 4, 4, 4);
+            btnFixedExportPlace.Name = "btnFixedExportPlace";
+            btnFixedExportPlace.Size = new Size(27, 29);
+            btnFixedExportPlace.TabIndex = 16;
+            btnFixedExportPlace.Text = "...";
+            btnFixedExportPlace.UseVisualStyleBackColor = true;
+            btnFixedExportPlace.Click += btnFixedExportPlace_Click;
+            // 
+            // label57
+            // 
+            label57.AutoSize = true;
+            label57.Location = new Point(7, 26);
+            label57.Margin = new Padding(4, 0, 4, 0);
+            label57.Name = "label57";
+            label57.Size = new Size(55, 15);
+            label57.TabIndex = 14;
+            label57.Text = "出力Path";
+            // 
+            // tbFixedExportPlacePath
+            // 
+            tbFixedExportPlacePath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbFixedExportPlacePath.Location = new Point(85, 22);
+            tbFixedExportPlacePath.Margin = new Padding(4, 4, 4, 4);
+            tbFixedExportPlacePath.Name = "tbFixedExportPlacePath";
+            tbFixedExportPlacePath.Size = new Size(376, 23);
+            tbFixedExportPlacePath.TabIndex = 15;
+            // 
+            // label48
+            // 
+            label48.Location = new Point(8, 16);
+            label48.Margin = new Padding(4, 0, 4, 0);
+            label48.Name = "label48";
+            label48.Size = new Size(234, 24);
+            label48.TabIndex = 27;
+            label48.Text = "ファイルエクスポート時のループ回数";
+            label48.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // tbLoopTimes
+            // 
+            tbLoopTimes.Location = new Point(250, 16);
+            tbLoopTimes.Margin = new Padding(4, 4, 4, 4);
+            tbLoopTimes.Name = "tbLoopTimes";
+            tbLoopTimes.Size = new Size(60, 23);
+            tbLoopTimes.TabIndex = 0;
+            // 
+            // lblLoopTimes
+            // 
+            lblLoopTimes.AutoSize = true;
+            lblLoopTimes.Location = new Point(317, 20);
+            lblLoopTimes.Margin = new Padding(4, 0, 4, 0);
+            lblLoopTimes.Name = "lblLoopTimes";
+            lblLoopTimes.Size = new Size(19, 15);
+            lblLoopTimes.TabIndex = 1;
+            lblLoopTimes.Text = "回";
+            // 
+            // tpMIDIExp
+            // 
+            tpMIDIExp.BorderStyle = BorderStyle.FixedSingle;
+            tpMIDIExp.Controls.Add(cbUseMIDIExport);
+            tpMIDIExp.Controls.Add(gbMIDIExport);
+            tpMIDIExp.Location = new Point(4, 64);
+            tpMIDIExp.Margin = new Padding(4, 4, 4, 4);
+            tpMIDIExp.Name = "tpMIDIExp";
+            tpMIDIExp.Size = new Size(518, 490);
+            tpMIDIExp.TabIndex = 6;
+            tpMIDIExp.Text = "MIDIExport";
+            tpMIDIExp.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMIDIExport
+            // 
+            cbUseMIDIExport.AutoSize = true;
+            cbUseMIDIExport.Location = new Point(18, 4);
+            cbUseMIDIExport.Margin = new Padding(4, 4, 4, 4);
+            cbUseMIDIExport.Name = "cbUseMIDIExport";
+            cbUseMIDIExport.Size = new Size(183, 19);
+            cbUseMIDIExport.TabIndex = 1;
+            cbUseMIDIExport.Text = "演奏時MIDIファイルをexportする";
+            cbUseMIDIExport.UseVisualStyleBackColor = true;
+            cbUseMIDIExport.CheckedChanged += cbUseMIDIExport_CheckedChanged;
+            // 
+            // gbMIDIExport
+            // 
+            gbMIDIExport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gbMIDIExport.Controls.Add(cbMIDIKeyOnFnum);
+            gbMIDIExport.Controls.Add(cbMIDIUseVOPM);
+            gbMIDIExport.Controls.Add(groupBox6);
+            gbMIDIExport.Controls.Add(cbMIDIPlayless);
+            gbMIDIExport.Controls.Add(btnMIDIOutputPath);
+            gbMIDIExport.Controls.Add(lblOutputPath);
+            gbMIDIExport.Controls.Add(tbMIDIOutputPath);
+            gbMIDIExport.Location = new Point(8, 4);
+            gbMIDIExport.Margin = new Padding(4, 4, 4, 4);
+            gbMIDIExport.Name = "gbMIDIExport";
+            gbMIDIExport.Padding = new Padding(4, 4, 4, 4);
+            gbMIDIExport.Size = new Size(503, 582);
+            gbMIDIExport.TabIndex = 0;
+            gbMIDIExport.TabStop = false;
+            // 
+            // cbMIDIKeyOnFnum
+            // 
+            cbMIDIKeyOnFnum.AutoSize = true;
+            cbMIDIKeyOnFnum.Location = new Point(24, 82);
+            cbMIDIKeyOnFnum.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIKeyOnFnum.Name = "cbMIDIKeyOnFnum";
+            cbMIDIKeyOnFnum.Size = new Size(176, 19);
+            cbMIDIKeyOnFnum.TabIndex = 23;
+            cbMIDIKeyOnFnum.Text = "KeyON時のみfnumを評価する";
+            cbMIDIKeyOnFnum.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIUseVOPM
+            // 
+            cbMIDIUseVOPM.AutoSize = true;
+            cbMIDIUseVOPM.Location = new Point(24, 55);
+            cbMIDIUseVOPM.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIUseVOPM.Name = "cbMIDIUseVOPM";
+            cbMIDIUseVOPM.Size = new Size(197, 19);
+            cbMIDIUseVOPM.TabIndex = 23;
+            cbMIDIUseVOPM.Text = "VOPMex向けコントロールを出力する";
+            cbMIDIUseVOPM.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            groupBox6.Controls.Add(cbMIDIYM2612);
+            groupBox6.Controls.Add(cbMIDISN76489Sec);
+            groupBox6.Controls.Add(cbMIDIYM2612Sec);
+            groupBox6.Controls.Add(cbMIDISN76489);
+            groupBox6.Controls.Add(cbMIDIYM2151);
+            groupBox6.Controls.Add(cbMIDIYM2610BSec);
+            groupBox6.Controls.Add(cbMIDIYM2151Sec);
+            groupBox6.Controls.Add(cbMIDIYM2610B);
+            groupBox6.Controls.Add(cbMIDIYM2203);
+            groupBox6.Controls.Add(cbMIDIYM2608Sec);
+            groupBox6.Controls.Add(cbMIDIYM2203Sec);
+            groupBox6.Controls.Add(cbMIDIYM2608);
+            groupBox6.Location = new Point(23, 141);
+            groupBox6.Margin = new Padding(4, 4, 4, 4);
+            groupBox6.Name = "groupBox6";
+            groupBox6.Padding = new Padding(4, 4, 4, 4);
+            groupBox6.Size = new Size(219, 190);
+            groupBox6.TabIndex = 22;
+            groupBox6.TabStop = false;
+            groupBox6.Text = "出力対象音源";
+            // 
+            // cbMIDIYM2612
+            // 
+            cbMIDIYM2612.AutoSize = true;
+            cbMIDIYM2612.Checked = true;
+            cbMIDIYM2612.CheckState = CheckState.Checked;
+            cbMIDIYM2612.Location = new Point(7, 22);
+            cbMIDIYM2612.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2612.Name = "cbMIDIYM2612";
+            cbMIDIYM2612.Size = new Size(68, 19);
+            cbMIDIYM2612.TabIndex = 21;
+            cbMIDIYM2612.Text = "YM2612";
+            cbMIDIYM2612.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDISN76489Sec
+            // 
+            cbMIDISN76489Sec.AutoSize = true;
+            cbMIDISN76489Sec.Enabled = false;
+            cbMIDISN76489Sec.Location = new Point(98, 160);
+            cbMIDISN76489Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDISN76489Sec.Name = "cbMIDISN76489Sec";
+            cbMIDISN76489Sec.Size = new Size(97, 19);
+            cbMIDISN76489Sec.TabIndex = 21;
+            cbMIDISN76489Sec.Text = "SN76489(Sec)";
+            cbMIDISN76489Sec.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2612Sec
+            // 
+            cbMIDIYM2612Sec.AutoSize = true;
+            cbMIDIYM2612Sec.Enabled = false;
+            cbMIDIYM2612Sec.Location = new Point(98, 22);
+            cbMIDIYM2612Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2612Sec.Name = "cbMIDIYM2612Sec";
+            cbMIDIYM2612Sec.Size = new Size(94, 19);
+            cbMIDIYM2612Sec.TabIndex = 21;
+            cbMIDIYM2612Sec.Text = "YM2612(Sec)";
+            cbMIDIYM2612Sec.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDISN76489
+            // 
+            cbMIDISN76489.AutoSize = true;
+            cbMIDISN76489.Enabled = false;
+            cbMIDISN76489.Location = new Point(7, 160);
+            cbMIDISN76489.Margin = new Padding(4, 4, 4, 4);
+            cbMIDISN76489.Name = "cbMIDISN76489";
+            cbMIDISN76489.Size = new Size(71, 19);
+            cbMIDISN76489.TabIndex = 21;
+            cbMIDISN76489.Text = "SN76489";
+            cbMIDISN76489.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2151
+            // 
+            cbMIDIYM2151.AutoSize = true;
+            cbMIDIYM2151.Location = new Point(7, 50);
+            cbMIDIYM2151.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2151.Name = "cbMIDIYM2151";
+            cbMIDIYM2151.Size = new Size(68, 19);
+            cbMIDIYM2151.TabIndex = 21;
+            cbMIDIYM2151.Text = "YM2151";
+            cbMIDIYM2151.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2610BSec
+            // 
+            cbMIDIYM2610BSec.AutoSize = true;
+            cbMIDIYM2610BSec.Enabled = false;
+            cbMIDIYM2610BSec.Location = new Point(98, 132);
+            cbMIDIYM2610BSec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2610BSec.Name = "cbMIDIYM2610BSec";
+            cbMIDIYM2610BSec.Size = new Size(101, 19);
+            cbMIDIYM2610BSec.TabIndex = 21;
+            cbMIDIYM2610BSec.Text = "YM2610B(Sec)";
+            cbMIDIYM2610BSec.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2151Sec
+            // 
+            cbMIDIYM2151Sec.AutoSize = true;
+            cbMIDIYM2151Sec.Enabled = false;
+            cbMIDIYM2151Sec.Location = new Point(98, 50);
+            cbMIDIYM2151Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2151Sec.Name = "cbMIDIYM2151Sec";
+            cbMIDIYM2151Sec.Size = new Size(94, 19);
+            cbMIDIYM2151Sec.TabIndex = 21;
+            cbMIDIYM2151Sec.Text = "YM2151(Sec)";
+            cbMIDIYM2151Sec.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2610B
+            // 
+            cbMIDIYM2610B.AutoSize = true;
+            cbMIDIYM2610B.Enabled = false;
+            cbMIDIYM2610B.Location = new Point(7, 132);
+            cbMIDIYM2610B.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2610B.Name = "cbMIDIYM2610B";
+            cbMIDIYM2610B.Size = new Size(75, 19);
+            cbMIDIYM2610B.TabIndex = 21;
+            cbMIDIYM2610B.Text = "YM2610B";
+            cbMIDIYM2610B.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2203
+            // 
+            cbMIDIYM2203.AutoSize = true;
+            cbMIDIYM2203.Enabled = false;
+            cbMIDIYM2203.Location = new Point(7, 78);
+            cbMIDIYM2203.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2203.Name = "cbMIDIYM2203";
+            cbMIDIYM2203.Size = new Size(68, 19);
+            cbMIDIYM2203.TabIndex = 21;
+            cbMIDIYM2203.Text = "YM2203";
+            cbMIDIYM2203.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2608Sec
+            // 
+            cbMIDIYM2608Sec.AutoSize = true;
+            cbMIDIYM2608Sec.Enabled = false;
+            cbMIDIYM2608Sec.Location = new Point(98, 105);
+            cbMIDIYM2608Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2608Sec.Name = "cbMIDIYM2608Sec";
+            cbMIDIYM2608Sec.Size = new Size(94, 19);
+            cbMIDIYM2608Sec.TabIndex = 21;
+            cbMIDIYM2608Sec.Text = "YM2608(Sec)";
+            cbMIDIYM2608Sec.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2203Sec
+            // 
+            cbMIDIYM2203Sec.AutoSize = true;
+            cbMIDIYM2203Sec.Enabled = false;
+            cbMIDIYM2203Sec.Location = new Point(98, 78);
+            cbMIDIYM2203Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2203Sec.Name = "cbMIDIYM2203Sec";
+            cbMIDIYM2203Sec.Size = new Size(94, 19);
+            cbMIDIYM2203Sec.TabIndex = 21;
+            cbMIDIYM2203Sec.Text = "YM2203(Sec)";
+            cbMIDIYM2203Sec.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIYM2608
+            // 
+            cbMIDIYM2608.AutoSize = true;
+            cbMIDIYM2608.Enabled = false;
+            cbMIDIYM2608.Location = new Point(7, 105);
+            cbMIDIYM2608.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2608.Name = "cbMIDIYM2608";
+            cbMIDIYM2608.Size = new Size(68, 19);
+            cbMIDIYM2608.TabIndex = 21;
+            cbMIDIYM2608.Text = "YM2608";
+            cbMIDIYM2608.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIPlayless
+            // 
+            cbMIDIPlayless.AutoSize = true;
+            cbMIDIPlayless.Enabled = false;
+            cbMIDIPlayless.Location = new Point(24, 28);
+            cbMIDIPlayless.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIPlayless.Name = "cbMIDIPlayless";
+            cbMIDIPlayless.Size = new Size(142, 19);
+            cbMIDIPlayless.TabIndex = 20;
+            cbMIDIPlayless.Text = "演奏を行わずに出力する";
+            cbMIDIPlayless.UseVisualStyleBackColor = true;
+            // 
+            // btnMIDIOutputPath
+            // 
+            btnMIDIOutputPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnMIDIOutputPath.Location = new Point(468, 108);
+            btnMIDIOutputPath.Margin = new Padding(4, 4, 4, 4);
+            btnMIDIOutputPath.Name = "btnMIDIOutputPath";
+            btnMIDIOutputPath.Size = new Size(27, 29);
+            btnMIDIOutputPath.TabIndex = 19;
+            btnMIDIOutputPath.Text = "...";
+            btnMIDIOutputPath.UseVisualStyleBackColor = true;
+            btnMIDIOutputPath.Click += btnMIDIOutputPath_Click;
+            // 
+            // lblOutputPath
+            // 
+            lblOutputPath.AutoSize = true;
+            lblOutputPath.Location = new Point(22, 114);
+            lblOutputPath.Margin = new Padding(4, 0, 4, 0);
+            lblOutputPath.Name = "lblOutputPath";
+            lblOutputPath.Size = new Size(55, 15);
+            lblOutputPath.TabIndex = 17;
+            lblOutputPath.Text = "出力Path";
+            // 
+            // tbMIDIOutputPath
+            // 
+            tbMIDIOutputPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbMIDIOutputPath.Location = new Point(90, 110);
+            tbMIDIOutputPath.Margin = new Padding(4, 4, 4, 4);
+            tbMIDIOutputPath.Name = "tbMIDIOutputPath";
+            tbMIDIOutputPath.Size = new Size(370, 23);
+            tbMIDIOutputPath.TabIndex = 18;
+            // 
+            // tpMIDIKBD
+            // 
+            tpMIDIKBD.BorderStyle = BorderStyle.FixedSingle;
+            tpMIDIKBD.Controls.Add(cbMIDIKbdAlwaysTop);
+            tpMIDIKBD.Controls.Add(cbUseMIDIKeyboard);
+            tpMIDIKBD.Controls.Add(gbMIDIKeyboard);
+            tpMIDIKBD.Location = new Point(4, 64);
+            tpMIDIKBD.Margin = new Padding(4, 4, 4, 4);
+            tpMIDIKBD.Name = "tpMIDIKBD";
+            tpMIDIKBD.Size = new Size(518, 490);
+            tpMIDIKBD.TabIndex = 5;
+            tpMIDIKBD.Text = "MIDI鍵盤";
+            tpMIDIKBD.UseVisualStyleBackColor = true;
+            // 
+            // cbMIDIKbdAlwaysTop
+            // 
+            cbMIDIKbdAlwaysTop.AutoSize = true;
+            cbMIDIKbdAlwaysTop.Location = new Point(14, 80);
+            cbMIDIKbdAlwaysTop.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
+            cbMIDIKbdAlwaysTop.Size = new Size(156, 19);
+            cbMIDIKbdAlwaysTop.TabIndex = 2;
+            cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
+            cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMIDIKeyboard
+            // 
+            cbUseMIDIKeyboard.AutoSize = true;
+            cbUseMIDIKeyboard.Location = new Point(13, 5);
+            cbUseMIDIKeyboard.Margin = new Padding(4, 4, 4, 4);
+            cbUseMIDIKeyboard.Name = "cbUseMIDIKeyboard";
+            cbUseMIDIKeyboard.Size = new Size(123, 19);
+            cbUseMIDIKeyboard.TabIndex = 1;
+            cbUseMIDIKeyboard.Text = "MIDIキーボードを使う";
+            cbUseMIDIKeyboard.UseVisualStyleBackColor = true;
+            cbUseMIDIKeyboard.CheckedChanged += cbUseMIDIKeyboard_CheckedChanged;
+            // 
+            // gbMIDIKeyboard
+            // 
+            gbMIDIKeyboard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gbMIDIKeyboard.Controls.Add(pictureBox8);
+            gbMIDIKeyboard.Controls.Add(pictureBox7);
+            gbMIDIKeyboard.Controls.Add(pictureBox6);
+            gbMIDIKeyboard.Controls.Add(pictureBox5);
+            gbMIDIKeyboard.Controls.Add(pictureBox4);
+            gbMIDIKeyboard.Controls.Add(pictureBox3);
+            gbMIDIKeyboard.Controls.Add(pictureBox2);
+            gbMIDIKeyboard.Controls.Add(pictureBox1);
+            gbMIDIKeyboard.Controls.Add(tbCCFadeout);
+            gbMIDIKeyboard.Controls.Add(tbCCPause);
+            gbMIDIKeyboard.Controls.Add(tbCCSlow);
+            gbMIDIKeyboard.Controls.Add(tbCCPrevious);
+            gbMIDIKeyboard.Controls.Add(tbCCNext);
+            gbMIDIKeyboard.Controls.Add(tbCCFast);
+            gbMIDIKeyboard.Controls.Add(tbCCStop);
+            gbMIDIKeyboard.Controls.Add(tbCCPlay);
+            gbMIDIKeyboard.Controls.Add(tbCCCopyLog);
+            gbMIDIKeyboard.Controls.Add(label17);
+            gbMIDIKeyboard.Controls.Add(tbCCDelLog);
+            gbMIDIKeyboard.Controls.Add(label15);
+            gbMIDIKeyboard.Controls.Add(tbCCChCopy);
+            gbMIDIKeyboard.Controls.Add(label8);
+            gbMIDIKeyboard.Controls.Add(label9);
+            gbMIDIKeyboard.Controls.Add(gbUseChannel);
+            gbMIDIKeyboard.Controls.Add(cmbMIDIIN);
+            gbMIDIKeyboard.Controls.Add(label5);
+            gbMIDIKeyboard.Enabled = false;
+            gbMIDIKeyboard.Location = new Point(4, 8);
+            gbMIDIKeyboard.Margin = new Padding(4, 4, 4, 4);
+            gbMIDIKeyboard.Name = "gbMIDIKeyboard";
+            gbMIDIKeyboard.Padding = new Padding(4, 4, 4, 4);
+            gbMIDIKeyboard.Size = new Size(507, 185);
+            gbMIDIKeyboard.TabIndex = 0;
+            gbMIDIKeyboard.TabStop = false;
+            // 
+            // pictureBox8
+            // 
+            pictureBox8.Image = Resources.ccNext;
+            pictureBox8.Location = new Point(433, 321);
+            pictureBox8.Margin = new Padding(4, 4, 4, 4);
+            pictureBox8.Name = "pictureBox8";
+            pictureBox8.Size = new Size(19, 20);
+            pictureBox8.TabIndex = 4;
+            pictureBox8.TabStop = false;
+            pictureBox8.Visible = false;
+            // 
+            // pictureBox7
+            // 
+            pictureBox7.Image = Resources.ccFast;
+            pictureBox7.Location = new Point(304, 321);
+            pictureBox7.Margin = new Padding(4, 4, 4, 4);
+            pictureBox7.Name = "pictureBox7";
+            pictureBox7.Size = new Size(19, 20);
+            pictureBox7.TabIndex = 4;
+            pictureBox7.TabStop = false;
+            pictureBox7.Visible = false;
+            // 
+            // pictureBox6
+            // 
+            pictureBox6.Image = Resources.ccPlay;
+            pictureBox6.Location = new Point(177, 322);
+            pictureBox6.Margin = new Padding(4, 4, 4, 4);
+            pictureBox6.Name = "pictureBox6";
+            pictureBox6.Size = new Size(19, 20);
+            pictureBox6.TabIndex = 4;
+            pictureBox6.TabStop = false;
+            pictureBox6.Visible = false;
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.Image = Resources.ccSlow;
+            pictureBox5.Location = new Point(49, 322);
+            pictureBox5.Margin = new Padding(4, 4, 4, 4);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(19, 20);
+            pictureBox5.TabIndex = 4;
+            pictureBox5.TabStop = false;
+            pictureBox5.Visible = false;
+            // 
+            // pictureBox4
+            // 
+            pictureBox4.Image = Resources.ccStop;
+            pictureBox4.Location = new Point(49, 292);
+            pictureBox4.Margin = new Padding(4, 4, 4, 4);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(19, 20);
+            pictureBox4.TabIndex = 4;
+            pictureBox4.TabStop = false;
+            pictureBox4.Visible = false;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.Image = Resources.ccPause;
+            pictureBox3.Location = new Point(177, 292);
+            pictureBox3.Margin = new Padding(4, 4, 4, 4);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(19, 20);
+            pictureBox3.TabIndex = 4;
+            pictureBox3.TabStop = false;
+            pictureBox3.Visible = false;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Image = Resources.ccPrevious;
+            pictureBox2.Location = new Point(433, 292);
+            pictureBox2.Margin = new Padding(4, 4, 4, 4);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(19, 20);
+            pictureBox2.TabIndex = 4;
+            pictureBox2.TabStop = false;
+            pictureBox2.Visible = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = Resources.ccFadeout;
+            pictureBox1.Location = new Point(304, 292);
+            pictureBox1.Margin = new Padding(4, 4, 4, 4);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(19, 20);
+            pictureBox1.TabIndex = 4;
+            pictureBox1.TabStop = false;
+            pictureBox1.Visible = false;
+            // 
+            // tbCCFadeout
+            // 
+            tbCCFadeout.Location = new Point(262, 290);
+            tbCCFadeout.Margin = new Padding(4, 4, 4, 4);
+            tbCCFadeout.MaxLength = 3;
+            tbCCFadeout.Name = "tbCCFadeout";
+            tbCCFadeout.Size = new Size(34, 23);
+            tbCCFadeout.TabIndex = 12;
+            tbCCFadeout.Visible = false;
+            // 
+            // tbCCPause
+            // 
+            tbCCPause.Location = new Point(135, 290);
+            tbCCPause.Margin = new Padding(4, 4, 4, 4);
+            tbCCPause.MaxLength = 3;
+            tbCCPause.Name = "tbCCPause";
+            tbCCPause.Size = new Size(34, 23);
+            tbCCPause.TabIndex = 11;
+            tbCCPause.Visible = false;
+            // 
+            // tbCCSlow
+            // 
+            tbCCSlow.Location = new Point(7, 321);
+            tbCCSlow.Margin = new Padding(4, 4, 4, 4);
+            tbCCSlow.MaxLength = 3;
+            tbCCSlow.Name = "tbCCSlow";
+            tbCCSlow.Size = new Size(34, 23);
+            tbCCSlow.TabIndex = 14;
+            tbCCSlow.Visible = false;
+            // 
+            // tbCCPrevious
+            // 
+            tbCCPrevious.Location = new Point(391, 290);
+            tbCCPrevious.Margin = new Padding(4, 4, 4, 4);
+            tbCCPrevious.MaxLength = 3;
+            tbCCPrevious.Name = "tbCCPrevious";
+            tbCCPrevious.Size = new Size(34, 23);
+            tbCCPrevious.TabIndex = 13;
+            tbCCPrevious.Visible = false;
+            // 
+            // tbCCNext
+            // 
+            tbCCNext.Location = new Point(391, 321);
+            tbCCNext.Margin = new Padding(4, 4, 4, 4);
+            tbCCNext.MaxLength = 3;
+            tbCCNext.Name = "tbCCNext";
+            tbCCNext.Size = new Size(34, 23);
+            tbCCNext.TabIndex = 17;
+            tbCCNext.Visible = false;
+            // 
+            // tbCCFast
+            // 
+            tbCCFast.Location = new Point(262, 321);
+            tbCCFast.Margin = new Padding(4, 4, 4, 4);
+            tbCCFast.MaxLength = 3;
+            tbCCFast.Name = "tbCCFast";
+            tbCCFast.Size = new Size(34, 23);
+            tbCCFast.TabIndex = 16;
+            tbCCFast.Visible = false;
+            // 
+            // tbCCStop
+            // 
+            tbCCStop.Location = new Point(7, 290);
+            tbCCStop.Margin = new Padding(4, 4, 4, 4);
+            tbCCStop.MaxLength = 3;
+            tbCCStop.Name = "tbCCStop";
+            tbCCStop.Size = new Size(34, 23);
+            tbCCStop.TabIndex = 10;
+            tbCCStop.Visible = false;
+            // 
+            // tbCCPlay
+            // 
+            tbCCPlay.Location = new Point(135, 321);
+            tbCCPlay.Margin = new Padding(4, 4, 4, 4);
+            tbCCPlay.MaxLength = 3;
+            tbCCPlay.Name = "tbCCPlay";
+            tbCCPlay.Size = new Size(34, 23);
+            tbCCPlay.TabIndex = 15;
+            tbCCPlay.Visible = false;
+            // 
+            // tbCCCopyLog
+            // 
+            tbCCCopyLog.Location = new Point(7, 259);
+            tbCCCopyLog.Margin = new Padding(4, 4, 4, 4);
+            tbCCCopyLog.MaxLength = 3;
+            tbCCCopyLog.Name = "tbCCCopyLog";
+            tbCCCopyLog.Size = new Size(34, 23);
+            tbCCCopyLog.TabIndex = 8;
+            tbCCCopyLog.Visible = false;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(49, 262);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(233, 15);
+            label17.TabIndex = 9;
+            label17.Text = "MONOモード時、選択ログをクリップボードに設定";
+            label17.Visible = false;
+            // 
+            // tbCCDelLog
+            // 
+            tbCCDelLog.Location = new Point(7, 228);
+            tbCCDelLog.Margin = new Padding(4, 4, 4, 4);
+            tbCCDelLog.MaxLength = 3;
+            tbCCDelLog.Name = "tbCCDelLog";
+            tbCCDelLog.Size = new Size(34, 23);
+            tbCCDelLog.TabIndex = 6;
+            tbCCDelLog.Visible = false;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(49, 231);
+            label15.Margin = new Padding(4, 0, 4, 0);
+            label15.Name = "label15";
+            label15.Size = new Size(120, 15);
+            label15.TabIndex = 7;
+            label15.Text = "直近のログをひとつ削除";
+            label15.Visible = false;
+            // 
+            // tbCCChCopy
+            // 
+            tbCCChCopy.Location = new Point(7, 196);
+            tbCCChCopy.Margin = new Padding(4, 4, 4, 4);
+            tbCCChCopy.MaxLength = 3;
+            tbCCChCopy.Name = "tbCCChCopy";
+            tbCCChCopy.Size = new Size(34, 23);
+            tbCCChCopy.TabIndex = 4;
+            tbCCChCopy.Visible = false;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(7, 178);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(162, 15);
+            label8.TabIndex = 3;
+            label8.Text = "CC(Control Change)による操作";
+            label8.Visible = false;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(49, 200);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(261, 15);
+            label9.TabIndex = 5;
+            label9.Text = "1Chの音色を全てのチャンネルにコピー(選択状況無視)";
+            label9.Visible = false;
+            // 
+            // gbUseChannel
+            // 
+            gbUseChannel.Controls.Add(rbMONO);
+            gbUseChannel.Controls.Add(rbPOLY);
+            gbUseChannel.Controls.Add(groupBox7);
+            gbUseChannel.Controls.Add(groupBox2);
+            gbUseChannel.Location = new Point(7, 55);
+            gbUseChannel.Margin = new Padding(4, 4, 4, 4);
+            gbUseChannel.Name = "gbUseChannel";
+            gbUseChannel.Padding = new Padding(4, 4, 4, 4);
+            gbUseChannel.Size = new Size(496, 108);
+            gbUseChannel.TabIndex = 2;
+            gbUseChannel.TabStop = false;
+            gbUseChannel.Text = "use channel";
+            gbUseChannel.Visible = false;
+            // 
+            // rbMONO
+            // 
+            rbMONO.AutoSize = true;
+            rbMONO.Checked = true;
+            rbMONO.Location = new Point(14, 21);
+            rbMONO.Margin = new Padding(4, 4, 4, 4);
+            rbMONO.Name = "rbMONO";
+            rbMONO.Size = new Size(63, 19);
+            rbMONO.TabIndex = 1;
+            rbMONO.TabStop = true;
+            rbMONO.Text = "MONO";
+            rbMONO.UseVisualStyleBackColor = true;
+            // 
+            // rbPOLY
+            // 
+            rbPOLY.AutoSize = true;
+            rbPOLY.Location = new Point(251, 21);
+            rbPOLY.Margin = new Padding(4, 4, 4, 4);
+            rbPOLY.Name = "rbPOLY";
+            rbPOLY.Size = new Size(54, 19);
+            rbPOLY.TabIndex = 3;
+            rbPOLY.Text = "POLY";
+            rbPOLY.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            groupBox7.Controls.Add(rbFM6);
+            groupBox7.Controls.Add(rbFM3);
+            groupBox7.Controls.Add(rbFM5);
+            groupBox7.Controls.Add(rbFM2);
+            groupBox7.Controls.Add(rbFM4);
+            groupBox7.Controls.Add(rbFM1);
+            groupBox7.Location = new Point(7, 22);
+            groupBox7.Margin = new Padding(4, 4, 4, 4);
+            groupBox7.Name = "groupBox7";
+            groupBox7.Padding = new Padding(4, 4, 4, 4);
+            groupBox7.Size = new Size(230, 78);
+            groupBox7.TabIndex = 0;
+            groupBox7.TabStop = false;
+            // 
+            // rbFM6
+            // 
+            rbFM6.AutoSize = true;
+            rbFM6.Location = new Point(126, 50);
+            rbFM6.Margin = new Padding(4, 4, 4, 4);
+            rbFM6.Name = "rbFM6";
+            rbFM6.Size = new Size(48, 19);
+            rbFM6.TabIndex = 5;
+            rbFM6.Text = "FM6";
+            rbFM6.UseVisualStyleBackColor = true;
+            // 
+            // rbFM3
+            // 
+            rbFM3.AutoSize = true;
+            rbFM3.Location = new Point(126, 22);
+            rbFM3.Margin = new Padding(4, 4, 4, 4);
+            rbFM3.Name = "rbFM3";
+            rbFM3.Size = new Size(48, 19);
+            rbFM3.TabIndex = 2;
+            rbFM3.Text = "FM3";
+            rbFM3.UseVisualStyleBackColor = true;
+            // 
+            // rbFM5
+            // 
+            rbFM5.AutoSize = true;
+            rbFM5.Location = new Point(66, 50);
+            rbFM5.Margin = new Padding(4, 4, 4, 4);
+            rbFM5.Name = "rbFM5";
+            rbFM5.Size = new Size(48, 19);
+            rbFM5.TabIndex = 4;
+            rbFM5.Text = "FM5";
+            rbFM5.UseVisualStyleBackColor = true;
+            // 
+            // rbFM2
+            // 
+            rbFM2.AutoSize = true;
+            rbFM2.Location = new Point(66, 22);
+            rbFM2.Margin = new Padding(4, 4, 4, 4);
+            rbFM2.Name = "rbFM2";
+            rbFM2.Size = new Size(48, 19);
+            rbFM2.TabIndex = 1;
+            rbFM2.Text = "FM2";
+            rbFM2.UseVisualStyleBackColor = true;
+            // 
+            // rbFM4
+            // 
+            rbFM4.AutoSize = true;
+            rbFM4.Location = new Point(7, 50);
+            rbFM4.Margin = new Padding(4, 4, 4, 4);
+            rbFM4.Name = "rbFM4";
+            rbFM4.Size = new Size(48, 19);
+            rbFM4.TabIndex = 3;
+            rbFM4.Text = "FM4";
+            rbFM4.UseVisualStyleBackColor = true;
+            // 
+            // rbFM1
+            // 
+            rbFM1.AutoSize = true;
+            rbFM1.Checked = true;
+            rbFM1.Location = new Point(7, 22);
+            rbFM1.Margin = new Padding(4, 4, 4, 4);
+            rbFM1.Name = "rbFM1";
+            rbFM1.Size = new Size(48, 19);
+            rbFM1.TabIndex = 0;
+            rbFM1.TabStop = true;
+            rbFM1.Text = "FM1";
+            rbFM1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(cbFM1);
+            groupBox2.Controls.Add(cbFM6);
+            groupBox2.Controls.Add(cbFM2);
+            groupBox2.Controls.Add(cbFM5);
+            groupBox2.Controls.Add(cbFM3);
+            groupBox2.Controls.Add(cbFM4);
+            groupBox2.Location = new Point(244, 22);
+            groupBox2.Margin = new Padding(4, 4, 4, 4);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new Padding(4, 4, 4, 4);
+            groupBox2.Size = new Size(245, 78);
+            groupBox2.TabIndex = 2;
+            groupBox2.TabStop = false;
+            // 
+            // cbFM1
+            // 
+            cbFM1.AutoSize = true;
+            cbFM1.Checked = true;
+            cbFM1.CheckState = CheckState.Checked;
+            cbFM1.Location = new Point(7, 22);
+            cbFM1.Margin = new Padding(4, 4, 4, 4);
+            cbFM1.Name = "cbFM1";
+            cbFM1.Size = new Size(49, 19);
+            cbFM1.TabIndex = 0;
+            cbFM1.Text = "FM1";
+            cbFM1.UseVisualStyleBackColor = true;
+            // 
+            // cbFM6
+            // 
+            cbFM6.AutoSize = true;
+            cbFM6.Checked = true;
+            cbFM6.CheckState = CheckState.Checked;
+            cbFM6.Location = new Point(128, 50);
+            cbFM6.Margin = new Padding(4, 4, 4, 4);
+            cbFM6.Name = "cbFM6";
+            cbFM6.Size = new Size(49, 19);
+            cbFM6.TabIndex = 5;
+            cbFM6.Text = "FM6";
+            cbFM6.UseVisualStyleBackColor = true;
+            // 
+            // cbFM2
+            // 
+            cbFM2.AutoSize = true;
+            cbFM2.Checked = true;
+            cbFM2.CheckState = CheckState.Checked;
+            cbFM2.Location = new Point(68, 22);
+            cbFM2.Margin = new Padding(4, 4, 4, 4);
+            cbFM2.Name = "cbFM2";
+            cbFM2.Size = new Size(49, 19);
+            cbFM2.TabIndex = 1;
+            cbFM2.Text = "FM2";
+            cbFM2.UseVisualStyleBackColor = true;
+            // 
+            // cbFM5
+            // 
+            cbFM5.AutoSize = true;
+            cbFM5.Checked = true;
+            cbFM5.CheckState = CheckState.Checked;
+            cbFM5.Location = new Point(68, 50);
+            cbFM5.Margin = new Padding(4, 4, 4, 4);
+            cbFM5.Name = "cbFM5";
+            cbFM5.Size = new Size(49, 19);
+            cbFM5.TabIndex = 4;
+            cbFM5.Text = "FM5";
+            cbFM5.UseVisualStyleBackColor = true;
+            // 
+            // cbFM3
+            // 
+            cbFM3.AutoSize = true;
+            cbFM3.Checked = true;
+            cbFM3.CheckState = CheckState.Checked;
+            cbFM3.Location = new Point(128, 22);
+            cbFM3.Margin = new Padding(4, 4, 4, 4);
+            cbFM3.Name = "cbFM3";
+            cbFM3.Size = new Size(49, 19);
+            cbFM3.TabIndex = 2;
+            cbFM3.Text = "FM3";
+            cbFM3.UseVisualStyleBackColor = true;
+            // 
+            // cbFM4
+            // 
+            cbFM4.AutoSize = true;
+            cbFM4.Checked = true;
+            cbFM4.CheckState = CheckState.Checked;
+            cbFM4.Location = new Point(7, 50);
+            cbFM4.Margin = new Padding(4, 4, 4, 4);
+            cbFM4.Name = "cbFM4";
+            cbFM4.Size = new Size(49, 19);
+            cbFM4.TabIndex = 3;
+            cbFM4.Text = "FM4";
+            cbFM4.UseVisualStyleBackColor = true;
+            // 
+            // cmbMIDIIN
+            // 
+            cmbMIDIIN.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbMIDIIN.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMIDIIN.FormattingEnabled = true;
+            cmbMIDIIN.Location = new Point(84, 22);
+            cmbMIDIIN.Margin = new Padding(4, 4, 4, 4);
+            cmbMIDIIN.Name = "cmbMIDIIN";
+            cmbMIDIIN.Size = new Size(416, 23);
+            cmbMIDIIN.TabIndex = 1;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(7, 26);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(47, 15);
+            label5.TabIndex = 0;
+            label5.Text = "MIDI IN";
+            // 
+            // tpKeyBoard
+            // 
+            tpKeyBoard.BorderStyle = BorderStyle.FixedSingle;
+            tpKeyBoard.Controls.Add(btnInitializeShortCutKey);
+            tpKeyBoard.Controls.Add(lblSKKey);
+            tpKeyBoard.Controls.Add(dgvShortCutKey);
+            tpKeyBoard.Location = new Point(4, 64);
+            tpKeyBoard.Margin = new Padding(4, 4, 4, 4);
+            tpKeyBoard.Name = "tpKeyBoard";
+            tpKeyBoard.Size = new Size(518, 490);
+            tpKeyBoard.TabIndex = 13;
+            tpKeyBoard.Text = "ショートカットキー";
+            tpKeyBoard.UseVisualStyleBackColor = true;
+            // 
+            // btnInitializeShortCutKey
+            // 
+            btnInitializeShortCutKey.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnInitializeShortCutKey.Location = new Point(390, 461);
+            btnInitializeShortCutKey.Margin = new Padding(4, 4, 4, 4);
+            btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
+            btnInitializeShortCutKey.Size = new Size(121, 29);
+            btnInitializeShortCutKey.TabIndex = 31;
+            btnInitializeShortCutKey.Text = "初期状態に戻す";
+            btnInitializeShortCutKey.UseVisualStyleBackColor = true;
+            btnInitializeShortCutKey.Click += btnInitializeShortCutKey_Click;
+            // 
+            // lblSKKey
+            // 
+            lblSKKey.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblSKKey.AutoSize = true;
+            lblSKKey.Location = new Point(49, 468);
+            lblSKKey.Margin = new Padding(4, 0, 4, 0);
+            lblSKKey.Name = "lblSKKey";
+            lblSKKey.Size = new Size(0, 15);
+            lblSKKey.TabIndex = 30;
+            // 
+            // dgvShortCutKey
+            // 
+            dgvShortCutKey.AllowUserToAddRows = false;
+            dgvShortCutKey.AllowUserToDeleteRows = false;
+            dgvShortCutKey.AllowUserToOrderColumns = true;
+            dgvShortCutKey.AllowUserToResizeRows = false;
+            dgvShortCutKey.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvShortCutKey.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvShortCutKey.Columns.AddRange(new DataGridViewColumn[] { clmNumber, clmFunc, clmShift, clmCtrl, clmAlt, clmKey, clmSet, clmClr, clmKBDSpacer });
+            dgvShortCutKey.Location = new Point(4, 4);
+            dgvShortCutKey.Margin = new Padding(4, 4, 4, 4);
+            dgvShortCutKey.MultiSelect = false;
+            dgvShortCutKey.Name = "dgvShortCutKey";
+            dgvShortCutKey.RowHeadersVisible = false;
+            dgvShortCutKey.RowTemplate.Height = 21;
+            dgvShortCutKey.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvShortCutKey.Size = new Size(507, 441);
+            dgvShortCutKey.TabIndex = 29;
+            dgvShortCutKey.CellContentClick += dgvShortCutKey_CellContentClick;
+            // 
+            // clmNumber
+            // 
+            clmNumber.HeaderText = "Number";
+            clmNumber.Name = "clmNumber";
+            clmNumber.Visible = false;
+            // 
+            // clmFunc
+            // 
+            clmFunc.HeaderText = "機能";
+            clmFunc.Name = "clmFunc";
+            clmFunc.ReadOnly = true;
+            clmFunc.Width = 150;
+            // 
+            // clmShift
+            // 
+            clmShift.HeaderText = "Shift";
+            clmShift.Name = "clmShift";
+            clmShift.Resizable = DataGridViewTriState.False;
+            clmShift.Width = 40;
+            // 
+            // clmCtrl
+            // 
+            clmCtrl.HeaderText = "Ctrl";
+            clmCtrl.Name = "clmCtrl";
+            clmCtrl.Resizable = DataGridViewTriState.False;
+            clmCtrl.Width = 40;
+            // 
+            // clmAlt
+            // 
+            clmAlt.HeaderText = "Alt";
+            clmAlt.Name = "clmAlt";
+            clmAlt.Resizable = DataGridViewTriState.False;
+            clmAlt.Width = 40;
+            // 
+            // clmKey
+            // 
+            clmKey.HeaderText = "Key";
+            clmKey.Name = "clmKey";
+            clmKey.ReadOnly = true;
+            clmKey.Width = 50;
+            // 
+            // clmSet
+            // 
+            clmSet.HeaderText = "Set";
+            clmSet.Name = "clmSet";
+            clmSet.Resizable = DataGridViewTriState.False;
+            clmSet.Text = "Set";
+            clmSet.Width = 40;
+            // 
+            // clmClr
+            // 
+            clmClr.HeaderText = "Clr";
+            clmClr.Name = "clmClr";
+            clmClr.Resizable = DataGridViewTriState.False;
+            clmClr.Text = "Clr";
+            clmClr.Width = 40;
+            // 
+            // clmKBDSpacer
+            // 
+            clmKBDSpacer.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            clmKBDSpacer.HeaderText = "";
+            clmKBDSpacer.Name = "clmKBDSpacer";
+            clmKBDSpacer.ReadOnly = true;
+            clmKBDSpacer.Resizable = DataGridViewTriState.True;
+            clmKBDSpacer.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tpBalance
+            // 
+            tpBalance.BorderStyle = BorderStyle.FixedSingle;
+            tpBalance.Controls.Add(groupBox25);
+            tpBalance.Controls.Add(cbAutoBalanceUseThis);
+            tpBalance.Controls.Add(groupBox18);
+            tpBalance.Location = new Point(4, 64);
+            tpBalance.Margin = new Padding(4, 4, 4, 4);
+            tpBalance.Name = "tpBalance";
+            tpBalance.Size = new Size(518, 490);
+            tpBalance.TabIndex = 12;
+            tpBalance.Text = "ミキサーバランス";
+            tpBalance.UseVisualStyleBackColor = true;
+            // 
+            // groupBox25
+            // 
+            groupBox25.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox25.Controls.Add(rbAutoBalanceNotSamePositionAsSongData);
+            groupBox25.Controls.Add(rbAutoBalanceSamePositionAsSongData);
+            groupBox25.Location = new Point(8, 409);
+            groupBox25.Margin = new Padding(4, 4, 4, 4);
+            groupBox25.Name = "groupBox25";
+            groupBox25.Padding = new Padding(4, 4, 4, 4);
+            groupBox25.Size = new Size(503, 51);
+            groupBox25.TabIndex = 1;
+            groupBox25.TabStop = false;
+            groupBox25.Text = "ソングミキサーバランス参照フォルダー";
+            // 
+            // rbAutoBalanceNotSamePositionAsSongData
+            // 
+            rbAutoBalanceNotSamePositionAsSongData.AutoSize = true;
+            rbAutoBalanceNotSamePositionAsSongData.Checked = true;
+            rbAutoBalanceNotSamePositionAsSongData.Location = new Point(7, 22);
+            rbAutoBalanceNotSamePositionAsSongData.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotSamePositionAsSongData.Name = "rbAutoBalanceNotSamePositionAsSongData";
+            rbAutoBalanceNotSamePositionAsSongData.Size = new Size(113, 19);
+            rbAutoBalanceNotSamePositionAsSongData.TabIndex = 0;
+            rbAutoBalanceNotSamePositionAsSongData.TabStop = true;
+            rbAutoBalanceNotSamePositionAsSongData.Text = "設定ファイルと同じ";
+            rbAutoBalanceNotSamePositionAsSongData.UseVisualStyleBackColor = true;
+            // 
+            // rbAutoBalanceSamePositionAsSongData
+            // 
+            rbAutoBalanceSamePositionAsSongData.AutoSize = true;
+            rbAutoBalanceSamePositionAsSongData.Location = new Point(142, 22);
+            rbAutoBalanceSamePositionAsSongData.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceSamePositionAsSongData.Name = "rbAutoBalanceSamePositionAsSongData";
+            rbAutoBalanceSamePositionAsSongData.Size = new Size(93, 19);
+            rbAutoBalanceSamePositionAsSongData.TabIndex = 0;
+            rbAutoBalanceSamePositionAsSongData.Text = "曲データと同じ";
+            rbAutoBalanceSamePositionAsSongData.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoBalanceUseThis
+            // 
+            cbAutoBalanceUseThis.AutoSize = true;
+            cbAutoBalanceUseThis.Checked = true;
+            cbAutoBalanceUseThis.CheckState = CheckState.Checked;
+            cbAutoBalanceUseThis.Location = new Point(15, 4);
+            cbAutoBalanceUseThis.Margin = new Padding(4, 4, 4, 4);
+            cbAutoBalanceUseThis.Name = "cbAutoBalanceUseThis";
+            cbAutoBalanceUseThis.Size = new Size(220, 19);
+            cbAutoBalanceUseThis.TabIndex = 1;
+            cbAutoBalanceUseThis.Text = "ミキサーバランス自動設定機能を使用する";
+            cbAutoBalanceUseThis.UseVisualStyleBackColor = true;
+            // 
+            // groupBox18
+            // 
+            groupBox18.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox18.Controls.Add(groupBox24);
+            groupBox18.Controls.Add(groupBox23);
+            groupBox18.Location = new Point(8, 4);
+            groupBox18.Margin = new Padding(4, 4, 4, 4);
+            groupBox18.Name = "groupBox18";
+            groupBox18.Padding = new Padding(4, 4, 4, 4);
+            groupBox18.Size = new Size(503, 398);
+            groupBox18.TabIndex = 0;
+            groupBox18.TabStop = false;
+            // 
+            // groupBox24
+            // 
+            groupBox24.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox24.Controls.Add(groupBox21);
+            groupBox24.Controls.Add(groupBox22);
+            groupBox24.Location = new Point(7, 231);
+            groupBox24.Margin = new Padding(4, 4, 4, 4);
+            groupBox24.Name = "groupBox24";
+            groupBox24.Padding = new Padding(4, 4, 4, 4);
+            groupBox24.Size = new Size(489, 159);
+            groupBox24.TabIndex = 1;
+            groupBox24.TabStop = false;
+            groupBox24.Text = "保存";
+            // 
+            // groupBox21
+            // 
+            groupBox21.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox21.Controls.Add(rbAutoBalanceNotSaveSongBalance);
+            groupBox21.Controls.Add(rbAutoBalanceSaveSongBalance);
+            groupBox21.Location = new Point(7, 22);
+            groupBox21.Margin = new Padding(4, 4, 4, 4);
+            groupBox21.Name = "groupBox21";
+            groupBox21.Padding = new Padding(4, 4, 4, 4);
+            groupBox21.Size = new Size(475, 78);
+            groupBox21.TabIndex = 0;
+            groupBox21.TabStop = false;
+            groupBox21.Text = "ソングミキサーバランス(曲データ毎)";
+            // 
+            // rbAutoBalanceNotSaveSongBalance
+            // 
+            rbAutoBalanceNotSaveSongBalance.AutoSize = true;
+            rbAutoBalanceNotSaveSongBalance.Checked = true;
+            rbAutoBalanceNotSaveSongBalance.Location = new Point(7, 50);
+            rbAutoBalanceNotSaveSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotSaveSongBalance.Name = "rbAutoBalanceNotSaveSongBalance";
+            rbAutoBalanceNotSaveSongBalance.Size = new Size(154, 19);
+            rbAutoBalanceNotSaveSongBalance.TabIndex = 0;
+            rbAutoBalanceNotSaveSongBalance.TabStop = true;
+            rbAutoBalanceNotSaveSongBalance.Text = "保存しない(手動保存のみ)";
+            rbAutoBalanceNotSaveSongBalance.UseVisualStyleBackColor = true;
+            // 
+            // rbAutoBalanceSaveSongBalance
+            // 
+            rbAutoBalanceSaveSongBalance.AutoSize = true;
+            rbAutoBalanceSaveSongBalance.Location = new Point(7, 22);
+            rbAutoBalanceSaveSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceSaveSongBalance.Name = "rbAutoBalanceSaveSongBalance";
+            rbAutoBalanceSaveSongBalance.Size = new Size(152, 19);
+            rbAutoBalanceSaveSongBalance.TabIndex = 0;
+            rbAutoBalanceSaveSongBalance.Text = "演奏停止時に自動で保存";
+            rbAutoBalanceSaveSongBalance.UseVisualStyleBackColor = true;
+            // 
+            // groupBox22
+            // 
+            groupBox22.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox22.Controls.Add(label4);
+            groupBox22.Location = new Point(7, 108);
+            groupBox22.Margin = new Padding(4, 4, 4, 4);
+            groupBox22.Name = "groupBox22";
+            groupBox22.Padding = new Padding(4, 4, 4, 4);
+            groupBox22.Size = new Size(475, 44);
+            groupBox22.TabIndex = 0;
+            groupBox22.TabStop = false;
+            groupBox22.Text = "ドライバーミキサーバランス(ドライバ毎)";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(7, 19);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(76, 15);
+            label4.TabIndex = 1;
+            label4.Text = "手動保存のみ";
+            // 
+            // groupBox23
+            // 
+            groupBox23.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox23.Controls.Add(groupBox19);
+            groupBox23.Controls.Add(groupBox20);
+            groupBox23.Location = new Point(7, 28);
+            groupBox23.Margin = new Padding(4, 4, 4, 4);
+            groupBox23.Name = "groupBox23";
+            groupBox23.Padding = new Padding(4, 4, 4, 4);
+            groupBox23.Size = new Size(489, 196);
+            groupBox23.TabIndex = 1;
+            groupBox23.TabStop = false;
+            groupBox23.Text = "読み込み";
+            // 
+            // groupBox19
+            // 
+            groupBox19.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox19.Controls.Add(rbAutoBalanceNotLoadSongBalance);
+            groupBox19.Controls.Add(rbAutoBalanceLoadSongBalance);
+            groupBox19.Location = new Point(7, 22);
+            groupBox19.Margin = new Padding(4, 4, 4, 4);
+            groupBox19.Name = "groupBox19";
+            groupBox19.Padding = new Padding(4, 4, 4, 4);
+            groupBox19.Size = new Size(475, 79);
+            groupBox19.TabIndex = 0;
+            groupBox19.TabStop = false;
+            groupBox19.Text = "ソングミキサーバランス(曲データ毎)";
+            // 
+            // rbAutoBalanceNotLoadSongBalance
+            // 
+            rbAutoBalanceNotLoadSongBalance.AutoSize = true;
+            rbAutoBalanceNotLoadSongBalance.Checked = true;
+            rbAutoBalanceNotLoadSongBalance.Location = new Point(7, 50);
+            rbAutoBalanceNotLoadSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotLoadSongBalance.Name = "rbAutoBalanceNotLoadSongBalance";
+            rbAutoBalanceNotLoadSongBalance.Size = new Size(104, 19);
+            rbAutoBalanceNotLoadSongBalance.TabIndex = 0;
+            rbAutoBalanceNotLoadSongBalance.TabStop = true;
+            rbAutoBalanceNotLoadSongBalance.Text = "手動で読み込む";
+            rbAutoBalanceNotLoadSongBalance.UseVisualStyleBackColor = true;
+            // 
+            // rbAutoBalanceLoadSongBalance
+            // 
+            rbAutoBalanceLoadSongBalance.AutoSize = true;
+            rbAutoBalanceLoadSongBalance.Location = new Point(7, 22);
+            rbAutoBalanceLoadSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceLoadSongBalance.Name = "rbAutoBalanceLoadSongBalance";
+            rbAutoBalanceLoadSongBalance.Size = new Size(149, 19);
+            rbAutoBalanceLoadSongBalance.TabIndex = 0;
+            rbAutoBalanceLoadSongBalance.Text = "再生時に自動で読み込む";
+            rbAutoBalanceLoadSongBalance.UseVisualStyleBackColor = true;
+            // 
+            // groupBox20
+            // 
+            groupBox20.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox20.Controls.Add(rbAutoBalanceNotLoadDriverBalance);
+            groupBox20.Controls.Add(rbAutoBalanceLoadDriverBalance);
+            groupBox20.Location = new Point(7, 109);
+            groupBox20.Margin = new Padding(4, 4, 4, 4);
+            groupBox20.Name = "groupBox20";
+            groupBox20.Padding = new Padding(4, 4, 4, 4);
+            groupBox20.Size = new Size(475, 79);
+            groupBox20.TabIndex = 0;
+            groupBox20.TabStop = false;
+            groupBox20.Text = "ドライバーミキサーバランス(ドライバ毎)";
+            // 
+            // rbAutoBalanceNotLoadDriverBalance
+            // 
+            rbAutoBalanceNotLoadDriverBalance.AutoSize = true;
+            rbAutoBalanceNotLoadDriverBalance.Location = new Point(7, 50);
+            rbAutoBalanceNotLoadDriverBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotLoadDriverBalance.Name = "rbAutoBalanceNotLoadDriverBalance";
+            rbAutoBalanceNotLoadDriverBalance.Size = new Size(104, 19);
+            rbAutoBalanceNotLoadDriverBalance.TabIndex = 0;
+            rbAutoBalanceNotLoadDriverBalance.Text = "手動で読み込む";
+            rbAutoBalanceNotLoadDriverBalance.UseVisualStyleBackColor = true;
+            // 
+            // rbAutoBalanceLoadDriverBalance
+            // 
+            rbAutoBalanceLoadDriverBalance.AutoSize = true;
+            rbAutoBalanceLoadDriverBalance.Checked = true;
+            rbAutoBalanceLoadDriverBalance.Location = new Point(7, 22);
+            rbAutoBalanceLoadDriverBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceLoadDriverBalance.Name = "rbAutoBalanceLoadDriverBalance";
+            rbAutoBalanceLoadDriverBalance.Size = new Size(343, 19);
+            rbAutoBalanceLoadDriverBalance.TabIndex = 0;
+            rbAutoBalanceLoadDriverBalance.TabStop = true;
+            rbAutoBalanceLoadDriverBalance.Text = "再生時に自動で読み込む(曲データ毎のバランスファイルが無い場合)";
+            rbAutoBalanceLoadDriverBalance.UseVisualStyleBackColor = true;
+            // 
+            // tpMMLParameter
+            // 
+            tpMMLParameter.BorderStyle = BorderStyle.FixedSingle;
+            tpMMLParameter.Controls.Add(cbDispInstrumentName);
+            tpMMLParameter.Location = new Point(4, 64);
+            tpMMLParameter.Margin = new Padding(4, 4, 4, 4);
+            tpMMLParameter.Name = "tpMMLParameter";
+            tpMMLParameter.Size = new Size(518, 490);
+            tpMMLParameter.TabIndex = 16;
+            tpMMLParameter.Text = "MMLParameter";
+            tpMMLParameter.UseVisualStyleBackColor = true;
+            // 
+            // cbDispInstrumentName
+            // 
+            cbDispInstrumentName.AutoSize = true;
+            cbDispInstrumentName.Location = new Point(27, 24);
+            cbDispInstrumentName.Margin = new Padding(4, 4, 4, 4);
+            cbDispInstrumentName.Name = "cbDispInstrumentName";
+            cbDispInstrumentName.Size = new Size(140, 19);
+            cbDispInstrumentName.TabIndex = 0;
+            cbDispInstrumentName.Text = "disp Instrument name";
+            cbDispInstrumentName.UseVisualStyleBackColor = true;
+            // 
+            // tpOther2
+            // 
+            tpOther2.Controls.Add(tbTABWidth);
+            tpOther2.Controls.Add(cbDispWarningMessage);
+            tpOther2.Controls.Add(tbUseHistoryBackUp);
+            tpOther2.Controls.Add(cbUseHistoryBackUp);
+            tpOther2.Controls.Add(cbUseMoonDriverDotNET);
+            tpOther2.Controls.Add(cbUsePMDDotNET);
+            tpOther2.Controls.Add(cbUseMucomDotNET);
+            tpOther2.Controls.Add(cbUseScript);
+            tpOther2.Controls.Add(cbChangeEnterCode);
+            tpOther2.Controls.Add(cbClearHistory);
+            tpOther2.Controls.Add(tbOpacity);
+            tpOther2.Controls.Add(label56);
+            tpOther2.Controls.Add(label52);
+            tpOther2.Controls.Add(groupBox29);
+            tpOther2.Controls.Add(cbInfiniteOfflineMode);
+            tpOther2.Controls.Add(cbUseSIen);
+            tpOther2.Controls.Add(cbRequestCacheClear);
+            tpOther2.Location = new Point(4, 44);
+            tpOther2.Margin = new Padding(4, 4, 4, 4);
+            tpOther2.Name = "tpOther2";
+            tpOther2.Size = new Size(518, 510);
+            tpOther2.TabIndex = 18;
+            tpOther2.Text = "Other";
+            tpOther2.UseVisualStyleBackColor = true;
             // 
             // cbDispWarningMessage
             // 
-            this.cbDispWarningMessage.AutoSize = true;
-            this.cbDispWarningMessage.Location = new System.Drawing.Point(7, 223);
-            this.cbDispWarningMessage.Name = "cbDispWarningMessage";
-            this.cbDispWarningMessage.Size = new System.Drawing.Size(283, 16);
-            this.cbDispWarningMessage.TabIndex = 30;
-            this.cbDispWarningMessage.Text = "コンパイル時の警告メッセージをログウィンドウに表示する";
-            this.cbDispWarningMessage.UseVisualStyleBackColor = true;
+            cbDispWarningMessage.AutoSize = true;
+            cbDispWarningMessage.Location = new Point(8, 279);
+            cbDispWarningMessage.Margin = new Padding(4, 4, 4, 4);
+            cbDispWarningMessage.Name = "cbDispWarningMessage";
+            cbDispWarningMessage.Size = new Size(283, 19);
+            cbDispWarningMessage.TabIndex = 30;
+            cbDispWarningMessage.Text = "コンパイル時の警告メッセージをログウィンドウに表示する";
+            cbDispWarningMessage.UseVisualStyleBackColor = true;
+            // 
+            // tbUseHistoryBackUp
+            // 
+            tbUseHistoryBackUp.Location = new Point(402, 249);
+            tbUseHistoryBackUp.Margin = new Padding(4, 4, 4, 4);
+            tbUseHistoryBackUp.Name = "tbUseHistoryBackUp";
+            tbUseHistoryBackUp.Size = new Size(61, 23);
+            tbUseHistoryBackUp.TabIndex = 29;
+            // 
+            // cbUseHistoryBackUp
+            // 
+            cbUseHistoryBackUp.AutoSize = true;
+            cbUseHistoryBackUp.Location = new Point(8, 251);
+            cbUseHistoryBackUp.Margin = new Padding(4, 4, 4, 4);
+            cbUseHistoryBackUp.Name = "cbUseHistoryBackUp";
+            cbUseHistoryBackUp.Size = new Size(346, 19);
+            cbUseHistoryBackUp.TabIndex = 28;
+            cbUseHistoryBackUp.Text = "保存時に既にファイルがある場合はバックアップする。バックアップ数：";
+            cbUseHistoryBackUp.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMoonDriverDotNET
+            // 
+            cbUseMoonDriverDotNET.AutoSize = true;
+            cbUseMoonDriverDotNET.Location = new Point(8, 224);
+            cbUseMoonDriverDotNET.Margin = new Padding(4, 4, 4, 4);
+            cbUseMoonDriverDotNET.Name = "cbUseMoonDriverDotNET";
+            cbUseMoonDriverDotNET.Size = new Size(237, 19);
+            cbUseMoonDriverDotNET.TabIndex = 27;
+            cbUseMoonDriverDotNET.Text = "MoonDriverDotNETを使用する(要再起動)";
+            cbUseMoonDriverDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUsePMDDotNET
+            // 
+            cbUsePMDDotNET.AutoSize = true;
+            cbUsePMDDotNET.Location = new Point(8, 196);
+            cbUsePMDDotNET.Margin = new Padding(4, 4, 4, 4);
+            cbUsePMDDotNET.Name = "cbUsePMDDotNET";
+            cbUsePMDDotNET.Size = new Size(200, 19);
+            cbUsePMDDotNET.TabIndex = 27;
+            cbUsePMDDotNET.Text = "PMDDotNETを使用する(要再起動)";
+            cbUsePMDDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUseMucomDotNET
+            // 
+            cbUseMucomDotNET.AutoSize = true;
+            cbUseMucomDotNET.Location = new Point(8, 169);
+            cbUseMucomDotNET.Margin = new Padding(4, 4, 4, 4);
+            cbUseMucomDotNET.Name = "cbUseMucomDotNET";
+            cbUseMucomDotNET.Size = new Size(214, 19);
+            cbUseMucomDotNET.TabIndex = 27;
+            cbUseMucomDotNET.Text = "mucomDotNETを使用する(要再起動)";
+            cbUseMucomDotNET.UseVisualStyleBackColor = true;
+            // 
+            // cbUseScript
+            // 
+            cbUseScript.AutoSize = true;
+            cbUseScript.Location = new Point(8, 141);
+            cbUseScript.Margin = new Padding(4, 4, 4, 4);
+            cbUseScript.Name = "cbUseScript";
+            cbUseScript.Size = new Size(177, 19);
+            cbUseScript.TabIndex = 27;
+            cbUseScript.Text = "スクリプトを使用する(要再起動)";
+            cbUseScript.UseVisualStyleBackColor = true;
+            // 
+            // cbChangeEnterCode
+            // 
+            cbChangeEnterCode.AutoSize = true;
+            cbChangeEnterCode.Location = new Point(8, 31);
+            cbChangeEnterCode.Margin = new Padding(4, 4, 4, 4);
+            cbChangeEnterCode.Name = "cbChangeEnterCode";
+            cbChangeEnterCode.Size = new Size(256, 19);
+            cbChangeEnterCode.TabIndex = 24;
+            cbChangeEnterCode.Text = "テキストファイルを開いた時、改行コード変換を行う";
+            cbChangeEnterCode.UseVisualStyleBackColor = true;
+            // 
+            // cbClearHistory
+            // 
+            cbClearHistory.AutoSize = true;
+            cbClearHistory.Location = new Point(8, 4);
+            cbClearHistory.Margin = new Padding(4, 4, 4, 4);
+            cbClearHistory.Name = "cbClearHistory";
+            cbClearHistory.Size = new Size(232, 19);
+            cbClearHistory.TabIndex = 26;
+            cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
+            cbClearHistory.UseVisualStyleBackColor = true;
+            // 
+            // tbOpacity
+            // 
+            tbOpacity.Location = new Point(125, 416);
+            tbOpacity.Margin = new Padding(4, 4, 4, 4);
+            tbOpacity.Maximum = 100;
+            tbOpacity.Minimum = 1;
+            tbOpacity.Name = "tbOpacity";
+            tbOpacity.Size = new Size(167, 45);
+            tbOpacity.TabIndex = 20;
+            tbOpacity.TickFrequency = 10;
+            tbOpacity.TickStyle = TickStyle.Both;
+            tbOpacity.Value = 1;
+            tbOpacity.Scroll += tbOpacity_Scroll;
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Location = new Point(6, 436);
+            label52.Margin = new Padding(4, 0, 4, 0);
+            label52.Name = "label52";
+            label52.Size = new Size(97, 15);
+            label52.TabIndex = 19;
+            label52.Text = "ウィンドウ不透明度";
+            // 
+            // groupBox29
+            // 
+            groupBox29.Controls.Add(label36);
+            groupBox29.Controls.Add(btFont);
+            groupBox29.Controls.Add(label54);
+            groupBox29.Controls.Add(lblFontName);
+            groupBox29.Controls.Add(label53);
+            groupBox29.Controls.Add(lblFontSize);
+            groupBox29.Controls.Add(lblFontStyle);
+            groupBox29.Location = new Point(299, 392);
+            groupBox29.Margin = new Padding(4, 4, 4, 4);
+            groupBox29.Name = "groupBox29";
+            groupBox29.Padding = new Padding(4, 4, 4, 4);
+            groupBox29.Size = new Size(215, 106);
+            groupBox29.TabIndex = 21;
+            groupBox29.TabStop = false;
+            groupBox29.Text = "フォント";
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(6, 19);
+            label36.Margin = new Padding(4, 0, 4, 0);
+            label36.Name = "label36";
+            label36.Size = new Size(38, 15);
+            label36.TabIndex = 19;
+            label36.Text = "Name";
+            // 
+            // btFont
+            // 
+            btFont.Location = new Point(181, 69);
+            btFont.Margin = new Padding(4, 4, 4, 4);
+            btFont.Name = "btFont";
+            btFont.Size = new Size(27, 29);
+            btFont.TabIndex = 18;
+            btFont.Text = "...";
+            btFont.UseVisualStyleBackColor = true;
+            btFont.Click += BtFont_Click;
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(6, 75);
+            label54.Margin = new Padding(4, 0, 4, 0);
+            label54.Name = "label54";
+            label54.Size = new Size(32, 15);
+            label54.TabIndex = 19;
+            label54.Text = "Style";
+            // 
+            // lblFontName
+            // 
+            lblFontName.AutoSize = true;
+            lblFontName.Location = new Point(64, 19);
+            lblFontName.Margin = new Padding(4, 0, 4, 0);
+            lblFontName.Name = "lblFontName";
+            lblFontName.Size = new Size(54, 15);
+            lblFontName.TabIndex = 19;
+            lblFontName.Text = "Consolas";
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Location = new Point(6, 48);
+            label53.Margin = new Padding(4, 0, 4, 0);
+            label53.Name = "label53";
+            label53.Size = new Size(27, 15);
+            label53.TabIndex = 19;
+            label53.Text = "Size";
+            // 
+            // lblFontSize
+            // 
+            lblFontSize.AutoSize = true;
+            lblFontSize.Location = new Point(64, 48);
+            lblFontSize.Margin = new Padding(4, 0, 4, 0);
+            lblFontSize.Name = "lblFontSize";
+            lblFontSize.Size = new Size(19, 15);
+            lblFontSize.TabIndex = 19;
+            lblFontSize.Text = "12";
+            // 
+            // lblFontStyle
+            // 
+            lblFontStyle.AutoSize = true;
+            lblFontStyle.Location = new Point(64, 75);
+            lblFontStyle.Margin = new Padding(4, 0, 4, 0);
+            lblFontStyle.Name = "lblFontStyle";
+            lblFontStyle.Size = new Size(47, 15);
+            lblFontStyle.TabIndex = 19;
+            lblFontStyle.Text = "Regular";
+            // 
+            // cbInfiniteOfflineMode
+            // 
+            cbInfiniteOfflineMode.AutoSize = true;
+            cbInfiniteOfflineMode.Location = new Point(8, 114);
+            cbInfiniteOfflineMode.Margin = new Padding(4, 4, 4, 4);
+            cbInfiniteOfflineMode.Name = "cbInfiniteOfflineMode";
+            cbInfiniteOfflineMode.Size = new Size(139, 19);
+            cbInfiniteOfflineMode.TabIndex = 23;
+            cbInfiniteOfflineMode.Text = "永続的にオフラインモード";
+            cbInfiniteOfflineMode.UseVisualStyleBackColor = true;
+            // 
+            // cbUseSIen
+            // 
+            cbUseSIen.AutoSize = true;
+            cbUseSIen.Location = new Point(8, 86);
+            cbUseSIen.Margin = new Padding(4, 4, 4, 4);
+            cbUseSIen.Name = "cbUseSIen";
+            cbUseSIen.Size = new Size(150, 19);
+            cbUseSIen.TabIndex = 23;
+            cbUseSIen.Text = "入力支援機能を使用する";
+            cbUseSIen.UseVisualStyleBackColor = true;
+            // 
+            // cbRequestCacheClear
+            // 
+            cbRequestCacheClear.AutoSize = true;
+            cbRequestCacheClear.Location = new Point(8, 59);
+            cbRequestCacheClear.Margin = new Padding(4, 4, 4, 4);
+            cbRequestCacheClear.Name = "cbRequestCacheClear";
+            cbRequestCacheClear.Size = new Size(213, 19);
+            cbRequestCacheClear.TabIndex = 23;
+            cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
+            cbRequestCacheClear.UseVisualStyleBackColor = true;
+            // 
+            // tpOther
+            // 
+            tpOther.BorderStyle = BorderStyle.FixedSingle;
+            tpOther.Controls.Add(cbWavSwitch);
+            tpOther.Controls.Add(groupBox17);
+            tpOther.Controls.Add(cbUseGetInst);
+            tpOther.Controls.Add(groupBox4);
+            tpOther.Controls.Add(cbDumpSwitch);
+            tpOther.Controls.Add(gbWav);
+            tpOther.Controls.Add(gbDump);
+            tpOther.Controls.Add(label30);
+            tpOther.Controls.Add(tbScreenFrameRate);
+            tpOther.Controls.Add(label29);
+            tpOther.Controls.Add(btnDataPath);
+            tpOther.Controls.Add(tbDataPath);
+            tpOther.Controls.Add(label19);
+            tpOther.Controls.Add(btnResetPosition);
+            tpOther.Controls.Add(btnOpenSettingFolder);
+            tpOther.Controls.Add(cbEmptyPlayList);
+            tpOther.Controls.Add(cbInitAlways);
+            tpOther.Controls.Add(cbAutoOpen);
+            tpOther.Controls.Add(cbUseLoopTimes);
+            tpOther.Location = new Point(4, 44);
+            tpOther.Margin = new Padding(4, 4, 4, 4);
+            tpOther.Name = "tpOther";
+            tpOther.Size = new Size(518, 510);
+            tpOther.TabIndex = 2;
+            tpOther.Text = "Other";
+            tpOther.UseVisualStyleBackColor = true;
+            // 
+            // cbWavSwitch
+            // 
+            cbWavSwitch.AutoSize = true;
+            cbWavSwitch.Location = new Point(16, 252);
+            cbWavSwitch.Margin = new Padding(4, 4, 4, 4);
+            cbWavSwitch.Name = "cbWavSwitch";
+            cbWavSwitch.Size = new Size(181, 19);
+            cbWavSwitch.TabIndex = 0;
+            cbWavSwitch.Text = "演奏時に.wavファイルを出力する";
+            cbWavSwitch.UseVisualStyleBackColor = true;
+            cbWavSwitch.CheckedChanged += cbWavSwitch_CheckedChanged;
+            // 
+            // groupBox17
+            // 
+            groupBox17.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox17.Controls.Add(tbImageExt);
+            groupBox17.Controls.Add(tbMMLExt);
+            groupBox17.Controls.Add(tbTextExt);
+            groupBox17.Controls.Add(label1);
+            groupBox17.Controls.Add(label3);
+            groupBox17.Controls.Add(label2);
+            groupBox17.Location = new Point(8, 320);
+            groupBox17.Margin = new Padding(4, 4, 4, 4);
+            groupBox17.Name = "groupBox17";
+            groupBox17.Padding = new Padding(4, 4, 4, 4);
+            groupBox17.Size = new Size(262, 104);
+            groupBox17.TabIndex = 1;
+            groupBox17.TabStop = false;
+            groupBox17.Text = "File Extension";
+            // 
+            // tbImageExt
+            // 
+            tbImageExt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbImageExt.Location = new Point(61, 72);
+            tbImageExt.Margin = new Padding(4, 4, 4, 4);
+            tbImageExt.Name = "tbImageExt";
+            tbImageExt.Size = new Size(188, 23);
+            tbImageExt.TabIndex = 1;
+            // 
+            // tbMMLExt
+            // 
+            tbMMLExt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbMMLExt.Location = new Point(61, 44);
+            tbMMLExt.Margin = new Padding(4, 4, 4, 4);
+            tbMMLExt.Name = "tbMMLExt";
+            tbMMLExt.Size = new Size(188, 23);
+            tbMMLExt.TabIndex = 1;
+            // 
+            // tbTextExt
+            // 
+            tbTextExt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbTextExt.Location = new Point(61, 15);
+            tbTextExt.Margin = new Padding(4, 4, 4, 4);
+            tbTextExt.Name = "tbTextExt";
+            tbTextExt.Size = new Size(188, 23);
+            tbTextExt.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(7, 19);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(28, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Text";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(7, 76);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(39, 15);
+            label3.TabIndex = 0;
+            label3.Text = "Image";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(7, 48);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(35, 15);
+            label2.TabIndex = 0;
+            label2.Text = "MML";
+            // 
+            // cbUseGetInst
+            // 
+            cbUseGetInst.AutoSize = true;
+            cbUseGetInst.Location = new Point(16, 39);
+            cbUseGetInst.Margin = new Padding(4, 4, 4, 4);
+            cbUseGetInst.Name = "cbUseGetInst";
+            cbUseGetInst.Size = new Size(289, 19);
+            cbUseGetInst.TabIndex = 12;
+            cbUseGetInst.Text = "音色欄をクリック時、その音色をクリップボードにコピーする";
+            cbUseGetInst.UseVisualStyleBackColor = true;
+            cbUseGetInst.CheckedChanged += cbUseGetInst_CheckedChanged;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox4.Controls.Add(cmbInstFormat);
+            groupBox4.Controls.Add(lblInstFormat);
+            groupBox4.Location = new Point(8, 39);
+            groupBox4.Margin = new Padding(4, 4, 4, 4);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Padding = new Padding(4, 4, 4, 4);
+            groupBox4.Size = new Size(503, 56);
+            groupBox4.TabIndex = 23;
+            groupBox4.TabStop = false;
+            // 
+            // cmbInstFormat
+            // 
+            cmbInstFormat.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbInstFormat.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbInstFormat.FormattingEnabled = true;
+            cmbInstFormat.Items.AddRange(new object[] { "FMP7", "MDX", ".TFI(ファイル出力)", "MUSIC LALF #1", "MUSIC LALF #2", "MML2VGM", "NRTDRV", "HuSIC" });
+            cmbInstFormat.Location = new Point(348, 24);
+            cmbInstFormat.Margin = new Padding(4, 4, 4, 4);
+            cmbInstFormat.Name = "cmbInstFormat";
+            cmbInstFormat.Size = new Size(148, 23);
+            cmbInstFormat.TabIndex = 18;
+            // 
+            // lblInstFormat
+            // 
+            lblInstFormat.AutoSize = true;
+            lblInstFormat.Location = new Point(276, 28);
+            lblInstFormat.Margin = new Padding(4, 0, 4, 0);
+            lblInstFormat.Name = "lblInstFormat";
+            lblInstFormat.Size = new Size(56, 15);
+            lblInstFormat.TabIndex = 17;
+            lblInstFormat.Text = "フォーマット";
+            // 
+            // cbDumpSwitch
+            // 
+            cbDumpSwitch.AutoSize = true;
+            cbDumpSwitch.Location = new Point(16, 190);
+            cbDumpSwitch.Margin = new Padding(4, 4, 4, 4);
+            cbDumpSwitch.Name = "cbDumpSwitch";
+            cbDumpSwitch.Size = new Size(222, 19);
+            cbDumpSwitch.TabIndex = 0;
+            cbDumpSwitch.Text = "DataBlock処理時にその内容をダンプする";
+            cbDumpSwitch.UseVisualStyleBackColor = true;
+            cbDumpSwitch.CheckedChanged += cbDumpSwitch_CheckedChanged;
+            // 
+            // gbWav
+            // 
+            gbWav.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbWav.Controls.Add(btnWavPath);
+            gbWav.Controls.Add(label7);
+            gbWav.Controls.Add(tbWavPath);
+            gbWav.Location = new Point(8, 256);
+            gbWav.Margin = new Padding(4, 4, 4, 4);
+            gbWav.Name = "gbWav";
+            gbWav.Padding = new Padding(4, 4, 4, 4);
+            gbWav.Size = new Size(503, 56);
+            gbWav.TabIndex = 22;
+            gbWav.TabStop = false;
+            // 
+            // btnWavPath
+            // 
+            btnWavPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnWavPath.Location = new Point(469, 20);
+            btnWavPath.Margin = new Padding(4, 4, 4, 4);
+            btnWavPath.Name = "btnWavPath";
+            btnWavPath.Size = new Size(27, 29);
+            btnWavPath.TabIndex = 16;
+            btnWavPath.Text = "...";
+            btnWavPath.UseVisualStyleBackColor = true;
+            btnWavPath.Click += btnWavPath_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(7, 26);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(55, 15);
+            label7.TabIndex = 14;
+            label7.Text = "出力Path";
+            // 
+            // tbWavPath
+            // 
+            tbWavPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbWavPath.Location = new Point(85, 22);
+            tbWavPath.Margin = new Padding(4, 4, 4, 4);
+            tbWavPath.Name = "tbWavPath";
+            tbWavPath.Size = new Size(376, 23);
+            tbWavPath.TabIndex = 15;
+            // 
+            // gbDump
+            // 
+            gbDump.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            gbDump.Controls.Add(btnDumpPath);
+            gbDump.Controls.Add(label6);
+            gbDump.Controls.Add(tbDumpPath);
+            gbDump.Location = new Point(8, 192);
+            gbDump.Margin = new Padding(4, 4, 4, 4);
+            gbDump.Name = "gbDump";
+            gbDump.Padding = new Padding(4, 4, 4, 4);
+            gbDump.Size = new Size(503, 56);
+            gbDump.TabIndex = 22;
+            gbDump.TabStop = false;
+            // 
+            // btnDumpPath
+            // 
+            btnDumpPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnDumpPath.Location = new Point(469, 20);
+            btnDumpPath.Margin = new Padding(4, 4, 4, 4);
+            btnDumpPath.Name = "btnDumpPath";
+            btnDumpPath.Size = new Size(27, 29);
+            btnDumpPath.TabIndex = 16;
+            btnDumpPath.Text = "...";
+            btnDumpPath.UseVisualStyleBackColor = true;
+            btnDumpPath.Click += btnDumpPath_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(7, 26);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(55, 15);
+            label6.TabIndex = 14;
+            label6.Text = "出力Path";
+            // 
+            // tbDumpPath
+            // 
+            tbDumpPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbDumpPath.Location = new Point(85, 22);
+            tbDumpPath.Margin = new Padding(4, 4, 4, 4);
+            tbDumpPath.Name = "tbDumpPath";
+            tbDumpPath.Size = new Size(376, 23);
+            tbDumpPath.TabIndex = 15;
+            // 
+            // label30
+            // 
+            label30.AutoSize = true;
+            label30.Location = new Point(159, 165);
+            label30.Margin = new Padding(4, 0, 4, 0);
+            label30.Name = "label30";
+            label30.Size = new Size(31, 15);
+            label30.TabIndex = 21;
+            label30.Text = "Hz/s";
+            // 
+            // tbScreenFrameRate
+            // 
+            tbScreenFrameRate.Location = new Point(93, 161);
+            tbScreenFrameRate.Margin = new Padding(4, 4, 4, 4);
+            tbScreenFrameRate.Name = "tbScreenFrameRate";
+            tbScreenFrameRate.Size = new Size(58, 23);
+            tbScreenFrameRate.TabIndex = 20;
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new Point(6, 165);
+            label29.Margin = new Padding(4, 0, 4, 0);
+            label29.Name = "label29";
+            label29.Size = new Size(66, 15);
+            label29.TabIndex = 19;
+            label29.Text = "フレームレート";
+            // 
+            // btnDataPath
+            // 
+            btnDataPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnDataPath.Location = new Point(477, 128);
+            btnDataPath.Margin = new Padding(4, 4, 4, 4);
+            btnDataPath.Name = "btnDataPath";
+            btnDataPath.Size = new Size(27, 29);
+            btnDataPath.TabIndex = 16;
+            btnDataPath.Text = "...";
+            btnDataPath.UseVisualStyleBackColor = true;
+            btnDataPath.Click += btnDataPath_Click;
+            // 
+            // tbDataPath
+            // 
+            tbDataPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbDataPath.Location = new Point(93, 130);
+            tbDataPath.Margin = new Padding(4, 4, 4, 4);
+            tbDataPath.Name = "tbDataPath";
+            tbDataPath.Size = new Size(376, 23);
+            tbDataPath.TabIndex = 15;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(6, 134);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(57, 15);
+            label19.TabIndex = 14;
+            label19.Text = "データPath";
+            // 
+            // btnResetPosition
+            // 
+            btnResetPosition.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnResetPosition.Location = new Point(192, 468);
+            btnResetPosition.Margin = new Padding(4, 4, 4, 4);
+            btnResetPosition.Name = "btnResetPosition";
+            btnResetPosition.Size = new Size(166, 29);
+            btnResetPosition.TabIndex = 13;
+            btnResetPosition.Text = "ウィンドウ位置をリセット";
+            btnResetPosition.UseVisualStyleBackColor = true;
+            btnResetPosition.Click += btnResetPosition_Click;
+            // 
+            // btnOpenSettingFolder
+            // 
+            btnOpenSettingFolder.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnOpenSettingFolder.Location = new Point(365, 468);
+            btnOpenSettingFolder.Margin = new Padding(4, 4, 4, 4);
+            btnOpenSettingFolder.Name = "btnOpenSettingFolder";
+            btnOpenSettingFolder.Size = new Size(146, 29);
+            btnOpenSettingFolder.TabIndex = 13;
+            btnOpenSettingFolder.Text = "設定フォルダーを開く";
+            btnOpenSettingFolder.UseVisualStyleBackColor = true;
+            btnOpenSettingFolder.Click += btnOpenSettingFolder_Click;
+            // 
+            // cbEmptyPlayList
+            // 
+            cbEmptyPlayList.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbEmptyPlayList.AutoSize = true;
+            cbEmptyPlayList.Location = new Point(304, 385);
+            cbEmptyPlayList.Margin = new Padding(4, 4, 4, 4);
+            cbEmptyPlayList.Name = "cbEmptyPlayList";
+            cbEmptyPlayList.Size = new Size(180, 19);
+            cbEmptyPlayList.TabIndex = 0;
+            cbEmptyPlayList.Text = "起動時にプレイリストを空にする。";
+            cbEmptyPlayList.UseVisualStyleBackColor = true;
+            cbEmptyPlayList.CheckedChanged += cbUseLoopTimes_CheckedChanged;
+            // 
+            // cbInitAlways
+            // 
+            cbInitAlways.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbInitAlways.Location = new Point(278, 329);
+            cbInitAlways.Margin = new Padding(4, 4, 4, 4);
+            cbInitAlways.Name = "cbInitAlways";
+            cbInitAlways.Size = new Size(226, 49);
+            cbInitAlways.TabIndex = 0;
+            cbInitAlways.Text = "再生開始時に必ずデバイスを初期化する。";
+            cbInitAlways.UseVisualStyleBackColor = true;
+            cbInitAlways.CheckedChanged += cbUseLoopTimes_CheckedChanged;
+            // 
+            // cbAutoOpen
+            // 
+            cbAutoOpen.AutoSize = true;
+            cbAutoOpen.Location = new Point(8, 102);
+            cbAutoOpen.Margin = new Padding(4, 4, 4, 4);
+            cbAutoOpen.Name = "cbAutoOpen";
+            cbAutoOpen.Size = new Size(170, 19);
+            cbAutoOpen.TabIndex = 0;
+            cbAutoOpen.Text = "使用音源の画面を自動で開く";
+            cbAutoOpen.UseVisualStyleBackColor = true;
+            cbAutoOpen.CheckedChanged += cbUseLoopTimes_CheckedChanged;
+            // 
+            // cbUseLoopTimes
+            // 
+            cbUseLoopTimes.AutoSize = true;
+            cbUseLoopTimes.Location = new Point(8, 9);
+            cbUseLoopTimes.Margin = new Padding(4, 4, 4, 4);
+            cbUseLoopTimes.Name = "cbUseLoopTimes";
+            cbUseLoopTimes.Size = new Size(215, 19);
+            cbUseLoopTimes.TabIndex = 0;
+            cbUseLoopTimes.Text = "無限ループ時、指定の回数だけ繰り返す";
+            cbUseLoopTimes.UseVisualStyleBackColor = true;
+            cbUseLoopTimes.CheckedChanged += cbUseLoopTimes_CheckedChanged;
+            // 
+            // tpOmake
+            // 
+            tpOmake.BorderStyle = BorderStyle.FixedSingle;
+            tpOmake.Controls.Add(groupBox31);
+            tpOmake.Controls.Add(groupBox30);
+            tpOmake.Controls.Add(label14);
+            tpOmake.Controls.Add(btVST);
+            tpOmake.Controls.Add(tbVST);
+            tpOmake.Controls.Add(groupBox5);
+            tpOmake.Location = new Point(4, 64);
+            tpOmake.Margin = new Padding(4, 4, 4, 4);
+            tpOmake.Name = "tpOmake";
+            tpOmake.Size = new Size(518, 490);
+            tpOmake.TabIndex = 7;
+            tpOmake.Text = "おまけ";
+            tpOmake.UseVisualStyleBackColor = true;
+            // 
+            // groupBox31
+            // 
+            groupBox31.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox31.Controls.Add(rbLoglevelINFO);
+            groupBox31.Controls.Add(rbLoglevelDEBUG);
+            groupBox31.Controls.Add(rbLoglevelTRACE);
+            groupBox31.Location = new Point(8, 151);
+            groupBox31.Margin = new Padding(4, 4, 4, 4);
+            groupBox31.Name = "groupBox31";
+            groupBox31.Padding = new Padding(4, 4, 4, 4);
+            groupBox31.Size = new Size(503, 54);
+            groupBox31.TabIndex = 25;
+            groupBox31.TabStop = false;
+            groupBox31.Text = "Log level";
+            // 
+            // rbLoglevelINFO
+            // 
+            rbLoglevelINFO.AutoSize = true;
+            rbLoglevelINFO.Checked = true;
+            rbLoglevelINFO.Location = new Point(13, 20);
+            rbLoglevelINFO.Margin = new Padding(4, 4, 4, 4);
+            rbLoglevelINFO.Name = "rbLoglevelINFO";
+            rbLoglevelINFO.Size = new Size(52, 19);
+            rbLoglevelINFO.TabIndex = 3;
+            rbLoglevelINFO.TabStop = true;
+            rbLoglevelINFO.Text = "INFO";
+            rbLoglevelINFO.UseVisualStyleBackColor = true;
+            // 
+            // rbLoglevelDEBUG
+            // 
+            rbLoglevelDEBUG.AutoSize = true;
+            rbLoglevelDEBUG.Location = new Point(77, 20);
+            rbLoglevelDEBUG.Margin = new Padding(4, 4, 4, 4);
+            rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
+            rbLoglevelDEBUG.Size = new Size(62, 19);
+            rbLoglevelDEBUG.TabIndex = 3;
+            rbLoglevelDEBUG.Text = "DEBUG";
+            rbLoglevelDEBUG.UseVisualStyleBackColor = true;
+            // 
+            // rbLoglevelTRACE
+            // 
+            rbLoglevelTRACE.AutoSize = true;
+            rbLoglevelTRACE.Location = new Point(156, 20);
+            rbLoglevelTRACE.Margin = new Padding(4, 4, 4, 4);
+            rbLoglevelTRACE.Name = "rbLoglevelTRACE";
+            rbLoglevelTRACE.Size = new Size(59, 19);
+            rbLoglevelTRACE.TabIndex = 3;
+            rbLoglevelTRACE.Text = "TRACE";
+            rbLoglevelTRACE.UseVisualStyleBackColor = true;
+            // 
+            // groupBox30
+            // 
+            groupBox30.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox30.Controls.Add(rbQueryPerformanceCounter);
+            groupBox30.Controls.Add(rbDateTime);
+            groupBox30.Controls.Add(rbStopWatch);
+            groupBox30.Location = new Point(8, 212);
+            groupBox30.Margin = new Padding(4, 4, 4, 4);
+            groupBox30.Name = "groupBox30";
+            groupBox30.Padding = new Padding(4, 4, 4, 4);
+            groupBox30.Size = new Size(503, 106);
+            groupBox30.TabIndex = 24;
+            groupBox30.TabStop = false;
+            groupBox30.Text = "Music Interrupt Timer";
+            // 
+            // rbQueryPerformanceCounter
+            // 
+            rbQueryPerformanceCounter.AutoSize = true;
+            rbQueryPerformanceCounter.Location = new Point(7, 78);
+            rbQueryPerformanceCounter.Margin = new Padding(4, 4, 4, 4);
+            rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
+            rbQueryPerformanceCounter.Size = new Size(225, 19);
+            rbQueryPerformanceCounter.TabIndex = 2;
+            rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
+            rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
+            // 
+            // rbDateTime
+            // 
+            rbDateTime.AutoSize = true;
+            rbDateTime.Location = new Point(7, 50);
+            rbDateTime.Margin = new Padding(4, 4, 4, 4);
+            rbDateTime.Name = "rbDateTime";
+            rbDateTime.Size = new Size(96, 19);
+            rbDateTime.TabIndex = 1;
+            rbDateTime.Text = "DateTime(C#)";
+            rbDateTime.UseVisualStyleBackColor = true;
+            // 
+            // rbStopWatch
+            // 
+            rbStopWatch.AutoSize = true;
+            rbStopWatch.Checked = true;
+            rbStopWatch.Location = new Point(7, 22);
+            rbStopWatch.Margin = new Padding(4, 4, 4, 4);
+            rbStopWatch.Name = "rbStopWatch";
+            rbStopWatch.Size = new Size(143, 19);
+            rbStopWatch.TabIndex = 0;
+            rbStopWatch.TabStop = true;
+            rbStopWatch.Text = "Stopwatch(C#) default";
+            rbStopWatch.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(8, 474);
+            label14.Margin = new Padding(4, 0, 4, 0);
+            label14.Name = "label14";
+            label14.Size = new Size(58, 15);
+            label14.TabIndex = 19;
+            label14.Text = "VST effect";
+            label14.Visible = false;
+            // 
+            // btVST
+            // 
+            btVST.Location = new Point(486, 468);
+            btVST.Margin = new Padding(4, 4, 4, 4);
+            btVST.Name = "btVST";
+            btVST.Size = new Size(27, 29);
+            btVST.TabIndex = 18;
+            btVST.Text = "...";
+            btVST.UseVisualStyleBackColor = true;
+            btVST.Visible = false;
+            btVST.Click += btVST_Click;
+            // 
+            // tbVST
+            // 
+            tbVST.Location = new Point(103, 470);
+            tbVST.Margin = new Padding(4, 4, 4, 4);
+            tbVST.Name = "tbVST";
+            tbVST.Size = new Size(376, 23);
+            tbVST.TabIndex = 17;
+            tbVST.Visible = false;
+            // 
+            // groupBox5
+            // 
+            groupBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox5.Controls.Add(cbSinWave);
+            groupBox5.Controls.Add(cbPlayDeviceCB);
+            groupBox5.Controls.Add(cbLogWarning);
+            groupBox5.Controls.Add(cbDispFrameCounter);
+            groupBox5.Location = new Point(8, 4);
+            groupBox5.Margin = new Padding(4, 4, 4, 4);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Padding = new Padding(4, 4, 4, 4);
+            groupBox5.Size = new Size(503, 140);
+            groupBox5.TabIndex = 3;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Debug Mode";
+            // 
+            // cbSinWave
+            // 
+            cbSinWave.AutoSize = true;
+            cbSinWave.Location = new Point(8, 106);
+            cbSinWave.Margin = new Padding(4, 4, 4, 4);
+            cbSinWave.Name = "cbSinWave";
+            cbSinWave.Size = new Size(94, 19);
+            cbSinWave.TabIndex = 2;
+            cbSinWave.Text = "440Hz正弦波";
+            cbSinWave.UseVisualStyleBackColor = true;
+            // 
+            // cbPlayDeviceCB
+            // 
+            cbPlayDeviceCB.AutoSize = true;
+            cbPlayDeviceCB.Location = new Point(7, 79);
+            cbPlayDeviceCB.Margin = new Padding(4, 4, 4, 4);
+            cbPlayDeviceCB.Name = "cbPlayDeviceCB";
+            cbPlayDeviceCB.Size = new Size(160, 19);
+            cbPlayDeviceCB.TabIndex = 2;
+            cbPlayDeviceCB.Text = "デバイスのコールバックで演奏";
+            cbPlayDeviceCB.UseVisualStyleBackColor = true;
+            // 
+            // cbLogWarning
+            // 
+            cbLogWarning.AutoSize = true;
+            cbLogWarning.Location = new Point(7, 49);
+            cbLogWarning.Margin = new Padding(4, 4, 4, 4);
+            cbLogWarning.Name = "cbLogWarning";
+            cbLogWarning.Size = new Size(150, 19);
+            cbLogWarning.TabIndex = 2;
+            cbLogWarning.Text = "ログにWarningを出力する";
+            cbLogWarning.UseVisualStyleBackColor = true;
+            // 
+            // cbDispFrameCounter
+            // 
+            cbDispFrameCounter.AutoSize = true;
+            cbDispFrameCounter.Location = new Point(7, 21);
+            cbDispFrameCounter.Margin = new Padding(4, 4, 4, 4);
+            cbDispFrameCounter.Name = "cbDispFrameCounter";
+            cbDispFrameCounter.Size = new Size(127, 19);
+            cbDispFrameCounter.TabIndex = 2;
+            cbDispFrameCounter.Text = "Debugウィンドウ表示";
+            cbDispFrameCounter.UseVisualStyleBackColor = true;
+            // 
+            // tpAbout
+            // 
+            tpAbout.BorderStyle = BorderStyle.FixedSingle;
+            tpAbout.Controls.Add(tableLayoutPanel);
+            tpAbout.Location = new Point(4, 64);
+            tpAbout.Margin = new Padding(4, 4, 4, 4);
+            tpAbout.Name = "tpAbout";
+            tpAbout.Padding = new Padding(4, 4, 4, 4);
+            tpAbout.Size = new Size(518, 490);
+            tpAbout.TabIndex = 1;
+            tpAbout.Text = "About";
+            tpAbout.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel
+            // 
+            tableLayoutPanel.ColumnCount = 2;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67F));
+            tableLayoutPanel.Controls.Add(logoPictureBox, 0, 0);
+            tableLayoutPanel.Controls.Add(labelProductName, 1, 0);
+            tableLayoutPanel.Controls.Add(labelVersion, 1, 1);
+            tableLayoutPanel.Controls.Add(labelCopyright, 1, 2);
+            tableLayoutPanel.Controls.Add(labelCompanyName, 1, 3);
+            tableLayoutPanel.Controls.Add(textBoxDescription, 1, 4);
+            tableLayoutPanel.Controls.Add(llOpenGithub, 1, 5);
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.Location = new Point(4, 4);
+            tableLayoutPanel.Margin = new Padding(4, 4, 4, 4);
+            tableLayoutPanel.Name = "tableLayoutPanel";
+            tableLayoutPanel.RowCount = 6;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 8.070175F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 53.33333F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 8.421053F));
+            tableLayoutPanel.Size = new Size(508, 480);
+            tableLayoutPanel.TabIndex = 1;
+            // 
+            // logoPictureBox
+            // 
+            logoPictureBox.Dock = DockStyle.Fill;
+            logoPictureBox.Image = Resources.ccPlay;
+            logoPictureBox.Location = new Point(4, 4);
+            logoPictureBox.Margin = new Padding(4, 4, 4, 4);
+            logoPictureBox.Name = "logoPictureBox";
+            tableLayoutPanel.SetRowSpan(logoPictureBox, 6);
+            logoPictureBox.Size = new Size(159, 472);
+            logoPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            logoPictureBox.TabIndex = 12;
+            logoPictureBox.TabStop = false;
+            // 
+            // labelProductName
+            // 
+            labelProductName.Dock = DockStyle.Fill;
+            labelProductName.Location = new Point(174, 0);
+            labelProductName.Margin = new Padding(7, 0, 4, 0);
+            labelProductName.MaximumSize = new Size(0, 20);
+            labelProductName.Name = "labelProductName";
+            labelProductName.Size = new Size(330, 20);
+            labelProductName.TabIndex = 19;
+            labelProductName.Text = "製品名";
+            labelProductName.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelVersion
+            // 
+            labelVersion.Dock = DockStyle.Fill;
+            labelVersion.Location = new Point(174, 48);
+            labelVersion.Margin = new Padding(7, 0, 4, 0);
+            labelVersion.MaximumSize = new Size(0, 20);
+            labelVersion.Name = "labelVersion";
+            labelVersion.Size = new Size(330, 20);
+            labelVersion.TabIndex = 0;
+            labelVersion.Text = "バージョン";
+            labelVersion.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelCopyright
+            // 
+            labelCopyright.Dock = DockStyle.Fill;
+            labelCopyright.Location = new Point(174, 96);
+            labelCopyright.Margin = new Padding(7, 0, 4, 0);
+            labelCopyright.MaximumSize = new Size(0, 20);
+            labelCopyright.Name = "labelCopyright";
+            labelCopyright.Size = new Size(330, 20);
+            labelCopyright.TabIndex = 21;
+            labelCopyright.Text = "著作権";
+            labelCopyright.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelCompanyName
+            // 
+            labelCompanyName.Dock = DockStyle.Fill;
+            labelCompanyName.Location = new Point(174, 144);
+            labelCompanyName.Margin = new Padding(7, 0, 4, 0);
+            labelCompanyName.MaximumSize = new Size(0, 20);
+            labelCompanyName.Name = "labelCompanyName";
+            labelCompanyName.Size = new Size(330, 20);
+            labelCompanyName.TabIndex = 22;
+            labelCompanyName.Text = "会社名";
+            labelCompanyName.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // textBoxDescription
+            // 
+            textBoxDescription.Dock = DockStyle.Fill;
+            textBoxDescription.Location = new Point(174, 186);
+            textBoxDescription.Margin = new Padding(7, 4, 4, 4);
+            textBoxDescription.Multiline = true;
+            textBoxDescription.Name = "textBoxDescription";
+            textBoxDescription.ReadOnly = true;
+            textBoxDescription.ScrollBars = ScrollBars.Both;
+            textBoxDescription.Size = new Size(330, 248);
+            textBoxDescription.TabIndex = 23;
+            textBoxDescription.TabStop = false;
+            textBoxDescription.Text = "説明";
+            // 
+            // llOpenGithub
+            // 
+            llOpenGithub.AutoSize = true;
+            llOpenGithub.Dock = DockStyle.Fill;
+            llOpenGithub.Location = new Point(171, 438);
+            llOpenGithub.Margin = new Padding(4, 0, 4, 0);
+            llOpenGithub.Name = "llOpenGithub";
+            llOpenGithub.Size = new Size(333, 42);
+            llOpenGithub.TabIndex = 24;
+            llOpenGithub.TabStop = true;
+            llOpenGithub.Text = "Open latest version page of Github.";
+            llOpenGithub.TextAlign = ContentAlignment.MiddleCenter;
+            llOpenGithub.LinkClicked += llOpenGithub_LinkClicked;
+            // 
+            // cbHiyorimiMode
+            // 
+            cbHiyorimiMode.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            cbHiyorimiMode.AutoSize = true;
+            cbHiyorimiMode.Location = new Point(13, 570);
+            cbHiyorimiMode.Margin = new Padding(4, 4, 4, 4);
+            cbHiyorimiMode.Name = "cbHiyorimiMode";
+            cbHiyorimiMode.Size = new Size(222, 34);
+            cbHiyorimiMode.TabIndex = 6;
+            cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
+            cbHiyorimiMode.UseVisualStyleBackColor = true;
+            cbHiyorimiMode.Visible = false;
+            // 
+            // label56
+            // 
+            label56.AutoSize = true;
+            label56.Location = new Point(8, 475);
+            label56.Margin = new Padding(4, 0, 4, 0);
+            label56.Name = "label56";
+            label56.Size = new Size(37, 15);
+            label56.TabIndex = 19;
+            label56.Text = "タブ幅";
+            // 
+            // tbTABWidth
+            // 
+            tbTABWidth.Location = new Point(125, 472);
+            tbTABWidth.Margin = new Padding(4);
+            tbTABWidth.Name = "tbTABWidth";
+            tbTABWidth.Size = new Size(61, 23);
+            tbTABWidth.TabIndex = 31;
             // 
             // FrmSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(464, 490);
-            this.Controls.Add(this.cbHiyorimiMode);
-            this.Controls.Add(this.tcSetting);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnOK);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(480, 529);
-            this.Name = "FrmSetting";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "オプション";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmSetting_FormClosed);
-            this.Load += new System.EventHandler(this.frmSetting_Load);
-            this.gbWaveOut.ResumeLayout(false);
-            this.gbAsioOut.ResumeLayout(false);
-            this.gbWasapiOut.ResumeLayout(false);
-            this.gbWasapiOut.PerformLayout();
-            this.gbDirectSound.ResumeLayout(false);
-            this.tcSetting.ResumeLayout(false);
-            this.tpOutput.ResumeLayout(false);
-            this.tpOutput.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage11.ResumeLayout(false);
-            this.tabPage11.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox16.ResumeLayout(false);
-            this.tabPage12.ResumeLayout(false);
-            this.groupBox27.ResumeLayout(false);
-            this.groupBox27.PerformLayout();
-            this.groupBox28.ResumeLayout(false);
-            this.groupBox28.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.tabPage13.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutPallet)).EndInit();
-            this.tbcMIDIoutList.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListA)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListB)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListC)).EndInit();
-            this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListD)).EndInit();
-            this.tpNuked.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage14.ResumeLayout(false);
-            this.groupBox26.ResumeLayout(false);
-            this.groupBox26.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            this.groupBox34.ResumeLayout(false);
-            this.groupBox34.PerformLayout();
-            this.tpNSF.ResumeLayout(false);
-            this.tabControl3.ResumeLayout(false);
-            this.tabPage15.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            this.groupBox12.ResumeLayout(false);
-            this.groupBox12.PerformLayout();
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
-            this.tabPage16.ResumeLayout(false);
-            this.tabPage16.PerformLayout();
-            this.groupBox14.ResumeLayout(false);
-            this.groupBox14.PerformLayout();
-            this.groupBox13.ResumeLayout(false);
-            this.groupBox13.PerformLayout();
-            this.tabPage17.ResumeLayout(false);
-            this.groupBox15.ResumeLayout(false);
-            this.groupBox15.PerformLayout();
-            this.tpPMDDotNET.ResumeLayout(false);
-            this.tpPMDDotNET.PerformLayout();
-            this.gbPMDManual.ResumeLayout(false);
-            this.gbPMDManual.PerformLayout();
-            this.groupBox32.ResumeLayout(false);
-            this.groupBox32.PerformLayout();
-            this.gbPPSDRV.ResumeLayout(false);
-            this.groupBox33.ResumeLayout(false);
-            this.groupBox33.PerformLayout();
-            this.gbPMDSetManualVolume.ResumeLayout(false);
-            this.gbPMDSetManualVolume.PerformLayout();
-            this.tpExport.ResumeLayout(false);
-            this.tpExport.PerformLayout();
-            this.gpbFixedExportPlace.ResumeLayout(false);
-            this.gpbFixedExportPlace.PerformLayout();
-            this.tpMIDIExp.ResumeLayout(false);
-            this.tpMIDIExp.PerformLayout();
-            this.gbMIDIExport.ResumeLayout(false);
-            this.gbMIDIExport.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
-            this.tpMIDIKBD.ResumeLayout(false);
-            this.tpMIDIKBD.PerformLayout();
-            this.gbMIDIKeyboard.ResumeLayout(false);
-            this.gbMIDIKeyboard.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.gbUseChannel.ResumeLayout(false);
-            this.gbUseChannel.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.tpKeyBoard.ResumeLayout(false);
-            this.tpKeyBoard.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvShortCutKey)).EndInit();
-            this.tpBalance.ResumeLayout(false);
-            this.tpBalance.PerformLayout();
-            this.groupBox25.ResumeLayout(false);
-            this.groupBox25.PerformLayout();
-            this.groupBox18.ResumeLayout(false);
-            this.groupBox24.ResumeLayout(false);
-            this.groupBox21.ResumeLayout(false);
-            this.groupBox21.PerformLayout();
-            this.groupBox22.ResumeLayout(false);
-            this.groupBox22.PerformLayout();
-            this.groupBox23.ResumeLayout(false);
-            this.groupBox19.ResumeLayout(false);
-            this.groupBox19.PerformLayout();
-            this.groupBox20.ResumeLayout(false);
-            this.groupBox20.PerformLayout();
-            this.tpMMLParameter.ResumeLayout(false);
-            this.tpMMLParameter.PerformLayout();
-            this.tpOther2.ResumeLayout(false);
-            this.tpOther2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();
-            this.groupBox29.ResumeLayout(false);
-            this.groupBox29.PerformLayout();
-            this.tpOther.ResumeLayout(false);
-            this.tpOther.PerformLayout();
-            this.groupBox17.ResumeLayout(false);
-            this.groupBox17.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.gbWav.ResumeLayout(false);
-            this.gbWav.PerformLayout();
-            this.gbDump.ResumeLayout(false);
-            this.gbDump.PerformLayout();
-            this.tpOmake.ResumeLayout(false);
-            this.tpOmake.PerformLayout();
-            this.groupBox31.ResumeLayout(false);
-            this.groupBox31.PerformLayout();
-            this.groupBox30.ResumeLayout(false);
-            this.groupBox30.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.tpAbout.ResumeLayout(false);
-            this.tableLayoutPanel.ResumeLayout(false);
-            this.tableLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = btnCancel;
+            ClientSize = new Size(541, 612);
+            Controls.Add(cbHiyorimiMode);
+            Controls.Add(tcSetting);
+            Controls.Add(btnCancel);
+            Controls.Add(btnOK);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(4, 4, 4, 4);
+            MinimumSize = new Size(557, 651);
+            Name = "FrmSetting";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "オプション";
+            FormClosed += frmSetting_FormClosed;
+            Load += frmSetting_Load;
+            gbWaveOut.ResumeLayout(false);
+            gbAsioOut.ResumeLayout(false);
+            gbWasapiOut.ResumeLayout(false);
+            gbWasapiOut.PerformLayout();
+            gbDirectSound.ResumeLayout(false);
+            tcSetting.ResumeLayout(false);
+            tpOutput.ResumeLayout(false);
+            tpOutput.PerformLayout();
+            tabControl1.ResumeLayout(false);
+            tabPage11.ResumeLayout(false);
+            tabPage11.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox16.ResumeLayout(false);
+            tabPage12.ResumeLayout(false);
+            groupBox27.ResumeLayout(false);
+            groupBox27.PerformLayout();
+            groupBox28.ResumeLayout(false);
+            groupBox28.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            tabPage13.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutPallet).EndInit();
+            tbcMIDIoutList.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListA).EndInit();
+            tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListB).EndInit();
+            tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListC).EndInit();
+            tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMIDIoutListD).EndInit();
+            tpNuked.ResumeLayout(false);
+            tabControl2.ResumeLayout(false);
+            tabPage14.ResumeLayout(false);
+            groupBox26.ResumeLayout(false);
+            groupBox26.PerformLayout();
+            tabPage5.ResumeLayout(false);
+            groupBox34.ResumeLayout(false);
+            groupBox34.PerformLayout();
+            tpNSF.ResumeLayout(false);
+            tabControl3.ResumeLayout(false);
+            tabPage15.ResumeLayout(false);
+            groupBox9.ResumeLayout(false);
+            groupBox9.PerformLayout();
+            groupBox10.ResumeLayout(false);
+            groupBox10.PerformLayout();
+            groupBox8.ResumeLayout(false);
+            groupBox8.PerformLayout();
+            groupBox12.ResumeLayout(false);
+            groupBox12.PerformLayout();
+            groupBox11.ResumeLayout(false);
+            groupBox11.PerformLayout();
+            tabPage16.ResumeLayout(false);
+            tabPage16.PerformLayout();
+            groupBox14.ResumeLayout(false);
+            groupBox14.PerformLayout();
+            groupBox13.ResumeLayout(false);
+            groupBox13.PerformLayout();
+            tabPage17.ResumeLayout(false);
+            groupBox15.ResumeLayout(false);
+            groupBox15.PerformLayout();
+            tpPMDDotNET.ResumeLayout(false);
+            tpPMDDotNET.PerformLayout();
+            gbPMDManual.ResumeLayout(false);
+            gbPMDManual.PerformLayout();
+            groupBox32.ResumeLayout(false);
+            groupBox32.PerformLayout();
+            gbPPSDRV.ResumeLayout(false);
+            groupBox33.ResumeLayout(false);
+            groupBox33.PerformLayout();
+            gbPMDSetManualVolume.ResumeLayout(false);
+            gbPMDSetManualVolume.PerformLayout();
+            tpExport.ResumeLayout(false);
+            tpExport.PerformLayout();
+            gpbFixedExportPlace.ResumeLayout(false);
+            gpbFixedExportPlace.PerformLayout();
+            tpMIDIExp.ResumeLayout(false);
+            tpMIDIExp.PerformLayout();
+            gbMIDIExport.ResumeLayout(false);
+            gbMIDIExport.PerformLayout();
+            groupBox6.ResumeLayout(false);
+            groupBox6.PerformLayout();
+            tpMIDIKBD.ResumeLayout(false);
+            tpMIDIKBD.PerformLayout();
+            gbMIDIKeyboard.ResumeLayout(false);
+            gbMIDIKeyboard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            gbUseChannel.ResumeLayout(false);
+            gbUseChannel.PerformLayout();
+            groupBox7.ResumeLayout(false);
+            groupBox7.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            tpKeyBoard.ResumeLayout(false);
+            tpKeyBoard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvShortCutKey).EndInit();
+            tpBalance.ResumeLayout(false);
+            tpBalance.PerformLayout();
+            groupBox25.ResumeLayout(false);
+            groupBox25.PerformLayout();
+            groupBox18.ResumeLayout(false);
+            groupBox24.ResumeLayout(false);
+            groupBox21.ResumeLayout(false);
+            groupBox21.PerformLayout();
+            groupBox22.ResumeLayout(false);
+            groupBox22.PerformLayout();
+            groupBox23.ResumeLayout(false);
+            groupBox19.ResumeLayout(false);
+            groupBox19.PerformLayout();
+            groupBox20.ResumeLayout(false);
+            groupBox20.PerformLayout();
+            tpMMLParameter.ResumeLayout(false);
+            tpMMLParameter.PerformLayout();
+            tpOther2.ResumeLayout(false);
+            tpOther2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)tbOpacity).EndInit();
+            groupBox29.ResumeLayout(false);
+            groupBox29.PerformLayout();
+            tpOther.ResumeLayout(false);
+            tpOther.PerformLayout();
+            groupBox17.ResumeLayout(false);
+            groupBox17.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            gbWav.ResumeLayout(false);
+            gbWav.PerformLayout();
+            gbDump.ResumeLayout(false);
+            gbDump.PerformLayout();
+            tpOmake.ResumeLayout(false);
+            tpOmake.PerformLayout();
+            groupBox31.ResumeLayout(false);
+            groupBox31.PerformLayout();
+            groupBox30.ResumeLayout(false);
+            groupBox30.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            tpAbout.ResumeLayout(false);
+            tableLayoutPanel.ResumeLayout(false);
+            tableLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)logoPictureBox).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.GroupBox gbWaveOut;
-        private System.Windows.Forms.RadioButton rbWaveOut;
-        private System.Windows.Forms.RadioButton rbAsioOut;
-        private System.Windows.Forms.RadioButton rbWasapiOut;
-        private System.Windows.Forms.GroupBox gbAsioOut;
-        private System.Windows.Forms.RadioButton rbDirectSoundOut;
-        private System.Windows.Forms.GroupBox gbWasapiOut;
-        private System.Windows.Forms.GroupBox gbDirectSound;
-        private System.Windows.Forms.ComboBox cmbWaveOutDevice;
-        private System.Windows.Forms.Button btnASIOControlPanel;
-        private System.Windows.Forms.ComboBox cmbAsioDevice;
-        private System.Windows.Forms.ComboBox cmbWasapiDevice;
-        private System.Windows.Forms.ComboBox cmbDirectSoundDevice;
-        private System.Windows.Forms.TabControl tcSetting;
-        private System.Windows.Forms.TabPage tpOutput;
-        private System.Windows.Forms.TabPage tpAbout;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private System.Windows.Forms.PictureBox logoPictureBox;
-        private System.Windows.Forms.Label labelProductName;
-        private System.Windows.Forms.Label labelVersion;
-        private System.Windows.Forms.Label labelCopyright;
-        private System.Windows.Forms.Label labelCompanyName;
-        private System.Windows.Forms.TextBox textBoxDescription;
-        private System.Windows.Forms.TabPage tpOther;
-        private System.Windows.Forms.GroupBox gbMIDIKeyboard;
-        private System.Windows.Forms.GroupBox gbUseChannel;
-        private System.Windows.Forms.CheckBox cbFM1;
-        private System.Windows.Forms.CheckBox cbFM2;
-        private System.Windows.Forms.CheckBox cbFM3;
-        private System.Windows.Forms.CheckBox cbUseMIDIKeyboard;
-        private System.Windows.Forms.CheckBox cbFM4;
-        private System.Windows.Forms.CheckBox cbFM5;
-        private System.Windows.Forms.CheckBox cbFM6;
-        private System.Windows.Forms.ComboBox cmbMIDIIN;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RadioButton rbExclusive;
-        private System.Windows.Forms.RadioButton rbShare;
-        private System.Windows.Forms.Label lblLatencyUnit;
-        private System.Windows.Forms.Label lblLatency;
-        private System.Windows.Forms.ComboBox cmbLatency;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox tbLatencyEmu;
-        private System.Windows.Forms.TextBox tbLatencySCCI;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.CheckBox cbDispFrameCounter;
-        private System.Windows.Forms.CheckBox cbHiyorimiMode;
-        private System.Windows.Forms.CheckBox cbUseLoopTimes;
-        private System.Windows.Forms.Label lblLoopTimes;
-        private System.Windows.Forms.TextBox tbLoopTimes;
-        private System.Windows.Forms.Button btnOpenSettingFolder;
-        private System.Windows.Forms.CheckBox cbUseGetInst;
-        private System.Windows.Forms.Button btnDataPath;
-        private System.Windows.Forms.TextBox tbDataPath;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TabPage tpMIDIKBD;
-        private System.Windows.Forms.ComboBox cmbInstFormat;
-        private System.Windows.Forms.Label lblInstFormat;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.TextBox tbScreenFrameRate;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.CheckBox cbAutoOpen;
+        private Button btnOK;
+        private Button btnCancel;
+        private GroupBox gbWaveOut;
+        private RadioButton rbWaveOut;
+        private RadioButton rbAsioOut;
+        private RadioButton rbWasapiOut;
+        private GroupBox gbAsioOut;
+        private RadioButton rbDirectSoundOut;
+        private GroupBox gbWasapiOut;
+        private GroupBox gbDirectSound;
+        private ComboBox cmbWaveOutDevice;
+        private Button btnASIOControlPanel;
+        private ComboBox cmbAsioDevice;
+        private ComboBox cmbWasapiDevice;
+        private ComboBox cmbDirectSoundDevice;
+        private TabControl tcSetting;
+        private TabPage tpOutput;
+        private TabPage tpAbout;
+        private TableLayoutPanel tableLayoutPanel;
+        private PictureBox logoPictureBox;
+        private Label labelProductName;
+        private Label labelVersion;
+        private Label labelCopyright;
+        private Label labelCompanyName;
+        private TextBox textBoxDescription;
+        private TabPage tpOther;
+        private GroupBox gbMIDIKeyboard;
+        private GroupBox gbUseChannel;
+        private CheckBox cbFM1;
+        private CheckBox cbFM2;
+        private CheckBox cbFM3;
+        private CheckBox cbUseMIDIKeyboard;
+        private CheckBox cbFM4;
+        private CheckBox cbFM5;
+        private CheckBox cbFM6;
+        private ComboBox cmbMIDIIN;
+        private Label label5;
+        private RadioButton rbExclusive;
+        private RadioButton rbShare;
+        private Label lblLatencyUnit;
+        private Label lblLatency;
+        private ComboBox cmbLatency;
+        private GroupBox groupBox3;
+        private Label label13;
+        private Label label12;
+        private Label label11;
+        private TextBox tbLatencyEmu;
+        private TextBox tbLatencySCCI;
+        private Label label10;
+        private GroupBox groupBox5;
+        private CheckBox cbDispFrameCounter;
+        private CheckBox cbHiyorimiMode;
+        private CheckBox cbUseLoopTimes;
+        private Label lblLoopTimes;
+        private TextBox tbLoopTimes;
+        private Button btnOpenSettingFolder;
+        private CheckBox cbUseGetInst;
+        private Button btnDataPath;
+        private TextBox tbDataPath;
+        private Label label19;
+        private TabPage tpMIDIKBD;
+        private ComboBox cmbInstFormat;
+        private Label lblInstFormat;
+        private Label label30;
+        private TextBox tbScreenFrameRate;
+        private Label label29;
+        private CheckBox cbAutoOpen;
         private ucSettingInstruments ucSI;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.CheckBox cbDumpSwitch;
-        private System.Windows.Forms.GroupBox gbDump;
-        private System.Windows.Forms.Button btnDumpPath;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox tbDumpPath;
-        private System.Windows.Forms.Button btnResetPosition;
-        private System.Windows.Forms.TabPage tpMIDIExp;
-        private System.Windows.Forms.CheckBox cbUseMIDIExport;
-        private System.Windows.Forms.GroupBox gbMIDIExport;
-        private System.Windows.Forms.CheckBox cbMIDIUseVOPM;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.CheckBox cbMIDIYM2612;
-        private System.Windows.Forms.CheckBox cbMIDISN76489Sec;
-        private System.Windows.Forms.CheckBox cbMIDIYM2612Sec;
-        private System.Windows.Forms.CheckBox cbMIDISN76489;
-        private System.Windows.Forms.CheckBox cbMIDIYM2151;
-        private System.Windows.Forms.CheckBox cbMIDIYM2610BSec;
-        private System.Windows.Forms.CheckBox cbMIDIYM2151Sec;
-        private System.Windows.Forms.CheckBox cbMIDIYM2610B;
-        private System.Windows.Forms.CheckBox cbMIDIYM2203;
-        private System.Windows.Forms.CheckBox cbMIDIYM2608Sec;
-        private System.Windows.Forms.CheckBox cbMIDIYM2203Sec;
-        private System.Windows.Forms.CheckBox cbMIDIYM2608;
-        private System.Windows.Forms.CheckBox cbMIDIPlayless;
-        private System.Windows.Forms.Button btnMIDIOutputPath;
-        private System.Windows.Forms.Label lblOutputPath;
-        private System.Windows.Forms.TextBox tbMIDIOutputPath;
-        private System.Windows.Forms.CheckBox cbWavSwitch;
-        private System.Windows.Forms.GroupBox gbWav;
-        private System.Windows.Forms.Button btnWavPath;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox tbWavPath;
-        private System.Windows.Forms.RadioButton rbMONO;
-        private System.Windows.Forms.RadioButton rbPOLY;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.RadioButton rbFM6;
-        private System.Windows.Forms.RadioButton rbFM3;
-        private System.Windows.Forms.RadioButton rbFM5;
-        private System.Windows.Forms.RadioButton rbFM2;
-        private System.Windows.Forms.RadioButton rbFM4;
-        private System.Windows.Forms.RadioButton rbFM1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TabPage tpOmake;
-        private System.Windows.Forms.TextBox tbCCFadeout;
-        private System.Windows.Forms.TextBox tbCCPause;
-        private System.Windows.Forms.TextBox tbCCSlow;
-        private System.Windows.Forms.TextBox tbCCPrevious;
-        private System.Windows.Forms.TextBox tbCCNext;
-        private System.Windows.Forms.TextBox tbCCFast;
-        private System.Windows.Forms.TextBox tbCCStop;
-        private System.Windows.Forms.TextBox tbCCPlay;
-        private System.Windows.Forms.TextBox tbCCCopyLog;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox tbCCDelLog;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox tbCCChCopy;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox8;
-        private System.Windows.Forms.PictureBox pictureBox7;
-        private System.Windows.Forms.PictureBox pictureBox6;
-        private System.Windows.Forms.PictureBox pictureBox5;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Button btVST;
-        private System.Windows.Forms.TextBox tbVST;
-        private System.Windows.Forms.Button btnUP_A;
-        private System.Windows.Forms.Button btnSubMIDIout;
-        private System.Windows.Forms.Button btnDOWN_A;
-        private System.Windows.Forms.Button btnAddMIDIout;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListA;
-        private System.Windows.Forms.DataGridView dgvMIDIoutPallet;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmDeviceName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmManufacturer;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmSpacer;
-        private System.Windows.Forms.TabControl tbcMIDIoutList;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Button btnUP_B;
-        private System.Windows.Forms.Button btnDOWN_B;
-        private System.Windows.Forms.Button btnUP_C;
-        private System.Windows.Forms.Button btnDOWN_C;
-        private System.Windows.Forms.Button btnUP_D;
-        private System.Windows.Forms.Button btnDOWN_D;
-        private System.Windows.Forms.Button btnAddVST;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListB;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListC;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListD;
-        private System.Windows.Forms.TabPage tpNSF;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.CheckBox cbNSFFDSWriteDisable8000;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.CheckBox cbNSFDmc_TriNull;
-        private System.Windows.Forms.CheckBox cbNSFDmc_TriMute;
-        private System.Windows.Forms.CheckBox cbNSFDmc_RandomizeNoise;
-        private System.Windows.Forms.CheckBox cbNSFDmc_DPCMAntiClick;
-        private System.Windows.Forms.CheckBox cbNSFDmc_EnablePNoise;
-        private System.Windows.Forms.CheckBox cbNSFDmc_Enable4011;
-        private System.Windows.Forms.CheckBox cbNSFDmc_NonLinearMixer;
-        private System.Windows.Forms.CheckBox cbNSFDmc_UnmuteOnReset;
-        private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.CheckBox cbNSFN160_Serial;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.CheckBox cbNSFMmc5_PhaseRefresh;
-        private System.Windows.Forms.CheckBox cbNSFMmc5_NonLinearMixer;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.CheckBox cbNFSNes_DutySwap;
-        private System.Windows.Forms.CheckBox cbNFSNes_PhaseRefresh;
-        private System.Windows.Forms.CheckBox cbNFSNes_NonLinearMixer;
-        private System.Windows.Forms.CheckBox cbNFSNes_UnmuteOnReset;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox tbNSFFds_LPF;
-        private System.Windows.Forms.CheckBox cbNFSFds_4085Reset;
-        private System.Windows.Forms.GroupBox groupBox13;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Button btnSIDCharacter;
-        private System.Windows.Forms.Button btnSIDBasic;
-        private System.Windows.Forms.Button btnSIDKernal;
-        private System.Windows.Forms.TextBox tbSIDCharacter;
-        private System.Windows.Forms.TextBox tbSIDBasic;
-        private System.Windows.Forms.TextBox tbSIDKernal;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.GroupBox groupBox14;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.RadioButton rdSIDQ1;
-        private System.Windows.Forms.RadioButton rdSIDQ3;
-        private System.Windows.Forms.RadioButton rdSIDQ2;
-        private System.Windows.Forms.RadioButton rdSIDQ4;
-        private System.Windows.Forms.Label lblWaitTime;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.ComboBox cmbWaitTime;
-        private System.Windows.Forms.GroupBox groupBox15;
-        private System.Windows.Forms.Button btnBeforeSend_Default;
-        private System.Windows.Forms.TextBox tbBeforeSend_Custom;
-        private System.Windows.Forms.TextBox tbBeforeSend_XGReset;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.TextBox tbBeforeSend_GSReset;
-        private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.TextBox tbBeforeSend_GMReset;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.RadioButton rbSPPCM;
-        private System.Windows.Forms.GroupBox groupBox16;
-        private System.Windows.Forms.ComboBox cmbSPPCMDevice;
-        private System.Windows.Forms.GroupBox groupBox17;
-        private System.Windows.Forms.TextBox tbImageExt;
-        private System.Windows.Forms.TextBox tbMMLExt;
-        private System.Windows.Forms.TextBox tbTextExt;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox cbInitAlways;
-        private System.Windows.Forms.TabPage tpBalance;
-        private System.Windows.Forms.CheckBox cbAutoBalanceUseThis;
-        private System.Windows.Forms.GroupBox groupBox18;
-        private System.Windows.Forms.GroupBox groupBox24;
-        private System.Windows.Forms.GroupBox groupBox21;
-        private System.Windows.Forms.RadioButton rbAutoBalanceNotSaveSongBalance;
-        private System.Windows.Forms.RadioButton rbAutoBalanceSamePositionAsSongData;
-        private System.Windows.Forms.RadioButton rbAutoBalanceSaveSongBalance;
-        private System.Windows.Forms.GroupBox groupBox22;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox23;
-        private System.Windows.Forms.GroupBox groupBox19;
-        private System.Windows.Forms.RadioButton rbAutoBalanceNotLoadSongBalance;
-        private System.Windows.Forms.RadioButton rbAutoBalanceLoadSongBalance;
-        private System.Windows.Forms.GroupBox groupBox20;
-        private System.Windows.Forms.RadioButton rbAutoBalanceNotLoadDriverBalance;
-        private System.Windows.Forms.RadioButton rbAutoBalanceLoadDriverBalance;
-        private System.Windows.Forms.GroupBox groupBox25;
-        private System.Windows.Forms.RadioButton rbAutoBalanceNotSamePositionAsSongData;
-        private System.Windows.Forms.TabPage tpKeyBoard;
-        private System.Windows.Forms.RadioButton rbNullDevice;
-        private System.Windows.Forms.TextBox tbSIDOutputBufferSize;
-        private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.Label label51;
-        private System.Windows.Forms.TabPage tpNuked;
-        private System.Windows.Forms.GroupBox groupBox26;
-        private System.Windows.Forms.RadioButton rbNukedOPN2OptionYM2612u;
-        private System.Windows.Forms.RadioButton rbNukedOPN2OptionYM2612;
-        private System.Windows.Forms.RadioButton rbNukedOPN2OptionDiscrete;
-        private System.Windows.Forms.RadioButton rbNukedOPN2OptionASIC;
-        private System.Windows.Forms.RadioButton rbNukedOPN2OptionASIClp;
-        private System.Windows.Forms.CheckBox cbEmptyPlayList;
-        private System.Windows.Forms.CheckBox cbMIDIKeyOnFnum;
-        private System.Windows.Forms.TrackBar tbOpacity;
-        private System.Windows.Forms.Label label52;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.GroupBox groupBox27;
-        private System.Windows.Forms.RadioButton rbManualDetect;
-        private System.Windows.Forms.RadioButton rbAutoDetect;
-        private System.Windows.Forms.GroupBox groupBox28;
-        private System.Windows.Forms.RadioButton rbSCCIDetect;
-        private System.Windows.Forms.RadioButton rbC86ctlDetect;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage11;
-        private System.Windows.Forms.TabPage tabPage12;
-        private System.Windows.Forms.TabPage tabPage13;
-        private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage tabPage14;
-        private System.Windows.Forms.TabControl tabControl3;
-        private System.Windows.Forms.TabPage tabPage15;
-        private System.Windows.Forms.TabPage tabPage16;
-        private System.Windows.Forms.TabPage tabPage17;
-        private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.Button btFont;
-        private System.Windows.Forms.Label label54;
-        private System.Windows.Forms.Label label53;
-        private System.Windows.Forms.Label lblFontStyle;
-        private System.Windows.Forms.Label lblFontSize;
-        private System.Windows.Forms.Label lblFontName;
-        private System.Windows.Forms.GroupBox groupBox29;
-        private System.Windows.Forms.CheckBox cbInfiniteOfflineMode;
-        private System.Windows.Forms.CheckBox cbMIDIKbdAlwaysTop;
-        private System.Windows.Forms.CheckBox cbUseRealChip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clmIsVST;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmFileName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn clmType;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ClmBeforeSend;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.GroupBox groupBox30;
-        private System.Windows.Forms.RadioButton rbQueryPerformanceCounter;
-        private System.Windows.Forms.RadioButton rbDateTime;
-        private System.Windows.Forms.RadioButton rbStopWatch;
-        private System.Windows.Forms.GroupBox groupBox31;
-        private System.Windows.Forms.RadioButton rbLoglevelINFO;
-        private System.Windows.Forms.RadioButton rbLoglevelDEBUG;
-        private System.Windows.Forms.RadioButton rbLoglevelTRACE;
-        private System.Windows.Forms.CheckBox cbLogWarning;
-        private System.Windows.Forms.DataGridView dgvShortCutKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmFunc;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clmShift;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clmCtrl;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clmAlt;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmKey;
-        private System.Windows.Forms.DataGridViewButtonColumn clmSet;
-        private System.Windows.Forms.DataGridViewButtonColumn clmClr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmKBDSpacer;
-        private System.Windows.Forms.Label lblSKKey;
-        private System.Windows.Forms.Button btnInitializeShortCutKey;
-        private System.Windows.Forms.CheckBox cbUseSIen;
-        private System.Windows.Forms.LinkLabel llOpenGithub;
-        private System.Windows.Forms.CheckBox cbPlayDeviceCB;
-        private System.Windows.Forms.TabPage tpPMDDotNET;
-        private System.Windows.Forms.RadioButton rbPMDManual;
-        private System.Windows.Forms.RadioButton rbPMDAuto;
-        private System.Windows.Forms.Button btnPMDResetDriverArguments;
-        private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.Button btnPMDResetCompilerArhguments;
-        private System.Windows.Forms.TextBox tbPMDDriverArguments;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.TextBox tbPMDCompilerArguments;
-        private System.Windows.Forms.GroupBox gbPMDManual;
-        private System.Windows.Forms.CheckBox cbPMDSetManualVolume;
-        private System.Windows.Forms.CheckBox cbPMDUsePPZ8;
-        private System.Windows.Forms.GroupBox groupBox32;
-        private System.Windows.Forms.RadioButton rbPMD86B;
-        private System.Windows.Forms.RadioButton rbPMDSpbB;
-        private System.Windows.Forms.RadioButton rbPMDNrmB;
-        private System.Windows.Forms.CheckBox cbPMDUsePPSDRV;
-        private System.Windows.Forms.GroupBox gbPPSDRV;
-        private System.Windows.Forms.RadioButton rbPMDUsePPSDRVManualFreq;
-        private System.Windows.Forms.RadioButton rbPMDUsePPSDRVFreqDefault;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.Label label38;
-        private System.Windows.Forms.TextBox tbPMDPPSDRVManualWait;
-        private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.TextBox tbPMDPPSDRVFreq;
-        private System.Windows.Forms.Button btnPMDPPSDRVManualWait;
-        private System.Windows.Forms.GroupBox gbPMDSetManualVolume;
-        private System.Windows.Forms.Label label41;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.TextBox tbPMDVolumeAdpcm;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.TextBox tbPMDVolumeRhythm;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.TextBox tbPMDVolumeSSG;
-        private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.TextBox tbPMDVolumeGIMICSSG;
-        private System.Windows.Forms.Label label45;
-        private System.Windows.Forms.TextBox tbPMDVolumeFM;
-        private System.Windows.Forms.GroupBox groupBox33;
-        private System.Windows.Forms.CheckBox cbRequestCacheClear;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.GroupBox groupBox34;
-        private System.Windows.Forms.CheckBox cbGensSSGEG;
-        private System.Windows.Forms.CheckBox cbGensDACHPF;
-        private System.Windows.Forms.CheckBox cbSinWave;
-        private System.Windows.Forms.CheckBox cbClearHistory;
-        private System.Windows.Forms.TabPage tpMMLParameter;
-        private System.Windows.Forms.CheckBox cbDispInstrumentName;
-        private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.ComboBox cmbSampleRate;
-        private System.Windows.Forms.CheckBox cbChangeEnterCode;
-        private System.Windows.Forms.TabPage tpExport;
-        private System.Windows.Forms.CheckBox cbFixedExportPlace;
-        private System.Windows.Forms.GroupBox gpbFixedExportPlace;
-        private System.Windows.Forms.Button btnFixedExportPlace;
-        private System.Windows.Forms.Label label57;
-        private System.Windows.Forms.TextBox tbFixedExportPlacePath;
-        private System.Windows.Forms.CheckBox cbAlwaysAskForLoopCount;
-        private System.Windows.Forms.TabPage tpOther2;
-        private System.Windows.Forms.CheckBox cbUseScript;
-        private System.Windows.Forms.CheckBox cbUseMoonDriverDotNET;
-        private System.Windows.Forms.CheckBox cbUsePMDDotNET;
-        private System.Windows.Forms.CheckBox cbUseMucomDotNET;
-        private System.Windows.Forms.TextBox tbUseHistoryBackUp;
-        private System.Windows.Forms.CheckBox cbUseHistoryBackUp;
-        private System.Windows.Forms.CheckBox cbDispWarningMessage;
+        private GroupBox groupBox1;
+        private GroupBox groupBox4;
+        private CheckBox cbDumpSwitch;
+        private GroupBox gbDump;
+        private Button btnDumpPath;
+        private Label label6;
+        private TextBox tbDumpPath;
+        private Button btnResetPosition;
+        private TabPage tpMIDIExp;
+        private CheckBox cbUseMIDIExport;
+        private GroupBox gbMIDIExport;
+        private CheckBox cbMIDIUseVOPM;
+        private GroupBox groupBox6;
+        private CheckBox cbMIDIYM2612;
+        private CheckBox cbMIDISN76489Sec;
+        private CheckBox cbMIDIYM2612Sec;
+        private CheckBox cbMIDISN76489;
+        private CheckBox cbMIDIYM2151;
+        private CheckBox cbMIDIYM2610BSec;
+        private CheckBox cbMIDIYM2151Sec;
+        private CheckBox cbMIDIYM2610B;
+        private CheckBox cbMIDIYM2203;
+        private CheckBox cbMIDIYM2608Sec;
+        private CheckBox cbMIDIYM2203Sec;
+        private CheckBox cbMIDIYM2608;
+        private CheckBox cbMIDIPlayless;
+        private Button btnMIDIOutputPath;
+        private Label lblOutputPath;
+        private TextBox tbMIDIOutputPath;
+        private CheckBox cbWavSwitch;
+        private GroupBox gbWav;
+        private Button btnWavPath;
+        private Label label7;
+        private TextBox tbWavPath;
+        private RadioButton rbMONO;
+        private RadioButton rbPOLY;
+        private GroupBox groupBox7;
+        private RadioButton rbFM6;
+        private RadioButton rbFM3;
+        private RadioButton rbFM5;
+        private RadioButton rbFM2;
+        private RadioButton rbFM4;
+        private RadioButton rbFM1;
+        private GroupBox groupBox2;
+        private TabPage tpOmake;
+        private TextBox tbCCFadeout;
+        private TextBox tbCCPause;
+        private TextBox tbCCSlow;
+        private TextBox tbCCPrevious;
+        private TextBox tbCCNext;
+        private TextBox tbCCFast;
+        private TextBox tbCCStop;
+        private TextBox tbCCPlay;
+        private TextBox tbCCCopyLog;
+        private Label label17;
+        private TextBox tbCCDelLog;
+        private Label label15;
+        private TextBox tbCCChCopy;
+        private Label label9;
+        private Label label8;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox4;
+        private PictureBox pictureBox3;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox8;
+        private PictureBox pictureBox7;
+        private PictureBox pictureBox6;
+        private PictureBox pictureBox5;
+        private Label label14;
+        private Button btVST;
+        private TextBox tbVST;
+        private Button btnUP_A;
+        private Button btnSubMIDIout;
+        private Button btnDOWN_A;
+        private Button btnAddMIDIout;
+        private Label label18;
+        private DataGridView dgvMIDIoutListA;
+        private DataGridView dgvMIDIoutPallet;
+        private Label label16;
+        private DataGridViewTextBoxColumn clmID;
+        private DataGridViewTextBoxColumn clmDeviceName;
+        private DataGridViewTextBoxColumn clmManufacturer;
+        private DataGridViewTextBoxColumn clmSpacer;
+        private TabControl tbcMIDIoutList;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private TabPage tabPage3;
+        private TabPage tabPage4;
+        private Button btnUP_B;
+        private Button btnDOWN_B;
+        private Button btnUP_C;
+        private Button btnDOWN_C;
+        private Button btnUP_D;
+        private Button btnDOWN_D;
+        private Button btnAddVST;
+        private DataGridView dgvMIDIoutListB;
+        private DataGridView dgvMIDIoutListC;
+        private DataGridView dgvMIDIoutListD;
+        private TabPage tpNSF;
+        private GroupBox groupBox8;
+        private CheckBox cbNSFFDSWriteDisable8000;
+        private GroupBox groupBox10;
+        private CheckBox cbNSFDmc_TriNull;
+        private CheckBox cbNSFDmc_TriMute;
+        private CheckBox cbNSFDmc_RandomizeNoise;
+        private CheckBox cbNSFDmc_DPCMAntiClick;
+        private CheckBox cbNSFDmc_EnablePNoise;
+        private CheckBox cbNSFDmc_Enable4011;
+        private CheckBox cbNSFDmc_NonLinearMixer;
+        private CheckBox cbNSFDmc_UnmuteOnReset;
+        private GroupBox groupBox12;
+        private CheckBox cbNSFN160_Serial;
+        private GroupBox groupBox11;
+        private CheckBox cbNSFMmc5_PhaseRefresh;
+        private CheckBox cbNSFMmc5_NonLinearMixer;
+        private GroupBox groupBox9;
+        private CheckBox cbNFSNes_DutySwap;
+        private CheckBox cbNFSNes_PhaseRefresh;
+        private CheckBox cbNFSNes_NonLinearMixer;
+        private CheckBox cbNFSNes_UnmuteOnReset;
+        private Label label21;
+        private Label label20;
+        private TextBox tbNSFFds_LPF;
+        private CheckBox cbNFSFds_4085Reset;
+        private GroupBox groupBox13;
+        private Label label22;
+        private Button btnSIDCharacter;
+        private Button btnSIDBasic;
+        private Button btnSIDKernal;
+        private TextBox tbSIDCharacter;
+        private TextBox tbSIDBasic;
+        private TextBox tbSIDKernal;
+        private Label label24;
+        private Label label23;
+        private GroupBox groupBox14;
+        private Label label27;
+        private Label label26;
+        private Label label25;
+        private RadioButton rdSIDQ1;
+        private RadioButton rdSIDQ3;
+        private RadioButton rdSIDQ2;
+        private RadioButton rdSIDQ4;
+        private Label lblWaitTime;
+        private Label label28;
+        private ComboBox cmbWaitTime;
+        private GroupBox groupBox15;
+        private Button btnBeforeSend_Default;
+        private TextBox tbBeforeSend_Custom;
+        private TextBox tbBeforeSend_XGReset;
+        private Label label34;
+        private Label label32;
+        private TextBox tbBeforeSend_GSReset;
+        private Label label33;
+        private TextBox tbBeforeSend_GMReset;
+        private Label label31;
+        private Label label35;
+        private RadioButton rbSPPCM;
+        private GroupBox groupBox16;
+        private ComboBox cmbSPPCMDevice;
+        private GroupBox groupBox17;
+        private TextBox tbImageExt;
+        private TextBox tbMMLExt;
+        private TextBox tbTextExt;
+        private Label label1;
+        private Label label3;
+        private Label label2;
+        private CheckBox cbInitAlways;
+        private TabPage tpBalance;
+        private CheckBox cbAutoBalanceUseThis;
+        private GroupBox groupBox18;
+        private GroupBox groupBox24;
+        private GroupBox groupBox21;
+        private RadioButton rbAutoBalanceNotSaveSongBalance;
+        private RadioButton rbAutoBalanceSamePositionAsSongData;
+        private RadioButton rbAutoBalanceSaveSongBalance;
+        private GroupBox groupBox22;
+        private Label label4;
+        private GroupBox groupBox23;
+        private GroupBox groupBox19;
+        private RadioButton rbAutoBalanceNotLoadSongBalance;
+        private RadioButton rbAutoBalanceLoadSongBalance;
+        private GroupBox groupBox20;
+        private RadioButton rbAutoBalanceNotLoadDriverBalance;
+        private RadioButton rbAutoBalanceLoadDriverBalance;
+        private GroupBox groupBox25;
+        private RadioButton rbAutoBalanceNotSamePositionAsSongData;
+        private TabPage tpKeyBoard;
+        private RadioButton rbNullDevice;
+        private TextBox tbSIDOutputBufferSize;
+        private Label label49;
+        private Label label51;
+        private TabPage tpNuked;
+        private GroupBox groupBox26;
+        private RadioButton rbNukedOPN2OptionYM2612u;
+        private RadioButton rbNukedOPN2OptionYM2612;
+        private RadioButton rbNukedOPN2OptionDiscrete;
+        private RadioButton rbNukedOPN2OptionASIC;
+        private RadioButton rbNukedOPN2OptionASIClp;
+        private CheckBox cbEmptyPlayList;
+        private CheckBox cbMIDIKeyOnFnum;
+        private TrackBar tbOpacity;
+        private Label label52;
+        private SplitContainer splitContainer1;
+        private GroupBox groupBox27;
+        private RadioButton rbManualDetect;
+        private RadioButton rbAutoDetect;
+        private GroupBox groupBox28;
+        private RadioButton rbSCCIDetect;
+        private RadioButton rbC86ctlDetect;
+        private TabControl tabControl1;
+        private TabPage tabPage11;
+        private TabPage tabPage12;
+        private TabPage tabPage13;
+        private TabControl tabControl2;
+        private TabPage tabPage14;
+        private TabControl tabControl3;
+        private TabPage tabPage15;
+        private TabPage tabPage16;
+        private TabPage tabPage17;
+        private Label label36;
+        private Button btFont;
+        private Label label54;
+        private Label label53;
+        private Label lblFontStyle;
+        private Label lblFontSize;
+        private Label lblFontName;
+        private GroupBox groupBox29;
+        private CheckBox cbInfiniteOfflineMode;
+        private CheckBox cbMIDIKbdAlwaysTop;
+        private CheckBox cbUseRealChip;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewCheckBoxColumn clmIsVST;
+        private DataGridViewTextBoxColumn clmFileName;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewComboBoxColumn clmType;
+        private DataGridViewComboBoxColumn ClmBeforeSend;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private GroupBox groupBox30;
+        private RadioButton rbQueryPerformanceCounter;
+        private RadioButton rbDateTime;
+        private RadioButton rbStopWatch;
+        private GroupBox groupBox31;
+        private RadioButton rbLoglevelINFO;
+        private RadioButton rbLoglevelDEBUG;
+        private RadioButton rbLoglevelTRACE;
+        private CheckBox cbLogWarning;
+        private DataGridView dgvShortCutKey;
+        private DataGridViewTextBoxColumn clmNumber;
+        private DataGridViewTextBoxColumn clmFunc;
+        private DataGridViewCheckBoxColumn clmShift;
+        private DataGridViewCheckBoxColumn clmCtrl;
+        private DataGridViewCheckBoxColumn clmAlt;
+        private DataGridViewTextBoxColumn clmKey;
+        private DataGridViewButtonColumn clmSet;
+        private DataGridViewButtonColumn clmClr;
+        private DataGridViewTextBoxColumn clmKBDSpacer;
+        private Label lblSKKey;
+        private Button btnInitializeShortCutKey;
+        private CheckBox cbUseSIen;
+        private LinkLabel llOpenGithub;
+        private CheckBox cbPlayDeviceCB;
+        private TabPage tpPMDDotNET;
+        private RadioButton rbPMDManual;
+        private RadioButton rbPMDAuto;
+        private Button btnPMDResetDriverArguments;
+        private Label label47;
+        private Button btnPMDResetCompilerArhguments;
+        private TextBox tbPMDDriverArguments;
+        private Label label37;
+        private TextBox tbPMDCompilerArguments;
+        private GroupBox gbPMDManual;
+        private CheckBox cbPMDSetManualVolume;
+        private CheckBox cbPMDUsePPZ8;
+        private GroupBox groupBox32;
+        private RadioButton rbPMD86B;
+        private RadioButton rbPMDSpbB;
+        private RadioButton rbPMDNrmB;
+        private CheckBox cbPMDUsePPSDRV;
+        private GroupBox gbPPSDRV;
+        private RadioButton rbPMDUsePPSDRVManualFreq;
+        private RadioButton rbPMDUsePPSDRVFreqDefault;
+        private Label label40;
+        private Label label38;
+        private TextBox tbPMDPPSDRVManualWait;
+        private Label label39;
+        private TextBox tbPMDPPSDRVFreq;
+        private Button btnPMDPPSDRVManualWait;
+        private GroupBox gbPMDSetManualVolume;
+        private Label label41;
+        private Label label46;
+        private TextBox tbPMDVolumeAdpcm;
+        private Label label42;
+        private TextBox tbPMDVolumeRhythm;
+        private Label label43;
+        private TextBox tbPMDVolumeSSG;
+        private Label label44;
+        private TextBox tbPMDVolumeGIMICSSG;
+        private Label label45;
+        private TextBox tbPMDVolumeFM;
+        private GroupBox groupBox33;
+        private CheckBox cbRequestCacheClear;
+        private TabPage tabPage5;
+        private GroupBox groupBox34;
+        private CheckBox cbGensSSGEG;
+        private CheckBox cbGensDACHPF;
+        private CheckBox cbSinWave;
+        private CheckBox cbClearHistory;
+        private TabPage tpMMLParameter;
+        private CheckBox cbDispInstrumentName;
+        private Label label48;
+        private Label label55;
+        private Label label50;
+        private ComboBox cmbSampleRate;
+        private CheckBox cbChangeEnterCode;
+        private TabPage tpExport;
+        private CheckBox cbFixedExportPlace;
+        private GroupBox gpbFixedExportPlace;
+        private Button btnFixedExportPlace;
+        private Label label57;
+        private TextBox tbFixedExportPlacePath;
+        private CheckBox cbAlwaysAskForLoopCount;
+        private TabPage tpOther2;
+        private CheckBox cbUseScript;
+        private CheckBox cbUseMoonDriverDotNET;
+        private CheckBox cbUsePMDDotNET;
+        private CheckBox cbUseMucomDotNET;
+        private TextBox tbUseHistoryBackUp;
+        private CheckBox cbUseHistoryBackUp;
+        private CheckBox cbDispWarningMessage;
+        private TextBox tbTABWidth;
+        private Label label56;
     }
 }
