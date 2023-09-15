@@ -28,1757 +28,1885 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cmbYM2151P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2151P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2151P_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2151P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbYM2151P_EmuX68Sound = new System.Windows.Forms.RadioButton();
-            this.rbYM2151P_EmuMame = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cmbYM2151S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2151S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2151S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2151S_EmuX68Sound = new System.Windows.Forms.RadioButton();
-            this.rbYM2151S_EmuMame = new System.Windows.Forms.RadioButton();
-            this.rbYM2151S_Emu = new System.Windows.Forms.RadioButton();
-            this.cmbYM2203P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2203P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2203P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.rbYM2203P_Silent = new System.Windows.Forms.RadioButton();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.cmbYM2203S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2203S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2203S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2203S_Emu = new System.Windows.Forms.RadioButton();
-            this.cmbYM2608P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2608P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2608P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.rbYM2608P_Silent = new System.Windows.Forms.RadioButton();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.cmbYM2608S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2608S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2608S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2608S_Emu = new System.Windows.Forms.RadioButton();
-            this.cmbYM2610BP_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2610BP_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2610BP_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cmbSPPCMP_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2610BP_Silent = new System.Windows.Forms.RadioButton();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbYM2610BS_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2610BS_SCCI = new System.Windows.Forms.RadioButton();
-            this.cmbSPPCMS_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2610BS_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2610BS_Emu = new System.Windows.Forms.RadioButton();
-            this.cbEmulationPCMOnly = new System.Windows.Forms.CheckBox();
-            this.cbTwice = new System.Windows.Forms.CheckBox();
-            this.cbSendWait = new System.Windows.Forms.CheckBox();
-            this.cmbYM2612P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2612P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2612P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.rbYM2612P_EmuMame = new System.Windows.Forms.RadioButton();
-            this.rbYM2612P_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2612P_EmuNuked = new System.Windows.Forms.RadioButton();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.rbYM2612S_EmuMame = new System.Windows.Forms.RadioButton();
-            this.rbYM2612S_Silent = new System.Windows.Forms.RadioButton();
-            this.cmbYM2612S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2612S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2612S_EmuNuked = new System.Windows.Forms.RadioButton();
-            this.rbYM2612S_Emu = new System.Windows.Forms.RadioButton();
-            this.cmbSN76489P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbSN76489P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbSN76489P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.rbSN76489P_Silent = new System.Windows.Forms.RadioButton();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.cmbSN76489S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbSN76489S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbSN76489S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbSN76489S_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox13 = new System.Windows.Forms.GroupBox();
-            this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.cmbC140S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbC140S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbC140S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbC140S_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.cmbC140P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbC140P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbC140P_Silent = new System.Windows.Forms.RadioButton();
-            this.rbC140P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.cmbSEGAPCMS_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbSEGAPCMS_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbSEGAPCMS_Silent = new System.Windows.Forms.RadioButton();
-            this.rbSEGAPCMS_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox17 = new System.Windows.Forms.GroupBox();
-            this.cmbSEGAPCMP_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbSEGAPCMP_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbSEGAPCMP_Silent = new System.Windows.Forms.RadioButton();
-            this.rbSEGAPCMP_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox18 = new System.Windows.Forms.GroupBox();
-            this.cbEmulationOPNBADPCMOnly = new System.Windows.Forms.CheckBox();
-            this.groupBox19 = new System.Windows.Forms.GroupBox();
-            this.cbEmulationOPNAADPCMOnly = new System.Windows.Forms.CheckBox();
-            this.groupBox20 = new System.Windows.Forms.GroupBox();
-            this.cmbAY8910S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbAY8910S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbAY8910S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbAY8910S_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox21 = new System.Windows.Forms.GroupBox();
-            this.cmbAY8910P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbAY8910P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbAY8910P_Silent = new System.Windows.Forms.RadioButton();
-            this.rbAY8910P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox22 = new System.Windows.Forms.GroupBox();
-            this.cmbYM2413P_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2413P_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2413P_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2413P_Emu = new System.Windows.Forms.RadioButton();
-            this.groupBox23 = new System.Windows.Forms.GroupBox();
-            this.cmbYM2413S_SCCI = new System.Windows.Forms.ComboBox();
-            this.rbYM2413S_SCCI = new System.Windows.Forms.RadioButton();
-            this.rbYM2413S_Silent = new System.Windows.Forms.RadioButton();
-            this.rbYM2413S_Emu = new System.Windows.Forms.RadioButton();
-            this.rbSN76489S_Emu2 = new System.Windows.Forms.RadioButton();
-            this.rbSN76489P_Emu2 = new System.Windows.Forms.RadioButton();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox6.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            this.groupBox10.SuspendLayout();
-            this.groupBox11.SuspendLayout();
-            this.groupBox12.SuspendLayout();
-            this.groupBox13.SuspendLayout();
-            this.groupBox14.SuspendLayout();
-            this.groupBox15.SuspendLayout();
-            this.groupBox16.SuspendLayout();
-            this.groupBox17.SuspendLayout();
-            this.groupBox18.SuspendLayout();
-            this.groupBox19.SuspendLayout();
-            this.groupBox20.SuspendLayout();
-            this.groupBox21.SuspendLayout();
-            this.groupBox22.SuspendLayout();
-            this.groupBox23.SuspendLayout();
-            this.SuspendLayout();
+            cmbYM2151P_SCCI = new ComboBox();
+            rbYM2151P_SCCI = new RadioButton();
+            rbYM2151P_Silent = new RadioButton();
+            rbYM2151P_Emu = new RadioButton();
+            groupBox1 = new GroupBox();
+            rbYM2151P_EmuX68Sound = new RadioButton();
+            rbYM2151P_EmuMame = new RadioButton();
+            groupBox2 = new GroupBox();
+            cmbYM2151S_SCCI = new ComboBox();
+            rbYM2151S_SCCI = new RadioButton();
+            rbYM2151S_Silent = new RadioButton();
+            rbYM2151S_EmuX68Sound = new RadioButton();
+            rbYM2151S_EmuMame = new RadioButton();
+            rbYM2151S_Emu = new RadioButton();
+            cmbYM2203P_SCCI = new ComboBox();
+            rbYM2203P_SCCI = new RadioButton();
+            rbYM2203P_Emu = new RadioButton();
+            groupBox3 = new GroupBox();
+            rbYM2203P_Silent = new RadioButton();
+            groupBox4 = new GroupBox();
+            cmbYM2203S_SCCI = new ComboBox();
+            rbYM2203S_SCCI = new RadioButton();
+            rbYM2203S_Silent = new RadioButton();
+            rbYM2203S_Emu = new RadioButton();
+            cmbYM2608P_SCCI = new ComboBox();
+            rbYM2608P_SCCI = new RadioButton();
+            rbYM2608P_Emu = new RadioButton();
+            groupBox5 = new GroupBox();
+            rbYM2608P_Silent = new RadioButton();
+            groupBox6 = new GroupBox();
+            cmbYM2608S_SCCI = new ComboBox();
+            rbYM2608S_SCCI = new RadioButton();
+            rbYM2608S_Silent = new RadioButton();
+            rbYM2608S_Emu = new RadioButton();
+            cmbYM2610BP_SCCI = new ComboBox();
+            rbYM2610BP_SCCI = new RadioButton();
+            rbYM2610BP_Emu = new RadioButton();
+            groupBox7 = new GroupBox();
+            label1 = new Label();
+            cmbSPPCMP_SCCI = new ComboBox();
+            rbYM2610BP_Silent = new RadioButton();
+            groupBox8 = new GroupBox();
+            label2 = new Label();
+            cmbYM2610BS_SCCI = new ComboBox();
+            rbYM2610BS_SCCI = new RadioButton();
+            cmbSPPCMS_SCCI = new ComboBox();
+            rbYM2610BS_Silent = new RadioButton();
+            rbYM2610BS_Emu = new RadioButton();
+            cbEmulationPCMOnly = new CheckBox();
+            cbTwice = new CheckBox();
+            cbSendWait = new CheckBox();
+            cmbYM2612P_SCCI = new ComboBox();
+            rbYM2612P_SCCI = new RadioButton();
+            rbYM2612P_Emu = new RadioButton();
+            groupBox9 = new GroupBox();
+            rbYM2612P_EmuMame = new RadioButton();
+            rbYM2612P_Silent = new RadioButton();
+            rbYM2612P_EmuNuked = new RadioButton();
+            groupBox10 = new GroupBox();
+            rbYM2612S_EmuMame = new RadioButton();
+            rbYM2612S_Silent = new RadioButton();
+            cmbYM2612S_SCCI = new ComboBox();
+            rbYM2612S_SCCI = new RadioButton();
+            rbYM2612S_EmuNuked = new RadioButton();
+            rbYM2612S_Emu = new RadioButton();
+            cmbSN76489P_SCCI = new ComboBox();
+            rbSN76489P_SCCI = new RadioButton();
+            rbSN76489P_Emu = new RadioButton();
+            groupBox11 = new GroupBox();
+            rbSN76489P_Emu2 = new RadioButton();
+            rbSN76489P_Silent = new RadioButton();
+            groupBox12 = new GroupBox();
+            cmbSN76489S_SCCI = new ComboBox();
+            rbSN76489S_SCCI = new RadioButton();
+            rbSN76489S_Silent = new RadioButton();
+            rbSN76489S_Emu2 = new RadioButton();
+            rbSN76489S_Emu = new RadioButton();
+            groupBox13 = new GroupBox();
+            groupBox14 = new GroupBox();
+            cmbC140S_SCCI = new ComboBox();
+            rbC140S_SCCI = new RadioButton();
+            rbC140S_Silent = new RadioButton();
+            rbC140S_Emu = new RadioButton();
+            groupBox15 = new GroupBox();
+            cmbC140P_SCCI = new ComboBox();
+            rbC140P_SCCI = new RadioButton();
+            rbC140P_Silent = new RadioButton();
+            rbC140P_Emu = new RadioButton();
+            groupBox16 = new GroupBox();
+            cmbSEGAPCMS_SCCI = new ComboBox();
+            rbSEGAPCMS_SCCI = new RadioButton();
+            rbSEGAPCMS_Silent = new RadioButton();
+            rbSEGAPCMS_Emu = new RadioButton();
+            groupBox17 = new GroupBox();
+            cmbSEGAPCMP_SCCI = new ComboBox();
+            rbSEGAPCMP_SCCI = new RadioButton();
+            rbSEGAPCMP_Silent = new RadioButton();
+            rbSEGAPCMP_Emu = new RadioButton();
+            groupBox18 = new GroupBox();
+            cbEmulationOPNBADPCMOnly = new CheckBox();
+            groupBox19 = new GroupBox();
+            cbEmulationOPNAADPCMOnly = new CheckBox();
+            groupBox20 = new GroupBox();
+            cmbAY8910S_SCCI = new ComboBox();
+            rbAY8910S_SCCI = new RadioButton();
+            rbAY8910S_Silent = new RadioButton();
+            rbAY8910S_Emu = new RadioButton();
+            groupBox21 = new GroupBox();
+            cmbAY8910P_SCCI = new ComboBox();
+            rbAY8910P_SCCI = new RadioButton();
+            rbAY8910P_Silent = new RadioButton();
+            rbAY8910P_Emu = new RadioButton();
+            groupBox22 = new GroupBox();
+            cmbYM2413P_SCCI = new ComboBox();
+            rbYM2413P_SCCI = new RadioButton();
+            rbYM2413P_Silent = new RadioButton();
+            rbYM2413P_Emu = new RadioButton();
+            groupBox23 = new GroupBox();
+            cmbYM2413S_SCCI = new ComboBox();
+            rbYM2413S_SCCI = new RadioButton();
+            rbYM2413S_Silent = new RadioButton();
+            rbYM2413S_Emu = new RadioButton();
+            cbYM2151P_exchgPAN = new CheckBox();
+            cbYM2151S_exchgPAN = new CheckBox();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            groupBox5.SuspendLayout();
+            groupBox6.SuspendLayout();
+            groupBox7.SuspendLayout();
+            groupBox8.SuspendLayout();
+            groupBox9.SuspendLayout();
+            groupBox10.SuspendLayout();
+            groupBox11.SuspendLayout();
+            groupBox12.SuspendLayout();
+            groupBox13.SuspendLayout();
+            groupBox14.SuspendLayout();
+            groupBox15.SuspendLayout();
+            groupBox16.SuspendLayout();
+            groupBox17.SuspendLayout();
+            groupBox18.SuspendLayout();
+            groupBox19.SuspendLayout();
+            groupBox20.SuspendLayout();
+            groupBox21.SuspendLayout();
+            groupBox22.SuspendLayout();
+            groupBox23.SuspendLayout();
+            SuspendLayout();
             // 
             // cmbYM2151P_SCCI
             // 
-            this.cmbYM2151P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2151P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2151P_SCCI.FormattingEnabled = true;
-            this.cmbYM2151P_SCCI.Location = new System.Drawing.Point(190, 34);
-            this.cmbYM2151P_SCCI.Name = "cmbYM2151P_SCCI";
-            this.cmbYM2151P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2151P_SCCI.TabIndex = 2;
+            cmbYM2151P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2151P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2151P_SCCI.FormattingEnabled = true;
+            cmbYM2151P_SCCI.Location = new Point(222, 42);
+            cmbYM2151P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2151P_SCCI.Name = "cmbYM2151P_SCCI";
+            cmbYM2151P_SCCI.Size = new Size(250, 23);
+            cmbYM2151P_SCCI.TabIndex = 2;
             // 
             // rbYM2151P_SCCI
             // 
-            this.rbYM2151P_SCCI.AutoSize = true;
-            this.rbYM2151P_SCCI.Location = new System.Drawing.Point(138, 35);
-            this.rbYM2151P_SCCI.Name = "rbYM2151P_SCCI";
-            this.rbYM2151P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2151P_SCCI.TabIndex = 1;
-            this.rbYM2151P_SCCI.Text = "Real";
-            this.rbYM2151P_SCCI.UseVisualStyleBackColor = true;
+            rbYM2151P_SCCI.AutoSize = true;
+            rbYM2151P_SCCI.Location = new Point(161, 44);
+            rbYM2151P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151P_SCCI.Name = "rbYM2151P_SCCI";
+            rbYM2151P_SCCI.Size = new Size(47, 19);
+            rbYM2151P_SCCI.TabIndex = 1;
+            rbYM2151P_SCCI.Text = "Real";
+            rbYM2151P_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2151P_Silent
             // 
-            this.rbYM2151P_Silent.AutoSize = true;
-            this.rbYM2151P_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2151P_Silent.Name = "rbYM2151P_Silent";
-            this.rbYM2151P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2151P_Silent.TabIndex = 0;
-            this.rbYM2151P_Silent.Text = "Silent";
-            this.rbYM2151P_Silent.UseVisualStyleBackColor = true;
+            rbYM2151P_Silent.AutoSize = true;
+            rbYM2151P_Silent.Location = new Point(5, 16);
+            rbYM2151P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151P_Silent.Name = "rbYM2151P_Silent";
+            rbYM2151P_Silent.Size = new Size(54, 19);
+            rbYM2151P_Silent.TabIndex = 0;
+            rbYM2151P_Silent.Text = "Silent";
+            rbYM2151P_Silent.UseVisualStyleBackColor = true;
             // 
             // rbYM2151P_Emu
             // 
-            this.rbYM2151P_Emu.AutoSize = true;
-            this.rbYM2151P_Emu.Checked = true;
-            this.rbYM2151P_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2151P_Emu.Name = "rbYM2151P_Emu";
-            this.rbYM2151P_Emu.Size = new System.Drawing.Size(84, 16);
-            this.rbYM2151P_Emu.TabIndex = 0;
-            this.rbYM2151P_Emu.TabStop = true;
-            this.rbYM2151P_Emu.Text = "Emu(fmgen)";
-            this.rbYM2151P_Emu.UseVisualStyleBackColor = true;
+            rbYM2151P_Emu.AutoSize = true;
+            rbYM2151P_Emu.Checked = true;
+            rbYM2151P_Emu.Location = new Point(72, 16);
+            rbYM2151P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151P_Emu.Name = "rbYM2151P_Emu";
+            rbYM2151P_Emu.Size = new Size(90, 19);
+            rbYM2151P_Emu.TabIndex = 0;
+            rbYM2151P_Emu.TabStop = true;
+            rbYM2151P_Emu.Text = "Emu(fmgen)";
+            rbYM2151P_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.cmbYM2151P_SCCI);
-            this.groupBox1.Controls.Add(this.rbYM2151P_SCCI);
-            this.groupBox1.Controls.Add(this.rbYM2151P_Silent);
-            this.groupBox1.Controls.Add(this.rbYM2151P_EmuX68Sound);
-            this.groupBox1.Controls.Add(this.rbYM2151P_EmuMame);
-            this.groupBox1.Controls.Add(this.rbYM2151P_Emu);
-            this.groupBox1.Location = new System.Drawing.Point(3, 420);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(411, 60);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "YM2151(Primary)";
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.Controls.Add(cbYM2151P_exchgPAN);
+            groupBox1.Controls.Add(cmbYM2151P_SCCI);
+            groupBox1.Controls.Add(rbYM2151P_SCCI);
+            groupBox1.Controls.Add(rbYM2151P_Silent);
+            groupBox1.Controls.Add(rbYM2151P_EmuX68Sound);
+            groupBox1.Controls.Add(rbYM2151P_EmuMame);
+            groupBox1.Controls.Add(rbYM2151P_Emu);
+            groupBox1.Location = new Point(4, 525);
+            groupBox1.Margin = new Padding(4, 4, 4, 4);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new Padding(4, 4, 4, 4);
+            groupBox1.Size = new Size(479, 75);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "YM2151(Primary)";
             // 
             // rbYM2151P_EmuX68Sound
             // 
-            this.rbYM2151P_EmuX68Sound.AutoSize = true;
-            this.rbYM2151P_EmuX68Sound.Location = new System.Drawing.Point(269, 13);
-            this.rbYM2151P_EmuX68Sound.Name = "rbYM2151P_EmuX68Sound";
-            this.rbYM2151P_EmuX68Sound.Size = new System.Drawing.Size(103, 16);
-            this.rbYM2151P_EmuX68Sound.TabIndex = 0;
-            this.rbYM2151P_EmuX68Sound.Text = "Emu(X68Sound)";
-            this.rbYM2151P_EmuX68Sound.UseVisualStyleBackColor = true;
+            rbYM2151P_EmuX68Sound.AutoSize = true;
+            rbYM2151P_EmuX68Sound.Location = new Point(314, 16);
+            rbYM2151P_EmuX68Sound.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151P_EmuX68Sound.Name = "rbYM2151P_EmuX68Sound";
+            rbYM2151P_EmuX68Sound.Size = new Size(109, 19);
+            rbYM2151P_EmuX68Sound.TabIndex = 0;
+            rbYM2151P_EmuX68Sound.Text = "Emu(X68Sound)";
+            rbYM2151P_EmuX68Sound.UseVisualStyleBackColor = true;
             // 
             // rbYM2151P_EmuMame
             // 
-            this.rbYM2151P_EmuMame.AutoSize = true;
-            this.rbYM2151P_EmuMame.Location = new System.Drawing.Point(165, 13);
-            this.rbYM2151P_EmuMame.Name = "rbYM2151P_EmuMame";
-            this.rbYM2151P_EmuMame.Size = new System.Drawing.Size(83, 16);
-            this.rbYM2151P_EmuMame.TabIndex = 0;
-            this.rbYM2151P_EmuMame.Text = "Emu(mame)";
-            this.rbYM2151P_EmuMame.UseVisualStyleBackColor = true;
+            rbYM2151P_EmuMame.AutoSize = true;
+            rbYM2151P_EmuMame.Location = new Point(192, 16);
+            rbYM2151P_EmuMame.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151P_EmuMame.Name = "rbYM2151P_EmuMame";
+            rbYM2151P_EmuMame.Size = new Size(88, 19);
+            rbYM2151P_EmuMame.TabIndex = 0;
+            rbYM2151P_EmuMame.Text = "Emu(mame)";
+            rbYM2151P_EmuMame.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.cmbYM2151S_SCCI);
-            this.groupBox2.Controls.Add(this.rbYM2151S_SCCI);
-            this.groupBox2.Controls.Add(this.rbYM2151S_Silent);
-            this.groupBox2.Controls.Add(this.rbYM2151S_EmuX68Sound);
-            this.groupBox2.Controls.Add(this.rbYM2151S_EmuMame);
-            this.groupBox2.Controls.Add(this.rbYM2151S_Emu);
-            this.groupBox2.Location = new System.Drawing.Point(3, 486);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(411, 60);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "YM2151(Secondary)";
+            groupBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox2.Controls.Add(cbYM2151S_exchgPAN);
+            groupBox2.Controls.Add(cmbYM2151S_SCCI);
+            groupBox2.Controls.Add(rbYM2151S_SCCI);
+            groupBox2.Controls.Add(rbYM2151S_Silent);
+            groupBox2.Controls.Add(rbYM2151S_EmuX68Sound);
+            groupBox2.Controls.Add(rbYM2151S_EmuMame);
+            groupBox2.Controls.Add(rbYM2151S_Emu);
+            groupBox2.Location = new Point(4, 608);
+            groupBox2.Margin = new Padding(4, 4, 4, 4);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new Padding(4, 4, 4, 4);
+            groupBox2.Size = new Size(479, 75);
+            groupBox2.TabIndex = 0;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "YM2151(Secondary)";
             // 
             // cmbYM2151S_SCCI
             // 
-            this.cmbYM2151S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2151S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2151S_SCCI.FormattingEnabled = true;
-            this.cmbYM2151S_SCCI.Location = new System.Drawing.Point(190, 34);
-            this.cmbYM2151S_SCCI.Name = "cmbYM2151S_SCCI";
-            this.cmbYM2151S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2151S_SCCI.TabIndex = 2;
+            cmbYM2151S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2151S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2151S_SCCI.FormattingEnabled = true;
+            cmbYM2151S_SCCI.Location = new Point(222, 42);
+            cmbYM2151S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2151S_SCCI.Name = "cmbYM2151S_SCCI";
+            cmbYM2151S_SCCI.Size = new Size(250, 23);
+            cmbYM2151S_SCCI.TabIndex = 2;
             // 
             // rbYM2151S_SCCI
             // 
-            this.rbYM2151S_SCCI.AutoSize = true;
-            this.rbYM2151S_SCCI.Location = new System.Drawing.Point(138, 35);
-            this.rbYM2151S_SCCI.Name = "rbYM2151S_SCCI";
-            this.rbYM2151S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2151S_SCCI.TabIndex = 1;
-            this.rbYM2151S_SCCI.Text = "Real";
-            this.rbYM2151S_SCCI.UseVisualStyleBackColor = true;
+            rbYM2151S_SCCI.AutoSize = true;
+            rbYM2151S_SCCI.Location = new Point(161, 44);
+            rbYM2151S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151S_SCCI.Name = "rbYM2151S_SCCI";
+            rbYM2151S_SCCI.Size = new Size(47, 19);
+            rbYM2151S_SCCI.TabIndex = 1;
+            rbYM2151S_SCCI.Text = "Real";
+            rbYM2151S_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2151S_Silent
             // 
-            this.rbYM2151S_Silent.AutoSize = true;
-            this.rbYM2151S_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2151S_Silent.Name = "rbYM2151S_Silent";
-            this.rbYM2151S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2151S_Silent.TabIndex = 0;
-            this.rbYM2151S_Silent.Text = "Silent";
-            this.rbYM2151S_Silent.UseVisualStyleBackColor = true;
+            rbYM2151S_Silent.AutoSize = true;
+            rbYM2151S_Silent.Location = new Point(5, 16);
+            rbYM2151S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151S_Silent.Name = "rbYM2151S_Silent";
+            rbYM2151S_Silent.Size = new Size(54, 19);
+            rbYM2151S_Silent.TabIndex = 0;
+            rbYM2151S_Silent.Text = "Silent";
+            rbYM2151S_Silent.UseVisualStyleBackColor = true;
             // 
             // rbYM2151S_EmuX68Sound
             // 
-            this.rbYM2151S_EmuX68Sound.AutoSize = true;
-            this.rbYM2151S_EmuX68Sound.Location = new System.Drawing.Point(269, 13);
-            this.rbYM2151S_EmuX68Sound.Name = "rbYM2151S_EmuX68Sound";
-            this.rbYM2151S_EmuX68Sound.Size = new System.Drawing.Size(103, 16);
-            this.rbYM2151S_EmuX68Sound.TabIndex = 0;
-            this.rbYM2151S_EmuX68Sound.Text = "Emu(X68Sound)";
-            this.rbYM2151S_EmuX68Sound.UseVisualStyleBackColor = true;
+            rbYM2151S_EmuX68Sound.AutoSize = true;
+            rbYM2151S_EmuX68Sound.Location = new Point(314, 16);
+            rbYM2151S_EmuX68Sound.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151S_EmuX68Sound.Name = "rbYM2151S_EmuX68Sound";
+            rbYM2151S_EmuX68Sound.Size = new Size(109, 19);
+            rbYM2151S_EmuX68Sound.TabIndex = 0;
+            rbYM2151S_EmuX68Sound.Text = "Emu(X68Sound)";
+            rbYM2151S_EmuX68Sound.UseVisualStyleBackColor = true;
             // 
             // rbYM2151S_EmuMame
             // 
-            this.rbYM2151S_EmuMame.AutoSize = true;
-            this.rbYM2151S_EmuMame.Location = new System.Drawing.Point(165, 13);
-            this.rbYM2151S_EmuMame.Name = "rbYM2151S_EmuMame";
-            this.rbYM2151S_EmuMame.Size = new System.Drawing.Size(83, 16);
-            this.rbYM2151S_EmuMame.TabIndex = 0;
-            this.rbYM2151S_EmuMame.Text = "Emu(mame)";
-            this.rbYM2151S_EmuMame.UseVisualStyleBackColor = true;
+            rbYM2151S_EmuMame.AutoSize = true;
+            rbYM2151S_EmuMame.Location = new Point(192, 16);
+            rbYM2151S_EmuMame.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151S_EmuMame.Name = "rbYM2151S_EmuMame";
+            rbYM2151S_EmuMame.Size = new Size(88, 19);
+            rbYM2151S_EmuMame.TabIndex = 0;
+            rbYM2151S_EmuMame.Text = "Emu(mame)";
+            rbYM2151S_EmuMame.UseVisualStyleBackColor = true;
             // 
             // rbYM2151S_Emu
             // 
-            this.rbYM2151S_Emu.AutoSize = true;
-            this.rbYM2151S_Emu.Checked = true;
-            this.rbYM2151S_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2151S_Emu.Name = "rbYM2151S_Emu";
-            this.rbYM2151S_Emu.Size = new System.Drawing.Size(84, 16);
-            this.rbYM2151S_Emu.TabIndex = 0;
-            this.rbYM2151S_Emu.TabStop = true;
-            this.rbYM2151S_Emu.Text = "Emu(fmgen)";
-            this.rbYM2151S_Emu.UseVisualStyleBackColor = true;
+            rbYM2151S_Emu.AutoSize = true;
+            rbYM2151S_Emu.Checked = true;
+            rbYM2151S_Emu.Location = new Point(72, 16);
+            rbYM2151S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2151S_Emu.Name = "rbYM2151S_Emu";
+            rbYM2151S_Emu.Size = new Size(90, 19);
+            rbYM2151S_Emu.TabIndex = 0;
+            rbYM2151S_Emu.TabStop = true;
+            rbYM2151S_Emu.Text = "Emu(fmgen)";
+            rbYM2151S_Emu.UseVisualStyleBackColor = true;
             // 
             // cmbYM2203P_SCCI
             // 
-            this.cmbYM2203P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2203P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2203P_SCCI.FormattingEnabled = true;
-            this.cmbYM2203P_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2203P_SCCI.Name = "cmbYM2203P_SCCI";
-            this.cmbYM2203P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2203P_SCCI.TabIndex = 2;
+            cmbYM2203P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2203P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2203P_SCCI.FormattingEnabled = true;
+            cmbYM2203P_SCCI.Location = new Point(222, 15);
+            cmbYM2203P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2203P_SCCI.Name = "cmbYM2203P_SCCI";
+            cmbYM2203P_SCCI.Size = new Size(250, 23);
+            cmbYM2203P_SCCI.TabIndex = 2;
             // 
             // rbYM2203P_SCCI
             // 
-            this.rbYM2203P_SCCI.AutoSize = true;
-            this.rbYM2203P_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2203P_SCCI.Name = "rbYM2203P_SCCI";
-            this.rbYM2203P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2203P_SCCI.TabIndex = 1;
-            this.rbYM2203P_SCCI.Text = "Real";
-            this.rbYM2203P_SCCI.UseVisualStyleBackColor = true;
+            rbYM2203P_SCCI.AutoSize = true;
+            rbYM2203P_SCCI.Location = new Point(161, 16);
+            rbYM2203P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2203P_SCCI.Name = "rbYM2203P_SCCI";
+            rbYM2203P_SCCI.Size = new Size(47, 19);
+            rbYM2203P_SCCI.TabIndex = 1;
+            rbYM2203P_SCCI.Text = "Real";
+            rbYM2203P_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2203P_Emu
             // 
-            this.rbYM2203P_Emu.AutoSize = true;
-            this.rbYM2203P_Emu.Checked = true;
-            this.rbYM2203P_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2203P_Emu.Name = "rbYM2203P_Emu";
-            this.rbYM2203P_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2203P_Emu.TabIndex = 0;
-            this.rbYM2203P_Emu.TabStop = true;
-            this.rbYM2203P_Emu.Text = "Emu";
-            this.rbYM2203P_Emu.UseVisualStyleBackColor = true;
+            rbYM2203P_Emu.AutoSize = true;
+            rbYM2203P_Emu.Checked = true;
+            rbYM2203P_Emu.Location = new Point(72, 16);
+            rbYM2203P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2203P_Emu.Name = "rbYM2203P_Emu";
+            rbYM2203P_Emu.Size = new Size(48, 19);
+            rbYM2203P_Emu.TabIndex = 0;
+            rbYM2203P_Emu.TabStop = true;
+            rbYM2203P_Emu.Text = "Emu";
+            rbYM2203P_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.cmbYM2203P_SCCI);
-            this.groupBox3.Controls.Add(this.rbYM2203P_SCCI);
-            this.groupBox3.Controls.Add(this.rbYM2203P_Silent);
-            this.groupBox3.Controls.Add(this.rbYM2203P_Emu);
-            this.groupBox3.Location = new System.Drawing.Point(3, 552);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(411, 38);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "YM2203(Primary)";
+            groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox3.Controls.Add(cmbYM2203P_SCCI);
+            groupBox3.Controls.Add(rbYM2203P_SCCI);
+            groupBox3.Controls.Add(rbYM2203P_Silent);
+            groupBox3.Controls.Add(rbYM2203P_Emu);
+            groupBox3.Location = new Point(4, 690);
+            groupBox3.Margin = new Padding(4, 4, 4, 4);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Padding = new Padding(4, 4, 4, 4);
+            groupBox3.Size = new Size(479, 48);
+            groupBox3.TabIndex = 1;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "YM2203(Primary)";
             // 
             // rbYM2203P_Silent
             // 
-            this.rbYM2203P_Silent.AutoSize = true;
-            this.rbYM2203P_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2203P_Silent.Name = "rbYM2203P_Silent";
-            this.rbYM2203P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2203P_Silent.TabIndex = 0;
-            this.rbYM2203P_Silent.Text = "Silent";
-            this.rbYM2203P_Silent.UseVisualStyleBackColor = true;
+            rbYM2203P_Silent.AutoSize = true;
+            rbYM2203P_Silent.Location = new Point(5, 16);
+            rbYM2203P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2203P_Silent.Name = "rbYM2203P_Silent";
+            rbYM2203P_Silent.Size = new Size(54, 19);
+            rbYM2203P_Silent.TabIndex = 0;
+            rbYM2203P_Silent.Text = "Silent";
+            rbYM2203P_Silent.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.cmbYM2203S_SCCI);
-            this.groupBox4.Controls.Add(this.rbYM2203S_SCCI);
-            this.groupBox4.Controls.Add(this.rbYM2203S_Silent);
-            this.groupBox4.Controls.Add(this.rbYM2203S_Emu);
-            this.groupBox4.Location = new System.Drawing.Point(3, 596);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(411, 38);
-            this.groupBox4.TabIndex = 1;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "YM2203(Secondary)";
+            groupBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox4.Controls.Add(cmbYM2203S_SCCI);
+            groupBox4.Controls.Add(rbYM2203S_SCCI);
+            groupBox4.Controls.Add(rbYM2203S_Silent);
+            groupBox4.Controls.Add(rbYM2203S_Emu);
+            groupBox4.Location = new Point(4, 745);
+            groupBox4.Margin = new Padding(4, 4, 4, 4);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Padding = new Padding(4, 4, 4, 4);
+            groupBox4.Size = new Size(479, 48);
+            groupBox4.TabIndex = 1;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "YM2203(Secondary)";
             // 
             // cmbYM2203S_SCCI
             // 
-            this.cmbYM2203S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2203S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2203S_SCCI.FormattingEnabled = true;
-            this.cmbYM2203S_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2203S_SCCI.Name = "cmbYM2203S_SCCI";
-            this.cmbYM2203S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2203S_SCCI.TabIndex = 2;
+            cmbYM2203S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2203S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2203S_SCCI.FormattingEnabled = true;
+            cmbYM2203S_SCCI.Location = new Point(222, 15);
+            cmbYM2203S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2203S_SCCI.Name = "cmbYM2203S_SCCI";
+            cmbYM2203S_SCCI.Size = new Size(250, 23);
+            cmbYM2203S_SCCI.TabIndex = 2;
             // 
             // rbYM2203S_SCCI
             // 
-            this.rbYM2203S_SCCI.AutoSize = true;
-            this.rbYM2203S_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2203S_SCCI.Name = "rbYM2203S_SCCI";
-            this.rbYM2203S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2203S_SCCI.TabIndex = 1;
-            this.rbYM2203S_SCCI.Text = "Real";
-            this.rbYM2203S_SCCI.UseVisualStyleBackColor = true;
+            rbYM2203S_SCCI.AutoSize = true;
+            rbYM2203S_SCCI.Location = new Point(161, 16);
+            rbYM2203S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2203S_SCCI.Name = "rbYM2203S_SCCI";
+            rbYM2203S_SCCI.Size = new Size(47, 19);
+            rbYM2203S_SCCI.TabIndex = 1;
+            rbYM2203S_SCCI.Text = "Real";
+            rbYM2203S_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2203S_Silent
             // 
-            this.rbYM2203S_Silent.AutoSize = true;
-            this.rbYM2203S_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2203S_Silent.Name = "rbYM2203S_Silent";
-            this.rbYM2203S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2203S_Silent.TabIndex = 0;
-            this.rbYM2203S_Silent.Text = "Silent";
-            this.rbYM2203S_Silent.UseVisualStyleBackColor = true;
+            rbYM2203S_Silent.AutoSize = true;
+            rbYM2203S_Silent.Location = new Point(5, 16);
+            rbYM2203S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2203S_Silent.Name = "rbYM2203S_Silent";
+            rbYM2203S_Silent.Size = new Size(54, 19);
+            rbYM2203S_Silent.TabIndex = 0;
+            rbYM2203S_Silent.Text = "Silent";
+            rbYM2203S_Silent.UseVisualStyleBackColor = true;
             // 
             // rbYM2203S_Emu
             // 
-            this.rbYM2203S_Emu.AutoSize = true;
-            this.rbYM2203S_Emu.Checked = true;
-            this.rbYM2203S_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2203S_Emu.Name = "rbYM2203S_Emu";
-            this.rbYM2203S_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2203S_Emu.TabIndex = 0;
-            this.rbYM2203S_Emu.TabStop = true;
-            this.rbYM2203S_Emu.Text = "Emu";
-            this.rbYM2203S_Emu.UseVisualStyleBackColor = true;
+            rbYM2203S_Emu.AutoSize = true;
+            rbYM2203S_Emu.Checked = true;
+            rbYM2203S_Emu.Location = new Point(72, 16);
+            rbYM2203S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2203S_Emu.Name = "rbYM2203S_Emu";
+            rbYM2203S_Emu.Size = new Size(48, 19);
+            rbYM2203S_Emu.TabIndex = 0;
+            rbYM2203S_Emu.TabStop = true;
+            rbYM2203S_Emu.Text = "Emu";
+            rbYM2203S_Emu.UseVisualStyleBackColor = true;
             // 
             // cmbYM2608P_SCCI
             // 
-            this.cmbYM2608P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2608P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2608P_SCCI.FormattingEnabled = true;
-            this.cmbYM2608P_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2608P_SCCI.Name = "cmbYM2608P_SCCI";
-            this.cmbYM2608P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2608P_SCCI.TabIndex = 2;
+            cmbYM2608P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2608P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2608P_SCCI.FormattingEnabled = true;
+            cmbYM2608P_SCCI.Location = new Point(222, 15);
+            cmbYM2608P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2608P_SCCI.Name = "cmbYM2608P_SCCI";
+            cmbYM2608P_SCCI.Size = new Size(250, 23);
+            cmbYM2608P_SCCI.TabIndex = 2;
             // 
             // rbYM2608P_SCCI
             // 
-            this.rbYM2608P_SCCI.AutoSize = true;
-            this.rbYM2608P_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2608P_SCCI.Name = "rbYM2608P_SCCI";
-            this.rbYM2608P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2608P_SCCI.TabIndex = 1;
-            this.rbYM2608P_SCCI.Text = "Real";
-            this.rbYM2608P_SCCI.UseVisualStyleBackColor = true;
+            rbYM2608P_SCCI.AutoSize = true;
+            rbYM2608P_SCCI.Location = new Point(161, 16);
+            rbYM2608P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2608P_SCCI.Name = "rbYM2608P_SCCI";
+            rbYM2608P_SCCI.Size = new Size(47, 19);
+            rbYM2608P_SCCI.TabIndex = 1;
+            rbYM2608P_SCCI.Text = "Real";
+            rbYM2608P_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2608P_Emu
             // 
-            this.rbYM2608P_Emu.AutoSize = true;
-            this.rbYM2608P_Emu.Checked = true;
-            this.rbYM2608P_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2608P_Emu.Name = "rbYM2608P_Emu";
-            this.rbYM2608P_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2608P_Emu.TabIndex = 0;
-            this.rbYM2608P_Emu.TabStop = true;
-            this.rbYM2608P_Emu.Text = "Emu";
-            this.rbYM2608P_Emu.UseVisualStyleBackColor = true;
+            rbYM2608P_Emu.AutoSize = true;
+            rbYM2608P_Emu.Checked = true;
+            rbYM2608P_Emu.Location = new Point(72, 16);
+            rbYM2608P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2608P_Emu.Name = "rbYM2608P_Emu";
+            rbYM2608P_Emu.Size = new Size(48, 19);
+            rbYM2608P_Emu.TabIndex = 0;
+            rbYM2608P_Emu.TabStop = true;
+            rbYM2608P_Emu.Text = "Emu";
+            rbYM2608P_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.cmbYM2608P_SCCI);
-            this.groupBox5.Controls.Add(this.rbYM2608P_SCCI);
-            this.groupBox5.Controls.Add(this.rbYM2608P_Silent);
-            this.groupBox5.Controls.Add(this.rbYM2608P_Emu);
-            this.groupBox5.Location = new System.Drawing.Point(3, 728);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(411, 38);
-            this.groupBox5.TabIndex = 2;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "YM2608(Primary)";
+            groupBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox5.Controls.Add(cmbYM2608P_SCCI);
+            groupBox5.Controls.Add(rbYM2608P_SCCI);
+            groupBox5.Controls.Add(rbYM2608P_Silent);
+            groupBox5.Controls.Add(rbYM2608P_Emu);
+            groupBox5.Location = new Point(4, 910);
+            groupBox5.Margin = new Padding(4, 4, 4, 4);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Padding = new Padding(4, 4, 4, 4);
+            groupBox5.Size = new Size(479, 48);
+            groupBox5.TabIndex = 2;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "YM2608(Primary)";
             // 
             // rbYM2608P_Silent
             // 
-            this.rbYM2608P_Silent.AutoSize = true;
-            this.rbYM2608P_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2608P_Silent.Name = "rbYM2608P_Silent";
-            this.rbYM2608P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2608P_Silent.TabIndex = 0;
-            this.rbYM2608P_Silent.Text = "Silent";
-            this.rbYM2608P_Silent.UseVisualStyleBackColor = true;
+            rbYM2608P_Silent.AutoSize = true;
+            rbYM2608P_Silent.Location = new Point(5, 16);
+            rbYM2608P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2608P_Silent.Name = "rbYM2608P_Silent";
+            rbYM2608P_Silent.Size = new Size(54, 19);
+            rbYM2608P_Silent.TabIndex = 0;
+            rbYM2608P_Silent.Text = "Silent";
+            rbYM2608P_Silent.UseVisualStyleBackColor = true;
             // 
             // groupBox6
             // 
-            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox6.Controls.Add(this.cmbYM2608S_SCCI);
-            this.groupBox6.Controls.Add(this.rbYM2608S_SCCI);
-            this.groupBox6.Controls.Add(this.rbYM2608S_Silent);
-            this.groupBox6.Controls.Add(this.rbYM2608S_Emu);
-            this.groupBox6.Location = new System.Drawing.Point(3, 772);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(411, 38);
-            this.groupBox6.TabIndex = 2;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "YM2608(Secondary)";
+            groupBox6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox6.Controls.Add(cmbYM2608S_SCCI);
+            groupBox6.Controls.Add(rbYM2608S_SCCI);
+            groupBox6.Controls.Add(rbYM2608S_Silent);
+            groupBox6.Controls.Add(rbYM2608S_Emu);
+            groupBox6.Location = new Point(4, 965);
+            groupBox6.Margin = new Padding(4, 4, 4, 4);
+            groupBox6.Name = "groupBox6";
+            groupBox6.Padding = new Padding(4, 4, 4, 4);
+            groupBox6.Size = new Size(479, 48);
+            groupBox6.TabIndex = 2;
+            groupBox6.TabStop = false;
+            groupBox6.Text = "YM2608(Secondary)";
             // 
             // cmbYM2608S_SCCI
             // 
-            this.cmbYM2608S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2608S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2608S_SCCI.FormattingEnabled = true;
-            this.cmbYM2608S_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2608S_SCCI.Name = "cmbYM2608S_SCCI";
-            this.cmbYM2608S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2608S_SCCI.TabIndex = 2;
+            cmbYM2608S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2608S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2608S_SCCI.FormattingEnabled = true;
+            cmbYM2608S_SCCI.Location = new Point(222, 15);
+            cmbYM2608S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2608S_SCCI.Name = "cmbYM2608S_SCCI";
+            cmbYM2608S_SCCI.Size = new Size(250, 23);
+            cmbYM2608S_SCCI.TabIndex = 2;
             // 
             // rbYM2608S_SCCI
             // 
-            this.rbYM2608S_SCCI.AutoSize = true;
-            this.rbYM2608S_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2608S_SCCI.Name = "rbYM2608S_SCCI";
-            this.rbYM2608S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2608S_SCCI.TabIndex = 1;
-            this.rbYM2608S_SCCI.Text = "Real";
-            this.rbYM2608S_SCCI.UseVisualStyleBackColor = true;
+            rbYM2608S_SCCI.AutoSize = true;
+            rbYM2608S_SCCI.Location = new Point(161, 16);
+            rbYM2608S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2608S_SCCI.Name = "rbYM2608S_SCCI";
+            rbYM2608S_SCCI.Size = new Size(47, 19);
+            rbYM2608S_SCCI.TabIndex = 1;
+            rbYM2608S_SCCI.Text = "Real";
+            rbYM2608S_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2608S_Silent
             // 
-            this.rbYM2608S_Silent.AutoSize = true;
-            this.rbYM2608S_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2608S_Silent.Name = "rbYM2608S_Silent";
-            this.rbYM2608S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2608S_Silent.TabIndex = 0;
-            this.rbYM2608S_Silent.Text = "Silent";
-            this.rbYM2608S_Silent.UseVisualStyleBackColor = true;
+            rbYM2608S_Silent.AutoSize = true;
+            rbYM2608S_Silent.Location = new Point(5, 16);
+            rbYM2608S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2608S_Silent.Name = "rbYM2608S_Silent";
+            rbYM2608S_Silent.Size = new Size(54, 19);
+            rbYM2608S_Silent.TabIndex = 0;
+            rbYM2608S_Silent.Text = "Silent";
+            rbYM2608S_Silent.UseVisualStyleBackColor = true;
             // 
             // rbYM2608S_Emu
             // 
-            this.rbYM2608S_Emu.AutoSize = true;
-            this.rbYM2608S_Emu.Checked = true;
-            this.rbYM2608S_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2608S_Emu.Name = "rbYM2608S_Emu";
-            this.rbYM2608S_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2608S_Emu.TabIndex = 0;
-            this.rbYM2608S_Emu.TabStop = true;
-            this.rbYM2608S_Emu.Text = "Emu";
-            this.rbYM2608S_Emu.UseVisualStyleBackColor = true;
+            rbYM2608S_Emu.AutoSize = true;
+            rbYM2608S_Emu.Checked = true;
+            rbYM2608S_Emu.Location = new Point(72, 16);
+            rbYM2608S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2608S_Emu.Name = "rbYM2608S_Emu";
+            rbYM2608S_Emu.Size = new Size(48, 19);
+            rbYM2608S_Emu.TabIndex = 0;
+            rbYM2608S_Emu.TabStop = true;
+            rbYM2608S_Emu.Text = "Emu";
+            rbYM2608S_Emu.UseVisualStyleBackColor = true;
             // 
             // cmbYM2610BP_SCCI
             // 
-            this.cmbYM2610BP_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2610BP_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2610BP_SCCI.FormattingEnabled = true;
-            this.cmbYM2610BP_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2610BP_SCCI.Name = "cmbYM2610BP_SCCI";
-            this.cmbYM2610BP_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2610BP_SCCI.TabIndex = 2;
+            cmbYM2610BP_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2610BP_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2610BP_SCCI.FormattingEnabled = true;
+            cmbYM2610BP_SCCI.Location = new Point(222, 15);
+            cmbYM2610BP_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2610BP_SCCI.Name = "cmbYM2610BP_SCCI";
+            cmbYM2610BP_SCCI.Size = new Size(250, 23);
+            cmbYM2610BP_SCCI.TabIndex = 2;
             // 
             // rbYM2610BP_SCCI
             // 
-            this.rbYM2610BP_SCCI.AutoSize = true;
-            this.rbYM2610BP_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2610BP_SCCI.Name = "rbYM2610BP_SCCI";
-            this.rbYM2610BP_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2610BP_SCCI.TabIndex = 1;
-            this.rbYM2610BP_SCCI.Text = "Real";
-            this.rbYM2610BP_SCCI.UseVisualStyleBackColor = true;
+            rbYM2610BP_SCCI.AutoSize = true;
+            rbYM2610BP_SCCI.Location = new Point(161, 16);
+            rbYM2610BP_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2610BP_SCCI.Name = "rbYM2610BP_SCCI";
+            rbYM2610BP_SCCI.Size = new Size(47, 19);
+            rbYM2610BP_SCCI.TabIndex = 1;
+            rbYM2610BP_SCCI.Text = "Real";
+            rbYM2610BP_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2610BP_Emu
             // 
-            this.rbYM2610BP_Emu.AutoSize = true;
-            this.rbYM2610BP_Emu.Checked = true;
-            this.rbYM2610BP_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2610BP_Emu.Name = "rbYM2610BP_Emu";
-            this.rbYM2610BP_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2610BP_Emu.TabIndex = 0;
-            this.rbYM2610BP_Emu.TabStop = true;
-            this.rbYM2610BP_Emu.Text = "Emu";
-            this.rbYM2610BP_Emu.UseVisualStyleBackColor = true;
+            rbYM2610BP_Emu.AutoSize = true;
+            rbYM2610BP_Emu.Checked = true;
+            rbYM2610BP_Emu.Location = new Point(72, 16);
+            rbYM2610BP_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2610BP_Emu.Name = "rbYM2610BP_Emu";
+            rbYM2610BP_Emu.Size = new Size(48, 19);
+            rbYM2610BP_Emu.TabIndex = 0;
+            rbYM2610BP_Emu.TabStop = true;
+            rbYM2610BP_Emu.Text = "Emu";
+            rbYM2610BP_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox7
             // 
-            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox7.Controls.Add(this.label1);
-            this.groupBox7.Controls.Add(this.cmbSPPCMP_SCCI);
-            this.groupBox7.Controls.Add(this.cmbYM2610BP_SCCI);
-            this.groupBox7.Controls.Add(this.rbYM2610BP_SCCI);
-            this.groupBox7.Controls.Add(this.rbYM2610BP_Silent);
-            this.groupBox7.Controls.Add(this.rbYM2610BP_Emu);
-            this.groupBox7.Location = new System.Drawing.Point(3, 861);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(411, 64);
-            this.groupBox7.TabIndex = 3;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "YM2610/B(Primary)";
+            groupBox7.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox7.Controls.Add(label1);
+            groupBox7.Controls.Add(cmbSPPCMP_SCCI);
+            groupBox7.Controls.Add(cmbYM2610BP_SCCI);
+            groupBox7.Controls.Add(rbYM2610BP_SCCI);
+            groupBox7.Controls.Add(rbYM2610BP_Silent);
+            groupBox7.Controls.Add(rbYM2610BP_Emu);
+            groupBox7.Location = new Point(4, 1076);
+            groupBox7.Margin = new Padding(4, 4, 4, 4);
+            groupBox7.Name = "groupBox7";
+            groupBox7.Padding = new Padding(4, 4, 4, 4);
+            groupBox7.Size = new Size(479, 80);
+            groupBox7.TabIndex = 3;
+            groupBox7.TabStop = false;
+            groupBox7.Text = "YM2610/B(Primary)";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(173, 41);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(11, 12);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "+";
+            label1.AutoSize = true;
+            label1.Location = new Point(202, 51);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(15, 15);
+            label1.TabIndex = 3;
+            label1.Text = "+";
             // 
             // cmbSPPCMP_SCCI
             // 
-            this.cmbSPPCMP_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSPPCMP_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSPPCMP_SCCI.FormattingEnabled = true;
-            this.cmbSPPCMP_SCCI.Location = new System.Drawing.Point(190, 38);
-            this.cmbSPPCMP_SCCI.Name = "cmbSPPCMP_SCCI";
-            this.cmbSPPCMP_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbSPPCMP_SCCI.TabIndex = 2;
+            cmbSPPCMP_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSPPCMP_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSPPCMP_SCCI.FormattingEnabled = true;
+            cmbSPPCMP_SCCI.Location = new Point(222, 48);
+            cmbSPPCMP_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbSPPCMP_SCCI.Name = "cmbSPPCMP_SCCI";
+            cmbSPPCMP_SCCI.Size = new Size(250, 23);
+            cmbSPPCMP_SCCI.TabIndex = 2;
             // 
             // rbYM2610BP_Silent
             // 
-            this.rbYM2610BP_Silent.AutoSize = true;
-            this.rbYM2610BP_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2610BP_Silent.Name = "rbYM2610BP_Silent";
-            this.rbYM2610BP_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2610BP_Silent.TabIndex = 0;
-            this.rbYM2610BP_Silent.Text = "Silent";
-            this.rbYM2610BP_Silent.UseVisualStyleBackColor = true;
+            rbYM2610BP_Silent.AutoSize = true;
+            rbYM2610BP_Silent.Location = new Point(5, 16);
+            rbYM2610BP_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2610BP_Silent.Name = "rbYM2610BP_Silent";
+            rbYM2610BP_Silent.Size = new Size(54, 19);
+            rbYM2610BP_Silent.TabIndex = 0;
+            rbYM2610BP_Silent.Text = "Silent";
+            rbYM2610BP_Silent.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
-            this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox8.Controls.Add(this.label2);
-            this.groupBox8.Controls.Add(this.cmbYM2610BS_SCCI);
-            this.groupBox8.Controls.Add(this.rbYM2610BS_SCCI);
-            this.groupBox8.Controls.Add(this.cmbSPPCMS_SCCI);
-            this.groupBox8.Controls.Add(this.rbYM2610BS_Silent);
-            this.groupBox8.Controls.Add(this.rbYM2610BS_Emu);
-            this.groupBox8.Location = new System.Drawing.Point(3, 931);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(411, 64);
-            this.groupBox8.TabIndex = 3;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "YM2610/B(Secondary)";
+            groupBox8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox8.Controls.Add(label2);
+            groupBox8.Controls.Add(cmbYM2610BS_SCCI);
+            groupBox8.Controls.Add(rbYM2610BS_SCCI);
+            groupBox8.Controls.Add(cmbSPPCMS_SCCI);
+            groupBox8.Controls.Add(rbYM2610BS_Silent);
+            groupBox8.Controls.Add(rbYM2610BS_Emu);
+            groupBox8.Location = new Point(4, 1164);
+            groupBox8.Margin = new Padding(4, 4, 4, 4);
+            groupBox8.Name = "groupBox8";
+            groupBox8.Padding = new Padding(4, 4, 4, 4);
+            groupBox8.Size = new Size(479, 80);
+            groupBox8.TabIndex = 3;
+            groupBox8.TabStop = false;
+            groupBox8.Text = "YM2610/B(Secondary)";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(173, 41);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(11, 12);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "+";
+            label2.AutoSize = true;
+            label2.Location = new Point(202, 51);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(15, 15);
+            label2.TabIndex = 3;
+            label2.Text = "+";
             // 
             // cmbYM2610BS_SCCI
             // 
-            this.cmbYM2610BS_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2610BS_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2610BS_SCCI.FormattingEnabled = true;
-            this.cmbYM2610BS_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2610BS_SCCI.Name = "cmbYM2610BS_SCCI";
-            this.cmbYM2610BS_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2610BS_SCCI.TabIndex = 2;
+            cmbYM2610BS_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2610BS_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2610BS_SCCI.FormattingEnabled = true;
+            cmbYM2610BS_SCCI.Location = new Point(222, 15);
+            cmbYM2610BS_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2610BS_SCCI.Name = "cmbYM2610BS_SCCI";
+            cmbYM2610BS_SCCI.Size = new Size(250, 23);
+            cmbYM2610BS_SCCI.TabIndex = 2;
             // 
             // rbYM2610BS_SCCI
             // 
-            this.rbYM2610BS_SCCI.AutoSize = true;
-            this.rbYM2610BS_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2610BS_SCCI.Name = "rbYM2610BS_SCCI";
-            this.rbYM2610BS_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2610BS_SCCI.TabIndex = 1;
-            this.rbYM2610BS_SCCI.Text = "Real";
-            this.rbYM2610BS_SCCI.UseVisualStyleBackColor = true;
+            rbYM2610BS_SCCI.AutoSize = true;
+            rbYM2610BS_SCCI.Location = new Point(161, 16);
+            rbYM2610BS_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2610BS_SCCI.Name = "rbYM2610BS_SCCI";
+            rbYM2610BS_SCCI.Size = new Size(47, 19);
+            rbYM2610BS_SCCI.TabIndex = 1;
+            rbYM2610BS_SCCI.Text = "Real";
+            rbYM2610BS_SCCI.UseVisualStyleBackColor = true;
             // 
             // cmbSPPCMS_SCCI
             // 
-            this.cmbSPPCMS_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSPPCMS_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSPPCMS_SCCI.FormattingEnabled = true;
-            this.cmbSPPCMS_SCCI.Location = new System.Drawing.Point(190, 38);
-            this.cmbSPPCMS_SCCI.Name = "cmbSPPCMS_SCCI";
-            this.cmbSPPCMS_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbSPPCMS_SCCI.TabIndex = 2;
+            cmbSPPCMS_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSPPCMS_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSPPCMS_SCCI.FormattingEnabled = true;
+            cmbSPPCMS_SCCI.Location = new Point(222, 48);
+            cmbSPPCMS_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbSPPCMS_SCCI.Name = "cmbSPPCMS_SCCI";
+            cmbSPPCMS_SCCI.Size = new Size(250, 23);
+            cmbSPPCMS_SCCI.TabIndex = 2;
             // 
             // rbYM2610BS_Silent
             // 
-            this.rbYM2610BS_Silent.AutoSize = true;
-            this.rbYM2610BS_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2610BS_Silent.Name = "rbYM2610BS_Silent";
-            this.rbYM2610BS_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2610BS_Silent.TabIndex = 0;
-            this.rbYM2610BS_Silent.Text = "Silent";
-            this.rbYM2610BS_Silent.UseVisualStyleBackColor = true;
+            rbYM2610BS_Silent.AutoSize = true;
+            rbYM2610BS_Silent.Location = new Point(5, 16);
+            rbYM2610BS_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2610BS_Silent.Name = "rbYM2610BS_Silent";
+            rbYM2610BS_Silent.Size = new Size(54, 19);
+            rbYM2610BS_Silent.TabIndex = 0;
+            rbYM2610BS_Silent.Text = "Silent";
+            rbYM2610BS_Silent.UseVisualStyleBackColor = true;
             // 
             // rbYM2610BS_Emu
             // 
-            this.rbYM2610BS_Emu.AutoSize = true;
-            this.rbYM2610BS_Emu.Checked = true;
-            this.rbYM2610BS_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2610BS_Emu.Name = "rbYM2610BS_Emu";
-            this.rbYM2610BS_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2610BS_Emu.TabIndex = 0;
-            this.rbYM2610BS_Emu.TabStop = true;
-            this.rbYM2610BS_Emu.Text = "Emu";
-            this.rbYM2610BS_Emu.UseVisualStyleBackColor = true;
+            rbYM2610BS_Emu.AutoSize = true;
+            rbYM2610BS_Emu.Checked = true;
+            rbYM2610BS_Emu.Location = new Point(72, 16);
+            rbYM2610BS_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2610BS_Emu.Name = "rbYM2610BS_Emu";
+            rbYM2610BS_Emu.Size = new Size(48, 19);
+            rbYM2610BS_Emu.TabIndex = 0;
+            rbYM2610BS_Emu.TabStop = true;
+            rbYM2610BS_Emu.Text = "Emu";
+            rbYM2610BS_Emu.UseVisualStyleBackColor = true;
             // 
             // cbEmulationPCMOnly
             // 
-            this.cbEmulationPCMOnly.AutoSize = true;
-            this.cbEmulationPCMOnly.Location = new System.Drawing.Point(4, 18);
-            this.cbEmulationPCMOnly.Name = "cbEmulationPCMOnly";
-            this.cbEmulationPCMOnly.Size = new System.Drawing.Size(154, 16);
-            this.cbEmulationPCMOnly.TabIndex = 5;
-            this.cbEmulationPCMOnly.Text = "PCMだけエミュレーションする";
-            this.cbEmulationPCMOnly.UseVisualStyleBackColor = true;
+            cbEmulationPCMOnly.AutoSize = true;
+            cbEmulationPCMOnly.Location = new Point(5, 22);
+            cbEmulationPCMOnly.Margin = new Padding(4, 4, 4, 4);
+            cbEmulationPCMOnly.Name = "cbEmulationPCMOnly";
+            cbEmulationPCMOnly.Size = new Size(155, 19);
+            cbEmulationPCMOnly.TabIndex = 5;
+            cbEmulationPCMOnly.Text = "PCMだけエミュレーションする";
+            cbEmulationPCMOnly.UseVisualStyleBackColor = true;
             // 
             // cbTwice
             // 
-            this.cbTwice.AutoSize = true;
-            this.cbTwice.Location = new System.Drawing.Point(206, 39);
-            this.cbTwice.Name = "cbTwice";
-            this.cbTwice.Size = new System.Drawing.Size(104, 16);
-            this.cbTwice.TabIndex = 4;
-            this.cbTwice.Text = "そのWait値を2倍";
-            this.cbTwice.UseVisualStyleBackColor = true;
+            cbTwice.AutoSize = true;
+            cbTwice.Location = new Point(240, 49);
+            cbTwice.Margin = new Padding(4, 4, 4, 4);
+            cbTwice.Name = "cbTwice";
+            cbTwice.Size = new Size(108, 19);
+            cbTwice.TabIndex = 4;
+            cbTwice.Text = "そのWait値を2倍";
+            cbTwice.UseVisualStyleBackColor = true;
             // 
             // cbSendWait
             // 
-            this.cbSendWait.AutoSize = true;
-            this.cbSendWait.Location = new System.Drawing.Point(190, 18);
-            this.cbSendWait.Name = "cbSendWait";
-            this.cbSendWait.Size = new System.Drawing.Size(109, 16);
-            this.cbSendWait.TabIndex = 3;
-            this.cbSendWait.Text = "Waitシグナル発信";
-            this.cbSendWait.UseVisualStyleBackColor = true;
-            this.cbSendWait.CheckedChanged += new System.EventHandler(this.cbSendWait_CheckedChanged);
+            cbSendWait.AutoSize = true;
+            cbSendWait.Location = new Point(222, 22);
+            cbSendWait.Margin = new Padding(4, 4, 4, 4);
+            cbSendWait.Name = "cbSendWait";
+            cbSendWait.Size = new Size(111, 19);
+            cbSendWait.TabIndex = 3;
+            cbSendWait.Text = "Waitシグナル発信";
+            cbSendWait.UseVisualStyleBackColor = true;
+            cbSendWait.CheckedChanged += cbSendWait_CheckedChanged;
             // 
             // cmbYM2612P_SCCI
             // 
-            this.cmbYM2612P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2612P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2612P_SCCI.FormattingEnabled = true;
-            this.cmbYM2612P_SCCI.Location = new System.Drawing.Point(190, 36);
-            this.cmbYM2612P_SCCI.Name = "cmbYM2612P_SCCI";
-            this.cmbYM2612P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2612P_SCCI.TabIndex = 2;
+            cmbYM2612P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2612P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2612P_SCCI.FormattingEnabled = true;
+            cmbYM2612P_SCCI.Location = new Point(222, 45);
+            cmbYM2612P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2612P_SCCI.Name = "cmbYM2612P_SCCI";
+            cmbYM2612P_SCCI.Size = new Size(250, 23);
+            cmbYM2612P_SCCI.TabIndex = 2;
             // 
             // rbYM2612P_SCCI
             // 
-            this.rbYM2612P_SCCI.AutoSize = true;
-            this.rbYM2612P_SCCI.Location = new System.Drawing.Point(138, 37);
-            this.rbYM2612P_SCCI.Name = "rbYM2612P_SCCI";
-            this.rbYM2612P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2612P_SCCI.TabIndex = 1;
-            this.rbYM2612P_SCCI.Text = "Real";
-            this.rbYM2612P_SCCI.UseVisualStyleBackColor = true;
+            rbYM2612P_SCCI.AutoSize = true;
+            rbYM2612P_SCCI.Location = new Point(161, 46);
+            rbYM2612P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612P_SCCI.Name = "rbYM2612P_SCCI";
+            rbYM2612P_SCCI.Size = new Size(47, 19);
+            rbYM2612P_SCCI.TabIndex = 1;
+            rbYM2612P_SCCI.Text = "Real";
+            rbYM2612P_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2612P_Emu
             // 
-            this.rbYM2612P_Emu.AutoSize = true;
-            this.rbYM2612P_Emu.Checked = true;
-            this.rbYM2612P_Emu.Location = new System.Drawing.Point(234, 15);
-            this.rbYM2612P_Emu.Name = "rbYM2612P_Emu";
-            this.rbYM2612P_Emu.Size = new System.Drawing.Size(79, 16);
-            this.rbYM2612P_Emu.TabIndex = 0;
-            this.rbYM2612P_Emu.TabStop = true;
-            this.rbYM2612P_Emu.Text = "Emu(Gens)";
-            this.rbYM2612P_Emu.UseVisualStyleBackColor = true;
+            rbYM2612P_Emu.AutoSize = true;
+            rbYM2612P_Emu.Checked = true;
+            rbYM2612P_Emu.Location = new Point(273, 19);
+            rbYM2612P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612P_Emu.Name = "rbYM2612P_Emu";
+            rbYM2612P_Emu.Size = new Size(82, 19);
+            rbYM2612P_Emu.TabIndex = 0;
+            rbYM2612P_Emu.TabStop = true;
+            rbYM2612P_Emu.Text = "Emu(Gens)";
+            rbYM2612P_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox9
             // 
-            this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox9.Controls.Add(this.rbYM2612P_EmuMame);
-            this.groupBox9.Controls.Add(this.rbYM2612P_Silent);
-            this.groupBox9.Controls.Add(this.cmbYM2612P_SCCI);
-            this.groupBox9.Controls.Add(this.rbYM2612P_SCCI);
-            this.groupBox9.Controls.Add(this.rbYM2612P_EmuNuked);
-            this.groupBox9.Controls.Add(this.rbYM2612P_Emu);
-            this.groupBox9.Location = new System.Drawing.Point(3, 1046);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(411, 60);
-            this.groupBox9.TabIndex = 4;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "YM2612(Primary)";
+            groupBox9.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox9.Controls.Add(rbYM2612P_EmuMame);
+            groupBox9.Controls.Add(rbYM2612P_Silent);
+            groupBox9.Controls.Add(cmbYM2612P_SCCI);
+            groupBox9.Controls.Add(rbYM2612P_SCCI);
+            groupBox9.Controls.Add(rbYM2612P_EmuNuked);
+            groupBox9.Controls.Add(rbYM2612P_Emu);
+            groupBox9.Location = new Point(4, 1308);
+            groupBox9.Margin = new Padding(4, 4, 4, 4);
+            groupBox9.Name = "groupBox9";
+            groupBox9.Padding = new Padding(4, 4, 4, 4);
+            groupBox9.Size = new Size(479, 75);
+            groupBox9.TabIndex = 4;
+            groupBox9.TabStop = false;
+            groupBox9.Text = "YM2612(Primary)";
             // 
             // rbYM2612P_EmuMame
             // 
-            this.rbYM2612P_EmuMame.AutoSize = true;
-            this.rbYM2612P_EmuMame.Location = new System.Drawing.Point(4, 37);
-            this.rbYM2612P_EmuMame.Name = "rbYM2612P_EmuMame";
-            this.rbYM2612P_EmuMame.Size = new System.Drawing.Size(129, 16);
-            this.rbYM2612P_EmuMame.TabIndex = 3;
-            this.rbYM2612P_EmuMame.Text = "エミュレーション(mame)";
-            this.rbYM2612P_EmuMame.UseVisualStyleBackColor = true;
+            rbYM2612P_EmuMame.AutoSize = true;
+            rbYM2612P_EmuMame.Location = new Point(5, 46);
+            rbYM2612P_EmuMame.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612P_EmuMame.Name = "rbYM2612P_EmuMame";
+            rbYM2612P_EmuMame.Size = new Size(132, 19);
+            rbYM2612P_EmuMame.TabIndex = 3;
+            rbYM2612P_EmuMame.Text = "エミュレーション(mame)";
+            rbYM2612P_EmuMame.UseVisualStyleBackColor = true;
             // 
             // rbYM2612P_Silent
             // 
-            this.rbYM2612P_Silent.AutoSize = true;
-            this.rbYM2612P_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbYM2612P_Silent.Name = "rbYM2612P_Silent";
-            this.rbYM2612P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2612P_Silent.TabIndex = 0;
-            this.rbYM2612P_Silent.Text = "Silent";
-            this.rbYM2612P_Silent.UseVisualStyleBackColor = true;
+            rbYM2612P_Silent.AutoSize = true;
+            rbYM2612P_Silent.Location = new Point(5, 19);
+            rbYM2612P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612P_Silent.Name = "rbYM2612P_Silent";
+            rbYM2612P_Silent.Size = new Size(54, 19);
+            rbYM2612P_Silent.TabIndex = 0;
+            rbYM2612P_Silent.Text = "Silent";
+            rbYM2612P_Silent.UseVisualStyleBackColor = true;
             // 
             // rbYM2612P_EmuNuked
             // 
-            this.rbYM2612P_EmuNuked.AutoSize = true;
-            this.rbYM2612P_EmuNuked.Location = new System.Drawing.Point(62, 15);
-            this.rbYM2612P_EmuNuked.Name = "rbYM2612P_EmuNuked";
-            this.rbYM2612P_EmuNuked.Size = new System.Drawing.Size(120, 16);
-            this.rbYM2612P_EmuNuked.TabIndex = 0;
-            this.rbYM2612P_EmuNuked.Text = "Emu(Nuked-OPN2)";
-            this.rbYM2612P_EmuNuked.UseVisualStyleBackColor = true;
+            rbYM2612P_EmuNuked.AutoSize = true;
+            rbYM2612P_EmuNuked.Location = new Point(72, 19);
+            rbYM2612P_EmuNuked.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612P_EmuNuked.Name = "rbYM2612P_EmuNuked";
+            rbYM2612P_EmuNuked.Size = new Size(127, 19);
+            rbYM2612P_EmuNuked.TabIndex = 0;
+            rbYM2612P_EmuNuked.Text = "Emu(Nuked-OPN2)";
+            rbYM2612P_EmuNuked.UseVisualStyleBackColor = true;
             // 
             // groupBox10
             // 
-            this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox10.Controls.Add(this.rbYM2612S_EmuMame);
-            this.groupBox10.Controls.Add(this.rbYM2612S_Silent);
-            this.groupBox10.Controls.Add(this.cmbYM2612S_SCCI);
-            this.groupBox10.Controls.Add(this.rbYM2612S_SCCI);
-            this.groupBox10.Controls.Add(this.rbYM2612S_EmuNuked);
-            this.groupBox10.Controls.Add(this.rbYM2612S_Emu);
-            this.groupBox10.Location = new System.Drawing.Point(3, 1112);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(411, 60);
-            this.groupBox10.TabIndex = 4;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "YM2612(Secondary)";
+            groupBox10.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox10.Controls.Add(rbYM2612S_EmuMame);
+            groupBox10.Controls.Add(rbYM2612S_Silent);
+            groupBox10.Controls.Add(cmbYM2612S_SCCI);
+            groupBox10.Controls.Add(rbYM2612S_SCCI);
+            groupBox10.Controls.Add(rbYM2612S_EmuNuked);
+            groupBox10.Controls.Add(rbYM2612S_Emu);
+            groupBox10.Location = new Point(4, 1390);
+            groupBox10.Margin = new Padding(4, 4, 4, 4);
+            groupBox10.Name = "groupBox10";
+            groupBox10.Padding = new Padding(4, 4, 4, 4);
+            groupBox10.Size = new Size(479, 75);
+            groupBox10.TabIndex = 4;
+            groupBox10.TabStop = false;
+            groupBox10.Text = "YM2612(Secondary)";
             // 
             // rbYM2612S_EmuMame
             // 
-            this.rbYM2612S_EmuMame.AutoSize = true;
-            this.rbYM2612S_EmuMame.Location = new System.Drawing.Point(4, 36);
-            this.rbYM2612S_EmuMame.Name = "rbYM2612S_EmuMame";
-            this.rbYM2612S_EmuMame.Size = new System.Drawing.Size(129, 16);
-            this.rbYM2612S_EmuMame.TabIndex = 3;
-            this.rbYM2612S_EmuMame.Text = "エミュレーション(mame)";
-            this.rbYM2612S_EmuMame.UseVisualStyleBackColor = true;
+            rbYM2612S_EmuMame.AutoSize = true;
+            rbYM2612S_EmuMame.Location = new Point(5, 45);
+            rbYM2612S_EmuMame.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612S_EmuMame.Name = "rbYM2612S_EmuMame";
+            rbYM2612S_EmuMame.Size = new Size(132, 19);
+            rbYM2612S_EmuMame.TabIndex = 3;
+            rbYM2612S_EmuMame.Text = "エミュレーション(mame)";
+            rbYM2612S_EmuMame.UseVisualStyleBackColor = true;
             // 
             // rbYM2612S_Silent
             // 
-            this.rbYM2612S_Silent.AutoSize = true;
-            this.rbYM2612S_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbYM2612S_Silent.Name = "rbYM2612S_Silent";
-            this.rbYM2612S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2612S_Silent.TabIndex = 0;
-            this.rbYM2612S_Silent.Text = "Silent";
-            this.rbYM2612S_Silent.UseVisualStyleBackColor = true;
+            rbYM2612S_Silent.AutoSize = true;
+            rbYM2612S_Silent.Location = new Point(5, 19);
+            rbYM2612S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612S_Silent.Name = "rbYM2612S_Silent";
+            rbYM2612S_Silent.Size = new Size(54, 19);
+            rbYM2612S_Silent.TabIndex = 0;
+            rbYM2612S_Silent.Text = "Silent";
+            rbYM2612S_Silent.UseVisualStyleBackColor = true;
             // 
             // cmbYM2612S_SCCI
             // 
-            this.cmbYM2612S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2612S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2612S_SCCI.FormattingEnabled = true;
-            this.cmbYM2612S_SCCI.Location = new System.Drawing.Point(190, 36);
-            this.cmbYM2612S_SCCI.Name = "cmbYM2612S_SCCI";
-            this.cmbYM2612S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2612S_SCCI.TabIndex = 2;
+            cmbYM2612S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2612S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2612S_SCCI.FormattingEnabled = true;
+            cmbYM2612S_SCCI.Location = new Point(222, 45);
+            cmbYM2612S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2612S_SCCI.Name = "cmbYM2612S_SCCI";
+            cmbYM2612S_SCCI.Size = new Size(250, 23);
+            cmbYM2612S_SCCI.TabIndex = 2;
             // 
             // rbYM2612S_SCCI
             // 
-            this.rbYM2612S_SCCI.AutoSize = true;
-            this.rbYM2612S_SCCI.Location = new System.Drawing.Point(138, 36);
-            this.rbYM2612S_SCCI.Name = "rbYM2612S_SCCI";
-            this.rbYM2612S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2612S_SCCI.TabIndex = 1;
-            this.rbYM2612S_SCCI.Text = "Real";
-            this.rbYM2612S_SCCI.UseVisualStyleBackColor = true;
+            rbYM2612S_SCCI.AutoSize = true;
+            rbYM2612S_SCCI.Location = new Point(161, 45);
+            rbYM2612S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612S_SCCI.Name = "rbYM2612S_SCCI";
+            rbYM2612S_SCCI.Size = new Size(47, 19);
+            rbYM2612S_SCCI.TabIndex = 1;
+            rbYM2612S_SCCI.Text = "Real";
+            rbYM2612S_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbYM2612S_EmuNuked
             // 
-            this.rbYM2612S_EmuNuked.AutoSize = true;
-            this.rbYM2612S_EmuNuked.Location = new System.Drawing.Point(62, 15);
-            this.rbYM2612S_EmuNuked.Name = "rbYM2612S_EmuNuked";
-            this.rbYM2612S_EmuNuked.Size = new System.Drawing.Size(120, 16);
-            this.rbYM2612S_EmuNuked.TabIndex = 0;
-            this.rbYM2612S_EmuNuked.Text = "Emu(Nuked-OPN2)";
-            this.rbYM2612S_EmuNuked.UseVisualStyleBackColor = true;
+            rbYM2612S_EmuNuked.AutoSize = true;
+            rbYM2612S_EmuNuked.Location = new Point(72, 19);
+            rbYM2612S_EmuNuked.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612S_EmuNuked.Name = "rbYM2612S_EmuNuked";
+            rbYM2612S_EmuNuked.Size = new Size(127, 19);
+            rbYM2612S_EmuNuked.TabIndex = 0;
+            rbYM2612S_EmuNuked.Text = "Emu(Nuked-OPN2)";
+            rbYM2612S_EmuNuked.UseVisualStyleBackColor = true;
             // 
             // rbYM2612S_Emu
             // 
-            this.rbYM2612S_Emu.AutoSize = true;
-            this.rbYM2612S_Emu.Checked = true;
-            this.rbYM2612S_Emu.Location = new System.Drawing.Point(234, 15);
-            this.rbYM2612S_Emu.Name = "rbYM2612S_Emu";
-            this.rbYM2612S_Emu.Size = new System.Drawing.Size(79, 16);
-            this.rbYM2612S_Emu.TabIndex = 0;
-            this.rbYM2612S_Emu.TabStop = true;
-            this.rbYM2612S_Emu.Text = "Emu(Gens)";
-            this.rbYM2612S_Emu.UseVisualStyleBackColor = true;
+            rbYM2612S_Emu.AutoSize = true;
+            rbYM2612S_Emu.Checked = true;
+            rbYM2612S_Emu.Location = new Point(273, 19);
+            rbYM2612S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2612S_Emu.Name = "rbYM2612S_Emu";
+            rbYM2612S_Emu.Size = new Size(82, 19);
+            rbYM2612S_Emu.TabIndex = 0;
+            rbYM2612S_Emu.TabStop = true;
+            rbYM2612S_Emu.Text = "Emu(Gens)";
+            rbYM2612S_Emu.UseVisualStyleBackColor = true;
             // 
             // cmbSN76489P_SCCI
             // 
-            this.cmbSN76489P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSN76489P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSN76489P_SCCI.FormattingEnabled = true;
-            this.cmbSN76489P_SCCI.Location = new System.Drawing.Point(190, 39);
-            this.cmbSN76489P_SCCI.Name = "cmbSN76489P_SCCI";
-            this.cmbSN76489P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbSN76489P_SCCI.TabIndex = 2;
+            cmbSN76489P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSN76489P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSN76489P_SCCI.FormattingEnabled = true;
+            cmbSN76489P_SCCI.Location = new Point(222, 49);
+            cmbSN76489P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbSN76489P_SCCI.Name = "cmbSN76489P_SCCI";
+            cmbSN76489P_SCCI.Size = new Size(250, 23);
+            cmbSN76489P_SCCI.TabIndex = 2;
             // 
             // rbSN76489P_SCCI
             // 
-            this.rbSN76489P_SCCI.AutoSize = true;
-            this.rbSN76489P_SCCI.Location = new System.Drawing.Point(138, 40);
-            this.rbSN76489P_SCCI.Name = "rbSN76489P_SCCI";
-            this.rbSN76489P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbSN76489P_SCCI.TabIndex = 1;
-            this.rbSN76489P_SCCI.Text = "Real";
-            this.rbSN76489P_SCCI.UseVisualStyleBackColor = true;
+            rbSN76489P_SCCI.AutoSize = true;
+            rbSN76489P_SCCI.Location = new Point(161, 50);
+            rbSN76489P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489P_SCCI.Name = "rbSN76489P_SCCI";
+            rbSN76489P_SCCI.Size = new Size(47, 19);
+            rbSN76489P_SCCI.TabIndex = 1;
+            rbSN76489P_SCCI.Text = "Real";
+            rbSN76489P_SCCI.UseVisualStyleBackColor = true;
             // 
             // rbSN76489P_Emu
             // 
-            this.rbSN76489P_Emu.AutoSize = true;
-            this.rbSN76489P_Emu.Checked = true;
-            this.rbSN76489P_Emu.Location = new System.Drawing.Point(62, 15);
-            this.rbSN76489P_Emu.Name = "rbSN76489P_Emu";
-            this.rbSN76489P_Emu.Size = new System.Drawing.Size(86, 16);
-            this.rbSN76489P_Emu.TabIndex = 0;
-            this.rbSN76489P_Emu.TabStop = true;
-            this.rbSN76489P_Emu.Text = "Emu(maxim)";
-            this.rbSN76489P_Emu.UseVisualStyleBackColor = true;
+            rbSN76489P_Emu.AutoSize = true;
+            rbSN76489P_Emu.Checked = true;
+            rbSN76489P_Emu.Location = new Point(72, 19);
+            rbSN76489P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489P_Emu.Name = "rbSN76489P_Emu";
+            rbSN76489P_Emu.Size = new Size(91, 19);
+            rbSN76489P_Emu.TabIndex = 0;
+            rbSN76489P_Emu.TabStop = true;
+            rbSN76489P_Emu.Text = "Emu(maxim)";
+            rbSN76489P_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox11
             // 
-            this.groupBox11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox11.Controls.Add(this.rbSN76489P_Emu2);
-            this.groupBox11.Controls.Add(this.cmbSN76489P_SCCI);
-            this.groupBox11.Controls.Add(this.rbSN76489P_SCCI);
-            this.groupBox11.Controls.Add(this.rbSN76489P_Silent);
-            this.groupBox11.Controls.Add(this.rbSN76489P_Emu);
-            this.groupBox11.Location = new System.Drawing.Point(3, 275);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(411, 65);
-            this.groupBox11.TabIndex = 5;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "SN76489(Primary)";
-            // 
-            // rbSN76489P_Silent
-            // 
-            this.rbSN76489P_Silent.AutoSize = true;
-            this.rbSN76489P_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbSN76489P_Silent.Name = "rbSN76489P_Silent";
-            this.rbSN76489P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbSN76489P_Silent.TabIndex = 0;
-            this.rbSN76489P_Silent.Text = "Silent";
-            this.rbSN76489P_Silent.UseVisualStyleBackColor = true;
-            // 
-            // groupBox12
-            // 
-            this.groupBox12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox12.Controls.Add(this.cmbSN76489S_SCCI);
-            this.groupBox12.Controls.Add(this.rbSN76489S_SCCI);
-            this.groupBox12.Controls.Add(this.rbSN76489S_Silent);
-            this.groupBox12.Controls.Add(this.rbSN76489S_Emu2);
-            this.groupBox12.Controls.Add(this.rbSN76489S_Emu);
-            this.groupBox12.Location = new System.Drawing.Point(3, 346);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(411, 68);
-            this.groupBox12.TabIndex = 5;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "SN76489(Secondary)";
-            // 
-            // cmbSN76489S_SCCI
-            // 
-            this.cmbSN76489S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSN76489S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSN76489S_SCCI.FormattingEnabled = true;
-            this.cmbSN76489S_SCCI.Location = new System.Drawing.Point(190, 42);
-            this.cmbSN76489S_SCCI.Name = "cmbSN76489S_SCCI";
-            this.cmbSN76489S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbSN76489S_SCCI.TabIndex = 2;
-            // 
-            // rbSN76489S_SCCI
-            // 
-            this.rbSN76489S_SCCI.AutoSize = true;
-            this.rbSN76489S_SCCI.Location = new System.Drawing.Point(138, 43);
-            this.rbSN76489S_SCCI.Name = "rbSN76489S_SCCI";
-            this.rbSN76489S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbSN76489S_SCCI.TabIndex = 1;
-            this.rbSN76489S_SCCI.Text = "Real";
-            this.rbSN76489S_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbSN76489S_Silent
-            // 
-            this.rbSN76489S_Silent.AutoSize = true;
-            this.rbSN76489S_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbSN76489S_Silent.Name = "rbSN76489S_Silent";
-            this.rbSN76489S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbSN76489S_Silent.TabIndex = 0;
-            this.rbSN76489S_Silent.Text = "Silent";
-            this.rbSN76489S_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbSN76489S_Emu
-            // 
-            this.rbSN76489S_Emu.AutoSize = true;
-            this.rbSN76489S_Emu.Checked = true;
-            this.rbSN76489S_Emu.Location = new System.Drawing.Point(62, 15);
-            this.rbSN76489S_Emu.Name = "rbSN76489S_Emu";
-            this.rbSN76489S_Emu.Size = new System.Drawing.Size(86, 16);
-            this.rbSN76489S_Emu.TabIndex = 0;
-            this.rbSN76489S_Emu.TabStop = true;
-            this.rbSN76489S_Emu.Text = "Emu(maxim)";
-            this.rbSN76489S_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox13
-            // 
-            this.groupBox13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox13.Controls.Add(this.cbSendWait);
-            this.groupBox13.Controls.Add(this.cbEmulationPCMOnly);
-            this.groupBox13.Controls.Add(this.cbTwice);
-            this.groupBox13.Location = new System.Drawing.Point(3, 1178);
-            this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(411, 59);
-            this.groupBox13.TabIndex = 6;
-            this.groupBox13.TabStop = false;
-            this.groupBox13.Text = "YM2612(Use Real module Only!)";
-            // 
-            // groupBox14
-            // 
-            this.groupBox14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox14.Controls.Add(this.cmbC140S_SCCI);
-            this.groupBox14.Controls.Add(this.rbC140S_SCCI);
-            this.groupBox14.Controls.Add(this.rbC140S_Silent);
-            this.groupBox14.Controls.Add(this.rbC140S_Emu);
-            this.groupBox14.Location = new System.Drawing.Point(3, 137);
-            this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(411, 40);
-            this.groupBox14.TabIndex = 6;
-            this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "C140(Secondary)";
-            // 
-            // cmbC140S_SCCI
-            // 
-            this.cmbC140S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbC140S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbC140S_SCCI.FormattingEnabled = true;
-            this.cmbC140S_SCCI.Location = new System.Drawing.Point(190, 14);
-            this.cmbC140S_SCCI.Name = "cmbC140S_SCCI";
-            this.cmbC140S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbC140S_SCCI.TabIndex = 2;
-            // 
-            // rbC140S_SCCI
-            // 
-            this.rbC140S_SCCI.AutoSize = true;
-            this.rbC140S_SCCI.Location = new System.Drawing.Point(138, 15);
-            this.rbC140S_SCCI.Name = "rbC140S_SCCI";
-            this.rbC140S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbC140S_SCCI.TabIndex = 1;
-            this.rbC140S_SCCI.Text = "Real";
-            this.rbC140S_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbC140S_Silent
-            // 
-            this.rbC140S_Silent.AutoSize = true;
-            this.rbC140S_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbC140S_Silent.Name = "rbC140S_Silent";
-            this.rbC140S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbC140S_Silent.TabIndex = 0;
-            this.rbC140S_Silent.Text = "Silent";
-            this.rbC140S_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbC140S_Emu
-            // 
-            this.rbC140S_Emu.AutoSize = true;
-            this.rbC140S_Emu.Checked = true;
-            this.rbC140S_Emu.Location = new System.Drawing.Point(62, 15);
-            this.rbC140S_Emu.Name = "rbC140S_Emu";
-            this.rbC140S_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbC140S_Emu.TabIndex = 0;
-            this.rbC140S_Emu.TabStop = true;
-            this.rbC140S_Emu.Text = "Emu";
-            this.rbC140S_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox15
-            // 
-            this.groupBox15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox15.Controls.Add(this.cmbC140P_SCCI);
-            this.groupBox15.Controls.Add(this.rbC140P_SCCI);
-            this.groupBox15.Controls.Add(this.rbC140P_Silent);
-            this.groupBox15.Controls.Add(this.rbC140P_Emu);
-            this.groupBox15.Location = new System.Drawing.Point(3, 91);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(411, 40);
-            this.groupBox15.TabIndex = 7;
-            this.groupBox15.TabStop = false;
-            this.groupBox15.Text = "C140(Primary)";
-            // 
-            // cmbC140P_SCCI
-            // 
-            this.cmbC140P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbC140P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbC140P_SCCI.FormattingEnabled = true;
-            this.cmbC140P_SCCI.Location = new System.Drawing.Point(190, 14);
-            this.cmbC140P_SCCI.Name = "cmbC140P_SCCI";
-            this.cmbC140P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbC140P_SCCI.TabIndex = 2;
-            // 
-            // rbC140P_SCCI
-            // 
-            this.rbC140P_SCCI.AutoSize = true;
-            this.rbC140P_SCCI.Location = new System.Drawing.Point(138, 15);
-            this.rbC140P_SCCI.Name = "rbC140P_SCCI";
-            this.rbC140P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbC140P_SCCI.TabIndex = 1;
-            this.rbC140P_SCCI.Text = "Real";
-            this.rbC140P_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbC140P_Silent
-            // 
-            this.rbC140P_Silent.AutoSize = true;
-            this.rbC140P_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbC140P_Silent.Name = "rbC140P_Silent";
-            this.rbC140P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbC140P_Silent.TabIndex = 0;
-            this.rbC140P_Silent.Text = "Silent";
-            this.rbC140P_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbC140P_Emu
-            // 
-            this.rbC140P_Emu.AutoSize = true;
-            this.rbC140P_Emu.Checked = true;
-            this.rbC140P_Emu.Location = new System.Drawing.Point(62, 15);
-            this.rbC140P_Emu.Name = "rbC140P_Emu";
-            this.rbC140P_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbC140P_Emu.TabIndex = 0;
-            this.rbC140P_Emu.TabStop = true;
-            this.rbC140P_Emu.Text = "Emu";
-            this.rbC140P_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox16
-            // 
-            this.groupBox16.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox16.Controls.Add(this.cmbSEGAPCMS_SCCI);
-            this.groupBox16.Controls.Add(this.rbSEGAPCMS_SCCI);
-            this.groupBox16.Controls.Add(this.rbSEGAPCMS_Silent);
-            this.groupBox16.Controls.Add(this.rbSEGAPCMS_Emu);
-            this.groupBox16.Location = new System.Drawing.Point(3, 229);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(411, 40);
-            this.groupBox16.TabIndex = 8;
-            this.groupBox16.TabStop = false;
-            this.groupBox16.Text = "SEGAPCM(Secondary)";
-            // 
-            // cmbSEGAPCMS_SCCI
-            // 
-            this.cmbSEGAPCMS_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSEGAPCMS_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSEGAPCMS_SCCI.FormattingEnabled = true;
-            this.cmbSEGAPCMS_SCCI.Location = new System.Drawing.Point(190, 14);
-            this.cmbSEGAPCMS_SCCI.Name = "cmbSEGAPCMS_SCCI";
-            this.cmbSEGAPCMS_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbSEGAPCMS_SCCI.TabIndex = 2;
-            // 
-            // rbSEGAPCMS_SCCI
-            // 
-            this.rbSEGAPCMS_SCCI.AutoSize = true;
-            this.rbSEGAPCMS_SCCI.Location = new System.Drawing.Point(138, 15);
-            this.rbSEGAPCMS_SCCI.Name = "rbSEGAPCMS_SCCI";
-            this.rbSEGAPCMS_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbSEGAPCMS_SCCI.TabIndex = 1;
-            this.rbSEGAPCMS_SCCI.Text = "Real";
-            this.rbSEGAPCMS_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbSEGAPCMS_Silent
-            // 
-            this.rbSEGAPCMS_Silent.AutoSize = true;
-            this.rbSEGAPCMS_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbSEGAPCMS_Silent.Name = "rbSEGAPCMS_Silent";
-            this.rbSEGAPCMS_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbSEGAPCMS_Silent.TabIndex = 0;
-            this.rbSEGAPCMS_Silent.Text = "Silent";
-            this.rbSEGAPCMS_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbSEGAPCMS_Emu
-            // 
-            this.rbSEGAPCMS_Emu.AutoSize = true;
-            this.rbSEGAPCMS_Emu.Checked = true;
-            this.rbSEGAPCMS_Emu.Location = new System.Drawing.Point(62, 15);
-            this.rbSEGAPCMS_Emu.Name = "rbSEGAPCMS_Emu";
-            this.rbSEGAPCMS_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbSEGAPCMS_Emu.TabIndex = 0;
-            this.rbSEGAPCMS_Emu.TabStop = true;
-            this.rbSEGAPCMS_Emu.Text = "Emu";
-            this.rbSEGAPCMS_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox17.Controls.Add(this.cmbSEGAPCMP_SCCI);
-            this.groupBox17.Controls.Add(this.rbSEGAPCMP_SCCI);
-            this.groupBox17.Controls.Add(this.rbSEGAPCMP_Silent);
-            this.groupBox17.Controls.Add(this.rbSEGAPCMP_Emu);
-            this.groupBox17.Location = new System.Drawing.Point(3, 183);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(411, 40);
-            this.groupBox17.TabIndex = 9;
-            this.groupBox17.TabStop = false;
-            this.groupBox17.Text = "SEGAPCM(Primary)";
-            // 
-            // cmbSEGAPCMP_SCCI
-            // 
-            this.cmbSEGAPCMP_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSEGAPCMP_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSEGAPCMP_SCCI.FormattingEnabled = true;
-            this.cmbSEGAPCMP_SCCI.Location = new System.Drawing.Point(190, 14);
-            this.cmbSEGAPCMP_SCCI.Name = "cmbSEGAPCMP_SCCI";
-            this.cmbSEGAPCMP_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbSEGAPCMP_SCCI.TabIndex = 2;
-            // 
-            // rbSEGAPCMP_SCCI
-            // 
-            this.rbSEGAPCMP_SCCI.AutoSize = true;
-            this.rbSEGAPCMP_SCCI.Location = new System.Drawing.Point(138, 15);
-            this.rbSEGAPCMP_SCCI.Name = "rbSEGAPCMP_SCCI";
-            this.rbSEGAPCMP_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbSEGAPCMP_SCCI.TabIndex = 1;
-            this.rbSEGAPCMP_SCCI.Text = "Real";
-            this.rbSEGAPCMP_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbSEGAPCMP_Silent
-            // 
-            this.rbSEGAPCMP_Silent.AutoSize = true;
-            this.rbSEGAPCMP_Silent.Location = new System.Drawing.Point(4, 15);
-            this.rbSEGAPCMP_Silent.Name = "rbSEGAPCMP_Silent";
-            this.rbSEGAPCMP_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbSEGAPCMP_Silent.TabIndex = 0;
-            this.rbSEGAPCMP_Silent.Text = "Silent";
-            this.rbSEGAPCMP_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbSEGAPCMP_Emu
-            // 
-            this.rbSEGAPCMP_Emu.AutoSize = true;
-            this.rbSEGAPCMP_Emu.Checked = true;
-            this.rbSEGAPCMP_Emu.Location = new System.Drawing.Point(62, 15);
-            this.rbSEGAPCMP_Emu.Name = "rbSEGAPCMP_Emu";
-            this.rbSEGAPCMP_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbSEGAPCMP_Emu.TabIndex = 0;
-            this.rbSEGAPCMP_Emu.TabStop = true;
-            this.rbSEGAPCMP_Emu.Text = "Emu";
-            this.rbSEGAPCMP_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox18
-            // 
-            this.groupBox18.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox18.Controls.Add(this.cbEmulationOPNBADPCMOnly);
-            this.groupBox18.Location = new System.Drawing.Point(3, 1001);
-            this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(411, 39);
-            this.groupBox18.TabIndex = 6;
-            this.groupBox18.TabStop = false;
-            this.groupBox18.Text = "YM2610/B(Use Real module Only!)";
-            // 
-            // cbEmulationOPNBADPCMOnly
-            // 
-            this.cbEmulationOPNBADPCMOnly.AutoSize = true;
-            this.cbEmulationOPNBADPCMOnly.Location = new System.Drawing.Point(4, 18);
-            this.cbEmulationOPNBADPCMOnly.Name = "cbEmulationOPNBADPCMOnly";
-            this.cbEmulationOPNBADPCMOnly.Size = new System.Drawing.Size(170, 16);
-            this.cbEmulationOPNBADPCMOnly.TabIndex = 5;
-            this.cbEmulationOPNBADPCMOnly.Text = "ADPCMだけエミュレーションする";
-            this.cbEmulationOPNBADPCMOnly.UseVisualStyleBackColor = true;
-            // 
-            // groupBox19
-            // 
-            this.groupBox19.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox19.Controls.Add(this.cbEmulationOPNAADPCMOnly);
-            this.groupBox19.Location = new System.Drawing.Point(3, 816);
-            this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(411, 39);
-            this.groupBox19.TabIndex = 6;
-            this.groupBox19.TabStop = false;
-            this.groupBox19.Text = "YM2608(Use Real module Only!)";
-            // 
-            // cbEmulationOPNAADPCMOnly
-            // 
-            this.cbEmulationOPNAADPCMOnly.AutoSize = true;
-            this.cbEmulationOPNAADPCMOnly.Location = new System.Drawing.Point(4, 18);
-            this.cbEmulationOPNAADPCMOnly.Name = "cbEmulationOPNAADPCMOnly";
-            this.cbEmulationOPNAADPCMOnly.Size = new System.Drawing.Size(170, 16);
-            this.cbEmulationOPNAADPCMOnly.TabIndex = 5;
-            this.cbEmulationOPNAADPCMOnly.Text = "ADPCMだけエミュレーションする";
-            this.cbEmulationOPNAADPCMOnly.UseVisualStyleBackColor = true;
-            // 
-            // groupBox20
-            // 
-            this.groupBox20.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox20.Controls.Add(this.cmbAY8910S_SCCI);
-            this.groupBox20.Controls.Add(this.rbAY8910S_SCCI);
-            this.groupBox20.Controls.Add(this.rbAY8910S_Silent);
-            this.groupBox20.Controls.Add(this.rbAY8910S_Emu);
-            this.groupBox20.Location = new System.Drawing.Point(3, 47);
-            this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(411, 38);
-            this.groupBox20.TabIndex = 10;
-            this.groupBox20.TabStop = false;
-            this.groupBox20.Text = "AY8910(Secondary)";
-            // 
-            // cmbAY8910S_SCCI
-            // 
-            this.cmbAY8910S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbAY8910S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAY8910S_SCCI.FormattingEnabled = true;
-            this.cmbAY8910S_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbAY8910S_SCCI.Name = "cmbAY8910S_SCCI";
-            this.cmbAY8910S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbAY8910S_SCCI.TabIndex = 2;
-            // 
-            // rbAY8910S_SCCI
-            // 
-            this.rbAY8910S_SCCI.AutoSize = true;
-            this.rbAY8910S_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbAY8910S_SCCI.Name = "rbAY8910S_SCCI";
-            this.rbAY8910S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbAY8910S_SCCI.TabIndex = 1;
-            this.rbAY8910S_SCCI.Text = "Real";
-            this.rbAY8910S_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbAY8910S_Silent
-            // 
-            this.rbAY8910S_Silent.AutoSize = true;
-            this.rbAY8910S_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbAY8910S_Silent.Name = "rbAY8910S_Silent";
-            this.rbAY8910S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbAY8910S_Silent.TabIndex = 0;
-            this.rbAY8910S_Silent.Text = "Silent";
-            this.rbAY8910S_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbAY8910S_Emu
-            // 
-            this.rbAY8910S_Emu.AutoSize = true;
-            this.rbAY8910S_Emu.Checked = true;
-            this.rbAY8910S_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbAY8910S_Emu.Name = "rbAY8910S_Emu";
-            this.rbAY8910S_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbAY8910S_Emu.TabIndex = 0;
-            this.rbAY8910S_Emu.TabStop = true;
-            this.rbAY8910S_Emu.Text = "Emu";
-            this.rbAY8910S_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox21
-            // 
-            this.groupBox21.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox21.Controls.Add(this.cmbAY8910P_SCCI);
-            this.groupBox21.Controls.Add(this.rbAY8910P_SCCI);
-            this.groupBox21.Controls.Add(this.rbAY8910P_Silent);
-            this.groupBox21.Controls.Add(this.rbAY8910P_Emu);
-            this.groupBox21.Location = new System.Drawing.Point(3, 3);
-            this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(411, 38);
-            this.groupBox21.TabIndex = 11;
-            this.groupBox21.TabStop = false;
-            this.groupBox21.Text = "AY8910(Primary)";
-            // 
-            // cmbAY8910P_SCCI
-            // 
-            this.cmbAY8910P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbAY8910P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAY8910P_SCCI.FormattingEnabled = true;
-            this.cmbAY8910P_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbAY8910P_SCCI.Name = "cmbAY8910P_SCCI";
-            this.cmbAY8910P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbAY8910P_SCCI.TabIndex = 2;
-            // 
-            // rbAY8910P_SCCI
-            // 
-            this.rbAY8910P_SCCI.AutoSize = true;
-            this.rbAY8910P_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbAY8910P_SCCI.Name = "rbAY8910P_SCCI";
-            this.rbAY8910P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbAY8910P_SCCI.TabIndex = 1;
-            this.rbAY8910P_SCCI.Text = "Real";
-            this.rbAY8910P_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbAY8910P_Silent
-            // 
-            this.rbAY8910P_Silent.AutoSize = true;
-            this.rbAY8910P_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbAY8910P_Silent.Name = "rbAY8910P_Silent";
-            this.rbAY8910P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbAY8910P_Silent.TabIndex = 0;
-            this.rbAY8910P_Silent.Text = "Silent";
-            this.rbAY8910P_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbAY8910P_Emu
-            // 
-            this.rbAY8910P_Emu.AutoSize = true;
-            this.rbAY8910P_Emu.Checked = true;
-            this.rbAY8910P_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbAY8910P_Emu.Name = "rbAY8910P_Emu";
-            this.rbAY8910P_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbAY8910P_Emu.TabIndex = 0;
-            this.rbAY8910P_Emu.TabStop = true;
-            this.rbAY8910P_Emu.Text = "Emu";
-            this.rbAY8910P_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox22
-            // 
-            this.groupBox22.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox22.Controls.Add(this.cmbYM2413P_SCCI);
-            this.groupBox22.Controls.Add(this.rbYM2413P_SCCI);
-            this.groupBox22.Controls.Add(this.rbYM2413P_Silent);
-            this.groupBox22.Controls.Add(this.rbYM2413P_Emu);
-            this.groupBox22.Location = new System.Drawing.Point(3, 640);
-            this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(411, 38);
-            this.groupBox22.TabIndex = 1;
-            this.groupBox22.TabStop = false;
-            this.groupBox22.Text = "YM2413(Primary)";
-            // 
-            // cmbYM2413P_SCCI
-            // 
-            this.cmbYM2413P_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2413P_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2413P_SCCI.FormattingEnabled = true;
-            this.cmbYM2413P_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2413P_SCCI.Name = "cmbYM2413P_SCCI";
-            this.cmbYM2413P_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2413P_SCCI.TabIndex = 2;
-            // 
-            // rbYM2413P_SCCI
-            // 
-            this.rbYM2413P_SCCI.AutoSize = true;
-            this.rbYM2413P_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2413P_SCCI.Name = "rbYM2413P_SCCI";
-            this.rbYM2413P_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2413P_SCCI.TabIndex = 1;
-            this.rbYM2413P_SCCI.Text = "Real";
-            this.rbYM2413P_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbYM2413P_Silent
-            // 
-            this.rbYM2413P_Silent.AutoSize = true;
-            this.rbYM2413P_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2413P_Silent.Name = "rbYM2413P_Silent";
-            this.rbYM2413P_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2413P_Silent.TabIndex = 0;
-            this.rbYM2413P_Silent.Text = "Silent";
-            this.rbYM2413P_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbYM2413P_Emu
-            // 
-            this.rbYM2413P_Emu.AutoSize = true;
-            this.rbYM2413P_Emu.Checked = true;
-            this.rbYM2413P_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2413P_Emu.Name = "rbYM2413P_Emu";
-            this.rbYM2413P_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2413P_Emu.TabIndex = 0;
-            this.rbYM2413P_Emu.TabStop = true;
-            this.rbYM2413P_Emu.Text = "Emu";
-            this.rbYM2413P_Emu.UseVisualStyleBackColor = true;
-            // 
-            // groupBox23
-            // 
-            this.groupBox23.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox23.Controls.Add(this.cmbYM2413S_SCCI);
-            this.groupBox23.Controls.Add(this.rbYM2413S_SCCI);
-            this.groupBox23.Controls.Add(this.rbYM2413S_Silent);
-            this.groupBox23.Controls.Add(this.rbYM2413S_Emu);
-            this.groupBox23.Location = new System.Drawing.Point(3, 684);
-            this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(411, 38);
-            this.groupBox23.TabIndex = 1;
-            this.groupBox23.TabStop = false;
-            this.groupBox23.Text = "YM2413(Secondary)";
-            // 
-            // cmbYM2413S_SCCI
-            // 
-            this.cmbYM2413S_SCCI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbYM2413S_SCCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbYM2413S_SCCI.FormattingEnabled = true;
-            this.cmbYM2413S_SCCI.Location = new System.Drawing.Point(190, 12);
-            this.cmbYM2413S_SCCI.Name = "cmbYM2413S_SCCI";
-            this.cmbYM2413S_SCCI.Size = new System.Drawing.Size(215, 20);
-            this.cmbYM2413S_SCCI.TabIndex = 2;
-            // 
-            // rbYM2413S_SCCI
-            // 
-            this.rbYM2413S_SCCI.AutoSize = true;
-            this.rbYM2413S_SCCI.Location = new System.Drawing.Point(138, 13);
-            this.rbYM2413S_SCCI.Name = "rbYM2413S_SCCI";
-            this.rbYM2413S_SCCI.Size = new System.Drawing.Size(46, 16);
-            this.rbYM2413S_SCCI.TabIndex = 1;
-            this.rbYM2413S_SCCI.Text = "Real";
-            this.rbYM2413S_SCCI.UseVisualStyleBackColor = true;
-            // 
-            // rbYM2413S_Silent
-            // 
-            this.rbYM2413S_Silent.AutoSize = true;
-            this.rbYM2413S_Silent.Location = new System.Drawing.Point(4, 13);
-            this.rbYM2413S_Silent.Name = "rbYM2413S_Silent";
-            this.rbYM2413S_Silent.Size = new System.Drawing.Size(52, 16);
-            this.rbYM2413S_Silent.TabIndex = 0;
-            this.rbYM2413S_Silent.Text = "Silent";
-            this.rbYM2413S_Silent.UseVisualStyleBackColor = true;
-            // 
-            // rbYM2413S_Emu
-            // 
-            this.rbYM2413S_Emu.AutoSize = true;
-            this.rbYM2413S_Emu.Checked = true;
-            this.rbYM2413S_Emu.Location = new System.Drawing.Point(62, 13);
-            this.rbYM2413S_Emu.Name = "rbYM2413S_Emu";
-            this.rbYM2413S_Emu.Size = new System.Drawing.Size(45, 16);
-            this.rbYM2413S_Emu.TabIndex = 0;
-            this.rbYM2413S_Emu.TabStop = true;
-            this.rbYM2413S_Emu.Text = "Emu";
-            this.rbYM2413S_Emu.UseVisualStyleBackColor = true;
-            // 
-            // rbSN76489S_Emu2
-            // 
-            this.rbSN76489S_Emu2.AutoSize = true;
-            this.rbSN76489S_Emu2.Location = new System.Drawing.Point(154, 15);
-            this.rbSN76489S_Emu2.Name = "rbSN76489S_Emu2";
-            this.rbSN76489S_Emu2.Size = new System.Drawing.Size(83, 16);
-            this.rbSN76489S_Emu2.TabIndex = 0;
-            this.rbSN76489S_Emu2.Text = "Emu(mame)";
-            this.rbSN76489S_Emu2.UseVisualStyleBackColor = true;
+            groupBox11.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox11.Controls.Add(rbSN76489P_Emu2);
+            groupBox11.Controls.Add(cmbSN76489P_SCCI);
+            groupBox11.Controls.Add(rbSN76489P_SCCI);
+            groupBox11.Controls.Add(rbSN76489P_Silent);
+            groupBox11.Controls.Add(rbSN76489P_Emu);
+            groupBox11.Location = new Point(4, 344);
+            groupBox11.Margin = new Padding(4, 4, 4, 4);
+            groupBox11.Name = "groupBox11";
+            groupBox11.Padding = new Padding(4, 4, 4, 4);
+            groupBox11.Size = new Size(479, 81);
+            groupBox11.TabIndex = 5;
+            groupBox11.TabStop = false;
+            groupBox11.Text = "SN76489(Primary)";
             // 
             // rbSN76489P_Emu2
             // 
-            this.rbSN76489P_Emu2.AutoSize = true;
-            this.rbSN76489P_Emu2.Location = new System.Drawing.Point(154, 15);
-            this.rbSN76489P_Emu2.Name = "rbSN76489P_Emu2";
-            this.rbSN76489P_Emu2.Size = new System.Drawing.Size(83, 16);
-            this.rbSN76489P_Emu2.TabIndex = 3;
-            this.rbSN76489P_Emu2.Text = "Emu(mame)";
-            this.rbSN76489P_Emu2.UseVisualStyleBackColor = true;
+            rbSN76489P_Emu2.AutoSize = true;
+            rbSN76489P_Emu2.Location = new Point(180, 19);
+            rbSN76489P_Emu2.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489P_Emu2.Name = "rbSN76489P_Emu2";
+            rbSN76489P_Emu2.Size = new Size(88, 19);
+            rbSN76489P_Emu2.TabIndex = 3;
+            rbSN76489P_Emu2.Text = "Emu(mame)";
+            rbSN76489P_Emu2.UseVisualStyleBackColor = true;
+            // 
+            // rbSN76489P_Silent
+            // 
+            rbSN76489P_Silent.AutoSize = true;
+            rbSN76489P_Silent.Location = new Point(5, 19);
+            rbSN76489P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489P_Silent.Name = "rbSN76489P_Silent";
+            rbSN76489P_Silent.Size = new Size(54, 19);
+            rbSN76489P_Silent.TabIndex = 0;
+            rbSN76489P_Silent.Text = "Silent";
+            rbSN76489P_Silent.UseVisualStyleBackColor = true;
+            // 
+            // groupBox12
+            // 
+            groupBox12.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox12.Controls.Add(cmbSN76489S_SCCI);
+            groupBox12.Controls.Add(rbSN76489S_SCCI);
+            groupBox12.Controls.Add(rbSN76489S_Silent);
+            groupBox12.Controls.Add(rbSN76489S_Emu2);
+            groupBox12.Controls.Add(rbSN76489S_Emu);
+            groupBox12.Location = new Point(4, 432);
+            groupBox12.Margin = new Padding(4, 4, 4, 4);
+            groupBox12.Name = "groupBox12";
+            groupBox12.Padding = new Padding(4, 4, 4, 4);
+            groupBox12.Size = new Size(479, 85);
+            groupBox12.TabIndex = 5;
+            groupBox12.TabStop = false;
+            groupBox12.Text = "SN76489(Secondary)";
+            // 
+            // cmbSN76489S_SCCI
+            // 
+            cmbSN76489S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSN76489S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSN76489S_SCCI.FormattingEnabled = true;
+            cmbSN76489S_SCCI.Location = new Point(222, 52);
+            cmbSN76489S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbSN76489S_SCCI.Name = "cmbSN76489S_SCCI";
+            cmbSN76489S_SCCI.Size = new Size(250, 23);
+            cmbSN76489S_SCCI.TabIndex = 2;
+            // 
+            // rbSN76489S_SCCI
+            // 
+            rbSN76489S_SCCI.AutoSize = true;
+            rbSN76489S_SCCI.Location = new Point(161, 54);
+            rbSN76489S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489S_SCCI.Name = "rbSN76489S_SCCI";
+            rbSN76489S_SCCI.Size = new Size(47, 19);
+            rbSN76489S_SCCI.TabIndex = 1;
+            rbSN76489S_SCCI.Text = "Real";
+            rbSN76489S_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbSN76489S_Silent
+            // 
+            rbSN76489S_Silent.AutoSize = true;
+            rbSN76489S_Silent.Location = new Point(5, 19);
+            rbSN76489S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489S_Silent.Name = "rbSN76489S_Silent";
+            rbSN76489S_Silent.Size = new Size(54, 19);
+            rbSN76489S_Silent.TabIndex = 0;
+            rbSN76489S_Silent.Text = "Silent";
+            rbSN76489S_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbSN76489S_Emu2
+            // 
+            rbSN76489S_Emu2.AutoSize = true;
+            rbSN76489S_Emu2.Location = new Point(180, 19);
+            rbSN76489S_Emu2.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489S_Emu2.Name = "rbSN76489S_Emu2";
+            rbSN76489S_Emu2.Size = new Size(88, 19);
+            rbSN76489S_Emu2.TabIndex = 0;
+            rbSN76489S_Emu2.Text = "Emu(mame)";
+            rbSN76489S_Emu2.UseVisualStyleBackColor = true;
+            // 
+            // rbSN76489S_Emu
+            // 
+            rbSN76489S_Emu.AutoSize = true;
+            rbSN76489S_Emu.Checked = true;
+            rbSN76489S_Emu.Location = new Point(72, 19);
+            rbSN76489S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbSN76489S_Emu.Name = "rbSN76489S_Emu";
+            rbSN76489S_Emu.Size = new Size(91, 19);
+            rbSN76489S_Emu.TabIndex = 0;
+            rbSN76489S_Emu.TabStop = true;
+            rbSN76489S_Emu.Text = "Emu(maxim)";
+            rbSN76489S_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox13
+            // 
+            groupBox13.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox13.Controls.Add(cbSendWait);
+            groupBox13.Controls.Add(cbEmulationPCMOnly);
+            groupBox13.Controls.Add(cbTwice);
+            groupBox13.Location = new Point(4, 1472);
+            groupBox13.Margin = new Padding(4, 4, 4, 4);
+            groupBox13.Name = "groupBox13";
+            groupBox13.Padding = new Padding(4, 4, 4, 4);
+            groupBox13.Size = new Size(479, 74);
+            groupBox13.TabIndex = 6;
+            groupBox13.TabStop = false;
+            groupBox13.Text = "YM2612(Use Real module Only!)";
+            // 
+            // groupBox14
+            // 
+            groupBox14.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox14.Controls.Add(cmbC140S_SCCI);
+            groupBox14.Controls.Add(rbC140S_SCCI);
+            groupBox14.Controls.Add(rbC140S_Silent);
+            groupBox14.Controls.Add(rbC140S_Emu);
+            groupBox14.Location = new Point(4, 171);
+            groupBox14.Margin = new Padding(4, 4, 4, 4);
+            groupBox14.Name = "groupBox14";
+            groupBox14.Padding = new Padding(4, 4, 4, 4);
+            groupBox14.Size = new Size(479, 50);
+            groupBox14.TabIndex = 6;
+            groupBox14.TabStop = false;
+            groupBox14.Text = "C140(Secondary)";
+            // 
+            // cmbC140S_SCCI
+            // 
+            cmbC140S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbC140S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbC140S_SCCI.FormattingEnabled = true;
+            cmbC140S_SCCI.Location = new Point(222, 18);
+            cmbC140S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbC140S_SCCI.Name = "cmbC140S_SCCI";
+            cmbC140S_SCCI.Size = new Size(250, 23);
+            cmbC140S_SCCI.TabIndex = 2;
+            // 
+            // rbC140S_SCCI
+            // 
+            rbC140S_SCCI.AutoSize = true;
+            rbC140S_SCCI.Location = new Point(161, 19);
+            rbC140S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbC140S_SCCI.Name = "rbC140S_SCCI";
+            rbC140S_SCCI.Size = new Size(47, 19);
+            rbC140S_SCCI.TabIndex = 1;
+            rbC140S_SCCI.Text = "Real";
+            rbC140S_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbC140S_Silent
+            // 
+            rbC140S_Silent.AutoSize = true;
+            rbC140S_Silent.Location = new Point(5, 19);
+            rbC140S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbC140S_Silent.Name = "rbC140S_Silent";
+            rbC140S_Silent.Size = new Size(54, 19);
+            rbC140S_Silent.TabIndex = 0;
+            rbC140S_Silent.Text = "Silent";
+            rbC140S_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbC140S_Emu
+            // 
+            rbC140S_Emu.AutoSize = true;
+            rbC140S_Emu.Checked = true;
+            rbC140S_Emu.Location = new Point(72, 19);
+            rbC140S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbC140S_Emu.Name = "rbC140S_Emu";
+            rbC140S_Emu.Size = new Size(48, 19);
+            rbC140S_Emu.TabIndex = 0;
+            rbC140S_Emu.TabStop = true;
+            rbC140S_Emu.Text = "Emu";
+            rbC140S_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox15
+            // 
+            groupBox15.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox15.Controls.Add(cmbC140P_SCCI);
+            groupBox15.Controls.Add(rbC140P_SCCI);
+            groupBox15.Controls.Add(rbC140P_Silent);
+            groupBox15.Controls.Add(rbC140P_Emu);
+            groupBox15.Location = new Point(4, 114);
+            groupBox15.Margin = new Padding(4, 4, 4, 4);
+            groupBox15.Name = "groupBox15";
+            groupBox15.Padding = new Padding(4, 4, 4, 4);
+            groupBox15.Size = new Size(479, 50);
+            groupBox15.TabIndex = 7;
+            groupBox15.TabStop = false;
+            groupBox15.Text = "C140(Primary)";
+            // 
+            // cmbC140P_SCCI
+            // 
+            cmbC140P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbC140P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbC140P_SCCI.FormattingEnabled = true;
+            cmbC140P_SCCI.Location = new Point(222, 18);
+            cmbC140P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbC140P_SCCI.Name = "cmbC140P_SCCI";
+            cmbC140P_SCCI.Size = new Size(250, 23);
+            cmbC140P_SCCI.TabIndex = 2;
+            // 
+            // rbC140P_SCCI
+            // 
+            rbC140P_SCCI.AutoSize = true;
+            rbC140P_SCCI.Location = new Point(161, 19);
+            rbC140P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbC140P_SCCI.Name = "rbC140P_SCCI";
+            rbC140P_SCCI.Size = new Size(47, 19);
+            rbC140P_SCCI.TabIndex = 1;
+            rbC140P_SCCI.Text = "Real";
+            rbC140P_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbC140P_Silent
+            // 
+            rbC140P_Silent.AutoSize = true;
+            rbC140P_Silent.Location = new Point(5, 19);
+            rbC140P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbC140P_Silent.Name = "rbC140P_Silent";
+            rbC140P_Silent.Size = new Size(54, 19);
+            rbC140P_Silent.TabIndex = 0;
+            rbC140P_Silent.Text = "Silent";
+            rbC140P_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbC140P_Emu
+            // 
+            rbC140P_Emu.AutoSize = true;
+            rbC140P_Emu.Checked = true;
+            rbC140P_Emu.Location = new Point(72, 19);
+            rbC140P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbC140P_Emu.Name = "rbC140P_Emu";
+            rbC140P_Emu.Size = new Size(48, 19);
+            rbC140P_Emu.TabIndex = 0;
+            rbC140P_Emu.TabStop = true;
+            rbC140P_Emu.Text = "Emu";
+            rbC140P_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox16
+            // 
+            groupBox16.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox16.Controls.Add(cmbSEGAPCMS_SCCI);
+            groupBox16.Controls.Add(rbSEGAPCMS_SCCI);
+            groupBox16.Controls.Add(rbSEGAPCMS_Silent);
+            groupBox16.Controls.Add(rbSEGAPCMS_Emu);
+            groupBox16.Location = new Point(4, 286);
+            groupBox16.Margin = new Padding(4, 4, 4, 4);
+            groupBox16.Name = "groupBox16";
+            groupBox16.Padding = new Padding(4, 4, 4, 4);
+            groupBox16.Size = new Size(479, 50);
+            groupBox16.TabIndex = 8;
+            groupBox16.TabStop = false;
+            groupBox16.Text = "SEGAPCM(Secondary)";
+            // 
+            // cmbSEGAPCMS_SCCI
+            // 
+            cmbSEGAPCMS_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSEGAPCMS_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSEGAPCMS_SCCI.FormattingEnabled = true;
+            cmbSEGAPCMS_SCCI.Location = new Point(222, 18);
+            cmbSEGAPCMS_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbSEGAPCMS_SCCI.Name = "cmbSEGAPCMS_SCCI";
+            cmbSEGAPCMS_SCCI.Size = new Size(250, 23);
+            cmbSEGAPCMS_SCCI.TabIndex = 2;
+            // 
+            // rbSEGAPCMS_SCCI
+            // 
+            rbSEGAPCMS_SCCI.AutoSize = true;
+            rbSEGAPCMS_SCCI.Location = new Point(161, 19);
+            rbSEGAPCMS_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbSEGAPCMS_SCCI.Name = "rbSEGAPCMS_SCCI";
+            rbSEGAPCMS_SCCI.Size = new Size(47, 19);
+            rbSEGAPCMS_SCCI.TabIndex = 1;
+            rbSEGAPCMS_SCCI.Text = "Real";
+            rbSEGAPCMS_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbSEGAPCMS_Silent
+            // 
+            rbSEGAPCMS_Silent.AutoSize = true;
+            rbSEGAPCMS_Silent.Location = new Point(5, 19);
+            rbSEGAPCMS_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbSEGAPCMS_Silent.Name = "rbSEGAPCMS_Silent";
+            rbSEGAPCMS_Silent.Size = new Size(54, 19);
+            rbSEGAPCMS_Silent.TabIndex = 0;
+            rbSEGAPCMS_Silent.Text = "Silent";
+            rbSEGAPCMS_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbSEGAPCMS_Emu
+            // 
+            rbSEGAPCMS_Emu.AutoSize = true;
+            rbSEGAPCMS_Emu.Checked = true;
+            rbSEGAPCMS_Emu.Location = new Point(72, 19);
+            rbSEGAPCMS_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbSEGAPCMS_Emu.Name = "rbSEGAPCMS_Emu";
+            rbSEGAPCMS_Emu.Size = new Size(48, 19);
+            rbSEGAPCMS_Emu.TabIndex = 0;
+            rbSEGAPCMS_Emu.TabStop = true;
+            rbSEGAPCMS_Emu.Text = "Emu";
+            rbSEGAPCMS_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox17
+            // 
+            groupBox17.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox17.Controls.Add(cmbSEGAPCMP_SCCI);
+            groupBox17.Controls.Add(rbSEGAPCMP_SCCI);
+            groupBox17.Controls.Add(rbSEGAPCMP_Silent);
+            groupBox17.Controls.Add(rbSEGAPCMP_Emu);
+            groupBox17.Location = new Point(4, 229);
+            groupBox17.Margin = new Padding(4, 4, 4, 4);
+            groupBox17.Name = "groupBox17";
+            groupBox17.Padding = new Padding(4, 4, 4, 4);
+            groupBox17.Size = new Size(479, 50);
+            groupBox17.TabIndex = 9;
+            groupBox17.TabStop = false;
+            groupBox17.Text = "SEGAPCM(Primary)";
+            // 
+            // cmbSEGAPCMP_SCCI
+            // 
+            cmbSEGAPCMP_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbSEGAPCMP_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbSEGAPCMP_SCCI.FormattingEnabled = true;
+            cmbSEGAPCMP_SCCI.Location = new Point(222, 18);
+            cmbSEGAPCMP_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbSEGAPCMP_SCCI.Name = "cmbSEGAPCMP_SCCI";
+            cmbSEGAPCMP_SCCI.Size = new Size(250, 23);
+            cmbSEGAPCMP_SCCI.TabIndex = 2;
+            // 
+            // rbSEGAPCMP_SCCI
+            // 
+            rbSEGAPCMP_SCCI.AutoSize = true;
+            rbSEGAPCMP_SCCI.Location = new Point(161, 19);
+            rbSEGAPCMP_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbSEGAPCMP_SCCI.Name = "rbSEGAPCMP_SCCI";
+            rbSEGAPCMP_SCCI.Size = new Size(47, 19);
+            rbSEGAPCMP_SCCI.TabIndex = 1;
+            rbSEGAPCMP_SCCI.Text = "Real";
+            rbSEGAPCMP_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbSEGAPCMP_Silent
+            // 
+            rbSEGAPCMP_Silent.AutoSize = true;
+            rbSEGAPCMP_Silent.Location = new Point(5, 19);
+            rbSEGAPCMP_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbSEGAPCMP_Silent.Name = "rbSEGAPCMP_Silent";
+            rbSEGAPCMP_Silent.Size = new Size(54, 19);
+            rbSEGAPCMP_Silent.TabIndex = 0;
+            rbSEGAPCMP_Silent.Text = "Silent";
+            rbSEGAPCMP_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbSEGAPCMP_Emu
+            // 
+            rbSEGAPCMP_Emu.AutoSize = true;
+            rbSEGAPCMP_Emu.Checked = true;
+            rbSEGAPCMP_Emu.Location = new Point(72, 19);
+            rbSEGAPCMP_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbSEGAPCMP_Emu.Name = "rbSEGAPCMP_Emu";
+            rbSEGAPCMP_Emu.Size = new Size(48, 19);
+            rbSEGAPCMP_Emu.TabIndex = 0;
+            rbSEGAPCMP_Emu.TabStop = true;
+            rbSEGAPCMP_Emu.Text = "Emu";
+            rbSEGAPCMP_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox18
+            // 
+            groupBox18.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox18.Controls.Add(cbEmulationOPNBADPCMOnly);
+            groupBox18.Location = new Point(4, 1251);
+            groupBox18.Margin = new Padding(4, 4, 4, 4);
+            groupBox18.Name = "groupBox18";
+            groupBox18.Padding = new Padding(4, 4, 4, 4);
+            groupBox18.Size = new Size(479, 49);
+            groupBox18.TabIndex = 6;
+            groupBox18.TabStop = false;
+            groupBox18.Text = "YM2610/B(Use Real module Only!)";
+            // 
+            // cbEmulationOPNBADPCMOnly
+            // 
+            cbEmulationOPNBADPCMOnly.AutoSize = true;
+            cbEmulationOPNBADPCMOnly.Location = new Point(5, 22);
+            cbEmulationOPNBADPCMOnly.Margin = new Padding(4, 4, 4, 4);
+            cbEmulationOPNBADPCMOnly.Name = "cbEmulationOPNBADPCMOnly";
+            cbEmulationOPNBADPCMOnly.Size = new Size(171, 19);
+            cbEmulationOPNBADPCMOnly.TabIndex = 5;
+            cbEmulationOPNBADPCMOnly.Text = "ADPCMだけエミュレーションする";
+            cbEmulationOPNBADPCMOnly.UseVisualStyleBackColor = true;
+            // 
+            // groupBox19
+            // 
+            groupBox19.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox19.Controls.Add(cbEmulationOPNAADPCMOnly);
+            groupBox19.Location = new Point(4, 1020);
+            groupBox19.Margin = new Padding(4, 4, 4, 4);
+            groupBox19.Name = "groupBox19";
+            groupBox19.Padding = new Padding(4, 4, 4, 4);
+            groupBox19.Size = new Size(479, 49);
+            groupBox19.TabIndex = 6;
+            groupBox19.TabStop = false;
+            groupBox19.Text = "YM2608(Use Real module Only!)";
+            // 
+            // cbEmulationOPNAADPCMOnly
+            // 
+            cbEmulationOPNAADPCMOnly.AutoSize = true;
+            cbEmulationOPNAADPCMOnly.Location = new Point(5, 22);
+            cbEmulationOPNAADPCMOnly.Margin = new Padding(4, 4, 4, 4);
+            cbEmulationOPNAADPCMOnly.Name = "cbEmulationOPNAADPCMOnly";
+            cbEmulationOPNAADPCMOnly.Size = new Size(171, 19);
+            cbEmulationOPNAADPCMOnly.TabIndex = 5;
+            cbEmulationOPNAADPCMOnly.Text = "ADPCMだけエミュレーションする";
+            cbEmulationOPNAADPCMOnly.UseVisualStyleBackColor = true;
+            // 
+            // groupBox20
+            // 
+            groupBox20.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox20.Controls.Add(cmbAY8910S_SCCI);
+            groupBox20.Controls.Add(rbAY8910S_SCCI);
+            groupBox20.Controls.Add(rbAY8910S_Silent);
+            groupBox20.Controls.Add(rbAY8910S_Emu);
+            groupBox20.Location = new Point(4, 59);
+            groupBox20.Margin = new Padding(4, 4, 4, 4);
+            groupBox20.Name = "groupBox20";
+            groupBox20.Padding = new Padding(4, 4, 4, 4);
+            groupBox20.Size = new Size(479, 48);
+            groupBox20.TabIndex = 10;
+            groupBox20.TabStop = false;
+            groupBox20.Text = "AY8910(Secondary)";
+            // 
+            // cmbAY8910S_SCCI
+            // 
+            cmbAY8910S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbAY8910S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAY8910S_SCCI.FormattingEnabled = true;
+            cmbAY8910S_SCCI.Location = new Point(222, 15);
+            cmbAY8910S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbAY8910S_SCCI.Name = "cmbAY8910S_SCCI";
+            cmbAY8910S_SCCI.Size = new Size(250, 23);
+            cmbAY8910S_SCCI.TabIndex = 2;
+            // 
+            // rbAY8910S_SCCI
+            // 
+            rbAY8910S_SCCI.AutoSize = true;
+            rbAY8910S_SCCI.Location = new Point(161, 16);
+            rbAY8910S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbAY8910S_SCCI.Name = "rbAY8910S_SCCI";
+            rbAY8910S_SCCI.Size = new Size(47, 19);
+            rbAY8910S_SCCI.TabIndex = 1;
+            rbAY8910S_SCCI.Text = "Real";
+            rbAY8910S_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbAY8910S_Silent
+            // 
+            rbAY8910S_Silent.AutoSize = true;
+            rbAY8910S_Silent.Location = new Point(5, 16);
+            rbAY8910S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbAY8910S_Silent.Name = "rbAY8910S_Silent";
+            rbAY8910S_Silent.Size = new Size(54, 19);
+            rbAY8910S_Silent.TabIndex = 0;
+            rbAY8910S_Silent.Text = "Silent";
+            rbAY8910S_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbAY8910S_Emu
+            // 
+            rbAY8910S_Emu.AutoSize = true;
+            rbAY8910S_Emu.Checked = true;
+            rbAY8910S_Emu.Location = new Point(72, 16);
+            rbAY8910S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbAY8910S_Emu.Name = "rbAY8910S_Emu";
+            rbAY8910S_Emu.Size = new Size(48, 19);
+            rbAY8910S_Emu.TabIndex = 0;
+            rbAY8910S_Emu.TabStop = true;
+            rbAY8910S_Emu.Text = "Emu";
+            rbAY8910S_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox21
+            // 
+            groupBox21.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox21.Controls.Add(cmbAY8910P_SCCI);
+            groupBox21.Controls.Add(rbAY8910P_SCCI);
+            groupBox21.Controls.Add(rbAY8910P_Silent);
+            groupBox21.Controls.Add(rbAY8910P_Emu);
+            groupBox21.Location = new Point(4, 4);
+            groupBox21.Margin = new Padding(4, 4, 4, 4);
+            groupBox21.Name = "groupBox21";
+            groupBox21.Padding = new Padding(4, 4, 4, 4);
+            groupBox21.Size = new Size(479, 48);
+            groupBox21.TabIndex = 11;
+            groupBox21.TabStop = false;
+            groupBox21.Text = "AY8910(Primary)";
+            // 
+            // cmbAY8910P_SCCI
+            // 
+            cmbAY8910P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbAY8910P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAY8910P_SCCI.FormattingEnabled = true;
+            cmbAY8910P_SCCI.Location = new Point(222, 15);
+            cmbAY8910P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbAY8910P_SCCI.Name = "cmbAY8910P_SCCI";
+            cmbAY8910P_SCCI.Size = new Size(250, 23);
+            cmbAY8910P_SCCI.TabIndex = 2;
+            // 
+            // rbAY8910P_SCCI
+            // 
+            rbAY8910P_SCCI.AutoSize = true;
+            rbAY8910P_SCCI.Location = new Point(161, 16);
+            rbAY8910P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbAY8910P_SCCI.Name = "rbAY8910P_SCCI";
+            rbAY8910P_SCCI.Size = new Size(47, 19);
+            rbAY8910P_SCCI.TabIndex = 1;
+            rbAY8910P_SCCI.Text = "Real";
+            rbAY8910P_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbAY8910P_Silent
+            // 
+            rbAY8910P_Silent.AutoSize = true;
+            rbAY8910P_Silent.Location = new Point(5, 16);
+            rbAY8910P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbAY8910P_Silent.Name = "rbAY8910P_Silent";
+            rbAY8910P_Silent.Size = new Size(54, 19);
+            rbAY8910P_Silent.TabIndex = 0;
+            rbAY8910P_Silent.Text = "Silent";
+            rbAY8910P_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbAY8910P_Emu
+            // 
+            rbAY8910P_Emu.AutoSize = true;
+            rbAY8910P_Emu.Checked = true;
+            rbAY8910P_Emu.Location = new Point(72, 16);
+            rbAY8910P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbAY8910P_Emu.Name = "rbAY8910P_Emu";
+            rbAY8910P_Emu.Size = new Size(48, 19);
+            rbAY8910P_Emu.TabIndex = 0;
+            rbAY8910P_Emu.TabStop = true;
+            rbAY8910P_Emu.Text = "Emu";
+            rbAY8910P_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox22
+            // 
+            groupBox22.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox22.Controls.Add(cmbYM2413P_SCCI);
+            groupBox22.Controls.Add(rbYM2413P_SCCI);
+            groupBox22.Controls.Add(rbYM2413P_Silent);
+            groupBox22.Controls.Add(rbYM2413P_Emu);
+            groupBox22.Location = new Point(4, 800);
+            groupBox22.Margin = new Padding(4, 4, 4, 4);
+            groupBox22.Name = "groupBox22";
+            groupBox22.Padding = new Padding(4, 4, 4, 4);
+            groupBox22.Size = new Size(479, 48);
+            groupBox22.TabIndex = 1;
+            groupBox22.TabStop = false;
+            groupBox22.Text = "YM2413(Primary)";
+            // 
+            // cmbYM2413P_SCCI
+            // 
+            cmbYM2413P_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2413P_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2413P_SCCI.FormattingEnabled = true;
+            cmbYM2413P_SCCI.Location = new Point(222, 15);
+            cmbYM2413P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2413P_SCCI.Name = "cmbYM2413P_SCCI";
+            cmbYM2413P_SCCI.Size = new Size(250, 23);
+            cmbYM2413P_SCCI.TabIndex = 2;
+            // 
+            // rbYM2413P_SCCI
+            // 
+            rbYM2413P_SCCI.AutoSize = true;
+            rbYM2413P_SCCI.Location = new Point(161, 16);
+            rbYM2413P_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2413P_SCCI.Name = "rbYM2413P_SCCI";
+            rbYM2413P_SCCI.Size = new Size(47, 19);
+            rbYM2413P_SCCI.TabIndex = 1;
+            rbYM2413P_SCCI.Text = "Real";
+            rbYM2413P_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbYM2413P_Silent
+            // 
+            rbYM2413P_Silent.AutoSize = true;
+            rbYM2413P_Silent.Location = new Point(5, 16);
+            rbYM2413P_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2413P_Silent.Name = "rbYM2413P_Silent";
+            rbYM2413P_Silent.Size = new Size(54, 19);
+            rbYM2413P_Silent.TabIndex = 0;
+            rbYM2413P_Silent.Text = "Silent";
+            rbYM2413P_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbYM2413P_Emu
+            // 
+            rbYM2413P_Emu.AutoSize = true;
+            rbYM2413P_Emu.Checked = true;
+            rbYM2413P_Emu.Location = new Point(72, 16);
+            rbYM2413P_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2413P_Emu.Name = "rbYM2413P_Emu";
+            rbYM2413P_Emu.Size = new Size(48, 19);
+            rbYM2413P_Emu.TabIndex = 0;
+            rbYM2413P_Emu.TabStop = true;
+            rbYM2413P_Emu.Text = "Emu";
+            rbYM2413P_Emu.UseVisualStyleBackColor = true;
+            // 
+            // groupBox23
+            // 
+            groupBox23.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox23.Controls.Add(cmbYM2413S_SCCI);
+            groupBox23.Controls.Add(rbYM2413S_SCCI);
+            groupBox23.Controls.Add(rbYM2413S_Silent);
+            groupBox23.Controls.Add(rbYM2413S_Emu);
+            groupBox23.Location = new Point(4, 855);
+            groupBox23.Margin = new Padding(4, 4, 4, 4);
+            groupBox23.Name = "groupBox23";
+            groupBox23.Padding = new Padding(4, 4, 4, 4);
+            groupBox23.Size = new Size(479, 48);
+            groupBox23.TabIndex = 1;
+            groupBox23.TabStop = false;
+            groupBox23.Text = "YM2413(Secondary)";
+            // 
+            // cmbYM2413S_SCCI
+            // 
+            cmbYM2413S_SCCI.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbYM2413S_SCCI.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbYM2413S_SCCI.FormattingEnabled = true;
+            cmbYM2413S_SCCI.Location = new Point(222, 15);
+            cmbYM2413S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            cmbYM2413S_SCCI.Name = "cmbYM2413S_SCCI";
+            cmbYM2413S_SCCI.Size = new Size(250, 23);
+            cmbYM2413S_SCCI.TabIndex = 2;
+            // 
+            // rbYM2413S_SCCI
+            // 
+            rbYM2413S_SCCI.AutoSize = true;
+            rbYM2413S_SCCI.Location = new Point(161, 16);
+            rbYM2413S_SCCI.Margin = new Padding(4, 4, 4, 4);
+            rbYM2413S_SCCI.Name = "rbYM2413S_SCCI";
+            rbYM2413S_SCCI.Size = new Size(47, 19);
+            rbYM2413S_SCCI.TabIndex = 1;
+            rbYM2413S_SCCI.Text = "Real";
+            rbYM2413S_SCCI.UseVisualStyleBackColor = true;
+            // 
+            // rbYM2413S_Silent
+            // 
+            rbYM2413S_Silent.AutoSize = true;
+            rbYM2413S_Silent.Location = new Point(5, 16);
+            rbYM2413S_Silent.Margin = new Padding(4, 4, 4, 4);
+            rbYM2413S_Silent.Name = "rbYM2413S_Silent";
+            rbYM2413S_Silent.Size = new Size(54, 19);
+            rbYM2413S_Silent.TabIndex = 0;
+            rbYM2413S_Silent.Text = "Silent";
+            rbYM2413S_Silent.UseVisualStyleBackColor = true;
+            // 
+            // rbYM2413S_Emu
+            // 
+            rbYM2413S_Emu.AutoSize = true;
+            rbYM2413S_Emu.Checked = true;
+            rbYM2413S_Emu.Location = new Point(72, 16);
+            rbYM2413S_Emu.Margin = new Padding(4, 4, 4, 4);
+            rbYM2413S_Emu.Name = "rbYM2413S_Emu";
+            rbYM2413S_Emu.Size = new Size(48, 19);
+            rbYM2413S_Emu.TabIndex = 0;
+            rbYM2413S_Emu.TabStop = true;
+            rbYM2413S_Emu.Text = "Emu";
+            rbYM2413S_Emu.UseVisualStyleBackColor = true;
+            // 
+            // cbYM2151P_exchgPAN
+            // 
+            cbYM2151P_exchgPAN.AutoSize = true;
+            cbYM2151P_exchgPAN.Location = new Point(5, 44);
+            cbYM2151P_exchgPAN.Margin = new Padding(4);
+            cbYM2151P_exchgPAN.Name = "cbYM2151P_exchgPAN";
+            cbYM2151P_exchgPAN.Size = new Size(104, 19);
+            cbYM2151P_exchgPAN.TabIndex = 6;
+            cbYM2151P_exchgPAN.Text = "Exchange PAN";
+            cbYM2151P_exchgPAN.UseVisualStyleBackColor = true;
+            // 
+            // cbYM2151S_exchgPAN
+            // 
+            cbYM2151S_exchgPAN.AutoSize = true;
+            cbYM2151S_exchgPAN.Location = new Point(5, 44);
+            cbYM2151S_exchgPAN.Margin = new Padding(4);
+            cbYM2151S_exchgPAN.Name = "cbYM2151S_exchgPAN";
+            cbYM2151S_exchgPAN.Size = new Size(104, 19);
+            cbYM2151S_exchgPAN.TabIndex = 6;
+            cbYM2151S_exchgPAN.Text = "Exchange PAN";
+            cbYM2151S_exchgPAN.UseVisualStyleBackColor = true;
             // 
             // ucSettingInstruments
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox20);
-            this.Controls.Add(this.groupBox21);
-            this.Controls.Add(this.groupBox16);
-            this.Controls.Add(this.groupBox14);
-            this.Controls.Add(this.groupBox17);
-            this.Controls.Add(this.groupBox19);
-            this.Controls.Add(this.groupBox18);
-            this.Controls.Add(this.groupBox13);
-            this.Controls.Add(this.groupBox15);
-            this.Controls.Add(this.groupBox12);
-            this.Controls.Add(this.groupBox11);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox10);
-            this.Controls.Add(this.groupBox9);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.groupBox8);
-            this.Controls.Add(this.groupBox7);
-            this.Controls.Add(this.groupBox23);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox22);
-            this.Controls.Add(this.groupBox3);
-            this.Name = "ucSettingInstruments";
-            this.Size = new System.Drawing.Size(417, 1240);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
-            this.groupBox12.ResumeLayout(false);
-            this.groupBox12.PerformLayout();
-            this.groupBox13.ResumeLayout(false);
-            this.groupBox13.PerformLayout();
-            this.groupBox14.ResumeLayout(false);
-            this.groupBox14.PerformLayout();
-            this.groupBox15.ResumeLayout(false);
-            this.groupBox15.PerformLayout();
-            this.groupBox16.ResumeLayout(false);
-            this.groupBox16.PerformLayout();
-            this.groupBox17.ResumeLayout(false);
-            this.groupBox17.PerformLayout();
-            this.groupBox18.ResumeLayout(false);
-            this.groupBox18.PerformLayout();
-            this.groupBox19.ResumeLayout(false);
-            this.groupBox19.PerformLayout();
-            this.groupBox20.ResumeLayout(false);
-            this.groupBox20.PerformLayout();
-            this.groupBox21.ResumeLayout(false);
-            this.groupBox21.PerformLayout();
-            this.groupBox22.ResumeLayout(false);
-            this.groupBox22.PerformLayout();
-            this.groupBox23.ResumeLayout(false);
-            this.groupBox23.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(groupBox20);
+            Controls.Add(groupBox21);
+            Controls.Add(groupBox16);
+            Controls.Add(groupBox14);
+            Controls.Add(groupBox17);
+            Controls.Add(groupBox19);
+            Controls.Add(groupBox18);
+            Controls.Add(groupBox13);
+            Controls.Add(groupBox15);
+            Controls.Add(groupBox12);
+            Controls.Add(groupBox11);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox10);
+            Controls.Add(groupBox9);
+            Controls.Add(groupBox1);
+            Controls.Add(groupBox8);
+            Controls.Add(groupBox7);
+            Controls.Add(groupBox23);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox6);
+            Controls.Add(groupBox5);
+            Controls.Add(groupBox22);
+            Controls.Add(groupBox3);
+            Margin = new Padding(4, 4, 4, 4);
+            Name = "ucSettingInstruments";
+            Size = new Size(486, 1550);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            groupBox6.ResumeLayout(false);
+            groupBox6.PerformLayout();
+            groupBox7.ResumeLayout(false);
+            groupBox7.PerformLayout();
+            groupBox8.ResumeLayout(false);
+            groupBox8.PerformLayout();
+            groupBox9.ResumeLayout(false);
+            groupBox9.PerformLayout();
+            groupBox10.ResumeLayout(false);
+            groupBox10.PerformLayout();
+            groupBox11.ResumeLayout(false);
+            groupBox11.PerformLayout();
+            groupBox12.ResumeLayout(false);
+            groupBox12.PerformLayout();
+            groupBox13.ResumeLayout(false);
+            groupBox13.PerformLayout();
+            groupBox14.ResumeLayout(false);
+            groupBox14.PerformLayout();
+            groupBox15.ResumeLayout(false);
+            groupBox15.PerformLayout();
+            groupBox16.ResumeLayout(false);
+            groupBox16.PerformLayout();
+            groupBox17.ResumeLayout(false);
+            groupBox17.PerformLayout();
+            groupBox18.ResumeLayout(false);
+            groupBox18.PerformLayout();
+            groupBox19.ResumeLayout(false);
+            groupBox19.PerformLayout();
+            groupBox20.ResumeLayout(false);
+            groupBox20.PerformLayout();
+            groupBox21.ResumeLayout(false);
+            groupBox21.PerformLayout();
+            groupBox22.ResumeLayout(false);
+            groupBox22.PerformLayout();
+            groupBox23.ResumeLayout(false);
+            groupBox23.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.GroupBox groupBox12;
-        public System.Windows.Forms.ComboBox cmbYM2151P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2151P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2151P_Silent;
-        public System.Windows.Forms.RadioButton rbYM2151P_Emu;
-        public System.Windows.Forms.ComboBox cmbYM2151S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2151S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2151S_Silent;
-        public System.Windows.Forms.RadioButton rbYM2151S_Emu;
-        public System.Windows.Forms.ComboBox cmbYM2203P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2203P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2203P_Emu;
-        public System.Windows.Forms.RadioButton rbYM2203P_Silent;
-        public System.Windows.Forms.ComboBox cmbYM2203S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2203S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2203S_Silent;
-        public System.Windows.Forms.RadioButton rbYM2203S_Emu;
-        public System.Windows.Forms.ComboBox cmbYM2608P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2608P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2608P_Emu;
-        public System.Windows.Forms.RadioButton rbYM2608P_Silent;
-        public System.Windows.Forms.ComboBox cmbYM2608S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2608S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2608S_Silent;
-        public System.Windows.Forms.RadioButton rbYM2608S_Emu;
-        public System.Windows.Forms.ComboBox cmbYM2610BP_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2610BP_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2610BP_Emu;
-        public System.Windows.Forms.RadioButton rbYM2610BP_Silent;
-        public System.Windows.Forms.ComboBox cmbYM2610BS_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2610BS_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2610BS_Silent;
-        public System.Windows.Forms.RadioButton rbYM2610BS_Emu;
-        public System.Windows.Forms.CheckBox cbEmulationPCMOnly;
-        public System.Windows.Forms.CheckBox cbTwice;
-        public System.Windows.Forms.CheckBox cbSendWait;
-        public System.Windows.Forms.ComboBox cmbYM2612P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2612P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2612P_Emu;
-        public System.Windows.Forms.RadioButton rbYM2612P_Silent;
-        public System.Windows.Forms.RadioButton rbYM2612S_Silent;
-        public System.Windows.Forms.ComboBox cmbYM2612S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2612S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2612S_Emu;
-        public System.Windows.Forms.ComboBox cmbSN76489P_SCCI;
-        public System.Windows.Forms.RadioButton rbSN76489P_SCCI;
-        public System.Windows.Forms.RadioButton rbSN76489P_Emu;
-        public System.Windows.Forms.RadioButton rbSN76489P_Silent;
-        public System.Windows.Forms.ComboBox cmbSN76489S_SCCI;
-        public System.Windows.Forms.RadioButton rbSN76489S_SCCI;
-        public System.Windows.Forms.RadioButton rbSN76489S_Silent;
-        public System.Windows.Forms.RadioButton rbSN76489S_Emu;
-        private System.Windows.Forms.GroupBox groupBox13;
-        private System.Windows.Forms.GroupBox groupBox14;
-        public System.Windows.Forms.ComboBox cmbC140S_SCCI;
-        public System.Windows.Forms.RadioButton rbC140S_SCCI;
-        public System.Windows.Forms.RadioButton rbC140S_Silent;
-        public System.Windows.Forms.RadioButton rbC140S_Emu;
-        private System.Windows.Forms.GroupBox groupBox15;
-        public System.Windows.Forms.ComboBox cmbC140P_SCCI;
-        public System.Windows.Forms.RadioButton rbC140P_SCCI;
-        public System.Windows.Forms.RadioButton rbC140P_Silent;
-        public System.Windows.Forms.RadioButton rbC140P_Emu;
-        private System.Windows.Forms.GroupBox groupBox16;
-        public System.Windows.Forms.ComboBox cmbSEGAPCMS_SCCI;
-        public System.Windows.Forms.RadioButton rbSEGAPCMS_SCCI;
-        public System.Windows.Forms.RadioButton rbSEGAPCMS_Silent;
-        public System.Windows.Forms.RadioButton rbSEGAPCMS_Emu;
-        private System.Windows.Forms.GroupBox groupBox17;
-        public System.Windows.Forms.ComboBox cmbSEGAPCMP_SCCI;
-        public System.Windows.Forms.RadioButton rbSEGAPCMP_SCCI;
-        public System.Windows.Forms.RadioButton rbSEGAPCMP_Silent;
-        public System.Windows.Forms.RadioButton rbSEGAPCMP_Emu;
-        public System.Windows.Forms.ComboBox cmbSPPCMP_SCCI;
-        private System.Windows.Forms.Label label2;
-        public System.Windows.Forms.ComboBox cmbSPPCMS_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2151P_EmuMame;
-        public System.Windows.Forms.RadioButton rbYM2151S_EmuMame;
-        public System.Windows.Forms.RadioButton rbYM2151P_EmuX68Sound;
-        public System.Windows.Forms.RadioButton rbYM2151S_EmuX68Sound;
-        public System.Windows.Forms.RadioButton rbYM2612P_EmuNuked;
-        public System.Windows.Forms.RadioButton rbYM2612S_EmuNuked;
-        private System.Windows.Forms.GroupBox groupBox18;
-        public System.Windows.Forms.CheckBox cbEmulationOPNBADPCMOnly;
-        private System.Windows.Forms.GroupBox groupBox19;
-        public System.Windows.Forms.CheckBox cbEmulationOPNAADPCMOnly;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox20;
-        public System.Windows.Forms.ComboBox cmbAY8910S_SCCI;
-        public System.Windows.Forms.RadioButton rbAY8910S_SCCI;
-        public System.Windows.Forms.RadioButton rbAY8910S_Silent;
-        public System.Windows.Forms.RadioButton rbAY8910S_Emu;
-        private System.Windows.Forms.GroupBox groupBox21;
-        public System.Windows.Forms.ComboBox cmbAY8910P_SCCI;
-        public System.Windows.Forms.RadioButton rbAY8910P_SCCI;
-        public System.Windows.Forms.RadioButton rbAY8910P_Silent;
-        public System.Windows.Forms.RadioButton rbAY8910P_Emu;
-        private System.Windows.Forms.GroupBox groupBox22;
-        public System.Windows.Forms.ComboBox cmbYM2413P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2413P_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2413P_Silent;
-        public System.Windows.Forms.RadioButton rbYM2413P_Emu;
-        private System.Windows.Forms.GroupBox groupBox23;
-        public System.Windows.Forms.ComboBox cmbYM2413S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2413S_SCCI;
-        public System.Windows.Forms.RadioButton rbYM2413S_Silent;
-        public System.Windows.Forms.RadioButton rbYM2413S_Emu;
-        public System.Windows.Forms.RadioButton rbYM2612P_EmuMame;
-        public System.Windows.Forms.RadioButton rbYM2612S_EmuMame;
-        public System.Windows.Forms.RadioButton rbSN76489P_Emu2;
-        public System.Windows.Forms.RadioButton rbSN76489S_Emu2;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
+        private GroupBox groupBox3;
+        private GroupBox groupBox4;
+        private GroupBox groupBox5;
+        private GroupBox groupBox6;
+        private GroupBox groupBox7;
+        private GroupBox groupBox8;
+        private GroupBox groupBox9;
+        private GroupBox groupBox10;
+        private GroupBox groupBox11;
+        private GroupBox groupBox12;
+        public ComboBox cmbYM2151P_SCCI;
+        public RadioButton rbYM2151P_SCCI;
+        public RadioButton rbYM2151P_Silent;
+        public RadioButton rbYM2151P_Emu;
+        public ComboBox cmbYM2151S_SCCI;
+        public RadioButton rbYM2151S_SCCI;
+        public RadioButton rbYM2151S_Silent;
+        public RadioButton rbYM2151S_Emu;
+        public ComboBox cmbYM2203P_SCCI;
+        public RadioButton rbYM2203P_SCCI;
+        public RadioButton rbYM2203P_Emu;
+        public RadioButton rbYM2203P_Silent;
+        public ComboBox cmbYM2203S_SCCI;
+        public RadioButton rbYM2203S_SCCI;
+        public RadioButton rbYM2203S_Silent;
+        public RadioButton rbYM2203S_Emu;
+        public ComboBox cmbYM2608P_SCCI;
+        public RadioButton rbYM2608P_SCCI;
+        public RadioButton rbYM2608P_Emu;
+        public RadioButton rbYM2608P_Silent;
+        public ComboBox cmbYM2608S_SCCI;
+        public RadioButton rbYM2608S_SCCI;
+        public RadioButton rbYM2608S_Silent;
+        public RadioButton rbYM2608S_Emu;
+        public ComboBox cmbYM2610BP_SCCI;
+        public RadioButton rbYM2610BP_SCCI;
+        public RadioButton rbYM2610BP_Emu;
+        public RadioButton rbYM2610BP_Silent;
+        public ComboBox cmbYM2610BS_SCCI;
+        public RadioButton rbYM2610BS_SCCI;
+        public RadioButton rbYM2610BS_Silent;
+        public RadioButton rbYM2610BS_Emu;
+        public CheckBox cbEmulationPCMOnly;
+        public CheckBox cbTwice;
+        public CheckBox cbSendWait;
+        public ComboBox cmbYM2612P_SCCI;
+        public RadioButton rbYM2612P_SCCI;
+        public RadioButton rbYM2612P_Emu;
+        public RadioButton rbYM2612P_Silent;
+        public RadioButton rbYM2612S_Silent;
+        public ComboBox cmbYM2612S_SCCI;
+        public RadioButton rbYM2612S_SCCI;
+        public RadioButton rbYM2612S_Emu;
+        public ComboBox cmbSN76489P_SCCI;
+        public RadioButton rbSN76489P_SCCI;
+        public RadioButton rbSN76489P_Emu;
+        public RadioButton rbSN76489P_Silent;
+        public ComboBox cmbSN76489S_SCCI;
+        public RadioButton rbSN76489S_SCCI;
+        public RadioButton rbSN76489S_Silent;
+        public RadioButton rbSN76489S_Emu;
+        private GroupBox groupBox13;
+        private GroupBox groupBox14;
+        public ComboBox cmbC140S_SCCI;
+        public RadioButton rbC140S_SCCI;
+        public RadioButton rbC140S_Silent;
+        public RadioButton rbC140S_Emu;
+        private GroupBox groupBox15;
+        public ComboBox cmbC140P_SCCI;
+        public RadioButton rbC140P_SCCI;
+        public RadioButton rbC140P_Silent;
+        public RadioButton rbC140P_Emu;
+        private GroupBox groupBox16;
+        public ComboBox cmbSEGAPCMS_SCCI;
+        public RadioButton rbSEGAPCMS_SCCI;
+        public RadioButton rbSEGAPCMS_Silent;
+        public RadioButton rbSEGAPCMS_Emu;
+        private GroupBox groupBox17;
+        public ComboBox cmbSEGAPCMP_SCCI;
+        public RadioButton rbSEGAPCMP_SCCI;
+        public RadioButton rbSEGAPCMP_Silent;
+        public RadioButton rbSEGAPCMP_Emu;
+        public ComboBox cmbSPPCMP_SCCI;
+        private Label label2;
+        public ComboBox cmbSPPCMS_SCCI;
+        public RadioButton rbYM2151P_EmuMame;
+        public RadioButton rbYM2151S_EmuMame;
+        public RadioButton rbYM2151P_EmuX68Sound;
+        public RadioButton rbYM2151S_EmuX68Sound;
+        public RadioButton rbYM2612P_EmuNuked;
+        public RadioButton rbYM2612S_EmuNuked;
+        private GroupBox groupBox18;
+        public CheckBox cbEmulationOPNBADPCMOnly;
+        private GroupBox groupBox19;
+        public CheckBox cbEmulationOPNAADPCMOnly;
+        private Label label1;
+        private GroupBox groupBox20;
+        public ComboBox cmbAY8910S_SCCI;
+        public RadioButton rbAY8910S_SCCI;
+        public RadioButton rbAY8910S_Silent;
+        public RadioButton rbAY8910S_Emu;
+        private GroupBox groupBox21;
+        public ComboBox cmbAY8910P_SCCI;
+        public RadioButton rbAY8910P_SCCI;
+        public RadioButton rbAY8910P_Silent;
+        public RadioButton rbAY8910P_Emu;
+        private GroupBox groupBox22;
+        public ComboBox cmbYM2413P_SCCI;
+        public RadioButton rbYM2413P_SCCI;
+        public RadioButton rbYM2413P_Silent;
+        public RadioButton rbYM2413P_Emu;
+        private GroupBox groupBox23;
+        public ComboBox cmbYM2413S_SCCI;
+        public RadioButton rbYM2413S_SCCI;
+        public RadioButton rbYM2413S_Silent;
+        public RadioButton rbYM2413S_Emu;
+        public RadioButton rbYM2612P_EmuMame;
+        public RadioButton rbYM2612S_EmuMame;
+        public RadioButton rbSN76489P_Emu2;
+        public RadioButton rbSN76489S_Emu2;
+        public CheckBox cbYM2151P_exchgPAN;
+        public CheckBox cbYM2151S_exchgPAN;
     }
 }

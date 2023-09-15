@@ -347,6 +347,8 @@ namespace mml2vgmIDE
                     , null, null, null
                     , ucSI.rbYM2151P_EmuMame
                     , ucSI.rbYM2151P_EmuX68Sound);
+                ucSI.cbYM2151P_exchgPAN.Checked = setting.YM2151Type.exchgPAN;
+
                 SetSCCIParam(setting.YM2151SType
                     , ucSI.rbYM2151S_Silent
                     , ucSI.rbYM2151S_Emu
@@ -355,6 +357,7 @@ namespace mml2vgmIDE
                     , null, null, null
                     , ucSI.rbYM2151S_EmuMame
                     , ucSI.rbYM2151S_EmuX68Sound);
+                ucSI.cbYM2151S_exchgPAN.Checked = setting.YM2151SType.exchgPAN;
 
                 SetSCCIParam(setting.AY8910Type
                     , ucSI.rbAY8910P_Silent
@@ -1159,6 +1162,7 @@ namespace mml2vgmIDE
             setting.YM2151Type.UseEmu = ucSI.rbYM2151P_Emu.Checked;
             setting.YM2151Type.UseEmu2 = ucSI.rbYM2151P_EmuMame.Checked;
             setting.YM2151Type.UseEmu3 = ucSI.rbYM2151P_EmuX68Sound.Checked;
+            setting.YM2151Type.exchgPAN = ucSI.cbYM2151P_exchgPAN.Checked;
 
             setting.YM2151SType = new Setting.ChipType();
             setting.YM2151SType.UseScci = ucSI.rbYM2151S_SCCI.Checked;
@@ -1174,6 +1178,7 @@ namespace mml2vgmIDE
             setting.YM2151SType.UseEmu = ucSI.rbYM2151S_Emu.Checked;
             setting.YM2151SType.UseEmu2 = ucSI.rbYM2151S_EmuMame.Checked;
             setting.YM2151SType.UseEmu3 = ucSI.rbYM2151S_EmuX68Sound.Checked;
+            setting.YM2151SType.exchgPAN = ucSI.cbYM2151S_exchgPAN.Checked;
 
             setting.YM2203Type = new Setting.ChipType();
             setting.YM2203Type.UseScci = ucSI.rbYM2203P_SCCI.Checked;

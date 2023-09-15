@@ -4147,13 +4147,29 @@ namespace mml2vgmIDE
             return false;
         }
 
+        private string getScriptsPath;
+        private TreeNode getScriptsTn;
+
         private void GetScripts(ToolStripMenuItem tsmiScript, ToolStripMenuItem tsmiTreeView, string path)
         {
-            TreeNode tn = new TreeNode();
-            SScript(tn, path);
+            getScriptsPath = path;
+            Thread getscript = new Thread(new ThreadStart(trdGetScripts));
+            getscript.Priority = ThreadPriority.Lowest;
+            getscript.Start();
+        }
 
-            DivScripts(tsmiScript, tn, "FROMMENU");
-            DivScripts(tsmiTreeView, tn, "FROMTREEVIEWCONTEXTMENU");
+        private void trdGetScripts()
+        {
+            TreeNode tn = new TreeNode();
+            SScript(tn, getScriptsPath);
+            getScriptsTn = tn;
+            this.Invoke(setScriptItem);
+        }
+
+        private void setScriptItem()
+        {
+            DivScripts(tsmiScript, getScriptsTn, "FROMMENU");
+            DivScripts(tsmiTreeView, getScriptsTn, "FROMTREEVIEWCONTEXTMENU");
             frmFolderTree.extendItem = tsmiTreeView;
         }
 

@@ -4573,6 +4573,12 @@ namespace mml2vgmIDE
                 int al = dData & 0x07;//AL
                 int ch = (dAddr & 0x7);
 
+                //exchg PANNING 
+                if (ctYM2151[Chip.Number].exchgPAN)
+                {
+                    dData = (dData & 0x3f) | ((dData & 0x80) >> 1) | ((dData & 0x40) << 1);
+                }
+
                 for (int i = 0; i < 4; i++)
                 {
                     int slot = (i == 0) ? 0 : ((i == 1) ? 2 : ((i == 2) ? 1 : 3));

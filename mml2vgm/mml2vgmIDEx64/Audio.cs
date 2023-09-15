@@ -543,6 +543,7 @@ namespace mml2vgmIDE
                 chipType[i].UseEmu2 = true;
                 chipType[i].UseEmu3 = true;
                 chipType[i].UseScci = false;
+                chipType[i].exchgPAN = (i == 0 ? setting.YM2151Type.exchgPAN : (i == 1 ? setting.YM2151SType.exchgPAN : false));
                 if (ret.Count == 0) continue;
                 SearchRealChip(chipType, ret, i, EnmZGMDevice.YM2151, chipRegister.YM2151[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
                 if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmZGMDevice.YM2151, chipRegister.YM2151[i], setting.AutoDetectModuleType == 0 ? 1 : 0);

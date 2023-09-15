@@ -1692,6 +1692,9 @@ namespace mml2vgmIDE
                 }
             }
 
+            private bool _exchgPAN = false;
+            public bool exchgPAN { get; set; }
+
 
             public ChipType Copy()
             {
@@ -1729,6 +1732,8 @@ namespace mml2vgmIDE
                 ct.LatencyForEmulation = this.LatencyForEmulation;
                 ct.LatencyForScci = this.LatencyForScci;
                 ct.Type = this.Type;
+
+                ct.exchgPAN = this.exchgPAN;
 
                 return ct;
             }
