@@ -1,6 +1,7 @@
 ﻿using musicDriverInterface;
 using System;
 using System.Collections.Generic;
+using static MDSound.ym2612;
 
 namespace Core
 {
@@ -425,6 +426,12 @@ namespace Core
 
         public void OutKeyOn(MML mml, partPage page)
         {
+
+            if (page.RR15sw)
+            {
+                if (page.RR15 == 0) SetRR15(page, mml, 15);
+                ResetRR15(page, mml, 15);
+            }
 
             if (page.ch == 7 && page.mixer == 1)
             {
@@ -1109,6 +1116,62 @@ namespace Core
 
 
         }
+
+        public override void CmdRR15(partPage page, MML mml)
+        {
+            if (mml.args == null || (mml.args.Count != 1 && mml.args.Count != 2))
+            {
+                msgBox.setErrMsg(msg.get("E11010")
+                    , mml.line.Lp);
+                return;
+            }
+
+            if (!(mml.args[0] is bool))
+            {
+                msgBox.setErrMsg(msg.get("E11010")
+                    , mml.line.Lp);
+                return;
+            }
+
+            page.RR15sw = (bool)mml.args[0];
+            if (mml.args.Count == 2)
+            {
+                page.RR15 = (int)mml.args[1];
+            }
+
+            if (!page.RR15sw)
+            {
+                ResetRR15(page, mml, page.slots);
+            }
+        }
+
+        public override void SetRR15(partPage page)
+        {
+            SetRR15(page, null, page.slots);
+        }
+
+        protected virtual void SetRR15(partPage page, MML mml, int slot)
+        {
+            for (byte ope = 0; ope < 4; ope++)
+            {
+                if ((slot & (1 << ope)) == 0) continue;
+                ((YM2151)page.chip).OutSetSlRr(mml, page, ope,
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + 4],
+                    15);
+            }
+        }
+
+        protected virtual void ResetRR15(partPage page, MML mml, int slot)
+        {
+            for (byte ope = 0; ope < 4; ope++)
+            {
+                if ((slot & (1 << ope)) == 0) continue;
+                ((YM2151)page.chip).OutSetSlRr(mml, page, ope,
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + 4],
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + 3]);
+            }
+        }
+
 
     }
 }

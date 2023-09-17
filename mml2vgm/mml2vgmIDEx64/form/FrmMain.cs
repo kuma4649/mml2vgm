@@ -4120,7 +4120,6 @@ namespace mml2vgmIDE
             {
                 Disp("スクリプト読み込み中");
                 GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
-                Disp("スクリプト読み込み完了");
             }
 
             //frmSien = new FrmSien(setting);
@@ -4171,6 +4170,7 @@ namespace mml2vgmIDE
             DivScripts(tsmiScript, getScriptsTn, "FROMMENU");
             DivScripts(tsmiTreeView, getScriptsTn, "FROMTREEVIEWCONTEXTMENU");
             frmFolderTree.extendItem = tsmiTreeView;
+            Disp("スクリプト読み込み完了");
         }
 
         private void SScript(TreeNode parent, string path)

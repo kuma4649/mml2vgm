@@ -3702,7 +3702,8 @@ namespace Core
                             {
                                 if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= waitCounter;
 
-                                if (pg.waitRR15Counter > 0) pg.waitRR15Counter -= waitCounter;
+                                if (pg.waitRR15Counter > 0) 
+                                    pg.waitRR15Counter -= waitCounter;
 
                                 if (pg.waitCounter > 0) pg.waitCounter -= waitCounter;
 

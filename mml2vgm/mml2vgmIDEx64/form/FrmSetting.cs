@@ -2385,8 +2385,11 @@ namespace mml2vgmIDE
                 }
                 else
                 {
-                    lblSKKey.Text = "Clrキーはキー割り当て操作中のみ有効です";
-                    lblSKKey.ForeColor = System.Drawing.Color.Red;
+                    //lblSKKey.Text = "Clrキーはキー割り当て操作中のみ有効です";
+                    //lblSKKey.ForeColor = System.Drawing.Color.Red;
+                    dgvShortCutKey.Rows[e.RowIndex].Cells["clmKey"].Value = "(none)";
+                    btnOK.Enabled = true;
+                    lblSKKey.Text = "";
                 }
             }
 
