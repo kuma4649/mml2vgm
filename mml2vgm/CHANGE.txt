@@ -1,4 +1,7 @@
 更新履歴
+TAG705 2023/09/17 2nd
+  OPM:TTON/TTOF機能修正
+
 TAG704 2023/09/17
   OPM:TTON/TTOF機能追加
   IDE:ショートカットキーの挙動修正

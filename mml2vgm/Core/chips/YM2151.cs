@@ -367,6 +367,9 @@ namespace Core
                 OutSetDt2Sr(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                 OutSetSlRr(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
 
+                for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                        = parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
             }
             page.op1ml = parent.instOPM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             page.op2ml = parent.instOPM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
