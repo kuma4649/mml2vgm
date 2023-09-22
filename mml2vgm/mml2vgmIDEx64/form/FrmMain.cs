@@ -4,6 +4,7 @@ using mml2vgmIDE.form;
 using mml2vgmIDEx64.Properties;
 using musicDriverInterface;
 using Sgry.Azuki.WinForms;
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -846,11 +847,17 @@ namespace mml2vgmIDE
                     setting.other.Tutorial = ofd.FileName;
                 }
 
-                Process.Start(setting.other.Tutorial);
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = setting.other.Tutorial
+                }).Dispose();
             }
             catch
             {
-                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                setting.other.Tutorial = "";
+                TsmiReference_Click(sender, e);
+                //MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -873,11 +880,17 @@ namespace mml2vgmIDE
                     setting.other.CommandManual = ofd.FileName;
                 }
 
-                Process.Start(setting.other.CommandManual);
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = setting.other.CommandManual
+                }).Dispose(); 
             }
             catch
             {
-                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                setting.other.CommandManual = "";
+                TsmiReference_Click(sender, e);
+                //MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -900,11 +913,17 @@ namespace mml2vgmIDE
                     setting.other.CommandManualMucom = ofd.FileName;
                 }
 
-                Process.Start(setting.other.CommandManualMucom);
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = setting.other.CommandManualMucom
+                }).Dispose();
             }
             catch
             {
-                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                setting.other.CommandManualMucom = "";
+                TsmiReference_Click(sender, e);
+                //MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -927,11 +946,17 @@ namespace mml2vgmIDE
                     setting.other.CommandManualPMD = ofd.FileName;
                 }
 
-                Process.Start(setting.other.CommandManualPMD);
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = setting.other.CommandManualPMD
+                }).Dispose();
             }
             catch
             {
-                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                setting.other.CommandManualPMD = "";
+                TsmiReference_Click(sender, e);
+                //MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -954,11 +979,17 @@ namespace mml2vgmIDE
                     setting.other.CommandManualM98 = ofd.FileName;
                 }
 
-                Process.Start(setting.other.CommandManualM98);
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = setting.other.CommandManualM98
+                }).Dispose();
             }
             catch
             {
-                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                setting.other.CommandManualM98 = "";
+                TsmiReference_Click(sender, e);
+                //MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

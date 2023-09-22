@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -100,7 +101,11 @@ namespace mml2vgmIDE
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             llOpenGithub.LinkVisited = true;
-            System.Diagnostics.Process.Start("https://github.com/kuma4649/mml2vgm/releases/latest");
+            System.Diagnostics.Process.Start(new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                FileName = "https://github.com/kuma4649/mml2vgm/releases/latest"
+            }).Dispose();
 
         }
     }
