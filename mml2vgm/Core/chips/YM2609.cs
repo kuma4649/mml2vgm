@@ -447,7 +447,7 @@ namespace Core
                 int p = page.ch == 36 ? 1 : 3;
                 int v = page.ch != 38 ? 0x00 : 0x11;
                 SOutData(page, mml, port[p], (byte)(0x0b + v), (byte)vol);
-                page.beforeVolume = page.volume;
+                page.beforeVolume = vol;// page.volume;
             }
         }
 
@@ -817,6 +817,7 @@ namespace Core
             }
             else if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
             {
+                OutAdpcmKeyOff(mml, page);
                 OutAdpcmKeyOn(mml, page);
             }
         }
