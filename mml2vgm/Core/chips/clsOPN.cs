@@ -957,10 +957,13 @@ namespace Core
             vmml.type = enmMMLType.Volume;
             if (mml != null)
                 vmml.line = mml.line;
-            if ((page.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 0, ope[0]);
-            if ((page.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 1, ope[1]);
-            if ((page.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 2, ope[2]);
-            if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
+            if (!page.vguard)
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 0, ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 1, ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 2, ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
+            }
         }
 
         public int GetTLOFS(partPage page,MML mml, int slot)
@@ -1002,7 +1005,7 @@ namespace Core
             return tlOfs;
         }
 
-        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot)//, int n)
+        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4, int slot)//, int n)
         {
             //if (!parent.instFM.ContainsKey(n))
             //{
@@ -1010,7 +1013,7 @@ namespace Core
             //    return;
             //}
 
-            int alg =page.voice[0] & 0x7;
+            int alg = page.voice[0] & 0x7;
             int[] ope = new int[4] {
                 page.voice[partPage.voiceWidth + 0 * partPage.voiceWidth + 5]
                 , page.voice[partPage.voiceWidth + 1 * partPage.voiceWidth + 5]
@@ -1070,10 +1073,13 @@ namespace Core
             vmml.type = enmMMLType.unknown;//.TotalLevel;
             if (mml != null)
                 vmml.line = mml.line;
-            if ((page.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 0, ope[0]);
-            if ((page.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 1, ope[1]);
-            if ((page.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 2, ope[2]);
-            if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
+            if (!page.vguard)
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 0, ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 1, ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 2, ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
+            }
         }
 
         public void OutFmCh3SpecialModeSetFnum(MML mml, partPage page, byte ope, int octave, int num)
@@ -1271,12 +1277,13 @@ namespace Core
                 op[i] = Common.CheckRange(op[i], 0, 127);
             }
 
-
-            if ((isDef || (UMop & 1) != 0) && op[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 0, op[0]);
-            if ((isDef || (UMop & 2) != 0) && op[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 1, op[1]);
-            if ((isDef || (UMop & 4) != 0) && op[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 2, op[2]);
-            if ((isDef || (UMop & 8) != 0) && op[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 3, op[3]);
-
+            if (!page.vguard)
+            {
+                if ((isDef || (UMop & 1) != 0) && op[0] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 0, op[0]);
+                if ((isDef || (UMop & 2) != 0) && op[1] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 1, op[1]);
+                if ((isDef || (UMop & 4) != 0) && op[2] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 2, op[2]);
+                if ((isDef || (UMop & 8) != 0) && op[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(mml, vpg, 3, op[3]);
+            }
 
             //音量を再セットする
 
@@ -2967,6 +2974,20 @@ namespace Core
             page.voperator = val;
         }
 
+        public override void CmdVGuard(partPage page, MML mml)
+        {
+            int val = (int)mml.args[0];
+            page.vguard = val == 1;
+            if (!page.vguard)
+            {
+                page.beforeTL[0] = -1;
+                page.beforeTL[1] = -1;
+                page.beforeTL[2] = -1;
+                page.beforeTL[3] = -1;
+                SetVolume(page, mml);
+            }
+        }
+
         public override void CmdVolume(partPage page, MML mml)
         {
             base.CmdVolume(page, mml);
@@ -3421,7 +3442,7 @@ namespace Core
                 if (page.beforeTL[0] != tl)
                 {
                     page.beforeTL[0] = tl;
-                    OutFmSetTl(mml, page, 0, tl);
+                    if (!page.vguard) OutFmSetTl(mml, page, 0, tl);
                 }
             }
         }

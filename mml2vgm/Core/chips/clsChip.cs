@@ -1650,6 +1650,11 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdVGuard(partPage page, MML mml)
+        {
+            msgBox.setWrnMsg(msg.get("E10050")
+                    , mml.line.Lp);
+        }
 
         public virtual void CmdRenpuStart(partPage page, MML mml)
         {

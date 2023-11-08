@@ -1,4 +1,7 @@
 更新履歴
+TAG708 2023/11/08
+  Core:OPN系:OPM:TGON/TGOFコマンド追加
+
 TAG707 2023/09/24
   Core:OPNA2:ADPCM1/2/3の音量処理修正
 

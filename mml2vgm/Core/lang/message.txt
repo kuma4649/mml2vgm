@@ -249,6 +249,7 @@ E05086=Unknown command ('VOP?') defined.
 E05087=Unknown command ('TLOFS?') defined.
 E05088=A slot number is specified that cannot be used. slot enumerates the number of slots (1-4) to be used.
 E05089=The value exceeds the range of values that can be specified.
+E05090=Unknown command ('VGO?') defined.
 
 
 ;partWork.cs 06000
@@ -325,6 +326,7 @@ E10046=This channel can't use FM command.
 E10047=Use the POx command to initialize the system before using the __ command.
 E10048=This channel can't use TTON/TTOF command.
 E10049=This chip can't use VOP command.
+E10050=This chip can't use VGON/VGOF command.
 
 
 ;clsOPN.cs 11000

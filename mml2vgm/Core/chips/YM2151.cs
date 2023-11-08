@@ -148,13 +148,16 @@ namespace Core
                 }
             }
 
-            if ((page.slots & 1) != 0 && ope[0] != -1) OutSetTl(mml, page, 0, ope[0]);
-            if ((page.slots & 2) != 0 && ope[1] != -1) OutSetTl(mml, page, 1, ope[1]);
-            if ((page.slots & 4) != 0 && ope[2] != -1) OutSetTl(mml, page, 2, ope[2]);
-            if ((page.slots & 8) != 0 && ope[3] != -1) OutSetTl(mml, page, 3, ope[3]);
+            if (!page.vguard)
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) OutSetTl(mml, page, 0, ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) OutSetTl(mml, page, 1, ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) OutSetTl(mml, page, 2, ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) OutSetTl(mml, page, 3, ope[3]);
+            }
         }
 
-        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot, int n)
+        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4, int slot, int n)
         {
             if (!parent.instOPM.ContainsKey(n))
             {
@@ -208,10 +211,13 @@ namespace Core
             vmml.type = enmMMLType.unknown;//.TotalLevel;
             if (mml != null)
                 vmml.line = mml.line;
-            if ((page.slots & 1) != 0 && ope[0] != -1) OutSetTl(vmml, vpg, 0, ope[0]);
-            if ((page.slots & 2) != 0 && ope[1] != -1) OutSetTl(vmml, vpg, 1, ope[1]);
-            if ((page.slots & 4) != 0 && ope[2] != -1) OutSetTl(vmml, vpg, 2, ope[2]);
-            if ((page.slots & 8) != 0 && ope[3] != -1) OutSetTl(vmml, vpg, 3, ope[3]);
+            if (!page.vguard)
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) OutSetTl(vmml, vpg, 0, ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) OutSetTl(vmml, vpg, 1, ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) OutSetTl(vmml, vpg, 2, ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) OutSetTl(vmml, vpg, 3, ope[3]);
+            }
         }
 
         public void OutSetTl(MML mml, partPage page, int ope, int tl)
@@ -418,10 +424,13 @@ namespace Core
                 }
             }
 
-            if ((page.slots & 1) != 0 && op[0] != -1) OutSetTl(mml, page, 0, op[0]);
-            if ((page.slots & 2) != 0 && op[1] != -1) OutSetTl(mml, page, 1, op[1]);
-            if ((page.slots & 4) != 0 && op[2] != -1) OutSetTl(mml, page, 2, op[2]);
-            if ((page.slots & 8) != 0 && op[3] != -1) OutSetTl(mml, page, 3, op[3]);
+            if (!page.vguard)
+            {
+                if ((page.slots & 1) != 0 && op[0] != -1) OutSetTl(mml, page, 0, op[0]);
+                if ((page.slots & 2) != 0 && op[1] != -1) OutSetTl(mml, page, 1, op[1]);
+                if ((page.slots & 4) != 0 && op[2] != -1) OutSetTl(mml, page, 2, op[2]);
+                if ((page.slots & 8) != 0 && op[3] != -1) OutSetTl(mml, page, 3, op[3]);
+            }
 
             ((YM2151)page.chip).OutSetVolume(page, mml, vol, n);
 
@@ -841,6 +850,17 @@ namespace Core
             if (page.noise != n)
             {
                 page.noise = n;
+            }
+        }
+
+        public override void CmdVGuard(partPage page, MML mml)
+        {
+            int val = (int)mml.args[0];
+            page.vguard = val == 1;
+            if (!page.vguard)
+            {
+                page.beforeVolume = -1;
+                SetVolume(page, mml);
             }
         }
 

@@ -111,6 +111,9 @@ namespace mml2vgmIDE.MMLParameter
                 //70 -                                 
                 null,                null,             null,         null,            null,
                 null,                SetHardLFO,       null,         null,            null,
+                //80 -                                 
+                null,                null,             null,         null,            null,
+                null,                null,             null,         null,            null,
             };
         }
 

@@ -878,6 +878,11 @@ namespace Core
                 CmdVoperator(pw, page, mml);
                 return;
             }
+            else if (pw.getChar(page) == 'G') //vG
+            {
+                CmdVguard(pw, page, mml);
+                return;
+            }
 
 
             CmdTotalVolume(pw, page, mml);
@@ -1429,6 +1434,38 @@ namespace Core
                 return;
             }
             mml.type = enmMMLType.VOperator;
+            mml.args = new List<object>();
+            mml.args.Add(n);
+
+        }
+
+        private void CmdVguard(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'O')//vgO
+            {
+                msgBox.setErrMsg(msg.get("E05090"), mml.line.Lp);
+                return;
+            }
+            pw.incPos(page);
+            int n = 0;
+            if (pw.getChar(page) == 'N')//vgoN
+            {
+                n = 1;
+                pw.incPos(page);
+            }
+            else if (pw.getChar(page) == 'F')//vgoF
+            {
+                n = 0;
+                pw.incPos(page);
+            }
+            else
+            {
+                msgBox.setErrMsg(msg.get("E05090"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.VGuard;
             mml.args = new List<object>();
             mml.args.Add(n);
 

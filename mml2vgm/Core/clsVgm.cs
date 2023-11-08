@@ -6242,6 +6242,11 @@ namespace Core
                     page.chip.CmdVOperator(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.VGuard:
+                    log.Write("VGuard");
+                    page.chip.CmdVGuard(page, mml);
+                    page.mmlPos++;
+                    break;
                 case enmMMLType.Lfo:
                     log.Write("Lfo");
                     page.chip.CmdLfo(page, mml);

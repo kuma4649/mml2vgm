@@ -702,6 +702,7 @@ namespace Core
         public bool RR15sw { get; set; } = false;
         public int RR15 { get; set; } = 0;
         public int voperator { get; set; } = 0;
+        public bool vguard { get; set; } = false;
         public Dictionary<byte, byte> TLOFS = new Dictionary<byte, byte>();
 
         public bool PASwitch = false;
