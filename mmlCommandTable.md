@@ -199,6 +199,34 @@
     無効時(デフォルト)は、通常のPCMの音色を変更します。  
 
 
+### 音色変更(拡張モードのみ)  
+-----------  
+
+- Command  
+    @  
+ - Format  
+    @n1,n2[,n3]  
+- 設定可能範囲  
+    n1 : 0 ～ 255  
+    n2 : 送信するスロットを列挙する  
+    n3 :  
+         1       Algorithmのみ送信
+         2       Feedback のみ送信
+         3/省略  AlgorithmとFeedbackの両方を送信
+- Support chips  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(Ch3 Ex)  
+    - YM2609(Ch3 Ex)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音色を設定する(拡張モードのみ)  
+- Description  
+    音源の音色を変更します。(拡張モードのみ)  
+    スロット単位で音色を設定可能です  
+
+
 ### プリセット音色変更  
 -----------  
 - Command  
@@ -1657,6 +1685,52 @@
             n2:Sweep ShiftCount(-7 ~ 7)  
 
 
+### RR15キーオン処理スイッチ設定  
+-----------  
+- Command  
+    TT  
+- Format  
+    TTxn  
+- 設定可能範囲  
+    x : スイッチ ON/OF(ON:ON OF:OFF)  
+    n : ON時のみ。指定クロック前にRRに15をセットする(0 ~ )
+        省略時は1  
+- Support chips  
+    - YM2151(FM)  
+    - YM2203(FM)  
+    - YM2608(FM)  
+    - YM2610B(FM)  
+    - YM2612  
+    - YM2612X  
+    - YM2609(FM)  
+- Remark  
+    キーオン時にRRを15にセットするモードを開始/停止  
+- Description  
+    キーオン時にRRを15にセットするモードを有効、無効を設定します。  
+
+
+### ボリューム設定抑制スイッチ設定  
+-----------  
+- Command  
+    TG  
+- Format  
+    TGx  
+- 設定可能範囲  
+    x : スイッチ ON/OF(ON:ON OF:OFF)  
+- Support chips  
+    - YM2151(FM)  
+    - YM2203(FM)  
+    - YM2608(FM)  
+    - YM2610B(FM)  
+    - YM2612  
+    - YM2612X  
+    - YM2609(FM)  
+- Remark  
+    ボリューム設定時、値をTLに送信抑制します  
+- Description  
+    ボリューム設定時、値をTLに送信抑制モードを有効、無効を設定します。  
+
+
 ### LFOスイッチ設定  
 -----------  
 - Command  
@@ -2460,6 +2534,33 @@
     割り当てたいスロット番号(1～4)を列挙してください。  
 - Example  
     VOP234  オペレータ2,3,4を割り当てます。  
+
+
+### TLオフセット  
+-----------  
+- Command  
+    TLOFS  
+- Format  
+    TLOFSONn1,n2  
+    TLOFSOFn1  
+- 設定可能範囲  
+    n1 : 定義番号
+    n2 : スロットの番号(1～4)を列挙する  
+- Support chips  
+    - YM2612(FM)  
+    - YM2612X(FM)  
+    - YM2610B(FM)  
+    - YM2608(FM)  
+    - YM2609(FM)  
+    - YM2203(FM)  
+- Remark  
+    TLオフセットの開始、停止  
+- Description  
+    TLオフセットを開始、または停止します。  
+    定義された内容によってTLを制御します。  
+    割り当てたいスロット番号(1～4)を列挙してください。  
+- Example  
+    TLOFSON1,234  スロット2,3,4に定義番号1を割り当てます。  
 
 
 ### 効果音モード  

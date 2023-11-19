@@ -909,6 +909,8 @@ TTONn           -oo----oo---oo---oo----oo-o---------------------------  キー�
                                                                                      n:指定クロック前にRRに15をセットする(0 ~ )
                                                                                      省略時は1
 TTOF            -oo----oo---oo---oo----oo-o---------------------------  キーオン時にRRを15にセットするモードを停止
+TGON            -oo----oo---oo---oo----oo-o---------------------------  ボリューム設定をTLに送信しません
+TGOF            -oo----oo---oo---oo----oo-o---------------------------  ボリューム設定をTLに送信します
 Sx1n            -oo--ooooooooooooooooooooooooooooooooooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
 rn              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
 "xxx"n          oooooooooooooooooooooooooooooooooooooooooooooooooooooo  歌詞
