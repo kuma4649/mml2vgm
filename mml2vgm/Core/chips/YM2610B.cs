@@ -407,7 +407,8 @@ namespace Core
                 if (n < 0) { n += 12; }
             }
 
-            return (int)(0x4a53 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
+            //return (int)(0x4a53 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
+            return (int)(0x49ba * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
         }
 
         public void OutAdpcmBKeyOn(MML mml, partPage page)

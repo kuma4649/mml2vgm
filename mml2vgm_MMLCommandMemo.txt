@@ -414,12 +414,12 @@
    ...
   U35    YM2609(RHYTHM音源)(Primary)     CH5
   U36    YM2609(RHYTHM音源)(Primary)     CH6
-  U37    YM2609(ADPCM1音源)(Primary)     CH1
-  U38    YM2609(ADPCM2音源)(Primary)     CH1
-  U39    YM2609(ADPCM3音源)(Primary)     CH1
-  U40    YM2609(ADPCMA音源)(Primary)     CH1
+  U37    YM2609(ADPCMA音源)(Primary)     CH1
+  U38    YM2609(ADPCMA音源)(Primary)     CH2
+  U39    YM2609(ADPCMA音源)(Primary)     CH3
+  U40    YM2609(ADPCMB音源)(Primary)     CH1
    ...
-  U45    YM2609(ADPCMA音源)(Primary)     CH6
+  U45    YM2609(ADPCMB音源)(Primary)     CH6
   N1     YM2203(FM音源)(Primary)         CH1
   N2     YM2203(FM音源)(Primary)         CH2
   N3     YM2203(FM音源)(Primary)         CH3/CH3Ex0

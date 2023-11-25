@@ -2192,7 +2192,28 @@ namespace mml2vgmIDE
                                 cells[5] = pw[i].clockCounter;
                                 cells[6] = "-";
                                 cells[7] = muteManager.UpdateTrackInfo(doc, cells);
-                                cells[8] = pw[i].pg[0].Type.ToString();
+                                if (pw[i].pg[0].chip.chipType != enmChipType.YM2609)
+                                {
+                                    cells[8] = pw[i].pg[0].Type.ToString();
+                                }
+                                else
+                                {
+                                    if (pw[i].pg[0].Type != enmChannelType.ADPCM 
+                                        && pw[i].pg[0].Type != enmChannelType.ADPCMA 
+                                        && pw[i].pg[0].Type != enmChannelType.ADPCMB)
+                                    {
+                                        cells[8] = pw[i].pg[0].Type.ToString();
+                                    }
+                                    else if (pw[i].pg[0].Type == enmChannelType.ADPCM)
+                                    {
+                                        cells[8] = "ADPCM-B";//音程固定ADPCM(YM2610でいうADPCM-A)
+                                    }
+                                    else
+                                    {
+
+                                        cells[8] = "ADPCM-A";//音程可変ADPCM(YM2610でいうADPCM-B)
+                                    }
+                                }
                                 frmPartCounter.AddPartCounter(cells);
                             }
 

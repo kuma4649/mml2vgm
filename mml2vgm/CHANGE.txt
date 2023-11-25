@@ -1,4 +1,16 @@
 更新履歴
+TAG711 2023/11/26
+  重要!!->Core:OPNA/OPNB/OPNA2:ADPCMの基準音程変更
+               mucom基準からの修正になります。
+               例えばo4Aであれば444Hz(mucom基準)から440Hzへ変更になります。
+               (gwiのみです。)
+  PartCounter:OPNA2:ADPCMの表記の揺れを修正。
+               音程可変ADPCMを　"ADPCM-A"、
+               音程固定ADPCMを　"ADPCM-B"に。
+               (YM2610とは逆になります)
+               YM2609.txtも修正
+
+
 TAG710 2023/11/25
   Core:OPNA2:リズム音源パートでは@ コマンドを無視するよう修正
 

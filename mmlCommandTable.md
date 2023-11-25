@@ -48,9 +48,10 @@
 - YM2609(SSG)  
     Support type: PSG 12Ch(sine/square/triangle/saw wave)  
 - YM2609(RHYTHM)  
-    Support type: PRESET FIXED ADPCM 6Ch  
+    Support type: PRESET FIXED ADPCM   6Ch  
+    Support type:        FIXED ADPCM-B 6Ch  
 - YM2609(ADPCM)  
-    Support type: ADPCM 3Ch  
+    Support type: ADPCM-A 3Ch  
 - YM2203(FM)  
     Support type: FM 3Ch  
 - YM2203(Ch3 Ex)  
