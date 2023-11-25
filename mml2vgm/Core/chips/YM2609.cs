@@ -1436,6 +1436,11 @@ namespace Core
 
         public override void CmdInstrument(partPage page, MML mml)
         {
+            if(page.Type== enmChannelType.RHYTHM)
+            {
+                return;
+            }
+
             char type;
             bool re = false;
             int n;
