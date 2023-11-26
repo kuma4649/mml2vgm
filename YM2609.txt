@@ -3,10 +3,10 @@ Virtual Instrument YM2609(Register Map)
 
          Port 0                       Port 1                        Port 2                       Port 3
           __________________           __________________            __________________           __________________
-    $00  |      SSG1        |    $00  |     ADPCM-A1     |     $00  |      SSG3        |    $00  |     ADPCM-A2     |
+    $00  |      SSG1        |    $00  |     ADPCM1       |     $00  |      SSG3        |    $00  |     ADPCM2       |
          |                  |         |                  |          |                  |         |                  |
     $0F  |__________________|    $10  |__________________|     $0F  |__________________|    $10  |__________________|
-    $10  |      Rhythm      |    $11  |     ADPCM-B      |     $10  |      SSG4        |    $11  |     ADPCM-A3     |
+    $10  |      Rhythm      |    $11  |     ADPCM-A      |     $10  |      SSG4        |    $11  |     ADPCM3       |
          |                  |         |                  |          |                  |         |                  |
     $1F  |__________________|    $17  |__________________|     $1F  |__________________|    $21  |__________________|
     $20  |      FM          |    $20  |     SSG2         |     $20  |      FM          |    $22  |Sys:Rev.Dep       |
@@ -83,7 +83,7 @@ Virtual Instrument YM2609(Register Map)
         Wave Data : 0 ~ 15 (Write 64 times)
         
 
-     ADPCM-A1:1.$00 ADPCM-A2:3.$00 ADPCM-A3:3.$11
+     ADPCM1:1.$00 ADPCM2:3.$00 ADPCM3:3.$11
      ADDRESS      REGISTER       
     ____    ____________________
            |                    |
@@ -139,8 +139,8 @@ Virtual Instrument YM2609(Register Map)
     ____   |____________________|
 
     Extend Memory Capacity
-		ADPCM-A1  :256Kbyte
-		ADPCM-A2,3:16Mbyte
+		ADPCM1:256Kbyte
+		ADPCM2,3:16Mbyte
 
     Write Data  (FM)
     ADDR.    D7  D6  D5  D4  D3  D2  D1  D0         COMMENT
@@ -539,7 +539,7 @@ Virtual Instrument YM2609(Register Map)
     Ch.Ins.Effect                                                                Sys.Effect
      ____________       ____________       ____________       ____________        ____________       ____________       ____________ 
     |            |     |            |     |            |     | Ch.Ins.    |      |            |     | 3 band EQ  |     | Sys.       |
-    | Distortion | --> | Chorus     | --> | LPF > HPF  | --> | Compressor | -+-> | Reverb     | --> | l > m > h  | --> | Compressor |
+    | Distorsion | --> | Chorus     | --> | LPF > HPF  | --> | Compressor | -+-> | Reverb     | --> | l > m > h  | --> | Compressor |
     |____________|     |____________|     |____________|     |____________|  |   |____________|     |____________|     |____________|
                                                                              .
                                                                              . other Ch.Ins.Effect

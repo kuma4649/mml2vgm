@@ -5,6 +5,7 @@ using MDSound.np.memory;
 using SoundManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace mml2vgmIDE
 {
@@ -4445,6 +4446,7 @@ namespace mml2vgmIDE
         {
             if (type == EnmDataType.Normal)
             {
+                if (address == -1) return;
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
                     if (!ctYM2151[Chip.Number].UseScci)
@@ -4496,16 +4498,32 @@ namespace mml2vgmIDE
                     PackData[] pdata = (PackData[])exData;
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        if (ctYM2151[Chip.Number].UseEmu) foreach (PackData dat in pdata) mds.WriteYM2151(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
-                        if (ctYM2151[Chip.Number].UseEmu2) foreach (PackData dat in pdata) mds.WriteYM2151mame(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
-                        if (ctYM2151[Chip.Number].UseEmu3) foreach (PackData dat in pdata) mds.WriteYM2151x68sound(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                        if (ctYM2151[Chip.Number].UseEmu)
+                            foreach (PackData dat in pdata)
+                            {
+                                if (dat.Address != -1)
+                                    mds.WriteYM2151(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            }
+                        if (ctYM2151[Chip.Number].UseEmu2)
+                            foreach (PackData dat in pdata)
+                            {
+                                if (dat.Address != -1)
+                                    mds.WriteYM2151mame(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            }
+                        if (ctYM2151[Chip.Number].UseEmu3)
+                            foreach (PackData dat in pdata)
+                            {
+                                if (dat.Address != -1)
+                                    mds.WriteYM2151x68sound(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            }
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
                     {
                         if (scYM2151[Chip.Number] != null)
                         {
                             foreach (PackData dat in pdata)
-                                scYM2151[Chip.Number].setRegister(dat.Address, dat.Data);
+                                if (dat.Address != -1)
+                                    scYM2151[Chip.Number].setRegister(dat.Address, dat.Data);
                         }
                     }
                 }
