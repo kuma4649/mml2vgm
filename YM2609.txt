@@ -24,7 +24,7 @@ Virtual Instrument YM2609(Register Map)
 
 
     Read/Write Data(SSG1:0.$00  SSG2:1.$20  SSG3:2.$00  SSG4:2.$20)
-    ADDR.     D7    D6    D5    D4    D3    D2    D1    D0              COMMENT
+ADDR.     D7    D6    D5    D4    D3    D2    D1    D0              COMMENT
     _____  __________________________________________________   _______________________
           |                                                  |
      +00  |                    Fine Tune                     |
@@ -65,22 +65,32 @@ Virtual Instrument YM2609(Register Map)
           |                                                  |
      +0C  |                    Coarse tune                   |
     ____  |__________________________________________________|  _______________________
-          |                         |     |     |     |      |
-     +0D  |=========================| CON | ATT | ALT | HLD  |  Envelop Shape Cycle
-    ____  |_________________________|_____|_____|_____|______|  _______________________
-          |     |                   |                        |
-     +0E  | RST | User def.#(0 ~ 5) |       Wave Data        |  Define Wave data 
-    ____  |_____|___________________|________________________|  _______________________
+          |     |                   |     |     |     |      |
+     +0D  | RST | User def.#(0 ~ 5) | CON | ATT | ALT | HLD  |  Envelop Shape Cycle
+    ____  |_____|___________________|_____|_____|_____|______|  _______________________
+          |                                                  |
+     +0E  |                    Wave Data                     |  Define Wave data 
+    ____  |__________________________________________________|  _______________________
+          |           |                   |                  |
+     +0F  | Ch.(0~2)  |  Left Mul(0~7)    |  Right Mul(0~7)  |  Channel:2bit Left:3bit Right:3bit
+    ____  |___________|___________________|__________________|  _______________________
 
     Duty cycle
         7:1/8 6:2/8 5:3/8 4:4/8 3:5/8 2:6/8 1:7/8 duty. 0:8/8 Pure square wave.
         8:Triangle Wave  9:Saw Wave  10,11,12,13,14,15:user0 ~ user5
     L/R panpot
         0:LR Enable 1:R Enable 2:L Enable 3:LR Enable
+    L(M)ul
+        Left Panpot Multiple 0:x1.0 1:x0.875 2:x0.750 3:x0.625 4:x0.500 5:x0.375 6:x0.250 7:x0.125
+    R(M)ul
+        Right Panpot Multiple 0:x1.0 1:x0.875 2:x0.750 3:x0.625 4:x0.500 5:x0.375 6:x0.250 7:x0.125
     User define wave form(0x0E)
         RST : reset setting position 
-        User def.# : user define wave number 0 ~ 5 (select duty cycle 10 ~ 15)
+        User def.# : user define wave number 0 ~ 5 (select duty cycle 10~15)
         Wave Data : 0 ~ 15 (Write 64 times)
+
+        ex) set user0 wave form
+              0x80 0x01 0x02 ... 0x0f  ( 64 data )
         
 
      ADPCM1:1.$00 ADPCM2:3.$00 ADPCM3:3.$11
