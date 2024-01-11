@@ -282,12 +282,31 @@ namespace Core
 
         }
 
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
+        {
+            if (page.Type == enmChannelType.FMOPN
+                || page.Type == enmChannelType.FMOPNex
+                || (page.Type == enmChannelType.FMPCMex && !page.pcm))
+            {
+                return GetFmFNum(FNumTbl[0], octave, cmd, shift, pitchShift);
+            }
+            if (page.Type == enmChannelType.SSG)
+            {
+                return GetSsgFNum(page, mml, octave, cmd, shift, pitchShift);
+            }
+            if (page.Type == enmChannelType.ADPCM)
+            {
+                return GetAdpcmFNum(page, octave, cmd, shift, pitchShift);
+            }
+            return 0;
+        }
+
         public void SetAdpcmFNum(MML mml, partPage page)
         {
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -352,7 +371,7 @@ namespace Core
             }
         }
 
-        public int GetAdpcmFNum(partPage page, int octave, char noteCmd, int shift)
+        public int GetAdpcmFNum(partPage page, int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -382,7 +401,7 @@ namespace Core
 
             return (int)(
                 //0x4a82 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)) * (freq / 8000.0)
-                0x49d8 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)) * (freq / 8000.0)
+                0x49d8 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)) * (freq / 8000.0) + pitchShift
                 );
         }
 

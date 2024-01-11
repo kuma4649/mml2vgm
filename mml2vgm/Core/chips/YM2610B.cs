@@ -320,12 +320,31 @@ namespace Core
 
         }
 
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
+        {
+            if (page.Type == enmChannelType.FMOPN
+                || page.Type == enmChannelType.FMOPNex
+                || (page.Type == enmChannelType.FMPCMex && !page.pcm))
+            {
+                return GetFmFNum(FNumTbl[0], octave, cmd, shift, pitchShift);
+            }
+            if (page.Type == enmChannelType.SSG)
+            {
+                return GetSsgFNum(page, mml, octave, cmd, shift, pitchShift);
+            }
+            if (page.Type == enmChannelType.ADPCMB)
+            {
+                return GetAdpcmBFNum(page, octave, cmd, shift, pitchShift);
+            }
+            return 0;
+        }
+
         public void SetAdpcmBFNum(MML mml, partPage page)
         {
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetAdpcmBFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+            int f = GetAdpcmBFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -389,7 +408,7 @@ namespace Core
             }
         }
 
-        public int GetAdpcmBFNum(int octave, char noteCmd, int shift)
+        public int GetAdpcmBFNum(partPage page, int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -407,8 +426,20 @@ namespace Core
                 if (n < 0) { n += 12; }
             }
 
+            double freq = 8000.0;
+            if (page.instrument != -1)
+            {
+                freq = (double)parent.instPCM[page.instrument].Item2.samplerate;
+                if (parent.instPCM[page.instrument].Item2.freq != -1)
+                {
+                    freq = (double)parent.instPCM[page.instrument].Item2.freq;
+                }
+            }
+
             //return (int)(0x4a53 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
-            return (int)(0x49ba * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
+            return (int)(
+                0x49ba * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)) * (freq / 8000.0)+pitchShift
+                );
         }
 
         public void OutAdpcmBKeyOn(MML mml, partPage page)

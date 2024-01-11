@@ -1,4 +1,7 @@
 更新履歴
+TAG714 2024/01/11
+  OPNA/OPNB:ADPCM/ADPCM-Bでベンドができなかったバグを修正
+
 TAG713 2024/01/08
   MDSoundの差し替え
 
