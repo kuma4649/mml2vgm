@@ -756,6 +756,8 @@
 @Wn,n,n,n       -----------------oo-----------------------------------  基本波形番号指定(0 - 255) 基本波形4種を指定した波形に変更できる
 ln              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定
 l#n             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定(クロック値指定)
+    `n          oooooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト発音音長指定
+    `#n         oooooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト発音音長指定(クロック値指定)
 on              -ooo-ooooo-oooo-oooo-oooooo-o-ooo-o-o-oo-o---ooooooooo  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
 on              -ooo---oo---oo---oo----oo-----------------------------  オクターブ絶対指定(-1 - 9)(実際に発音される音は可能な音域のみ)
 on              ---o--------------------------------------------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
@@ -922,7 +924,7 @@ rn              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
 [|n             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース開始位置(n:有効パート数)
 |n              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース区切り位置(n:有効パート数)
 |]              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース終了位置
-[`              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別アルペジオ開始位置
+[`              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別アルペジオ開始位置 (デフォルト発音音長はデフォルト音長がセットされます。)
 `]              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別アルペジオ終了位置
 EON             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--ooooooooo  エンベロープの開始
 EOF             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--ooooooooo  エンベロープの停止
@@ -1059,6 +1061,8 @@ x               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(
     ^#n         oooooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を延長。)
     ~n          oooooooooooooooooooooooooooooooooooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
     ~#n         oooooooooooooooooooooooooooooooooooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
+    `n          oooooooooooooooooooooooooooooooooooooooooooooooooooooo  発音音長(パート別アルペジオ中のみ)(n: 発音音長 音長分だけ発音。)
+    `#n         oooooooooooooooooooooooooooooooooooooooooooooooooooooo  発音音長(パート別アルペジオ中のみ)(#n:  クロック指定発音音長 音長分だけ発音。)
     ,n          oooooooooooooooooooooooooooooooooooooooooooooooooooooo  ベロシティ(n:0-)
     ,           -oo----oo---oo---oo----oo-o---------------------------  Tone Doublerモード
                                                                         音符指定の後に0或いは,を指定するとTone Doublerモードになる。

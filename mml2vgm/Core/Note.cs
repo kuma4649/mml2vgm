@@ -8,6 +8,7 @@ namespace Core
 
         public char cmd = 'r';
         public int length = 0;
+        public int arpPartLength = 0;
 
         /// <summary>
         /// 次が音符かどうか(RR15処理用)
@@ -20,6 +21,7 @@ namespace Core
             n.cmd = this.cmd;
             n.length = this.length;
             n.nextIsNote = this.nextIsNote;
+            n.arpPartLength=this.arpPartLength;
 
             return n;
         }
@@ -58,6 +60,7 @@ namespace Core
             n.tieSw = this.tieSw;
             n.cmd = this.cmd;
             n.length = this.length;
+            n.arpPartLength = this.arpPartLength;
 
             n.bendSw = this.bendSw;
             n.bendCmd = this.bendCmd;

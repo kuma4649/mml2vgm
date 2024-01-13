@@ -115,7 +115,7 @@ namespace Core
         /// lコマンドで設定されている音符の長さ(clock)
         /// </summary>
         public long length = 24;
-
+        public long arpPartLength = 24;
         /// <summary>
         /// oコマンドで設定されているオクターブ数
         /// </summary>

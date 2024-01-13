@@ -2014,19 +2014,39 @@ namespace Core
             }
 
             //gateTimeの決定
-            if (page.gatetimePmode)
+            if (!page.PASwitch)
             {
-                if (!page.gatetimeReverse)
-                    page.waitKeyOnCounter = page.waitCounter * page.gatetime / 8L;
+                if (page.gatetimePmode)
+                {
+                    if (!page.gatetimeReverse)
+                        page.waitKeyOnCounter = page.waitCounter * page.gatetime / 8L;
+                    else
+                        page.waitKeyOnCounter = page.waitCounter - page.waitCounter * (page.gatetime % 8L) / 8L;//リバース時は剰余数で計算
+                }
                 else
-                    page.waitKeyOnCounter = page.waitCounter - page.waitCounter * (page.gatetime % 8L) / 8L;//リバース時は剰余数で計算
+                {
+                    if (!page.gatetimeReverse)
+                        page.waitKeyOnCounter = page.waitCounter - page.gatetime;
+                    else
+                        page.waitKeyOnCounter = Math.Abs(page.gatetime);//リバース時は負の数でも同じ動作
+                }
             }
             else
             {
-                if (!page.gatetimeReverse)
-                    page.waitKeyOnCounter = page.waitCounter - page.gatetime;
+                if (page.gatetimePmode)
+                {
+                    if (!page.gatetimeReverse)
+                        page.waitKeyOnCounter = note.arpPartLength * page.gatetime / 8L;
+                    else
+                        page.waitKeyOnCounter = note.arpPartLength - page.waitCounter * (page.gatetime % 8L) / 8L;//リバース時は剰余数で計算
+                }
                 else
-                    page.waitKeyOnCounter = Math.Abs(page.gatetime);//リバース時は負の数でも同じ動作
+                {
+                    if (!page.gatetimeReverse)
+                        page.waitKeyOnCounter = note.arpPartLength - page.gatetime;
+                    else
+                        page.waitKeyOnCounter = Math.Abs(page.gatetime);//リバース時は負の数でも同じ動作
+                }
             }
             //if (page.waitKeyOnCounter > page.waitCounter) page.waitKeyOnCounter = page.waitCounter;
             if (page.waitKeyOnCounter < 1) page.waitKeyOnCounter = 1;

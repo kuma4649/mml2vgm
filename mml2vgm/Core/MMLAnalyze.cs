@@ -1019,10 +1019,51 @@ namespace Core
                 n += futen;
 
             }
+            pw.skipTabSpace(page);
+            int an = -1;
+            if (pw.getChar(page) == '`')
+            {
+                pw.incPos(page);
+                if (pw.getNumNoteLength(page, out an, out bool adirectFlg))
+                {
+                    if (!adirectFlg)
+                    {
+                        if ((int)info.clockCount % an != 0)
+                        {
+                            msgBox.setWrnMsg(string.Format(msg.get("E05008"), an), mml.line.Lp);
+                        }
+                        an = (int)info.clockCount / an;
+                    }
+                    else
+                    {
+                        an = Common.CheckRange(an, 1, 65535);
+                    }
+
+                    //.の解析
+                    int futen = 0;
+                    int fn = an;
+                    while (pw.getChar(page) == '.')
+                    {
+                        if (fn % 2 != 0)
+                        {
+                            msgBox.setWrnMsg(msg.get("E05036")
+                                , mml.line.Lp);
+                        }
+                        fn = fn / 2;
+                        futen += fn;
+                        pw.incPos(page);
+                    }
+                    an += futen;
+                }
+            }
+
+
             mml.type = enmMMLType.Length;
             mml.args = new List<object>();
             mml.args.Add(n);
+            mml.args.Add(an);
             page.length = n;
+            page.arpPartLength = an;
         }
 
         private void CmdClockLength(partWork pw, partPage page, MML mml)
@@ -1608,8 +1649,10 @@ namespace Core
             num = Math.Max(num, 1);
 
             mml.type = enmMMLType.ReplaceByParts;
-            mml.args = new List<object>();
-            mml.args.Add(num);
+            mml.args = new List<object>
+            {
+                num
+            };
         }
 
         private void CmdReplaceByParts_End(partWork pw, partPage page, MML mml)
@@ -1652,11 +1695,15 @@ namespace Core
             }
 
             page.replacePartOrPartArpeggio = true;
+            page.arpPartLength = page.length;
+
             mml.type = enmMMLType.PartArpeggio_Start;
-            mml.args = new List<object>();
-            mml.args.Add(mode);
-            mml.args.Add(mml.line.Index);
-            mml.args.Add(mml.line.Count);
+            mml.args = new List<object>
+            {
+                mode,
+                mml.line.Index,
+                mml.line.Count
+            };
         }
 
         private void CmdPartArpeggio_End(partWork pw, partPage page, MML mml)
@@ -3386,8 +3433,8 @@ namespace Core
         //}
 
         //
-        //  c + 0 99 .. ^99 &99 ~99 ,99 :
-        //  1 2 3  4  5   6   7   8 9   10
+        //  c + 0 99 .. ^99 &99 ~99 `99 ,99 :
+        //  1 2 3  4  5   6   7   8 9   10  11
         //
         // 1... c d e f g a b x 音符
         // 2... + -           半音上げる/下げる(複数可能) 
@@ -3397,10 +3444,11 @@ namespace Core
         // 6... ^n..          音長を加算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
         // 7... &n..          音長を加算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
         // 8... ~n..          音長を減算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
-        //  6,7,8 は複数繰り返し指定可能。順番も自由
-        // 9... ,c            コンマの後が音符ならばToneDoubler
+        // 9... `n..          発音音長を設定2個目以降は加算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
+        //  6,7,8,9 は複数繰り返し指定可能。順番も自由
+        //10... ,c            コンマの後が音符ならばToneDoubler
         //                    数値の場合はベロシティ
-        //10... :             和音指定(ウエイトキャンセル)
+        //11... :             和音指定(ウエイトキャンセル)
         private void CmdNote(partWork pw, partPage page, char cmd, MML mml)
         {
             pw.incPos(page);
@@ -3507,7 +3555,8 @@ namespace Core
 
             //& ^ ~ コマンドの解析
             int leng = 0;
-            while (pw.getChar(page) == '&' || pw.getChar(page) == '^' || pw.getChar(page) == '~')
+            int apLeng = 0;
+            while (pw.getChar(page) == '&' || pw.getChar(page) == '^' || pw.getChar(page) == '~' || pw.getChar(page) == '`')
             {
                 char ch = pw.getChar(page);
                 int oldPos = pw.getPos(page);
@@ -3516,7 +3565,7 @@ namespace Core
                 {
                     len++;
                     mml.line.Lp.length = len;
-                    if (pw.getNumNoteLength(page, out n, out directFlg,out col,out kcol))
+                    if (pw.getNumNoteLength(page, out n, out directFlg, out col, out kcol))
                     {
                         if (!directFlg)
                         {
@@ -3541,8 +3590,8 @@ namespace Core
                         pw.decPos(page, nowPos - oldPos);
                         break;
                     }
-                    int dmy=0;
-                    n += CountFuten(pw, page, mml, n,ref dmy);
+                    int dmy = 0;
+                    n += CountFuten(pw, page, mml, n, ref dmy);
 
                 }
                 else if (ch == '^')
@@ -3562,12 +3611,30 @@ namespace Core
                     mml.line.Lp.length = len + kcol;
                     len += col;
                 }
+                else if (ch == '`')
+                {
+                    n = 0;
+                    if (pw.getChar(page) == ']')
+                    {
+                        pw.decPos(page);
+                        break;
+                    }
+                    int an;
+                    len++;
+                    mml.line.Lp.length = len;
+                    GetLength(pw, page, mml, out an, out col, out kcol, true);
+                    
+                    mml.line.Lp.length = len + kcol;
+                    len += col;
+                    apLeng += an;
 
+                }
                 leng += n;
             }
 
             note.length += leng;
             note.addLength = leng;
+            note.arpPartLength = (apLeng == 0) ? (int)page.arpPartLength : apLeng;
             len+=pw.skipTabSpace(page);
             //
 
@@ -3645,7 +3712,7 @@ namespace Core
             n += CountFuten(pw, page, mml, n,ref dmy);
         }
 
-        private void GetLength(partWork pw, partPage page, MML mml, out int n,out int col,out int kcol)
+        private void GetLength(partWork pw, partPage page, MML mml, out int n,out int col,out int kcol, bool sw = false)
         {
             if (pw.getNumNoteLength(page, out n, out bool directFlg,out col,out kcol))
             {
@@ -3666,7 +3733,7 @@ namespace Core
             else
             {
                 //数値未指定の場合はlコマンドでの設定値を使用する
-                n = (int)page.length;
+                n = sw ? (int)page.arpPartLength : (int)page.length;
             }
             int dmy = 0;
             n += CountFuten(pw, page, mml, n, ref dmy);
