@@ -1,12 +1,11 @@
 {
   "runtimeTarget": {
-    "name": ".NETStandard,Version=v2.1/",
+    "name": ".NETCoreApp,Version=v6.0",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETStandard,Version=v2.1": {},
-    ".NETStandard,Version=v2.1/": {
+    ".NETCoreApp,Version=v6.0": {
       "mucomDotNETCompiler/1.0.0": {
         "dependencies": {
           "mucomDotNETCommon": "1.0.0",
