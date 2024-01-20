@@ -5433,6 +5433,7 @@ namespace Core
 
                 int w = 0;
                 if (pl.type == eLfoType.Wah) w = 1;
+                pl.phase = pl.param[w + 6];
 
                 switch (pl.param[w+4])
                 {

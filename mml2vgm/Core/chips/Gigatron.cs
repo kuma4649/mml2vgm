@@ -73,7 +73,8 @@ namespace Core
                 if (pl.param[5] != 1) continue;
 
                 pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.value = 0;// (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.phase =  (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
                 pl.waitCounter = pl.param[0];
                 pl.direction = pl.param[2] < 0 ? -1 : 1;
                 pl.depthWaitCounter = pl.param[7];
@@ -102,7 +103,7 @@ namespace Core
                 if (!page.lfo[lfo].sw) continue;
                 if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                vol += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             if (page.varpeggioMode)
@@ -152,7 +153,7 @@ namespace Core
                 {
                     continue;
                 }
-                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             f = Common.CheckRange(f, 0, 0xffff);

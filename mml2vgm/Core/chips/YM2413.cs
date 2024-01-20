@@ -274,7 +274,7 @@ namespace Core
                 {
                     continue;
                 }
-                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
             while (f < ftbl[0])
             {
@@ -407,7 +407,7 @@ namespace Core
                     continue;
                 }
 
-                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             if (page.spg.beforeTlDelta1 != tl1)
@@ -467,7 +467,8 @@ namespace Core
                     continue;
 
                 pl.isEnd = false;
-                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.value = 0;// (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.phase = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
                 pl.waitCounter = pl.param[w + 0];
                 pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
                 pl.depthWaitCounter = pl.param[w + 7];
@@ -671,7 +672,7 @@ namespace Core
                     {
                         continue;
                     }
-                    vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                    vol += page.lfo[lfo].value + page.lfo[lfo].phase;
                 }
 
                 if (page.varpeggioMode)

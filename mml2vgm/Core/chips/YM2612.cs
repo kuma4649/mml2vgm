@@ -484,7 +484,8 @@ namespace Core
                     continue;
 
                 pl.isEnd = false;
-                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.value = 0;// (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.phase = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
                 pl.waitCounter = pl.param[w + 0];
                 pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
                 pl.depthWaitCounter = pl.param[w + 7];

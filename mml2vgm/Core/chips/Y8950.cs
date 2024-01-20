@@ -332,7 +332,7 @@ int ws
                 {
                     continue;
                 }
-                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             f = Common.CheckRange(f, 0, 0xffff);

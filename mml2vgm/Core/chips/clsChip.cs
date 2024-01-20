@@ -1068,13 +1068,14 @@ namespace Core
 
                 page.lfo[c].sw = true;
                 page.lfo[c].isEnd = false;
-                page.lfo[c].value = (page.lfo[c].param[w + 0] == 0) ? page.lfo[c].param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                page.lfo[c].value = 0;// (page.lfo[c].param[w + 0] == 0) ? page.lfo[c].param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
                 page.lfo[c].waitCounter = page.lfo[c].param[w + 0];
                 page.lfo[c].direction = page.lfo[c].param[w + 2] < 0 ? -1 : 1;
                 if (page.lfo[c].param[w + 4] == 2) page.lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
                 page.lfo[c].depthWaitCounter = page.lfo[c].param[w + 7];
                 page.lfo[c].depth = page.lfo[c].param[w + 3];
                 page.lfo[c].depthV2 = page.lfo[c].param[w + 2];
+                page.lfo[c].phase = (page.lfo[c].param[w + 0] == 0) ? page.lfo[c].param[w + 6] : 0;
 
                 page.lfo[c].slot = 0;
                 if (page.lfo[c].type == eLfoType.Wah)

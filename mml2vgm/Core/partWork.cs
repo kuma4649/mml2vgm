@@ -890,7 +890,7 @@ namespace Core
         public int depthV2 { get; internal set; }
 
         public int slot = 0;
-
+        public int phase = 0;
     }
 
     public class clsPcm

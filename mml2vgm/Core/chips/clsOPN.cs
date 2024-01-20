@@ -327,7 +327,7 @@ namespace Core
                 if (!page.lfo[lfo].sw) continue;
                 if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                vol += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             if (page.varpeggioMode)
@@ -416,7 +416,7 @@ namespace Core
                     {
                         continue;
                     }
-                    f -= page.lfo[lfo].value + page.lfo[lfo].param[6];
+                    f -= page.lfo[lfo].value + page.lfo[lfo].phase;
                 }
 
                 if (page.octaveNow < 1)
@@ -509,7 +509,7 @@ namespace Core
                 {
                     continue;
                 }
-                f -= page.lfo[lfo].value + page.lfo[lfo].param[6];
+                f -= page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             if (page.octaveNow < 1)
@@ -2231,7 +2231,7 @@ namespace Core
                 {
                     continue;
                 }
-                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             while (f < ftbl[0])
@@ -2273,7 +2273,7 @@ namespace Core
                 {
                     continue;
                 }
-                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
             f = Common.CheckRange(f, 0, 0xffff);
             OutFmSetForcedFnum(page, mml, f);
@@ -2374,7 +2374,7 @@ namespace Core
                 {
                     continue;
                 }
-                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                vol += page.lfo[lfo].value + page.lfo[lfo].phase;
             }
 
             if(page.varpeggioMode)
@@ -2411,10 +2411,10 @@ namespace Core
                     continue;
                 }
 
-                if ((page.lfo[lfo].slot & 1) != 0) { tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 1; }
-                if ((page.lfo[lfo].slot & 2) != 0) { tl2 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 2; }
-                if ((page.lfo[lfo].slot & 4) != 0) { tl3 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 4; }
-                if ((page.lfo[lfo].slot & 8) != 0) { tl4 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 8; }
+                if ((page.lfo[lfo].slot & 1) != 0) { tl1 += page.lfo[lfo].value + page.lfo[lfo].phase; slot |= 1; }
+                if ((page.lfo[lfo].slot & 2) != 0) { tl2 += page.lfo[lfo].value + page.lfo[lfo].phase; slot |= 2; }
+                if ((page.lfo[lfo].slot & 4) != 0) { tl3 += page.lfo[lfo].value + page.lfo[lfo].phase; slot |= 4; }
+                if ((page.lfo[lfo].slot & 8) != 0) { tl4 += page.lfo[lfo].value + page.lfo[lfo].phase; slot |= 8; }
             }
 
             if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
@@ -2467,7 +2467,8 @@ namespace Core
                     continue;
 
                 pl.isEnd = false;
-                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.value = 0;// (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.phase = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
                 pl.waitCounter = pl.param[w + 0];
                 pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
                 pl.depthWaitCounter = pl.param[w + 7];
