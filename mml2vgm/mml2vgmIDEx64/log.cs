@@ -18,9 +18,9 @@ namespace mml2vgmIDE
         public static Action<string> dispMsg;
 
 
-        public static void ForcedWrite(string msg)
+        public static void ForcedWrite(string msg, params object[] prm)
         {
-            if(sjisEnc== null)
+            if (sjisEnc == null)
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 sjisEnc = Encoding.GetEncoding("Shift_JIS");
@@ -36,7 +36,7 @@ namespace mml2vgmIDE
                 string timefmt = DateTime.Now.ToString(Resources.cntTimeFormat);
 
 #if DEBUG
-                dispMsg?.Invoke(msg);
+                dispMsg?.Invoke(string.Format(msg, prm));
 #else
                 using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
                 {

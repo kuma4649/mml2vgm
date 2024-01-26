@@ -1,8 +1,6 @@
 ﻿using Nc86ctl;
+using NiseC86ctl;
 using NScci;
-using System;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace mml2vgmIDE
 {
@@ -10,6 +8,7 @@ namespace mml2vgmIDE
     {
         private NScci.NScci nScci;
         private Nc86ctl.Nc86ctl nc86ctl;
+        private NiseC86ctl.NiseC86ctl niseC86ctl;
 
         #region IDisposable Support
 
@@ -45,7 +44,8 @@ namespace mml2vgmIDE
             }
 
             //SCCIの存在確認
-            int n = 0;
+            int n;
+            log.ForcedWrite("RealChip:Ctr:STEP 01 Check SCCI");
             try
             {
                 nScci = new NScci.NScci();
@@ -68,7 +68,7 @@ namespace mml2vgmIDE
                 nScci = null;
             }
 
-            log.ForcedWrite("RealChip:Ctr:STEP 01");
+            log.ForcedWrite("RealChip:Ctr:STEP 02 Check G.I.M.I.C.");
             try
             {
                 nc86ctl = new Nc86ctl.Nc86ctl();
@@ -82,7 +82,7 @@ namespace mml2vgmIDE
                 }
                 else
                 {
-                    log.ForcedWrite(string.Format("RealChip:Ctr:Found G.I.M.I.C.(Interface count={0})", n));
+                    log.ForcedWrite("RealChip:Ctr:Found G.I.M.I.C.(Interface count={0})", n);
                     Nc86ctl.NIRealChip nirc = nc86ctl.getChipInterface(0);
                     nirc.reset();
                 }
@@ -91,7 +91,35 @@ namespace mml2vgmIDE
             {
                 nc86ctl = null;
             }
-            log.ForcedWrite("RealChip:Ctr:STEP 02(Success)");
+
+            if (nc86ctl != null) return;
+
+            //NiseC86ctlを使用してGIMICの存在確認
+            log.ForcedWrite("RealChip:Ctr:STEP 03 Check G.I.M.I.C.(NiseC86ctl)");
+            try
+            {
+                niseC86ctl = new NiseC86ctl.NiseC86ctl(null);
+
+                niseC86ctl.Initialize();
+                n = niseC86ctl.GetNumberOfChip();
+
+                if (n == 0)
+                {
+                    niseC86ctl.Deinitialize();
+                    niseC86ctl = null;
+                    log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.(NiseC86ctl)");
+                }
+                else
+                {
+                    log.ForcedWrite("RealChip:Ctr:Found G.I.M.I.C.(NiseC86ctl)(Interface count={0})", n);
+                    niseC86ctl.Reset();
+                }
+            }
+            catch
+            {
+                log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.(NiseC86ctl) or NiseC86ctl");
+                niseC86ctl = null;
+            }
         }
 
         public void Close()
@@ -114,6 +142,15 @@ namespace mml2vgmIDE
                 catch { }
                 nc86ctl = null;
             }
+            if (niseC86ctl != null)
+            {
+                try
+                {
+                    niseC86ctl.Deinitialize();
+                }
+                catch { }
+                niseC86ctl = null;
+            }
         }
 
         public void getScciInstances()
@@ -128,7 +165,7 @@ namespace mml2vgmIDE
                 for (int j = 0; j < scc; j++)
                 {
                     NSoundChip sc = sif.getSoundChip(j);
-                    NSCCI_SOUND_CHIP_INFO info = sc.getSoundChipInfo();
+                    _ = sc.getSoundChipInfo();
                 }
             }
 
@@ -318,6 +355,60 @@ namespace mml2vgmIDE
                 }
             }
 
+            if (niseC86ctl != null)
+            {
+                int iCount = niseC86ctl.GetNumberOfChip();
+                for (int i = 0; i < iCount; i++)
+                {
+                    Gimic gm = niseC86ctl.GetChipInterface(i);
+                    NiseC86ctl.Devinfo devInfo;
+                    _ = gm.GetModuleInfo(out devInfo);
+                    string seri = devInfo.Serial;
+                    if (!int.TryParse(seri, out int o)) o = -1;
+
+                    switch (ind)
+                    {
+                        case 0:
+                            if (-2 == chipType.SoundLocation
+                        && i == chipType.BusID
+                        && o == chipType.SoundChip)
+                            {
+                                RNiseC86ctlSoundChip rsc = new(-2, i, o, chipType.Type)
+                                {
+                                    niseC86ctl = this.niseC86ctl
+                                };
+                                return rsc;
+                            }
+                            break;
+                        case 1:
+                            if (-2 == chipType.SoundLocation2A
+                        && i == chipType.BusID2A
+                        && o == chipType.SoundChip2A)
+                            {
+                                RNiseC86ctlSoundChip rsc = new(-2, i, o, chipType.Type2A)
+                                {
+                                    niseC86ctl = this.niseC86ctl
+                                };
+                                return rsc;
+                            }
+                            break;
+                        case 2:
+                            if (-2 == chipType.SoundLocation2B
+                        && i == chipType.BusID2B
+                        && o == chipType.SoundChip2B)
+                            {
+                                RNiseC86ctlSoundChip rsc = new(-2, i, o, chipType.Type2B)
+                                {
+                                    niseC86ctl = this.niseC86ctl
+                                };
+                                return rsc;
+                            }
+                            break;
+                    }
+
+                }
+            }
+
             return null;
         }
 
@@ -378,7 +469,7 @@ namespace mml2vgmIDE
                     NIRealChip rc = nc86ctl.getChipInterface(i);
                     NIGimic2 gm = rc.QueryInterface();
                     ChipType cct = gm.getModuleType();
-                    Devinfo di = gm.getModuleInfo();
+                    Nc86ctl.Devinfo di = gm.getModuleInfo();
                     Setting.ChipType ct = null;
                     int o = -1;
                     switch (realChipType)
@@ -481,6 +572,143 @@ namespace mml2vgmIDE
                 }
             }
 
+            if (niseC86ctl != null)
+            {
+                int iCount = niseC86ctl.GetNumberOfChip();
+                for (int i = 0; i < iCount; i++)
+                {
+                    Gimic gm = niseC86ctl.GetChipInterface(i);
+                    NiseC86ctl.Devinfo di; gm.GetModuleInfo(out di);
+                    string cct = gm.chip.ID;
+                    Setting.ChipType ct = null;
+                    int o;
+                    switch (realChipType)
+                    {
+                        case EnmRealChipType.YM2612:
+                            if (cct == "GMC-S2612" || cct == "GMC-S3438" || cct == "GMC-S276")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.SN76489:
+                            if (cct == "GMC-S5377")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.YM2203:
+                        case EnmRealChipType.YM2608:
+                            if (cct == "GMC-OPNA" || cct == "GMC-OPN3L" || cct == "GMC-OPN")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.AY8910:
+                            if (cct == "GMC-S2149"
+                                || cct == "GMC-S8910"
+                                || cct == "GMC-OPNA"
+                                || cct == "GMC-OPN3L"
+                                || cct == "GMC-OPN")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.YM2413:
+                            if (cct == "GMC-S2413")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.YM2610:
+                            if (cct == "GMC-OPNA" || cct == "GMC-OPN3L")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.YM2151:
+                            if (cct == "GMC-OPM")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                        case EnmRealChipType.YM3526:
+                        case EnmRealChipType.YM3812:
+                        case EnmRealChipType.YMF262:
+                            if (cct == "GMC-OPL3")
+                            {
+                                ct = new();
+                                ct.SoundLocation = -2;
+                                ct.BusID = i;
+                                string seri = di.Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.chip.ID;
+                                ct.InterfaceName = gm.MBInfo.Devname;
+                                ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
+                            }
+                            break;
+                    }
+
+                    if (ct != null) ret.Add(ct);
+                }
+            }
+
             return ret;
         }
 
@@ -531,6 +759,29 @@ namespace mml2vgmIDE
                     ct.ChipName = gm.getModuleInfo().Devname;
                     ct.InterfaceName = gm.getMBInfo().Devname;
                     ct.Type = (int)cct;
+                    ret.Add(ct);
+                }
+            }
+
+            if (niseC86ctl != null)
+            {
+                int iCount = niseC86ctl.GetNumberOfChip();
+                for (int i = 0; i < iCount; i++)
+                {
+                    Gimic gm = niseC86ctl.GetChipInterface(i);
+                    NiseC86ctl.Devinfo di; gm.GetModuleInfo(out di);
+                    string cct = gm.chip.ID;
+                    Setting.ChipType ct = null;
+                    int o=-2;
+                    ct = new Setting.ChipType();
+                    ct.SoundLocation = -2;
+                    ct.BusID = i;
+                    string seri = gm.moduleInfo.Serial;
+                    if (!int.TryParse(seri, out o)) o = -1;
+                    ct.SoundChip = o;
+                    ct.ChipName = gm.moduleInfo.Devname;
+                    ct.InterfaceName = gm.moduleInfo.Devname;
+                    ct.Type = RNiseC86ctlSoundChip.getChipType(gm.chip.ID);
                     ret.Add(ct);
                 }
             }
@@ -718,5 +969,118 @@ namespace mml2vgmIDE
 
     }
 
+    public class RNiseC86ctlSoundChip : RSoundChip
+    {
+        public NiseC86ctl.NiseC86ctl niseC86ctl = null;
+        public Gimic realChip = null;
+        public int chipType = -1;
+
+        public RNiseC86ctlSoundChip(int soundLocation, int busID, int soundChip, int type) : base(soundLocation, busID, soundChip, type)
+        {
+        }
+
+        override public void init()
+        {
+            Gimic gm = niseC86ctl.GetChipInterface(BusID);
+            gm.Reset();
+            realChip = gm;
+            gm.GetPLLClock(ref dClock);
+            log.ForcedWrite("C86ctl:PLL Clock={0}", dClock);
+            NiseC86ctl.Devinfo di; gm.GetModuleInfo(out di);
+            chipType = getChipType(gm.moduleInfo.Devname);
+            log.ForcedWrite("C86ctl:Found ChipType={0}", gm.moduleInfo.Devname);
+
+            //if (ChipType == ChipType.CHIP_YM2608)
+            //{
+            //    //setRegister(0x2d, 00);
+            //    //setRegister(0x29, 82);
+            //    //setRegister(0x07, 38);
+            //}
+            //else if (ChipType == ChipType.CHIP_OPM)
+            //{
+            //    //OPZReset();
+            //}
+        }
+
+        override public void setRegister(int adr, int dat)
+        {
+            if (adr < 0)
+                return;
+            realChip.Out((ushort)adr, (byte)dat);
+        }
+
+        /// <summary>
+        /// マスタークロックの設定
+        /// </summary>
+        /// <param name="mClock">設定したい値</param>
+        /// <returns>実際設定された値</returns>
+        override public uint SetMasterClock(uint mClock)
+        {
+            Gimic gm = realChip;
+            uint nowClock = 0; gm.GetPLLClock(ref nowClock);
+            if (nowClock != mClock)
+            {
+                gm.SetPLLClock(mClock);
+                log.ForcedWrite("Set PLLClock(clock:{0:d}", mClock);
+            }
+            gm.GetPLLClock(ref nowClock);
+            realChip.Reset();
+            log.ForcedWrite("reset NiseC86Ctl");
+
+            //if (ChipType == ChipType.CHIP_OPM)
+            //{
+            //    OPZReset2();
+            //}
+
+            return nowClock;
+        }
+
+        override public bool isBufferEmpty()
+        {
+            return true;
+        }
+
+        override public int getRegister(int adr)
+        {
+            return realChip.In((ushort)adr);
+        }
+
+        override public void setSSGVolume(byte vol)
+        {
+            realChip.SetSSGVolume(vol);
+        }
+
+        public static int getChipType(string devname)
+        {
+            switch (devname)
+            {
+                case "GMC-OPNA":
+                    return 1;
+                case "GMC-OPN3L":
+                    return 1;
+                case "GMC-OPN":
+                    return 8; //OPN/A系
+                case "GMC-S2149":
+                    return 65543;
+                case "GMC-S8910":
+                    return 7; //AY8910系
+                case "GMC-S2413":
+                    return 5; //OPLL
+                case "GMC-OPM":
+                    return 2; //OPM
+                case "GMC-OPL3":
+                    return 4;
+                case "GMC-S2612":
+                    return 9;
+                case "GMC-S3438"://OPN2C
+                    return 33;//OPN2C
+                case "GMC-S276"://OPN2L
+                    return 33;//OPN2C
+                case "GMC-S5377"://SPSG
+                    return 6;//DCSG
+            }
+            return -1;
+        }
+    }
 
 }

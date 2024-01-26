@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -45,6 +45,9 @@
     </Reference>
     <Reference Include="musicDriverInterface">
       <HintPath>musicDriverInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="NiseC86ctl">
+      <HintPath>NiseC86ctl.dll</HintPath>
     </Reference>
     <Reference Include="RealChipCtlWrap64">
       <HintPath>RealChipCtlWrap64.dll</HintPath>
@@ -142,6 +145,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="mucomDotNETDriver.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Nefarius.Drivers.WinUSB.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="PMDDotNETCommon.dll">

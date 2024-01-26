@@ -20,58 +20,62 @@ namespace mml2vgmIDE
         {
         }
 
+        private static object lockobj = new object();
+
         private static string[] GetScriptInfo(string path, int t)
         {
-
-            ScriptEngine engine;
-            ScriptRuntime runtime = null;
-
-            try
+            lock (lockobj)
             {
-                engine = Python.CreateEngine();
-                var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
-                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
-                if(hooks!=null) hooks.Clear();
-                ScriptSource source = engine.CreateScriptSourceFromFile(path);
-                CompiledCode code = source.Compile();
-                ScriptScope scope = engine.CreateScope();
-                runtime = engine.Runtime;
+                ScriptEngine engine;
+                ScriptRuntime runtime = null;
 
-                Assembly assembly = typeof(Program).Assembly;
-                runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
-                source.Execute(scope);
-
-                dynamic pyClass = scope.GetVariable("Mml2vgmScript");
-                dynamic mml2vgmScript = pyClass();
-                switch (t)
+                try
                 {
-                    case 0:
-                        return mml2vgmScript.title().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    case 1:
-                        return mml2vgmScript.scriptType().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    case 2:
-                        return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    case 3:
-                        string ret = mml2vgmScript.defaultShortCutKey();
-                        if (!string.IsNullOrEmpty(ret))
-                            return ret.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                        break;
+                    engine = Python.CreateEngine();
+                    var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
+                    var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
+                    if (hooks != null) hooks.Clear();
+                    ScriptSource source = engine.CreateScriptSourceFromFile(path);
+                    CompiledCode code = source.Compile();
+                    ScriptScope scope = engine.CreateScope();
+                    runtime = engine.Runtime;
+
+                    Assembly assembly = typeof(Program).Assembly;
+                    runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
+                    source.Execute(scope);
+
+                    dynamic pyClass = scope.GetVariable("Mml2vgmScript");
+                    dynamic mml2vgmScript = pyClass();
+                    switch (t)
+                    {
+                        case 0:
+                            return mml2vgmScript.title().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        case 1:
+                            return mml2vgmScript.scriptType().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        case 2:
+                            return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        case 3:
+                            string ret = mml2vgmScript.defaultShortCutKey();
+                            if (!string.IsNullOrEmpty(ret))
+                                return ret.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                            break;
+                    }
                 }
+                catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+                {
+                    ;//無視
+                }
+                catch (Exception ex)
+                {
+                    log.ForcedWrite(ex);
+                }
+                finally
+                {
+                    if (runtime != null) runtime.Shutdown();
+                    GC.Collect();
+                }
+                return new string[] { "" };// Path.GetFileName(path);
             }
-            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
-            {
-                ;//無視
-            }
-            catch (Exception ex)
-            {
-                log.ForcedWrite(ex);
-            }
-            finally
-            {
-                if (runtime != null) runtime.Shutdown();
-                GC.Collect();
-            }
-            return new string[] { "" };// Path.GetFileName(path);
         }
 
         public static string[] GetScriptTitles(string path)

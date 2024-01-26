@@ -752,7 +752,7 @@ namespace mml2vgmIDE
                 }
                 else
                 {
-                    if (ret[j].SoundLocation != -1) continue;
+                    if (ret[j].SoundLocation != -1 && ret[j].SoundLocation != -2) continue;
                 }
 
                 EnmRealModel mdl = CheckRealChip(dev, ret[j]);
@@ -777,7 +777,7 @@ namespace mml2vgmIDE
             switch (dev)
             {
                 case EnmZGMDevice.AY8910:
-                    if (chipType.SoundLocation == -1) //GIMIC ?
+                    if (chipType.SoundLocation == -1|| chipType.SoundLocation == -2) //GIMIC ?
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2608
                             || chipType.Type == (int)Nc86ctl.ChipType.CHIP_YMF288
@@ -798,7 +798,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.C140:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                     }
                     else
@@ -810,7 +810,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.SN76489:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                     }
                     else
@@ -822,7 +822,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.SegaPCM:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                     }
                     else
@@ -834,7 +834,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.YM2151:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2151)
                         {
@@ -850,7 +850,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.YM2203:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2203
                             || chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2608
@@ -871,7 +871,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.YM2413:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2413)
                         {
@@ -887,7 +887,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.YM2608:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2608
                             || chipType.Type == (int)Nc86ctl.ChipType.CHIP_YMF288)
@@ -906,7 +906,7 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.YM2609:
                     break;
                 case EnmZGMDevice.YM2610:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2608
                             || chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2610B
@@ -925,7 +925,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.YM2612:
-                    if (chipType.SoundLocation == -1)
+                    if (chipType.SoundLocation == -1 || chipType.SoundLocation == -2)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2612
                             || chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM3438)
