@@ -752,49 +752,11 @@ namespace Core
             SOutData(page, mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
         }
 
-        protected void GetPortVch(partPage page, out byte[] port, out int vch)
+        protected virtual void GetPortVch(partPage page, out byte[] port, out int vch)
         {
-            if (!(page.chip is YM2609))
-            {
-                port = page.ch > 2 ? page.port[1] : page.port[0];
-                vch = (byte)(page.ch > 2 ? page.ch - 3 : page.ch);
-            }
-            else
-            {
-                port =
-                    page.ch < 3 ?
-                    page.port[0] :
-                    (page.ch < 6 ?
-                        page.port[1] :
-                        (page.ch < 9 ?
-                            page.port[2] :
-                            (page.ch < 12 ?
-                                page.port[3] :
-                                (page.ch < 15 ?
-                                    page.port[0] :
-                                    page.port[2]
-                                )
-                            )
-                        )
-                    );
-                vch = (byte)(
-                    page.ch < 3 ?
-                    page.ch :
-                    (page.ch < 6 ?
-                        (page.ch - 3) :
-                        (page.ch < 9 ?
-                            (page.ch - 6) :
-                            (page.ch < 12 ?
-                                (page.ch - 9) :
-                                (page.ch < 15 ?
-                                    2 :
-                                    2
-                                )
-                            )
-                        )
-                    )
-                );
-            }
+            //YM2203
+            port = page.port[0];
+            vch = (byte)(page.ch > 2 ? page.ch - 3 : page.ch);
         }
 
         protected void GetPortVchSsg(partPage page, out int port, out int adr, out int vch)
@@ -1227,8 +1189,52 @@ namespace Core
                 ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
 
                 for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
+                {
                     vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
                         = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                    if (isDef)
+                    {
+                        if (!(page.chip is YM2609))
+                        {
+                            if (page.ch == 2 || page.ch == m + 3 || page.ch == m + 4 || page.ch == m + 5)
+                            {
+                                page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[m + 3].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[m + 4].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[m + 5].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                            }
+                        }
+                        else
+                        {
+                            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                            {
+                                page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[12].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[13].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[14].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                            }
+                            if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                            {
+                                page.chip.lstPartWork[8].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[15].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[16].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                page.chip.lstPartWork[17].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                            }
+                        }
+                    }
+                }
             }
 
             if ((page.slots & 1) != 0) page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];

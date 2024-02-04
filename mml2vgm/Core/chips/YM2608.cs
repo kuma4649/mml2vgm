@@ -1158,5 +1158,12 @@ namespace Core
                 , pcm.Item2.status.ToString()
                 );
         }
+
+        protected override void GetPortVch(partPage page, out byte[] port, out int vch)
+        {
+            port = (page.ch > 2 && page.ch < 6) ? page.port[1] : page.port[0];
+            vch = (byte)((page.ch > 2 && page.ch < 6) ? page.ch - 3 : (page.ch < 3 ? page.ch : 2));
+        }
+
     }
 }

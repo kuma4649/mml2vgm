@@ -7,7 +7,7 @@ del /Q .\output\mml2vgm\*.pdb
 xcopy .\mvc\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 
 rem xcopy .\mml2vgmIDE\bin\Release\*.* .\output\mml2vgmIDE /E /R /Y /I /K
-xcopy .\mml2vgmIDEx64\bin\x64\Release\net6.0-windows\*.* .\output\mml2vgmIDEx64 /E /R /Y /I /K
+xcopy .\mml2vgmIDEx64\bin\x64\Release\net8.0-windows7.0\*.* .\output\mml2vgmIDEx64 /E /R /Y /I /K
 copy /Y .\CHANGE.txt .\output
 copy /Y .\IDE.txt .\output
 copy /Y .\Script.txt .\output

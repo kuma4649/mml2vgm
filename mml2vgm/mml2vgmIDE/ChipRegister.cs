@@ -8939,7 +8939,7 @@ namespace mml2vgmIDE
 
                         if (ctSN76489[Chip.Number].UseEmu)
                         {
-                            if (address != 0x100)
+                            if (address != 0x1)
                             {
                                 mds.WriteSN76489(Chip.Index, (byte)Chip.Number, (byte)data);
                             }
@@ -8950,7 +8950,7 @@ namespace mml2vgmIDE
                         }
                         else if (ctSN76489[Chip.Number].UseEmu2)
                         {
-                            if (address != 0x100)
+                            if (address != 0x1)
                             {
                                 mds.WriteSN76496(Chip.Index, (byte)Chip.Number, (byte)data);
                             }
@@ -8985,7 +8985,7 @@ namespace mml2vgmIDE
                         {
                             if (ctSN76489[dat.Chip.Number].UseEmu)
                             {
-                                if (dat.Address != 0x100)
+                                if (dat.Address != 0x1)
                                 {
                                     mds.WriteSN76489(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
                                 }
@@ -8996,7 +8996,7 @@ namespace mml2vgmIDE
                             }
                             else if (ctSN76489[dat.Chip.Number].UseEmu2)
                             {
-                                if (dat.Address != 0x100)
+                                if (dat.Address != 0x1)
                                 {
                                     mds.WriteSN76496(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
                                 }
@@ -9025,7 +9025,7 @@ namespace mml2vgmIDE
 
         public void SN76489SetRegisterGGpanning(outDatum od, long Counter, int ChipID, int dData)
         {
-            enq(od, Counter, SN76489[ChipID], EnmDataType.Normal, 0x100, dData, null);
+            enq(od, Counter, SN76489[ChipID], EnmDataType.Normal, 0x1, dData, null);
 
             //EnmModel model = EnmModel.VirtualModel;
             //if (ctSN76489 == null) return;
@@ -9058,7 +9058,7 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriDCSG = 2;
             else chipLED.SecDCSG = 2;
 
-            if (Address == 0x100)
+            if (Address == 0x1)
             {
                 SN76489RegisterGGPan[Chip.Number] = dData;
                 return;
@@ -9150,6 +9150,17 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xbf, null));
             data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xdf, null));
             data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xff, null));
+            //freq 0
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0x80, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0x00, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xa0, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0x00, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xc0, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0x00, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xe0, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0x00, null));
+            //pan reset
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 1, 0xff, null));
 
             return data;
         }

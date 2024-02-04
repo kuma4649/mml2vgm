@@ -3119,5 +3119,41 @@ namespace Core
             }
         }
 
+        protected override void GetPortVch(partPage page, out byte[] port, out int vch)
+        {
+            port =
+                page.ch < 3 ?
+                page.port[0] :
+                (page.ch < 6 ?
+                    page.port[1] :
+                    (page.ch < 9 ?
+                        page.port[2] :
+                        (page.ch < 12 ?
+                            page.port[3] :
+                            (page.ch < 15 ?
+                                page.port[0] :
+                                page.port[2]
+                            )
+                        )
+                    )
+                );
+            vch = (byte)(
+                page.ch < 3 ?
+                page.ch :
+                (page.ch < 6 ?
+                    (page.ch - 3) :
+                    (page.ch < 9 ?
+                        (page.ch - 6) :
+                        (page.ch < 12 ?
+                            (page.ch - 9) :
+                            (page.ch < 15 ?
+                                2 :
+                                2
+                            )
+                        )
+                    )
+                )
+            );
+        }
     }
 }
