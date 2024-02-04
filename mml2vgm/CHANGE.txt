@@ -1,4 +1,7 @@
 更新履歴
+TAG720 2024/02/04
+  LicenseをGPLに変更
+
 TAG719 2024/02/04
   Core:OPNA,OPNA2,OPNB,OPN2,OPN2X:効果音モード中にTTON(タイトーリリースモード)を使用するとFM4-6のRR/SLの値が破壊されるバグを修正
 
