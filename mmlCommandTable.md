@@ -5,7 +5,7 @@
     例えばループコマンドなど特殊なコマンドのみをサポートする仮想音源です。  
 - YM2612  
     Support type: FM 6Ch  
-- YM2612(XGM)  
+- YM2612(XGM/2)  
     Support type: FM 6Ch  
 - YM2612(Ch3 Ex)  
     Support type: FM Ch3Extend mode  
@@ -135,9 +135,9 @@
     - YM2612(FM)  
     - YM2612X(FM)  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(PCM)  
-    - YM2612X(PCM)  
+    - YM2612X/2(PCM)  
     - RF5C164  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -176,6 +176,7 @@
                             (YMF262のRHYTHMもFM音源の音色テーブルを参照します。)  
     PCM / ADPCM           : PCM音源の音色テーブルを参照します。  
     YM2612X(PCM)          : 最大63色まで定義できます。  
+    YM2612X2(PCM)         : 最大123色まで定義できます。  
     Pulse                 : Duty比の変更  
 
 
@@ -190,7 +191,7 @@
     n : 0 ～ 255  
 - Support chips  
     - (TBD)YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - (TBD)YM2608(ADPCM)  
     - (TBD)HuC6280  
 - Remark  
@@ -216,7 +217,7 @@
          3/省略  AlgorithmとFeedbackの両方を送信
 - Support chips  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2610B(Ch3 Ex)  
     - YM2608(Ch3 Ex)  
     - YM2609(Ch3 Ex)  
@@ -360,9 +361,9 @@
     n : 0 ～ 255  
 - Support chips  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2610B(FM)  
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
@@ -391,9 +392,9 @@
     n : 0 ～ 255  
 - Support chips  
 	- YM2612(FM)  
-	- YM2612X(FM)  
+	- YM2612X/2(FM)  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2610B(FM)  
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
@@ -423,9 +424,9 @@
     n : 0 ～ 255  
 - Support chips  
 	- YM2612(FM)  
-	- YM2612X(FM)  
+	- YM2612X/2(FM)  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2610B(FM)  
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
@@ -456,9 +457,9 @@
     n : 0 ～ 255  
 - Support chips  
 	- YM2612(FM)  
-	- YM2612X(FM)  
+	- YM2612X/2(FM)  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2610B(FM)  
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
@@ -491,11 +492,11 @@
 - Support chips  
 	- Conductor  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2612(6ChPCMmode)  
-	- YM2612X(6ChPCMmode)  
+	- YM2612X/2(6ChPCMmode)  
 	- SN76489  
 	- RF5C164  
 	- YM2610B(FM)  
@@ -565,11 +566,11 @@
 - Support chips  
 	- Conductor  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2612(6ChPCMmode)  
-	- YM2612X(6ChPCMmode)  
+	- YM2612X/2(6ChPCMmode)  
 	- SN76489  
 	- RF5C164  
 	- YM2610B(FM)  
@@ -636,9 +637,9 @@
     n : 2 ～ 5 ( SEGAPCM , C140 )  
 - Support chips  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- SN76489  
 	- RF5C164  
 	- YM2610B(FM)  
@@ -695,9 +696,9 @@
     なし  
 - Support chips  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- SN76489  
 	- RF5C164  
 	- YM2610B(FM)  
@@ -760,9 +761,9 @@
     n : 未チェック  
 - Support chips  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- SN76489  
 	- RF5C164  
 	- YM2610B(FM)  
@@ -824,9 +825,9 @@
     n : 0～256   (F)  
 - Support chips  
 	- YM2612 (A)  
-	- YM2612X (A)  
+	- YM2612X/2 (A)  
 	- YM2612(Ch3 Ex) (A)  
-	- YM2612X(Ch3 Ex) (A)  
+	- YM2612X/2(Ch3 Ex) (A)  
 	- SN76489 (B)  
 	- RF5C164 (D)  
 	- YM2610B(FM) (A)  
@@ -890,9 +891,9 @@
     n : 0～256 (F)  
 - Support chips  
 	- YM2612 (A)  
-	- YM2612X (A)  
+	- YM2612X/2 (A)  
 	- YM2612(Ch3 Ex) (A)  
-	- YM2612X(Ch3 Ex) (A)  
+	- YM2612X/2(Ch3 Ex) (A)  
 	- SN76489 (B)  
 	- RF5C164 (D)  
 	- YM2610B(FM) (A)  
@@ -997,11 +998,11 @@
 - Support chips  
 	- Conductor  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2612(6ChPCMmode)  
-	- YM2612X(6ChPCMmode)  
+	- YM2612X/2(6ChPCMmode)  
 	- SN76489  
 	- RF5C164  
 	- YM2610B(FM)  
@@ -1058,9 +1059,9 @@
 	n1,n2 : 音源ごとに違うがもっぱら0～255の8bit値  
 - Support chips  
 	- YM2612  
-	- YM2612X  
+	- YM2612X/2  
 	- YM2612(Ch3 Ex)  
-	- YM2612X(Ch3 Ex)  
+	- YM2612X/2(Ch3 Ex)  
 	- YM2612(6ChPCMmode)  
 	- SN76489  
 	- RF5C164  
@@ -1142,9 +1143,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1174,9 +1175,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1206,9 +1207,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1238,9 +1239,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1270,9 +1271,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1302,9 +1303,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1334,9 +1335,9 @@
     n2 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1365,9 +1366,9 @@
     n1 : データ。0～255の8bit値  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
@@ -1580,11 +1581,11 @@
 - Support chips  
     - Conductor           未対応  
     - YM2612              T/V/H/Wに対応  
-    - YM2612X             T/V/H/Wに対応  
+    - YM2612X/2             T/V/H/Wに対応  
     - YM2612(Ch3 Ex)      T/V/Hに対応  
-    - YM2612X(Ch3 Ex)     T/V/Hに対応  
+    - YM2612X/2(Ch3 Ex)     T/V/Hに対応  
     - YM2612(Ch6PCMmode)  未対応  
-    - YM2612X(Ch6PCMmode) 未対応  
+    - YM2612X/2(Ch6PCMmode) 未対応  
     - SN76489             T/Vに対応  
     - RF5C164             T/Vに対応  
     - YM2610B(FM)         T/V/H/Wに対応  
@@ -1704,7 +1705,7 @@
     - YM2608(FM)  
     - YM2610B(FM)  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2609(FM)  
 - Remark  
     キーオン時にRRを15にセットするモードを開始/停止  
@@ -1726,7 +1727,7 @@
     - YM2608(FM)  
     - YM2610B(FM)  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2609(FM)  
 - Remark  
     ボリューム設定時、値をTLに送信抑制します  
@@ -1745,9 +1746,9 @@
     n : スイッチ 0/1(0:OFF 1:ON)  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -1805,9 +1806,9 @@
     n : AMS値 音量LFO感度 0 ～ 7  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
@@ -1849,9 +1850,9 @@
     n : PMS値 音程LFO感度 0 ～ 3  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2610B(FM)  
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
@@ -1894,11 +1895,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -1958,11 +1959,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -2026,11 +2027,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -2106,11 +2107,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -2524,7 +2525,7 @@
     n : スロットの番号(1～4)を列挙する。0を指定すると既存動作となる  
 - Support chips  
     - YM2612(FM)  
-    - YM2612X(FM)  
+    - YM2612X/2(FM)  
     - YM2610B(FM)  
     - YM2608(FM)  
     - YM2609(FM)  
@@ -2552,7 +2553,7 @@
     n2 : スロットの番号(1～4)を列挙する  
 - Support chips  
     - YM2612(FM)  
-    - YM2612X(FM)  
+    - YM2612X/2(FM)  
     - YM2610B(FM)  
     - YM2608(FM)  
     - YM2609(FM)  
@@ -2581,7 +2582,7 @@
     n : スロットの番号(1～4)を列挙する  
 - Support chips  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2610B(Ch3 Ex)  
     - YM2608(Ch3 Ex)  
     - YM2609(Ch3 Ex)  
@@ -2607,7 +2608,7 @@
     n1～n4 : slot1～4のデチューン値  
 - Support chips  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2610B(Ch3 Ex)  
     - YM2608(Ch3 Ex)  
     - YM2609(Ch3 Ex)  
@@ -2629,7 +2630,7 @@
     n1～n4 : slot1～4のfnum値(16bit)  
 - Support chips  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2610B(Ch3 Ex)  
     - YM2608(Ch3 Ex)  
     - YM2609(Ch3 Ex)  
@@ -2653,7 +2654,7 @@
     n : スイッチ(0:OFF 1:ON)  
 - Support chips  
     - YM2612(FM Ch)  
-    - YM2612X(FM Ch)  
+    - YM2612X/2(FM Ch)  
     - YM2610B(FM Ch)  
     - YM2608(FM Ch)  
     - YM2609(FM Ch)  
@@ -2674,7 +2675,7 @@
     n1～n4 : ディレイ値  
 - Support chips  
     - YM2612(FM Ch)  
-    - YM2612X(FM Ch)  
+    - YM2612X/2(FM Ch)  
     - YM2610B(FM Ch)  
     - YM2608(FM Ch)  
     - YM2609(FM Ch)  
@@ -2701,11 +2702,11 @@
 - Support chips  
     - Conductor(推奨)  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -2764,11 +2765,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -2830,11 +2831,11 @@
     n : チェックなし  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -2896,11 +2897,11 @@
     n : 1 ～ 8  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -3059,17 +3060,17 @@
     n : 0 ～ 1  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - HuC6280  
 - Remark  
     PCMモードスイッチ  
 - Description  
     PCMモードスイッチ  
-    YM2612,YM2612XはCh6だけ。  
+    YM2612,YM2612X/2はCh6だけ。  
     HuC6280はチャンネルごとに指定可能です。  
     0:OFF  
     1:ON  
@@ -3086,12 +3087,12 @@
 - 設定可能範囲  
     無し
 - Support chips  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
 - Remark  
     PCMマッピングモードスイッチ  
 - Description  
     PCMマッピングモードスイッチ  
-    YM2612XのPCMChごとに指定可能です。  
+    YM2612X/2のPCMChごとに指定可能です。  
     mof:OFF  
     mon:ON  
 	このモードを有効にすると音符コマンドごとに音色を切り替えるようになります。  
@@ -3131,11 +3132,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -3194,11 +3195,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -3257,11 +3258,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -3320,9 +3321,9 @@
     n : -12 ～ 12  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -3409,9 +3410,9 @@
     n : 0 ～ 32 (0～32: 右～左  15: 中央) (C)  
 - Support chips  
     - YM2612 (A)  
-    - YM2612X (A)  
+    - YM2612X/2 (A)  
     - YM2612(6ChPCMmode) (A)  
-    - YM2612X(6ChPCMmode) (A)  
+    - YM2612X/2(6ChPCMmode) (A)  
     - YM2610B(FM) (A)  
     - YM2610B(ADPCM-A) (A)  
     - YM2610B(ADPCM-B) (A)  
@@ -4327,11 +4328,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -4390,11 +4391,11 @@
 - Support chips  
     - Conductor  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  
@@ -4458,11 +4459,11 @@
     次項で説明  
 - Support chips  
     - YM2612  
-    - YM2612X  
+    - YM2612X/2  
     - YM2612(Ch3 Ex)  
-    - YM2612X(Ch3 Ex)  
+    - YM2612X/2(Ch3 Ex)  
     - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
+    - YM2612X/2(6ChPCMmode)  
     - SN76489  
     - RF5C164  
     - YM2610B(FM)  

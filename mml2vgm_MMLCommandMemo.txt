@@ -134,7 +134,7 @@
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
            ・16bit,signedも読み込めるが8bit,unsignedに変換される。(TBD)
            ・8KHz固定で再生される。
-         YM2612(XGM)
+         YM2612(XGM/2)
            ・PCMは14KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
            ・16bit,signedも読み込めるが8bit,signedに変換される。(TBD)
            ・14KHz固定で再生される。
@@ -276,6 +276,7 @@
   CONDUCTOR CON    Cn                    -    2Ch(mml2vgm動作指示向け特殊音源)
   YM2612    OPN2   F               7670454    9Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
   YM2612X   OPN2X  E               7670454   24Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch PCM(overlay):12Ch)
+  YM2612X2  OPN2X2 E               7670454   24Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:3Ch PCM(overlay):12Ch)
   SN76489   DCSG   S               3579545    4Ch(PSG  :  4Ch)
   RF5C164   RF5C   R              12500000    8Ch(PCM  :  8Ch)
   YM2203    OPN    N               3993600    9Ch(FM   :  3Ch  FMex: 3Ch  SSG :  3Ch)
@@ -319,30 +320,30 @@
   F7     YM2612(FM音源)(Primary)         CH3Ex1
   F8     YM2612(FM音源)(Primary)         CH3Ex2
   F9     YM2612(FM音源)(Primary)         CH3Ex3
-  E01    YM2612(FM音源)(XGM Only)        CH1
-  E02    YM2612(FM音源)(XGM Only)        CH2
-  E03    YM2612(FM音源)(XGM Only)        CH3/CH3Ex0
-  E04    YM2612(FM音源)(XGM Only)        CH4
-  E05    YM2612(FM音源)(XGM Only)        CH5
-  E06    YM2612(FM音源)(XGM Only)        CH6/CH6PCM0(pcm ch1)
-  E07    YM2612(FM音源)(XGM Only)        CH3Ex1
-  E08    YM2612(FM音源)(XGM Only)        CH3Ex2
-  E09    YM2612(FM音源)(XGM Only)        CH3Ex3
-  E10    YM2612(FM音源)(XGM Only)        CH6PCM1(pcm ch2)
-  E11    YM2612(FM音源)(XGM Only)        CH6PCM2(pcm ch3)
-  E12    YM2612(FM音源)(XGM Only)        CH6PCM3(pcm ch4)
-  E13    YM2612(FM音源)(XGM Only)        CH6PCM4(pcm overlay ch1)
-  E14    YM2612(FM音源)(XGM Only)        CH6PCM5(pcm overlay ch2)
-  E15    YM2612(FM音源)(XGM Only)        CH6PCM6(pcm overlay ch3)
-  E16    YM2612(FM音源)(XGM Only)        CH6PCM7(pcm overlay ch4)
-  E17    YM2612(FM音源)(XGM Only)        CH6PCM8(pcm overlay ch1)
-  E18    YM2612(FM音源)(XGM Only)        CH6PCM9(pcm overlay ch2)
-  E19    YM2612(FM音源)(XGM Only)        CH6PCM10(pcm overlay ch3)
-  E20    YM2612(FM音源)(XGM Only)        CH6PCM11(pcm overlay ch4)
-  E21    YM2612(FM音源)(XGM Only)        CH6PCM12(pcm overlay ch1)
-  E22    YM2612(FM音源)(XGM Only)        CH6PCM13(pcm overlay ch2)
-  E23    YM2612(FM音源)(XGM Only)        CH6PCM14(pcm overlay ch3)
-  E24    YM2612(FM音源)(XGM Only)        CH6PCM15(pcm overlay ch4)
+  E01    YM2612(FM音源)(XGM/2 Only)        CH1
+  E02    YM2612(FM音源)(XGM/2 Only)        CH2
+  E03    YM2612(FM音源)(XGM/2 Only)        CH3/CH3Ex0
+  E04    YM2612(FM音源)(XGM/2 Only)        CH4
+  E05    YM2612(FM音源)(XGM/2 Only)        CH5
+  E06    YM2612(FM音源)(XGM/2 Only)        CH6/CH6PCM0(pcm ch1)
+  E07    YM2612(FM音源)(XGM/2 Only)        CH3Ex1
+  E08    YM2612(FM音源)(XGM/2 Only)        CH3Ex2
+  E09    YM2612(FM音源)(XGM/2 Only)        CH3Ex3
+  E10    YM2612(FM音源)(XGM/2 Only)        CH6PCM1(pcm ch2)
+  E11    YM2612(FM音源)(XGM/2 Only)        CH6PCM2(pcm ch3)
+  E12    YM2612(FM音源)(XGM   Only)        CH6PCM3(pcm ch4)
+  E13    YM2612(FM音源)(XGM/2 Only)        CH6PCM4(pcm overlay ch1)
+  E14    YM2612(FM音源)(XGM/2 Only)        CH6PCM5(pcm overlay ch2)
+  E15    YM2612(FM音源)(XGM/2 Only)        CH6PCM6(pcm overlay ch3)
+  E16    YM2612(FM音源)(XGM   Only)        CH6PCM7(pcm overlay ch4)
+  E17    YM2612(FM音源)(XGM/2 Only)        CH6PCM8(pcm overlay ch1)
+  E18    YM2612(FM音源)(XGM/2 Only)        CH6PCM9(pcm overlay ch2)
+  E19    YM2612(FM音源)(XGM/2 Only)        CH6PCM10(pcm overlay ch3)
+  E20    YM2612(FM音源)(XGM   Only)        CH6PCM11(pcm overlay ch4)
+  E21    YM2612(FM音源)(XGM/2 Only)        CH6PCM12(pcm overlay ch1)
+  E22    YM2612(FM音源)(XGM/2 Only)        CH6PCM13(pcm overlay ch2)
+  E23    YM2612(FM音源)(XGM/2 Only)        CH6PCM14(pcm overlay ch3)
+  E24    YM2612(FM音源)(XGM   Only)        CH6PCM15(pcm overlay ch4)
   S1     SN76489(SSG音源)(Primary/XGM)   CH1
   S2     SN76489(SSG音源)(Primary/XGM)   CH2
   S3     SN76489(SSG音源)(Primary/XGM)   CH3
@@ -667,9 +668,9 @@
  凡例
   Co Conductor
   Ff YM2612 / YM2612(XGM)
-  Fe YM2612(3ChEx) / YM2612(3ChEx)(XGM)
+  Fe YM2612(3ChEx) / YM2612(3ChEx)(XGM/2)
   Fp YM2612(6ChPCMmode)
-  Ep YM2612(6ChPCMmode)(XGM)
+  Ep YM2612(6ChPCMmode)(XGM/2)
   S  SN76489
   R  RF5C164
   Tf YM2610B(FM)
@@ -1298,6 +1299,9 @@ FMOF            --------------------------------------------------o---  FDS モ�
                 YM2612X : 36をo4cとして0～72の範囲で音程を変換し定義する。
                           73以上を指定すると14000を既定の周波数として音程を変換し定義する。
                           この機能を利用するにはSoXが必要。
+                YM2612X2: 36をo4cとして0～72の範囲で音程を変換し定義する。
+                          73以上を指定すると14000を既定の周波数として音程を変換し定義する。
+                          この機能を利用するにはSoXが必要。
                 YM2609  : 0,1,2,3がそれぞれADPCM1,2,3,Aとして定義される
                 Y8950   : bit0が0の場合 ROMとして定義する
                           bit0が1の場合 RAMとして定義する(TBD)
@@ -1307,7 +1311,7 @@ FMOF            --------------------------------------------------o---  FDS モ�
     Bankの機能が存在するChipの場合は、パディングなどを行いその制約に沿った配置を行う。
     また、音色定義も合わせて行われ、加工後のデータを基準にStartAdr、EndAdrが設定される。
 
-    YM2612X(XGM)で使用するSoXについて
+    YM2612X/2(XGM/2)で使用するSoXについて
       SoXはコマンドラインによるPCMデータ変換ツール。
       SoX
         ホームページ
@@ -1387,7 +1391,7 @@ FMOF            --------------------------------------------------o---  FDS モ�
     Octave      オクターブ(1-8)
     Note        ノート番号(0-11) 0:c 1:c+ ... 10:a+ 11:b
     No...       定義番号(0-62) カンマ区切りで半音ごとに複数定義可能です。
-    XGM専用コマンド。指定のノートにPCMを割り当てます。同じ音程の定義は上書きされます。
+    XGM/2専用コマンド。指定のノートにPCMを割り当てます。同じ音程の定義は上書きされます。
 
   PCM使用可能音源毎のコマンド対応表
                                          PPPP                         
@@ -1397,6 +1401,7 @@ FMOF            --------------------------------------------------o---  FDS モ�
   SN76489Secondary DCSGSecondary         o--T 不可     不可       
   YM2612           OPN2                  o--T 不可     不可       
   YM2612X          OPN2X                 o--o 不可     不可       XGM専用
+  YM2612X2         OPN2X2                o--o 不可     不可       XGM2専用
   RF5C164          RF5C                  ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
   RF5C164Secondary RF5CSecondary         ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
   YM2608           OPNA          ADPCM   ooo- 可       不可       
@@ -1750,6 +1755,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartSegaPCM                     =Z
           PartHuC6280                     =H
           PartYM2612X                     =E(XGM専用)
+          PartYM2612X2                    =E(XGM2専用)
           PartC140                        =Y
           PartC352                        =G
           PartAY8910                      =A
@@ -1787,11 +1793,12 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           (T.B.D.)PartOKIM6295Secondary   =
 
     ファイル形式指定
-      Format                  =VGM|XGM|ZGM
+      Format                  =VGM|XGM|XGM2|ZGM
         出力するファイル形式を指定する。
         VGM  デフォルト。VGM形式。多彩な音源を扱えるフォーマット
-        XGM  XGM形式。MegaDrive(Genesis)向けフォーマット。ソフトウェアによる4chPCM再生が強力。
-        ZGM  ZGM形式。VGM形式を拡張し、仮想音源、MIDIやWAV(TBD)も扱えるフォーマット
+        XGM  XGM形式。 MegaDrive(Genesis)向けフォーマット。ソフトウェアによる4chPCM再生が強力。
+        XGM2 XGM2形式。MegaDrive(Genesis)向けフォーマット。ソフトウェアによる3chPCM再生が強力。
+        ZGM  ZGM形式。 VGM形式を拡張し、仮想音源、MIDIやWAV(TBD)も扱えるフォーマット
     
     分解能指定
       ClockCount              =クロックカウント値
