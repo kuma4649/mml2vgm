@@ -146,6 +146,9 @@ I04022=Write TraceInfo(.ti) file.
 I04023= Start ZGM_GetByteData
 I04024= End   ZGM_GetByteData
 I04025=Write ZGM file.
+I04026= Start XGM2_GetByteData
+I04027= End   XGM2_GetByteData
+I04028=Write XGM2 file.
 
 E04000=File not found.
 E04001=Unexpected Error: Failed to get source file.
@@ -500,5 +503,8 @@ E32003=Parameters number exceeded to setup LFO.
 E32004=Selecting undefined sound patch ({0}).
 
 
+;YM2612X2.cs 33000
+E33000=Sound patch does not exist as PCM definition({0}).
+E33001=Selected Tone number({0}) is not for YM2612-XGM2 PCM data.
 
 

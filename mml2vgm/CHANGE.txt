@@ -1,4 +1,7 @@
 更新履歴
+TAG721 2024/02/29
+  Core,IDE:XGM2を追加。
+
 TAG720 2024/02/04
   LicenseをGPLに変更
 

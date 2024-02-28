@@ -146,7 +146,7 @@ namespace Core
         }
 
 
-        public void OutSetCh6PCMMode(MML mml, partPage page, bool sw)
+        public virtual void OutSetCh6PCMMode(MML mml, partPage page, bool sw)
         {
             SOutData(
                 page,

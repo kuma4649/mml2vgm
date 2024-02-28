@@ -191,6 +191,19 @@ namespace mml2vgmIDE
             return dat;
         }
 
+        public static UInt32 getBE16(outDatum[] buf, UInt32 adr)
+        {
+            if (buf == null || buf.Length - 1 < adr + 1)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            UInt32 dat;
+            dat = (UInt32)buf[adr].val * 0x100 + (UInt32)buf[adr + 1].val;
+
+            return dat;
+        }
+
         public static UInt32 getLE16(byte[] buf, UInt32 adr)
         {
             if (buf == null || buf.Length - 1 < adr + 1)

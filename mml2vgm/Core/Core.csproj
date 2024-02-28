@@ -70,11 +70,13 @@
     <Compile Include="chips\QSound.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
+    <Compile Include="chips\SN76489X2.cs" />
     <Compile Include="chips\SN76489.cs" />
     <Compile Include="chips\VRC6.cs" />
     <Compile Include="chips\Y8950.cs" />
     <Compile Include="chips\YM2151.cs" />
     <Compile Include="chips\YM2203.cs" />
+    <Compile Include="chips\YM2612X2.cs" />
     <Compile Include="chips\YM3526.cs" />
     <Compile Include="chips\YM3812.cs" />
     <Compile Include="chips\YMF262.cs" />
@@ -110,10 +112,14 @@
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceParser.cs" />
+    <Compile Include="XGM2maker.cs" />
     <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fnum\FNUM_Gigatron.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_SN76489X2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_VRC6.txt">
@@ -141,6 +147,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_Y8950.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_YM2612X2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YM3526.txt">

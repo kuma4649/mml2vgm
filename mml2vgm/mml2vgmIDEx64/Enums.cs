@@ -157,7 +157,8 @@
         MUB = 16,
         MUC = 17,
         ZGM = 18,
-        M = 19
+        M = 19,
+        XGM2 = 20,
     }
 
     public enum EnmMmlFileFormat : int

@@ -613,7 +613,7 @@ namespace Core
             return hsFnumTbl[f];
         }
 
-        public void OutOPNSetPanAMSPMS(MML mml, partPage page, int pan, int ams, int pms)
+        public virtual void OutOPNSetPanAMSPMS(MML mml, partPage page, int pan, int ams, int pms)
         {
             //TODO: 効果音パートで指定されている場合の考慮不足
             int vch;
@@ -631,7 +631,7 @@ namespace Core
             SOutData(page, mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + pms));
         }
 
-        public void OutOPNSetHardLfo(MML mml, partPage page, bool sw, int lfoNum)
+        public virtual void OutOPNSetHardLfo(MML mml, partPage page, bool sw, int lfoNum)
         {
             SOutData(page,
                 mml,
@@ -641,7 +641,7 @@ namespace Core
                 );
         }
 
-        public void OutOPNSetCh3SpecialMode(MML mml, partPage page, bool sw)
+        public virtual void OutOPNSetCh3SpecialMode(MML mml, partPage page, bool sw)
         {
             byte[] port = page.port[0];
             if (page.chip.chipType == enmChipType.YM2609)
@@ -685,7 +685,7 @@ namespace Core
             SOutData(page, mml, port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
         }
 
-        public void OutFmSetTl(MML mml, partPage page, int ope, int tl)
+        public virtual void OutFmSetTl(MML mml, partPage page, int ope, int tl)
         {
             int vch;
             byte[] port;
@@ -1175,62 +1175,143 @@ namespace Core
                     break;
             }
 
-
-            for (int ope = 0; ope < 4; ope++)
+            if (!(page.chip is YM2612X2))
             {
-                //ch3以外の拡張チャンネルであってもUMopが未指定の場合はそのまま設定する
-                if (!isDef && (UMop & (1 << ope)) == 0) continue;
-
-                ((ClsOPN)page.chip).OutFmSetDtMl(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                ((ClsOPN)page.chip).OutFmSetAmDr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
-                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
-
-                for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
+                for (int ope = 0; ope < 4; ope++)
                 {
-                    vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                        = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                    if (isDef)
+                    //ch3以外の拡張チャンネルであってもUMopが未指定の場合はそのまま設定する
+                    if (!isDef && (UMop & (1 << ope)) == 0) continue;
+
+                    ((ClsOPN)page.chip).OutFmSetDtMl(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                    ((ClsOPN)page.chip).OutFmSetAmDr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                    ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                    ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+
+                    for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
                     {
-                        if (!(page.chip is YM2609))
+                        vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                            = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                        if (isDef)
                         {
-                            if (page.ch == 2 || page.ch == m + 3 || page.ch == m + 4 || page.ch == m + 5)
+                            if (!(page.chip is YM2609))
                             {
-                                page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[m + 3].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[m + 4].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[m + 5].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                if (page.ch == 2 || page.ch == m + 3 || page.ch == m + 4 || page.ch == m + 5)
+                                {
+                                    page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 3].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 4].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 5].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                }
+                            }
+                            else
+                            {
+                                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                                {
+                                    page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[12].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[13].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[14].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                }
+                                if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                                {
+                                    page.chip.lstPartWork[8].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[15].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[16].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[17].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                }
                             }
                         }
-                        else
+                    }
+                }
+            }
+            else
+            {
+                byte mm = 0;
+                for (int ope = 0; ope < 4; ope++)
+                {
+                    if (!isDef && (UMop & (1 << ope)) == 0) continue;
+                    mm |= (byte)(1 << ope);
+                }
+
+                if (mm == 15)
+                {
+                    ((YM2612X2)page.chip).OutFmSetInstrumentBox(page,mml,n);
+                    page.beforeTL[0] = -1;
+                    page.beforeTL[1] = -1;
+                    page.beforeTL[2] = -1;
+                    page.beforeTL[3] = -1;
+
+                    for (int ope = 0; ope < 4; ope++)
+                    {
+                        //ch3以外の拡張チャンネルであってもUMopが未指定の場合はそのまま設定する
+                        if (!isDef && (UMop & (1 << ope)) == 0) continue;
+
+                        for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
                         {
-                            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                            vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                            if (isDef)
                             {
-                                page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[12].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[13].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[14].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                if (page.ch == 2 || page.ch == m + 3 || page.ch == m + 4 || page.ch == m + 5)
+                                {
+                                    page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 3].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 4].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 5].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                }
                             }
-                            if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                        }
+                    }
+                }
+                else
+                {
+                    for (int ope = 0; ope < 4; ope++)
+                    {
+                        //ch3以外の拡張チャンネルであってもUMopが未指定の場合はそのまま設定する
+                        if (!isDef && (UMop & (1 << ope)) == 0) continue;
+
+                        ((ClsOPN)page.chip).OutFmSetDtMl(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                        ((ClsOPN)page.chip).OutFmSetKsAr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                        ((ClsOPN)page.chip).OutFmSetAmDr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                        ((ClsOPN)page.chip).OutFmSetSr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                        ((ClsOPN)page.chip).OutFmSetSlRr(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                        ((ClsOPN)page.chip).OutFmSetSSGEG(mml, vpg, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+
+                        for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
+                        {
+                            vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                            if (isDef)
                             {
-                                page.chip.lstPartWork[8].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[15].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[16].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
-                                page.chip.lstPartWork[17].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i] 
-                                = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                if (page.ch == 2 || page.ch == m + 3 || page.ch == m + 4 || page.ch == m + 5)
+                                {
+                                    page.chip.lstPartWork[2].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 3].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 4].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                    page.chip.lstPartWork[m + 5].cpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                                    = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
+                                }
                             }
                         }
                     }
@@ -1328,7 +1409,7 @@ namespace Core
 
         }
 
-        public void OutFmKeyOff(partPage page, MML mml)
+        public virtual void OutFmKeyOff(partPage page, MML mml)
         {
             int n = (page.chip is YM2203) ? 0 : 3;
 
@@ -1698,7 +1779,7 @@ namespace Core
             }
         }
 
-        public void OutFmKeyOn(partPage page, MML mml)
+        public virtual void OutFmKeyOn(partPage page, MML mml)
         {
             SetDummyData(page, mml);
 

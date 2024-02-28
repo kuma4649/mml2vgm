@@ -74,7 +74,7 @@ namespace Core
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //歌詞
-            if (lyric != "")
+            if (!string.IsNullOrEmpty(lyric))
             {
                 foreach (byte b in Encoding.Unicode.GetBytes(lyric)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
                 dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));

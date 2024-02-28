@@ -2352,6 +2352,11 @@ namespace mml2vgmIDE
                     //XGM
                     InitPlayer(EnmFileFormat.XGM, mv.desBuf, mv.desVGM.jumpPointClock);
                 }
+                else if (mv.desVGM.info.format == enmFormat.XGM2)
+                {
+                    //XGM2
+                    InitPlayer(EnmFileFormat.XGM2, mv.desBuf, mv.desVGM.jumpPointClock);
+                }
                 else
                 {
                     //ZGM
@@ -3302,6 +3307,23 @@ namespace mml2vgmIDE
                 {
                     foreach (outDatum od in srcBuf)
                     {
+                        if(format== EnmFileFormat.XGM2)
+                        {
+                            if (od.type == enmMMLType.IDE && od.args.Count > 0 && od.args[0] is outDatum)
+                            {
+                                ;
+                                foreach(outDatum od2 in od.args)
+                                {
+                                    if (od2.linePos == null) continue;
+                                    //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
+                                    if (d != null && d.editor == od2.linePos.document)//d.gwiFullPath == od.linePos.srcMMLID)
+                                        od2.linePos.col = ac.GetCharIndexFromLineColumnIndex(od2.linePos.row, od2.linePos.col);
+                                    else
+                                        od2.linePos = null;
+                                }
+                            }
+                        }
+
                         if (od.linePos == null) continue;
                         //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
                         if (d != null && d.editor == od.linePos.document)//d.gwiFullPath == od.linePos.srcMMLID)
@@ -3345,18 +3367,22 @@ namespace mml2vgmIDE
                         format == EnmFileFormat.XGM
                         ? EnmMmlFileFormat.GWI
                         : (
-                            format == EnmFileFormat.ZGM
+                            format == EnmFileFormat.XGM2
                             ? EnmMmlFileFormat.GWI
                             : (
-                                format == EnmFileFormat.MUB
-                                ? EnmMmlFileFormat.MUC
+                                format == EnmFileFormat.ZGM
+                                ? EnmMmlFileFormat.GWI
                                 : (
-                                    format == EnmFileFormat.MUC
+                                    format == EnmFileFormat.MUB
                                     ? EnmMmlFileFormat.MUC
                                     : (
-                                        format == EnmFileFormat.M
-                                        ? EnmMmlFileFormat.MML
-                                        : EnmMmlFileFormat.unknown
+                                        format == EnmFileFormat.MUC
+                                        ? EnmMmlFileFormat.MUC
+                                        : (
+                                            format == EnmFileFormat.M
+                                            ? EnmMmlFileFormat.MML
+                                            : EnmMmlFileFormat.unknown
+                                            )
                                         )
                                     )
                                 )
@@ -4847,12 +4873,14 @@ namespace mml2vgmIDE
                         , "temp"
                         , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath))
                             + (FileInformation.format == enmFormat.VGM ? ".vgm"
-                                : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
+                                : (FileInformation.format == enmFormat.XGM ? ".xgm" 
+                                : (FileInformation.format == enmFormat.XGM2 ? ".xgm" : ".zgm")))
                         );
                     buf.AddRange(File.ReadAllBytes(sf));
                     outFn = Path.ChangeExtension(d.gwiFullPath,
                         (FileInformation.format == enmFormat.VGM ? ".vgm"
-                                : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm")));
+                                : (FileInformation.format == enmFormat.XGM ? ".xgm" 
+                                : (FileInformation.format == enmFormat.XGM2 ? ".xgm" : ".zgm"))));
                 }
 
             }
@@ -5052,12 +5080,13 @@ namespace mml2vgmIDE
             {
                 fn = fn.Substring(0, fn.Length - 1);
             }
-            sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
+            sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" 
+                : ((FileInformation.format == enmFormat.XGM|| FileInformation.format == enmFormat.XGM2) ? ".xgm" : ".zgm"));
             string path1 = System.IO.Path.GetDirectoryName(fn);
             path1 = string.IsNullOrEmpty(path1) ? fn : path1;
             sfd.InitialDirectory = path1;
             sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
-            if (FileInformation.format == enmFormat.XGM)
+            if (FileInformation.format == enmFormat.XGM|| FileInformation.format == enmFormat.XGM2)
             {
                 sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
             }
@@ -5080,7 +5109,8 @@ namespace mml2vgmIDE
             string sf = Path.Combine(
                 Common.GetApplicationDataFolder(true)
                 , "temp"
-                , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
+                , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" 
+                : ((FileInformation.format == enmFormat.XGM|| FileInformation.format == enmFormat.XGM2) ? ".xgm" : ".zgm"))
                 );
             File.Copy(sf, fn, File.Exists(fn));
 

@@ -21,10 +21,12 @@ namespace Core
         public YM2610B[] ym2610b = null;
         public YM2612[] ym2612 = null;
         public SN76489[] sn76489 = null;
+        public SN76489X2[] sn76489x2 = null;
         public RF5C164[] rf5c164 = null;
         public segaPcm[] segapcm = null;
         public HuC6280[] huc6280 = null;
         public YM2612X[] ym2612x = null;
+        public YM2612X2[] ym2612x2 = null;
         public YM2413[] ym2413 = null;
         public YM3526[] ym3526 = null;
         public Y8950[] y8950 = null;
@@ -246,6 +248,20 @@ namespace Core
                 chips.Add(enmChipType.SN76489, sn76489);
             }
 
+            List<SN76489X2> lstSN76489X2 = new List<SN76489X2>();
+            n = sp.dicChipPartName[enmChipType.SN76489X2];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstSN76489X2.Add(new SN76489X2(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstSN76489X2.Count > 0)
+            {
+                sn76489x2 = lstSN76489X2.ToArray();
+                chips.Add(enmChipType.SN76489X2, sn76489x2);
+            }
+
             List<RF5C164> lstRF5C164 = new List<RF5C164>();
             n = sp.dicChipPartName[enmChipType.RF5C164];
             for (int i = 0; i < n.Item3.Count; i++)
@@ -300,6 +316,20 @@ namespace Core
             {
                 ym2612x = lstYM2612X.ToArray();
                 chips.Add(enmChipType.YM2612X, ym2612x);
+            }
+
+            List<YM2612X2> lstYM2612X2 = new List<YM2612X2>();
+            n = sp.dicChipPartName[enmChipType.YM2612X2];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2612X2.Add(new YM2612X2(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2612X2.Count > 0)
+            {
+                ym2612x2 = lstYM2612X2.ToArray();
+                chips.Add(enmChipType.YM2612X2, ym2612x2);
             }
 
             List<YM2413> lstYM2413 = new List<YM2413>();
@@ -1426,6 +1456,14 @@ namespace Core
                     return;
                 }
             }
+            else if (info.format == enmFormat.XGM2)
+            {
+                if (enmChip != enmChipType.YM2612X2)
+                {
+                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
+                    return;
+                }
+            }
 
             int opt = -1;
 
@@ -1451,6 +1489,9 @@ namespace Core
                     opt = 0;
 
                 if (enmChip == enmChipType.YM2612X)
+                    opt = 36;
+
+                if (enmChip == enmChipType.YM2612X2)
                     opt = 36;
             }
 
@@ -3765,20 +3806,30 @@ namespace Core
 
                 if (!doJumping)
                 {
-                    lClock += waitCounter;
-                    dSample += (long)(info.samplesPerClock * waitCounter);
-                    bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
-                    dSample += (long)bSample;
-                    bSample -= (long)bSample;
-
-                    bool flg = false;
-                    if (ym2612 != null && ym2612[0] != null)
+                    if (info.format == enmFormat.XGM2)
                     {
-                        if (ym2612[0].lstPartWork[5].cpg.pcmWaitKeyOnCounter > 0) flg = true;
+                        lClock += waitCounter;
+                        bSample += info.samplesPerClock * waitCounter;
+                        OutWaitNSamples((long)bSample);
+                        dSample += (long)bSample;
+                        bSample -= (long)bSample;
                     }
+                    else
+                    {
+                        lClock += waitCounter;
+                        dSample += (long)(info.samplesPerClock * waitCounter);
+                        bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
+                        dSample += (long)bSample;
+                        bSample -= (long)bSample;
 
-                    if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
-                    else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                        bool flg = false;
+                        if (ym2612 != null && ym2612[0] != null)
+                        {
+                            if (ym2612[0].lstPartWork[5].cpg.pcmWaitKeyOnCounter > 0) flg = true;
+                        }
+                        if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
+                        else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                    }
                 }
 
             }

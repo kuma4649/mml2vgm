@@ -135,7 +135,7 @@ namespace Core
                 }
 
 
-                if (desVGM.info.format != enmFormat.ZGM)
+                if (desVGM.info.format == enmFormat.VGM || desVGM.info.format == enmFormat.XGM)
                 {
                     switch (desVGM.info.format)
                     {
@@ -171,6 +171,31 @@ namespace Core
                             OutVgmFile(desBuf);
                         else
                             OutXgmFile(desBuf);
+                    }
+
+                }
+                else if (desVGM.info.format == enmFormat.XGM2)
+                {
+
+                    Disp(msg.get("I04026"));
+                    XGM2maker xmake = new XGM2maker();
+                    desVGM.jumpPointClock = -1;
+                    desVGM.jumpChannels = new List<Tuple<enmChipType, int>>();
+                    desBuf = xmake.Build(desVGM, outVgmFile, writeFileMode);
+                    Disp(msg.get("I04027"));
+
+                    if (desBuf == null)
+                    {
+                        msgBox.setErrMsg(string.Format(
+                            msg.get("E04004")
+                            , desVGM.linePos.row), desVGM.linePos);
+                        return -1;
+                    }
+
+                    if (outVgmFile && writeFileMode)
+                    {
+                        Disp(msg.get("I04028"));
+                        xmake.OutFile(desBuf, desFn);
                     }
 
                 }
@@ -665,7 +690,7 @@ namespace Core
             //mml2vgmGUIからキャッシュを使う指示有りの場合は強制的に有効にする
             if (usePCMCacheFromGUI) desVGM.info.usePcmCache = true;
 
-            if (desVGM.info.usePcmCache && desVGM.info.format == enmFormat.XGM)
+            if (desVGM.info.usePcmCache && (desVGM.info.format == enmFormat.XGM|| desVGM.info.format == enmFormat.XGM2))
             {
                 try
                 {
@@ -712,7 +737,7 @@ namespace Core
                             , 8000);
                         desVGM.instPCM.Add(pds.No, new Tuple<string, clsPcm>("", v));
 
-                        if ((desVGM.info.format == enmFormat.XGM && desVGM.pcmCache == null)
+                        if (((desVGM.info.format == enmFormat.XGM|| desVGM.info.format == enmFormat.XGM2) && desVGM.pcmCache == null)
                             || desVGM.info.format != enmFormat.XGM)
                         {
                             //ファイルの読み込み
@@ -726,7 +751,7 @@ namespace Core
                             }
 
                             //pitch変換
-                            if (desVGM.info.format == enmFormat.XGM)
+                            if (desVGM.info.format == enmFormat.XGM || desVGM.info.format == enmFormat.XGM2)
                             {
                                 int fFreq = (int)pds.DatLoopAdr;
                                 //SOXで変換する
@@ -735,7 +760,7 @@ namespace Core
                                 v.freq = fFreq;
                             }
 
-                            if (desVGM.info.format == enmFormat.XGM && v.chipNumber != 0)
+                            if ((desVGM.info.format == enmFormat.XGM|| desVGM.info.format == enmFormat.XGM2) && v.chipNumber != 0)
                             {
                                 msgBox.setErrMsg(string.Format(
                                     msg.get("E01017")

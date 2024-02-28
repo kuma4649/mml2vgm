@@ -10,7 +10,7 @@ namespace Core
     public static class log
     {
         public static string path = "";
-        public static bool debug = false;
+        public static bool debug = true;
         public static StreamWriter writer;
         private static object locker = new object();
 

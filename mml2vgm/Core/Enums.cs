@@ -4,6 +4,7 @@
     {
         VGM,
         XGM,
+        XGM2,
         ZGM
     }
 
@@ -66,7 +67,9 @@
         NES = 25,
         DMG = 26,
         VRC6 = 27,
-        Gigatron=28
+        Gigatron=28,
+        YM2612X2 = 29,
+        SN76489X2 = 30,
     }
 
     public enum EnmZGMDevice : int

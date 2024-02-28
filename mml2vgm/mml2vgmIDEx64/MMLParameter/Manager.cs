@@ -25,6 +25,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> RF5C164 = new List<Instrument>();
         public List<Instrument> SegaPCM = new List<Instrument>();
         public List<Instrument> SN76489 = new List<Instrument>();
+        public List<Instrument> SN76489X2 = new List<Instrument>();
         public List<Instrument> Y8950 = new List<Instrument>();
         public List<Instrument> YM2151 = new List<Instrument>();
         public List<Instrument> YM2203 = new List<Instrument>();
@@ -34,6 +35,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM2610B = new List<Instrument>();
         public List<Instrument> YM2612 = new List<Instrument>();
         public List<Instrument> YM2612X = new List<Instrument>();
+        public List<Instrument> YM2612X2 = new List<Instrument>();
         public List<Instrument> YM3526 = new List<Instrument>();
         public List<Instrument> YM3812 = new List<Instrument>();
         public List<Instrument> YMF262 = new List<Instrument>();
@@ -83,6 +85,7 @@ namespace mml2vgmIDE.MMLParameter
             YM2610B.Clear();
             YM2612.Clear();
             YM2612X.Clear();
+            YM2612X2.Clear();
             PPZ8.Clear();
             VRC6.Clear();
             Gigatron.Clear();
@@ -203,6 +206,9 @@ namespace mml2vgmIDE.MMLParameter
                 case "SN76489":
                     SetupSN76489(od);
                     break;
+                case "SN76489X2":
+                    SetupSN76489X2(od);
+                    break;
                 case "YM2151":
                     SetupYM2151(od);
                     break;
@@ -244,6 +250,9 @@ namespace mml2vgmIDE.MMLParameter
                     break;
                 case "YM2612X":
                     SetupYM2612X(od);
+                    break;
+                case "YM2612X2":
+                    SetupYM2612X2(od);
                     break;
                 case "GeneralMIDI":
                     SetupGeneralMIDI(od);
@@ -535,6 +544,28 @@ namespace mml2vgmIDE.MMLParameter
             }
             YM2612X opn2x = new YM2612X(chip, setting, midiKbd);
             YM2612X.Add(opn2x);
+            dicInstAdd(opn2x, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(opn2x, od.linePos.chipIndex, od.linePos.chipNumber);
+            opn2x.isTrace = isTrace;
+        }
+
+        private void SetupYM2612X2(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.YM2612 != null
+                && od.linePos.chipIndex < Audio.chipRegister.YM2612.Count)
+            {
+                chip = Audio.chipRegister.YM2612[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2612[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            YM2612X2 opn2x = new YM2612X2(chip, setting, midiKbd);
+            YM2612X2.Add(opn2x);
             dicInstAdd(opn2x, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(opn2x, od.linePos.chipIndex, od.linePos.chipNumber);
             opn2x.isTrace = isTrace;
@@ -884,6 +915,28 @@ namespace mml2vgmIDE.MMLParameter
             dicInstAdd(dcsg, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(dcsg, od.linePos.chipIndex, od.linePos.chipNumber);
             dcsg.isTrace = isTrace;
+        }
+
+        private void SetupSN76489X2(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.SN76489 != null
+                && od.linePos.chipIndex < Audio.chipRegister.SN76489.Count)
+            {
+                chip = Audio.chipRegister.SN76489[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.SN76489[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            SN76489X2 dcsgx2 = new SN76489X2(chip, setting, midiKbd);
+            SN76489X2.Add(dcsgx2);
+            dicInstAdd(dcsgx2, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(dcsgx2, od.linePos.chipIndex, od.linePos.chipNumber);
+            dcsgx2.isTrace = isTrace;
         }
 
         private void SetupSEGAPCM(outDatum od)

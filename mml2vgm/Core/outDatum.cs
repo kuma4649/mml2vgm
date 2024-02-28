@@ -14,6 +14,11 @@ namespace Core
         {
         }
 
+        public outDatum(byte val)
+        {
+            this.val = val;
+        }
+
         public outDatum(enmMMLType type, List<object> args, LinePos linePos, byte val)
         {
             this.type = type;

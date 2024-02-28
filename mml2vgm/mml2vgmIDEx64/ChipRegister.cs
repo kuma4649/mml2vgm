@@ -8194,7 +8194,7 @@ namespace mml2vgmIDE
             if (type == EnmDataType.Normal)
             {
                 byte port = (byte)(address >> 8);
-                
+
                 //Console.WriteLine("Adr:{0:x02} Dat:{1:x02}",address,data);
 
                 if (Chip.Model == EnmVRModel.VirtualModel)
@@ -8204,7 +8204,7 @@ namespace mml2vgmIDE
                         if (mds == null) return;
                         if (ctYM2612[Chip.Number] == null || ctYM2612[Chip.Number].UseEmu)
                         {
-                            if (port == 10)
+                            if (port == 10 || port == 11)
                                 mds.PlayPCM_YM2612X(Chip.Index, (byte)Chip.Number, port, (byte)address, (byte)data);
                             else
                                 //Gens
@@ -8212,7 +8212,7 @@ namespace mml2vgmIDE
                         }
                         else if (ctYM2612[Chip.Number].UseEmu2)
                         {
-                            if (port == 10)
+                            if (port == 10 || port == 11)
                                 mds.PlayPCM_YM3438X(Chip.Index, (byte)Chip.Number, port, (byte)address, (byte)data);
                             else
                                 //Nuked
@@ -8220,7 +8220,7 @@ namespace mml2vgmIDE
                         }
                         else if (ctYM2612[Chip.Number].UseEmu3)
                         {
-                            if (port == 10)
+                            if (port == 10 || port == 11)
                                 mds.PlayPCM_YM2612mameX(Chip.Index, (byte)Chip.Number, port, (byte)address, (byte)data);
                             else
                                 //mame
@@ -8277,24 +8277,24 @@ namespace mml2vgmIDE
                         if (ctYM2612[Chip.Number].UseEmu)
                         {
                             foreach (PackData dat in pdata)
-                                if ((dat.Address & 0xf00) == 0xa00)
-                                    mds.PlayPCM_YM2612X(dat.Chip.Index, (byte)dat.Chip.Number, 10, (byte)address, (byte)data);
+                                if ((dat.Address & 0xf00) == 0xa00 || (dat.Address & 0xf00) == 0xb00)
+                                    mds.PlayPCM_YM2612X(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)address, (byte)data);
                                 else
                                     mds.WriteYM2612(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
                         }
                         else if (ctYM2612[Chip.Number].UseEmu2)
                         {
                             foreach (PackData dat in pdata)
-                                if ((dat.Address & 0xf00) == 0xa00)
-                                    mds.PlayPCM_YM3438X(dat.Chip.Index, (byte)dat.Chip.Number, 10, (byte)address, (byte)data);
+                                if ((dat.Address & 0xf00) == 0xa00 || (dat.Address & 0xf00) == 0xb00)
+                                    mds.PlayPCM_YM3438X(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)address, (byte)data);
                                 else
                                     mds.WriteYM3438(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
                         }
                         else if (ctYM2612[Chip.Number].UseEmu3)
                         {
                             foreach (PackData dat in pdata)
-                                if ((dat.Address & 0xf00) == 0xa00)
-                                    mds.PlayPCM_YM2612mameX(dat.Chip.Index, (byte)dat.Chip.Number, 10, (byte)address, (byte)data);
+                                if ((dat.Address & 0xf00) == 0xa00 || (dat.Address & 0xf00) == 0xb00)
+                                    mds.PlayPCM_YM2612mameX(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)address, (byte)data);
                                 else
                                     mds.WriteYM2612mame(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
                         }
@@ -8317,6 +8317,9 @@ namespace mml2vgmIDE
         {
             //XGM
             if ((Address & 0xf00) == 0xa00)
+                return;
+            //XGM2
+            if ((Address & 0xf00) == 0xb00)
                 return;
 
             if (ctYM2612 == null) return;
@@ -8526,7 +8529,7 @@ namespace mml2vgmIDE
         {
             dummyChip.Move(YM2612[ChipID]);
 
-            if (ctYM2612[0].OnlyPCMEmulation)
+            if (ctYM2612[0]!=null && ctYM2612[0].OnlyPCMEmulation)
             {
                 if (dPort == 0x00)
                 {
