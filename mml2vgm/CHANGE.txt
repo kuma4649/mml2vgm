@@ -1,4 +1,7 @@
 更新履歴
+TAG722 2024/02/29 2nd
+  Core:XGM2:PCMmapモードを追加。
+
 TAG721 2024/02/29
   Core,IDE:XGM2を追加。
 

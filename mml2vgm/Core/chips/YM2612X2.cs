@@ -159,6 +159,39 @@ namespace Core
 
         public void OutYM2612X2PcmKeyON(MML mml, partPage page)
         {
+            MML mmlDmy = mml != null ? mml : lastKeyOnMML;
+            if (page.isPcmMap)
+            {
+                int n = Const.NOTE.IndexOf(page.noteCmd);
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int f = page.octaveNow * 12 + n + page.shift + page.keyShift + arpNote;
+                if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
+                {
+                    if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
+                    {
+                        page.instrument = parent.instPCMMap[page.pcmMapNo][f];
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(
+                            string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote),
+                            mmlDmy != null ? mmlDmy.line.Lp : null);
+                        return;
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mmlDmy != null ? mmlDmy.line.Lp : null);
+                    return;
+                }
+            }
+
+            if (!parent.instPCM.ContainsKey(page.instrument))
+            {
+                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument), mmlDmy != null ? mmlDmy.line.Lp : null);
+                return;
+            }
+
             int id = parent.instPCM[page.instrument].Item2.seqNum + 1;
             int ch = Math.Max(0, page.ch - 8);
             bool hiPriority = true;

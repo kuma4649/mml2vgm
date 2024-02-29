@@ -44,7 +44,6 @@ namespace Core
         public outDatum[] Build(ClsVgm mmlInfo,bool outVgmFile,bool writeFileMode)
         {
             exportMode = outVgmFile && writeFileMode;
-            exportMode = true;
             this.mmlInfo = mmlInfo;
             mmlInfo.dat = new List<outDatum>();
 
