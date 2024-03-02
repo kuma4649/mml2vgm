@@ -13,9 +13,11 @@ class Mml2vgmScript:
         return (
         r"Information(log view)"
         + r"|Convert pcm(8bit,unsigned,8KHz,mono)"
+        + r"|Convert pcm(8bit,unsigned,13.3KHz,mono)"
         + r"|Convert pcm(8bit,unsigned,14KHz,mono)"
         + r"|Convert pcm(8bit,unsigned,16KHz,mono)"
         + r"|Convert pcm(8bit,unsigned,18.5KHz,mono)"
+        + r"|Convert pcm(16bit,signed,13.3KHz,mono)"
         + r"|Convert pcm(16bit,signed,14KHz,mono)"
         + r"|Convert pcm(16bit,signed,16KHz,mono)"
         + r"|Convert pcm(16bit,signed,18.5KHz,mono)"
@@ -39,6 +41,8 @@ class Mml2vgmScript:
         + r"|FromTreeViewContextMenu"
         + r"|FromTreeViewContextMenu"
         + r"|FromTreeViewContextMenu"
+        + r"|FromTreeViewContextMenu"
+        + r"|FromTreeViewContextMenu"
         )
 
     #このスクリプトがサポートするファイル拡張子を|をデリミタとして列挙する。
@@ -46,6 +50,8 @@ class Mml2vgmScript:
     def supportFileExt(self):
         return (
         r".wav"
+        + r"|.wav"
+        + r"|.wav"
         + r"|.wav"
         + r"|.wav"
         + r"|.wav"
@@ -93,10 +99,12 @@ class Mml2vgmScript:
 
             argList = [
                 "--i \"{0}{1}\""
-                , "\"{0}{1}\" -r 8000  -b 8 -c 1 \"{0}_8k{1}\""
-                , "\"{0}{1}\" -r 14000 -b 8 -c 1 \"{0}_14k{1}\""
-                , "\"{0}{1}\" -r 16000 -b 8 -c 1 \"{0}_16k{1}\""
-                , "\"{0}{1}\" -r 18500 -b 8 -c 1 \"{0}_18500{1}\""
+                , "\"{0}{1}\" -r 8000  -b 8 -c 1 \"{0}_8b_8k{1}\""
+                , "\"{0}{1}\" -r 13300 -b 8 -c 1 \"{0}_8b_13300{1}\""
+                , "\"{0}{1}\" -r 14000 -b 8 -c 1 \"{0}_8b_14k{1}\""
+                , "\"{0}{1}\" -r 16000 -b 8 -c 1 \"{0}_8b_16k{1}\""
+                , "\"{0}{1}\" -r 18500 -b 8 -c 1 \"{0}_8b_18500{1}\""
+                , "\"{0}{1}\" -b 16 -r 13300 -e signed-integer -c 1 \"{0}_16b_13300{1}\""
                 , "\"{0}{1}\" -b 16 -r 14000 -e signed-integer -c 1 \"{0}_16b_14k{1}\""
                 , "\"{0}{1}\" -b 16 -r 16000 -e signed-integer -c 1 \"{0}_16b_16k{1}\""
                 , "\"{0}{1}\" -b 16 -r 18500 -e signed-integer -c 1 \"{0}_16b_18500{1}\""

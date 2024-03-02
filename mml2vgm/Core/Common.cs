@@ -118,7 +118,7 @@ namespace Core
                         }
 
                         samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
-                        if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500 && samplerate != 14000)
+                        if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500 && samplerate != 14000 && samplerate != 13300)
                         {
                             msgBox.setWrnMsg(string.Format(msg.get("E02006"), samplerate), new LinePos(null,"-"));
                             //return null;
