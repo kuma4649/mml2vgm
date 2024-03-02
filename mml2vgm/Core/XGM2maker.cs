@@ -13,7 +13,7 @@ namespace Core
         private byte[] HeaderTemp = new byte[]
         {
             0x58 , 0x47 , 0x4d , 0x32 //'XGM2'
-            ,0 //+0x04: Version
+            ,0x10 //+0x04: Version
             ,0 //+0x05: Flags( b0:isNTSC  b1:isMultiTrack  b2:existGD3  b3:packedData )
             ,0,0 // +0x06: sampleDataBlockSize / 256
             ,0,0 // +0x08: fmDataBlockSize / 256
@@ -36,16 +36,32 @@ namespace Core
         private List<outDatum> pcmData = null;
         private List<outDatum> fmData = null;
         private List<outDatum> psgData = null;
+        private int fmFrameCounter = 0;
+        private int psgFrameCounter = 0;
+        private int fmFrameLength = 0;
+        private int psgFrameLength = 0;
+        private Action<string> disp;
+        private Dictionary<int, int> fmFrameLengthDic;
+        private Dictionary<int, int> psgFrameLengthDic;
 
-        public XGM2maker()
+        public XGM2maker(Action<string> disp=null)
         {
+            this.disp = disp;
         }
 
         public outDatum[] Build(ClsVgm mmlInfo,bool outVgmFile,bool writeFileMode)
         {
+            Disp("Start xgm2 build.");
+
             exportMode = outVgmFile && writeFileMode;
             this.mmlInfo = mmlInfo;
             mmlInfo.dat = new List<outDatum>();
+            fmFrameCounter = 0;
+            psgFrameCounter = 0;
+            fmFrameLength = 0;
+            fmFrameLengthDic=new Dictionary<int, int>();
+            psgFrameLength = 0;
+            psgFrameLengthDic = new Dictionary<int, int>();
 
             makeAndOutHeaderDiv();
             headData = mmlInfo.dat;
@@ -67,10 +83,24 @@ namespace Core
             psgData = makePSGtrack();
             psgData = ShapingPSGDat(psgData);
 
+            PaddingFM();
+
+            CheckFrameLength();
+
             mmlInfo.chips = bd;
             makeFooterDiv();
 
+            Disp("FM  frame(s) : {0}", fmFrameCounter);
+            Disp("PSG frame(s) : {0}", psgFrameCounter);
+            Disp("Finish xgm2 build.");
+
             return mmlInfo.dat.ToArray();
+        }
+
+        private void Disp(string v,params object[] prm)
+        {
+            if (disp == null) return;
+            disp(string.Format(v,prm));
         }
 
         public void OutFile(outDatum[] buf, string fn)
@@ -120,7 +150,7 @@ namespace Core
 
             isNTSC = mmlInfo.info.xgmSamplesPerSecond == 60;
             isMultiTrack = false;
-            existGD3 = CheckeInfo();
+            existGD3 = CheckInfo();
             packedData = false;
             mmlInfo.dat[5].val =
                 (byte)(
@@ -134,10 +164,10 @@ namespace Core
             for (uint i = 0; i < sampleID.Length; i++)
             {
                 sampleID[i] = new XGMSampleID();
-                sampleID[i].addr = 0xffff00;//0xffff00 is empty
+                sampleID[i].addr = (uint)(i == 0 ? 0 : 0xffff00);//0xffff00 is empty
                 sampleID[i].size = 0x000000;
-                mmlInfo.dat.Add(new outDatum(enmMMLType.unknown, null, null, 0xff));
-                mmlInfo.dat.Add(new outDatum(enmMMLType.unknown, null, null, 0xff));
+                mmlInfo.dat.Add(new outDatum(enmMMLType.unknown, null, null, (byte)(i == 0 ? 0 : 0xff)));
+                mmlInfo.dat.Add(new outDatum(enmMMLType.unknown, null, null, (byte)(i == 0 ? 0 : 0xff)));
             }
             for (uint i = 0; i < 3; i++)//PCM SFX
             {
@@ -221,7 +251,7 @@ namespace Core
         }
 
 
-        private bool CheckeInfo()
+        private bool CheckInfo()
         {
             if (mmlInfo.info.Composer != "") return true;
             if (mmlInfo.info.ComposerJ != "") return true;
@@ -364,6 +394,7 @@ namespace Core
                         outDatum d = od.Copy();
                         d.val = 0xe0;
                         e0.Add(d);
+                        fmFrameLength++;
                         int cnt = 0;
                         i--;
                         do
@@ -371,8 +402,9 @@ namespace Core
                             i++;
                             e0.Add(src[++i]);
                             e0.Add(src[++i]);
+                            fmFrameLength += 2;
                             cnt++;
-                        } while (src[i+1].val == od.val && cnt < 8);
+                        } while (src[i + 1].val == od.val && cnt < 8);
                         e0[0].val |= (byte)(od.val * 8 + (cnt - 1));
                         foreach (outDatum e in e0) ret.Add(e);
                         break;
@@ -387,28 +419,46 @@ namespace Core
                             case 0x60:
                             case 0x70:
                                 if (cmd.val == 0x0f) ret.Add(src[++i]);
+                                fmFrameLength++;
                                 break;
                             case 0x10://size 2
-                            case 0x90:
+                                if (exportMode)
+                                {
+                                    //PCM発音すると雑音が酷いためカット
+                                    ret.RemoveAt(ret.Count - 1);
+                                    i++;
+                                }
+                                else
+                                {
+                                    ret.Add(src[++i]);
+                                }
+                                fmFrameLength += 2;
+                                break;
+                            case 0x90://size 2
                             case 0xa0:
                             case 0xb0:
                             case 0xc0:
                             case 0xd0:
                                 ret.Add(src[++i]);
+                                fmFrameLength += 2;
                                 break;
                             case 0x20://size 31
                                 for (int j = 0; j < 30; j++) ret.Add(src[++i]);
+                                fmFrameLength += 31;
                                 break;
                             case 0x30://size 3
                             case 0x80:
                                 ret.Add(src[++i]);
                                 ret.Add(src[++i]);
+                                fmFrameLength += 3;
                                 break;
                             case 0xe0://size 1+2(x+1)
+                                fmFrameLength++;
                                 for (int j = 0; j < (cmd.val & 0x7) + 1; j++)
                                 {
                                     ret.Add(src[++i]);
                                     ret.Add(src[++i]);
+                                    fmFrameLength += 2;
                                 }
                                 break;
                             case 0xf0://size1/2/4
@@ -417,11 +467,13 @@ namespace Core
                                     case 0x8://size 2
                                     case 0x9:
                                         ret.Add(src[++i]);
+                                        fmFrameLength += 2;
                                         break;
                                     case 0xf://size 4
                                         ret.Add(src[++i]);
                                         ret.Add(src[++i]);
                                         ret.Add(src[++i]);
+                                        fmFrameLength += 4;
                                         break;
                                 }
                                 break;
@@ -441,38 +493,18 @@ namespace Core
                         i += 2;
                         break;
                     case 0x61: //wait
-                        int w = src[i+1].val + src[i + 2].val * 256;//ex) 21clock -> 16 + 5 -> [0x0f 0x05]
-                        while (w > 0)
-                        {
-                            if (w < 16)
-                            {
-                                outDatum wa = new outDatum();
-                                wa.val = (byte)(0x00 + w - 1);
-                                ret.Add(wa);
-                                w = 0;
-                            }
-                            else
-                            {
-                                w -= 16;
-                                outDatum wa = new outDatum();
-                                wa.val = 0x0f;
-                                ret.Add(wa);
-                                if (w < 256)
-                                {
-                                    wa = new outDatum();
-                                    wa.val = (byte)w;
-                                    ret.Add(wa);
-                                    w = 0;
-                                }
-                                else
-                                {
-                                    wa = new outDatum();
-                                    wa.val = (byte)0xff;
-                                    ret.Add(wa);
-                                    w -= 255;
-                                }
-                            }
-                        }
+                        if (fmFrameLengthDic.ContainsKey(fmFrameCounter))
+                            fmFrameLengthDic[fmFrameCounter] += fmFrameLength;
+                        else
+                            fmFrameLengthDic.Add(fmFrameCounter, fmFrameLength);
+                        //if (fmFrameLength > 255)
+                        //{
+                        //    Disp("fm frame Length : {0}(At frame {1})", fmFrameLength, fmFrameCounter);
+                        //}
+                        int w = src[i + 1].val + src[i + 2].val * 256;//ex) 21clock -> 16 + 5 -> [0x0f 0x05]
+                        fmFrameCounter += w;
+                        fmFrameLength = 0;
+                        ret = AddWaitFM(ret, w);
                         i += 2;
                         break;
                     case 0xff://loop/end mark
@@ -486,20 +518,16 @@ namespace Core
                 }
             }
 
-            //padding
-            if (ret.Count == 4 && ret[0].val == 0xff)
-            {
-                ret.Clear();
-            }
-            else
-            {
-                int pad = 256 - (ret.Count % 256);
-                outDatum p = new outDatum();
-                p.val = 0xff;
-                if (pad != 256) for (int i = 0; i < pad; i++) ret.Add(p);
-            }
-
             return ret;
+        }
+
+        private void PaddingFM()
+        {
+            //padding
+            int pad = 256 - (fmData.Count % 256);
+            outDatum p = new outDatum();
+            p.val = 0x00;
+            if (pad != 256) for (int i = 0; i < pad; i++) fmData.Add(p);
         }
 
         private List<outDatum> makePSGtrack()
@@ -613,18 +641,25 @@ namespace Core
                         switch (cmd.val & 0xf0)
                         {
                             case 0x00://size 1(0x0eの場合は2 0x0fの場合は4)
-                                if (cmd.val == 0x0e) ret.Add(src[++i]);
+                                psgFrameLength++;
+                                if (cmd.val == 0x0e)
+                                {
+                                    ret.Add(src[++i]);
+                                    psgFrameLength++;
+                                }
                                 else if (cmd.val == 0x0f)
                                 {
                                     ret.Add(src[++i]);
                                     ret.Add(src[++i]);
                                     ret.Add(src[++i]);
+                                    psgFrameLength += 3;
                                 }
                                 break;
                             case 0x10://size 2
                             case 0x20:
                             case 0x30:
                                 ret.Add(src[++i]);
+                                psgFrameLength += 2;
                                 break;
                             case 0x40://size 1
                             case 0x50:
@@ -638,45 +673,43 @@ namespace Core
                             case 0xd0:
                             case 0xe0:
                             case 0xf0:
+                                psgFrameLength++;
                                 break;
                         }
                         break;
                     case 0x61: //wait
+                        if (psgFrameLengthDic.ContainsKey(psgFrameCounter))
+                            psgFrameLengthDic[psgFrameCounter] += psgFrameLength;
+                        else
+                            psgFrameLengthDic.Add(psgFrameCounter, psgFrameLength);
                         int w = src[i + 1].val + src[i + 2].val * 256;//ex) 21clock -> 15 + 6 -> [0x0e 0x06]
-                        while (w > 0)
-                        {
-                            if (w < 15)
-                            {
-                                outDatum wa = new outDatum();
-                                wa.val = (byte)(0x00 + w - 1);
-                                ret.Add(wa);
-                                w = 0;
-                            }
-                            else
-                            {
-                                w -= 15;
-                                outDatum wa = new outDatum();
-                                wa.val = 0x0e;
-                                ret.Add(wa);
-                                if (w < 256)
-                                {
-                                    wa = new outDatum();
-                                    wa.val = (byte)w;
-                                    ret.Add(wa);
-                                    w = 0;
-                                }
-                                else
-                                {
-                                    wa = new outDatum();
-                                    wa.val = (byte)0xff;
-                                    ret.Add(wa);
-                                    w -= 255;
-                                }
-                            }
-                        }
+                        psgFrameCounter += w;
+                        psgFrameLength = 0;
+                        ret = AddWaitPSG(ret, w);
                         i += 2;
                         break;
                     case 0x0f://loop/end mark
+                        if (psgFrameCounter < fmFrameCounter)
+                        {
+                            ret = AddWaitPSG(ret, fmFrameCounter - psgFrameCounter);
+                        }
+                        else if (fmFrameCounter < psgFrameCounter)
+                        {
+                            outDatum[] loopEndMark= new outDatum[4];
+                            loopEndMark[0] = fmData[fmData.Count - 4];
+                            loopEndMark[1] = fmData[fmData.Count - 3];
+                            loopEndMark[2] = fmData[fmData.Count - 2];
+                            loopEndMark[3] = fmData[fmData.Count - 1];
+                            fmData.RemoveAt(fmData.Count - 1);
+                            fmData.RemoveAt(fmData.Count - 1);
+                            fmData.RemoveAt(fmData.Count - 1);
+                            fmData.RemoveAt(fmData.Count - 1);
+                            fmData = AddWaitFM(fmData, psgFrameCounter - fmFrameCounter);
+                            fmData.Add(loopEndMark[0]);
+                            fmData.Add(loopEndMark[1]);
+                            fmData.Add(loopEndMark[2]);
+                            fmData.Add(loopEndMark[3]);
+                        }
                         ret.Add(src[i]);
                         ret.Add(src[++i]);
                         ret.Add(src[++i]);
@@ -688,10 +721,95 @@ namespace Core
             //padding
             int pad = 256 - (ret.Count % 256);
             outDatum p = new outDatum();
-            p.val = 0xff;//psgは0xffはendコマンドではないので注意
+            p.val = 0x00;
             if (pad != 256) for (int i = 0; i < pad; i++) ret.Add(p);
 
             return ret;
+        }
+
+        private List<outDatum> AddWaitFM(List<outDatum> ret, int w)
+        {
+            while (w > 0)
+            {
+                if (w < 16)
+                {
+                    outDatum wa = new outDatum();
+                    wa.val = (byte)(0x00 + w - 1);
+                    ret.Add(wa);
+                    w = 0;
+                }
+                else
+                {
+                    w -= 16;
+                    outDatum wa = new outDatum();
+                    wa.val = 0x0f;
+                    ret.Add(wa);
+                    if (w < 256)
+                    {
+                        wa = new outDatum();
+                        wa.val = (byte)w;
+                        ret.Add(wa);
+                        w = 0;
+                    }
+                    else
+                    {
+                        wa = new outDatum();
+                        wa.val = (byte)0xff;
+                        ret.Add(wa);
+                        w -= 255;
+                    }
+                }
+            }
+            return ret;
+        }
+
+        private List<outDatum> AddWaitPSG(List<outDatum> ret,int w)
+        {
+            while (w > 0)
+            {
+                if (w < 15)
+                {
+                    outDatum wa = new outDatum();
+                    wa.val = (byte)(0x00 + w - 1);
+                    ret.Add(wa);
+                    w = 0;
+                }
+                else
+                {
+                    w -= 15;
+                    outDatum wa = new outDatum();
+                    wa.val = 0x0e;
+                    ret.Add(wa);
+                    if (w < 256)
+                    {
+                        wa = new outDatum();
+                        wa.val = (byte)w;
+                        ret.Add(wa);
+                        w = 0;
+                    }
+                    else
+                    {
+                        wa = new outDatum();
+                        wa.val = (byte)0xff;
+                        ret.Add(wa);
+                        w -= 255;
+                    }
+                }
+            }
+            return ret;
+        }
+
+        private void CheckFrameLength()
+        {
+            for(int i = 0;i<Math.Max(fmFrameCounter,psgFrameCounter);i++)
+            {
+                if (!fmFrameLengthDic.ContainsKey(i) && !psgFrameLengthDic.ContainsKey(i)) continue;
+                int len = 0;
+                if (fmFrameLengthDic.ContainsKey(i)) len += fmFrameLengthDic[i];
+                if (psgFrameLengthDic.ContainsKey(i)) len += psgFrameLengthDic[i];
+                if (len < 256) continue;
+                msgBox.setWrnMsg(string.Format("{0} frame is too long.(length : {1})", i, len), null);
+            }
         }
 
 

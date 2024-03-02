@@ -178,7 +178,7 @@ namespace Core
                 {
 
                     Disp(msg.get("I04026"));
-                    XGM2maker xmake = new XGM2maker();
+                    XGM2maker xmake = new XGM2maker(Disp);
                     desVGM.jumpPointClock = -1;
                     desVGM.jumpChannels = new List<Tuple<enmChipType, int>>();
                     desBuf = xmake.Build(desVGM, outVgmFile, writeFileMode);

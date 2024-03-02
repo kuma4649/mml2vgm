@@ -329,7 +329,7 @@ namespace mml2vgmIDE
 
                 byte cmd = (byte)(dat.val & 0xf0);
                 byte val = (byte)(dat.val & 0x0f);
-                byte id, cs, port, keyOffOn, pan, slot, tl, adr;
+                byte id, cs, port, keyOffOn, pan, slot, tl;
                 outDatum odcmd = dat.Copy();
                 outDatum odval = dat.Copy();
                 odval.val = val;

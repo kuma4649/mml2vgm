@@ -205,7 +205,7 @@ namespace Core
 
             cp = new SN76489X2(null, 0, null, null, 0);
             cpn.Add(enmChipType.SN76489X2, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
-                info.format == enmFormat.VGM ? new string[] { "S", "Ss" } : (
+                info.format == enmFormat.VGM ? new string[] { } : (
                 (info.format == enmFormat.XGM2) ? new string[] { "S" } : new string[] { })
                 ), new int[] { 2, 1, -1 }));
 
