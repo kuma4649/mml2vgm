@@ -460,7 +460,10 @@ namespace Core
             {
                 page.spg.noise = page.noise;
                 byte data = (byte)page.freq;
-                msgBox.setWrnMsg("ノイズ未サポート", mml != null ? mml.line.Lp : null);
+                SOutData(page, mml, port[0]
+                    , (byte)0x10
+                    , (byte)page.freq);
+                //msgBox.setWrnMsg("ノイズ未サポート", mml != null ? mml.line.Lp : null);
             }
         }
 
@@ -602,12 +605,14 @@ namespace Core
             if (beforeDcsgCh3Freq != dcsgCh3Freq && dcsgCh3Freq != -1)
             {
                 beforeDcsgCh3Freq = dcsgCh3Freq;
-                byte data = (byte)(0xc0 + (dcsgCh3Freq & 0xf));
-                //OutPsgPort(page, mml, port[0], data);
-
-                data = (byte)(dcsgCh3Freq >> 4);
-                //OutPsgPort(page, mml, port[0], data);
-                msgBox.setWrnMsg("ノイズ未サポート", null);
+                SOutData(page, mml, port[0]
+                    , (byte)(0x20 + (2 << 2) + ((dcsgCh3Freq & 0x300) >> 8))
+                    , (byte)dcsgCh3Freq);
+                //byte data = (byte)(0xc0 + (dcsgCh3Freq & 0xf));
+                ////OutPsgPort(page, mml, port[0], data);
+                //data = (byte)(dcsgCh3Freq >> 4);
+                ////OutPsgPort(page, mml, port[0], data);
+                //msgBox.setWrnMsg("ノイズ未サポート", null);
             }
         }
 

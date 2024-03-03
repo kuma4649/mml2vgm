@@ -186,16 +186,20 @@ namespace Core
                 }
             }
 
-            if (!parent.instPCM.ContainsKey(page.instrument))
+            if (!parent.instPCM.ContainsKey(page.isPcmMap ? (page.instrument & 0xff) : page.instrument))
             {
                 msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument), mmlDmy != null ? mmlDmy.line.Lp : null);
                 return;
             }
 
-            int id = parent.instPCM[page.instrument].Item2.seqNum + 1;
+            int id = parent.instPCM[page.instrument & 0xff].Item2.seqNum + 1;
             int ch = Math.Max(0, page.ch - 8);
             bool hiPriority = true;
-            bool fullSpeed = true;
+            bool fullSpeed = page.noise == 0;
+            if (page.isPcmMap)
+            {
+                fullSpeed = (page.instrument & 0x1_0000) == 0;
+            }
 
             if (pcmKeyOnCh[ch & 0x3] == page.ch)
             {
@@ -466,6 +470,7 @@ namespace Core
 
             int ch = Math.Max(0, page.ch - 8);
             int priority = 0;
+            int speed = page.noise == 0 ? 0 : 0x4;
 
             pcmKeyOnCh[ch & 0x3] = page.ch;
             pcmKeyOnInstNum[ch & 0x3] = id;
@@ -480,7 +485,8 @@ namespace Core
                 page,
                 mmlDmy,
                 cmd // original vgm command : YM2151
-                , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
+                  //b0b1:ch b2:speed b3:priority
+                , (byte)(0x50 + (ch & 0x3) + speed + ((priority & 0x3) << 2))
                 , (byte)id
                 );
 
@@ -631,6 +637,16 @@ namespace Core
                 page.isPcmMap = sw;
             }
         }
+
+        public override void CmdNoise(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 63);
+
+            page.noise = n;
+        }
+
+
 
 
         public override void CmdInstrument(partPage page, MML mml)

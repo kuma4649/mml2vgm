@@ -1697,12 +1697,24 @@ namespace Core
                     i++;
                     continue;
                 }
-                no = Common.ParseNumber(vs[3 + i]);
+                string nums = vs[3 + i].Trim().ToUpper();
+                bool isHalf = false;
+                if (nums.IndexOf('H') != -1)
+                {
+                    isHalf = true;
+                    nums = nums.Replace("H", "");
+                }
+                else if (nums.IndexOf('F') != -1)
+                {
+                    isHalf = false;
+                    nums = nums.Replace("F", "");
+                }
+                no = Common.ParseNumber(nums);
                 no = Math.Min(Math.Max(no, 0), 255);
 
                 if (instPCMMap[map].ContainsKey(oct * 12 + note + i))
                     instPCMMap[map].Remove(oct * 12 + note + i);
-                instPCMMap[map].Add(oct * 12 + note + i, no);
+                instPCMMap[map].Add(oct * 12 + note + i, no + (isHalf ? 0x1_0000 : 0x0));
                 i++;
             }
         }
