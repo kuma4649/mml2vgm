@@ -43,6 +43,10 @@ namespace Core
         private Action<string> disp;
         private Dictionary<int, int> fmFrameLengthDic;
         private Dictionary<int, int> psgFrameLengthDic;
+        private int fmWaitCounter = 0;
+        private int psgWaitCounter = 0;
+        private int fmLoopPtr = -1;
+        private int psgLoopPtr = -1;
 
         public XGM2maker(Action<string> disp=null)
         {
@@ -63,7 +67,12 @@ namespace Core
             psgFrameLength = 0;
             psgFrameLengthDic = new Dictionary<int, int>();
 
-            makeAndOutHeaderDiv();
+            fmWaitCounter = 0;
+            psgWaitCounter = 0;
+            fmLoopPtr = -1;
+            psgLoopPtr = -1;
+
+        makeAndOutHeaderDiv();
             headData = mmlInfo.dat;
             mmlInfo.dat = new List<outDatum>();
             makePCMData();
@@ -76,22 +85,32 @@ namespace Core
             mmlInfo.dat.Clear();
             mmlInfo.chips = getChips(true, bd);
             fmData = makeFMtrack();
-            fmData = ShapingFMDat(fmData);
 
             mmlInfo.dat.Clear();
             mmlInfo.chips = getChips(false, bd);
             psgData = makePSGtrack();
+
+            fmData = ShapingFMDat(fmData);
             psgData = ShapingPSGDat(psgData);
 
+            if (mmlInfo.loopSamples != -1)
+            {
+                //LOOP有り
+            }
+
             PaddingFM();
+            PaddingPSG();
 
             CheckFrameLength();
 
             mmlInfo.chips = bd;
             makeFooterDiv();
 
-            Disp("FM  frame(s) : {0}", fmFrameCounter);
-            Disp("PSG frame(s) : {0}", psgFrameCounter);
+            Disp("FM  frame(s)   : {0}", fmFrameCounter);
+            Disp("PSG frame(s)   : {0}", psgFrameCounter);
+            Disp("FM  wait count : {0} frame(s)", fmWaitCounter);
+            Disp("PSG wait count : {0} frame(s)", psgWaitCounter);
+            Disp("Loop point     : {0}", mmlInfo.loopSamples != -1 ? (mmlInfo.loopSamples.ToString()+ " frame(s)") : "no loop");
             Disp("Finish xgm2 build.");
 
             return mmlInfo.dat.ToArray();
@@ -367,12 +386,10 @@ namespace Core
             }
 
             //end mark
-            o = new outDatum();
-            o.val = 0xff;
-            dat.Add(o);
-            dat.Add(o);
-            dat.Add(o);
-            dat.Add(o);
+            dat.Add(new outDatum(0xff));
+            dat.Add(new outDatum(0xff));
+            dat.Add(new outDatum(0xff));
+            dat.Add(new outDatum(0xff));
 
             return dat;
         }
@@ -509,6 +526,12 @@ namespace Core
                         break;
                     case 0xff://loop/end mark
                         ret.Add(src[i]);
+                        if (fmLoopPtr >= 0)
+                        {
+                            src[i + 1].val = (byte)fmLoopPtr;
+                            src[i + 2].val = (byte)(fmLoopPtr >> 8);
+                            src[i + 3].val = (byte)(fmLoopPtr >> 16);
+                        }
                         ret.Add(src[++i]);
                         ret.Add(src[++i]);
                         ret.Add(src[++i]);
@@ -528,6 +551,15 @@ namespace Core
             outDatum p = new outDatum();
             p.val = 0x00;
             if (pad != 256) for (int i = 0; i < pad; i++) fmData.Add(p);
+        }
+
+        private void PaddingPSG()
+        {
+            //padding
+            int pad = 256 - (psgData.Count % 256);
+            outDatum p = new outDatum();
+            p.val = 0x00;
+            if (pad != 256) for (int i = 0; i < pad; i++) psgData.Add(p);
         }
 
         private List<outDatum> makePSGtrack()
@@ -599,14 +631,10 @@ namespace Core
             }
 
             //end mark
-            o = new outDatum();
-            o.val = 0x0f;
-            dat.Add(o);
-            o = new outDatum();
-            o.val = 0xff;
-            dat.Add(o);
-            dat.Add(o);
-            dat.Add(o);
+            dat.Add(new outDatum(0x0f));
+            dat.Add(new outDatum(0xff));
+            dat.Add(new outDatum(0xff));
+            dat.Add(new outDatum(0xff));
 
             return dat;
         }
@@ -710,6 +738,12 @@ namespace Core
                             fmData.Add(loopEndMark[2]);
                             fmData.Add(loopEndMark[3]);
                         }
+                        if (psgLoopPtr >= 0)
+                        {
+                            src[i + 1].val = (byte)psgLoopPtr;
+                            src[i + 2].val = (byte)(psgLoopPtr >> 8);
+                            src[i + 3].val = (byte)(psgLoopPtr >> 16);
+                        }
                         ret.Add(src[i]);
                         ret.Add(src[++i]);
                         ret.Add(src[++i]);
@@ -718,16 +752,26 @@ namespace Core
                 }
             }
 
-            //padding
-            int pad = 256 - (ret.Count % 256);
-            outDatum p = new outDatum();
-            p.val = 0x00;
-            if (pad != 256) for (int i = 0; i < pad; i++) ret.Add(p);
-
             return ret;
         }
 
         private List<outDatum> AddWaitFM(List<outDatum> ret, int w)
+        {
+            fmWaitCounter += w;
+            if (mmlInfo.loopSamples > fmWaitCounter || mmlInfo.loopSamples == -1 || fmLoopPtr >= 0)
+            {
+                AddWaitFM2(ret, w);
+                return ret;
+            }
+
+            int loop = (int)(fmWaitCounter - mmlInfo.loopSamples);
+            AddWaitFM2(ret, w - loop);
+            fmLoopPtr = ret.Count;
+            AddWaitFM2(ret, loop);
+            return ret;
+        }
+
+        private static void AddWaitFM2(List<outDatum> ret, int w)
         {
             while (w > 0)
             {
@@ -760,10 +804,25 @@ namespace Core
                     }
                 }
             }
+        }
+
+        private List<outDatum> AddWaitPSG(List<outDatum> ret, int w)
+        {
+            psgWaitCounter += w;
+            if (mmlInfo.loopSamples > psgWaitCounter || mmlInfo.loopSamples == -1 || psgLoopPtr >= 0)
+            {
+                AddWaitPSG2(ret, w);
+                return ret;
+            }
+
+            int loop = (int)(psgWaitCounter - mmlInfo.loopSamples);
+            AddWaitPSG2(ret, w - loop);
+            psgLoopPtr = ret.Count;
+            AddWaitPSG2(ret, loop);
             return ret;
         }
 
-        private List<outDatum> AddWaitPSG(List<outDatum> ret,int w)
+        private static void AddWaitPSG2(List<outDatum> ret, int w)
         {
             while (w > 0)
             {
@@ -796,7 +855,7 @@ namespace Core
                     }
                 }
             }
-            return ret;
+
         }
 
         private void CheckFrameLength()

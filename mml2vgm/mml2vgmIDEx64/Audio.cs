@@ -1117,6 +1117,8 @@ namespace mml2vgmIDE
             errMsg = "";
             Stop(SendMode.Both);
 
+            NAudioWrap.reinit();
+
             if (doSkipStop)
             {
                 sm.SetMode(SendMode.RealTime);

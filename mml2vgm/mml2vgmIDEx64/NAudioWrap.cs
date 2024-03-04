@@ -367,5 +367,15 @@ namespace mml2vgmIDE
 
             return asioOut.PlaybackLatency;
         }
+
+        public static void reinit()
+        {
+            try
+            {
+                //Stop();
+                //Start(setting);
+            }
+            catch { }
+        }
     }
 }

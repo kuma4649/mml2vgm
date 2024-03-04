@@ -155,7 +155,7 @@ namespace SoundManager
                 }
             }
 
-            int timeout = 2000;
+            int timeout = 1000;
             while (!dataSender.IsRunning() && timeout > 0)
             {
                 dataSender.RequestStart();
