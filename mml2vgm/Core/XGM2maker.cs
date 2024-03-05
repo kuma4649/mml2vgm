@@ -47,6 +47,8 @@ namespace Core
         private int psgWaitCounter = 0;
         private int fmLoopPtr = -1;
         private int psgLoopPtr = -1;
+        private int fmJumpPtr = -1;
+        private int psgJumpPtr = -1;
 
         public XGM2maker(Action<string> disp=null)
         {
@@ -71,8 +73,10 @@ namespace Core
             psgWaitCounter = 0;
             fmLoopPtr = -1;
             psgLoopPtr = -1;
+            fmJumpPtr = -1;
+            psgJumpPtr = -1;
 
-        makeAndOutHeaderDiv();
+            makeAndOutHeaderDiv();
             headData = mmlInfo.dat;
             mmlInfo.dat = new List<outDatum>();
             makePCMData();
@@ -758,21 +762,45 @@ namespace Core
         private List<outDatum> AddWaitFM(List<outDatum> ret, int w)
         {
             fmWaitCounter += w;
-            if (mmlInfo.loopSamples > fmWaitCounter || mmlInfo.loopSamples == -1 || fmLoopPtr >= 0)
+
+            //TAG727 2024/03/05
+            //Core: XGM2: Jコマンド実装(ただしJの前にLコマンドを書くとどんなに時間的に前の位置にLがあってもJの位置にLがある展開になります。)
+
+            bool flgJ = false;//ジャンプコマンドに到達していないか。true:未到達(ジャンプコマンド無しを含む。到達済みだけど分割済みも含む) false:到達
+            if (mmlInfo.jumpPointClock > fmWaitCounter || mmlInfo.jumpPointClock == -1 || fmJumpPtr >= 0) flgJ = true;
+
+            bool flgL = false;//ループコマンドに到達していないか。   true:未到達(ループコマンド  無しを含む。到達済みだけど分割済みも含む) false;到達
+            if (mmlInfo.loopSamples > fmWaitCounter || mmlInfo.loopSamples == -1 || fmLoopPtr >= 0) flgL = true;
+
+            if (flgJ && flgL)
             {
+                //分割が不要
                 AddWaitFM2(ret, w);
                 return ret;
             }
 
-            int loop = (int)(fmWaitCounter - mmlInfo.loopSamples);
-            AddWaitFM2(ret, w - loop);
-            fmLoopPtr = ret.Count;
-            AddWaitFM2(ret, loop);
+            //分割が必要
+            if (!flgL)
+            {
+                int loop = (int)(fmWaitCounter - mmlInfo.loopSamples);
+                AddWaitFM2(ret, w - loop);
+                fmLoopPtr = ret.Count;
+                if (!flgJ) fmJumpPtr = ret.Count;
+                AddWaitFM2(ret, loop);
+                return ret;
+            }
+
+            int jump = (int)(fmWaitCounter - mmlInfo.jumpPointClock);
+            AddWaitFM2(ret, w - jump);
+            fmJumpPtr = ret.Count;
+            AddWaitFM2(ret, jump);
             return ret;
         }
 
-        private static void AddWaitFM2(List<outDatum> ret, int w)
+        private void AddWaitFM2(List<outDatum> ret, int w)
         {
+            if (mmlInfo.jumpPointClock != -1 && fmJumpPtr < 0) return;
+
             while (w > 0)
             {
                 if (w < 16)
@@ -809,21 +837,45 @@ namespace Core
         private List<outDatum> AddWaitPSG(List<outDatum> ret, int w)
         {
             psgWaitCounter += w;
-            if (mmlInfo.loopSamples > psgWaitCounter || mmlInfo.loopSamples == -1 || psgLoopPtr >= 0)
+
+            //TAG727 2024/03/05
+            //Core: XGM2: Jコマンド実装(ただしJの前にLコマンドを書くとどんなに時間的に前の位置にLがあってもJの位置にLがある展開になります。)
+
+            bool flgJ = false;//ジャンプコマンドに到達していないか。true:未到達(ジャンプコマンド無しを含む。到達済みだけど分割済みも含む) false:到達
+            if (mmlInfo.jumpPointClock > psgWaitCounter || mmlInfo.jumpPointClock == -1 || psgJumpPtr >= 0) flgJ = true;
+
+            bool flgL = false;//ループコマンドに到達していないか。   true:未到達(ループコマンド  無しを含む。到達済みだけど分割済みも含む) false;到達
+            if (mmlInfo.loopSamples > psgWaitCounter || mmlInfo.loopSamples == -1 || psgLoopPtr >= 0) flgL = true;
+
+            if (flgJ && flgL)
             {
+                //分割が不要
                 AddWaitPSG2(ret, w);
                 return ret;
             }
 
-            int loop = (int)(psgWaitCounter - mmlInfo.loopSamples);
-            AddWaitPSG2(ret, w - loop);
-            psgLoopPtr = ret.Count;
-            AddWaitPSG2(ret, loop);
+            //分割が必要
+            if (!flgL)
+            {
+                int loop = (int)(psgWaitCounter - mmlInfo.loopSamples);
+                AddWaitPSG2(ret, w - loop);
+                psgLoopPtr = ret.Count;
+                if (!flgJ) psgJumpPtr = ret.Count;
+                AddWaitPSG2(ret, loop);
+                return ret;
+            }
+
+            int jump = (int)(psgWaitCounter - mmlInfo.jumpPointClock);
+            AddWaitPSG2(ret, w - jump);
+            psgJumpPtr = ret.Count;
+            AddWaitPSG2(ret, jump);
             return ret;
         }
 
-        private static void AddWaitPSG2(List<outDatum> ret, int w)
+        private void AddWaitPSG2(List<outDatum> ret, int w)
         {
+            if (mmlInfo.jumpPointClock != -1 && psgJumpPtr < 0) return;
+
             while (w > 0)
             {
                 if (w < 15)
