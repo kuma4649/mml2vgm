@@ -273,6 +273,13 @@ namespace mml2vgmIDE
                 vgmFrameCounter++;
                 Audio.DriverSeqCounter++;
 
+                //jump処理
+                while (jumpPointClock > 0)
+                {
+                    oneFrameXGM();
+                    jumpPointClock--;
+                }
+
                 musicStep = Common.DataSequenceSampleRate / (isNTSC ? 60.0 : 50.0);
 
                 if (musicDownCounter <= 0.0)

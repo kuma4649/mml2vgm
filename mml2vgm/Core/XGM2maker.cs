@@ -767,7 +767,11 @@ namespace Core
             //Core: XGM2: Jコマンド実装(ただしJの前にLコマンドを書くとどんなに時間的に前の位置にLがあってもJの位置にLがある展開になります。)
 
             bool flgJ = false;//ジャンプコマンドに到達していないか。true:未到達(ジャンプコマンド無しを含む。到達済みだけど分割済みも含む) false:到達
-            if (mmlInfo.jumpPointClock > fmWaitCounter || mmlInfo.jumpPointClock == -1 || fmJumpPtr >= 0) flgJ = true;
+            if (exportMode)
+            {
+                if (mmlInfo.jumpPointClock > fmWaitCounter || mmlInfo.jumpPointClock == -1 || fmJumpPtr >= 0) flgJ = true;
+            }
+            else flgJ = true;
 
             bool flgL = false;//ループコマンドに到達していないか。   true:未到達(ループコマンド  無しを含む。到達済みだけど分割済みも含む) false;到達
             if (mmlInfo.loopSamples > fmWaitCounter || mmlInfo.loopSamples == -1 || fmLoopPtr >= 0) flgL = true;
@@ -799,7 +803,7 @@ namespace Core
 
         private void AddWaitFM2(List<outDatum> ret, int w)
         {
-            if (mmlInfo.jumpPointClock != -1 && fmJumpPtr < 0) return;
+            if (exportMode) if (mmlInfo.jumpPointClock != -1 && fmJumpPtr < 0) return;
 
             while (w > 0)
             {
@@ -842,7 +846,11 @@ namespace Core
             //Core: XGM2: Jコマンド実装(ただしJの前にLコマンドを書くとどんなに時間的に前の位置にLがあってもJの位置にLがある展開になります。)
 
             bool flgJ = false;//ジャンプコマンドに到達していないか。true:未到達(ジャンプコマンド無しを含む。到達済みだけど分割済みも含む) false:到達
-            if (mmlInfo.jumpPointClock > psgWaitCounter || mmlInfo.jumpPointClock == -1 || psgJumpPtr >= 0) flgJ = true;
+            if (exportMode)
+            {
+                if (mmlInfo.jumpPointClock > psgWaitCounter || mmlInfo.jumpPointClock == -1 || psgJumpPtr >= 0) flgJ = true;
+            }
+            else flgJ = true;
 
             bool flgL = false;//ループコマンドに到達していないか。   true:未到達(ループコマンド  無しを含む。到達済みだけど分割済みも含む) false;到達
             if (mmlInfo.loopSamples > psgWaitCounter || mmlInfo.loopSamples == -1 || psgLoopPtr >= 0) flgL = true;
@@ -874,7 +882,8 @@ namespace Core
 
         private void AddWaitPSG2(List<outDatum> ret, int w)
         {
-            if (mmlInfo.jumpPointClock != -1 && psgJumpPtr < 0) return;
+            if (exportMode)
+                if (mmlInfo.jumpPointClock != -1 && psgJumpPtr < 0) return;
 
             while (w > 0)
             {
