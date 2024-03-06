@@ -749,10 +749,16 @@ namespace Core
                     if (pw.slotFixedFnum[3] == -1) f = freq + page.slotDetune[3];
                     else f = pw.slotFixedFnum[3] + page.slotDetune[3];
 
-                    SOutData(page, mml, page.port[2]
-                        , (byte)(0x30 + 0 + 3 + 8)//0:port 3:slot4 8:ch3specialMode
-                        , (byte)((f & 0xff00) >> 8)
-                        , (byte)(f & 0xff));
+                    //SOutData(page, mml, page.port[2]
+                    //    , (byte)(0x30 + 0 + 3 + 8)//0:port 3:slot4 8:ch3specialMode
+                    //    , (byte)((f & 0xff00) >> 8)
+                    //    , (byte)(f & 0xff));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xa6 //slot4
+                        , (byte)((f & 0xff00) >> 8));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xa2
+                        , (byte)f);
                 }
                 if ((page.slots & 4) != 0)
                 {
@@ -760,10 +766,16 @@ namespace Core
                     if (pw.slotFixedFnum[2] == -1) f = freq + page.slotDetune[2];
                     else f = pw.slotFixedFnum[2] + page.slotDetune[2];
 
-                    SOutData(page, mml, page.port[2]
-                        , (byte)(0x30 + 0 + 2 + 8)//0:port 2:slot3 8:ch3specialMode
-                        , (byte)((f & 0xff00) >> 8)
-                        , (byte)(f & 0xff));
+                    //SOutData(page, mml, page.port[2]
+                    //    , (byte)(0x30 + 0 + 2 + 8)//0:port 2:slot3 8:ch3specialMode
+                    //    , (byte)((f & 0xff00) >> 8)
+                    //    , (byte)(f & 0xff));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xac //slot3
+                        , (byte)((f & 0xff00) >> 8));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xa8
+                        , (byte)f);
                 }
                 if ((page.slots & 1) != 0)
                 {
@@ -771,10 +783,16 @@ namespace Core
                     if (pw.slotFixedFnum[0] == -1) f = freq + page.slotDetune[0];
                     else f = pw.slotFixedFnum[0] + page.slotDetune[0];
 
-                    SOutData(page, mml, page.port[2]
-                        , (byte)(0x30 + 0 + 1 + 8)//0:port 1:slot2 8:ch3specialMode
-                        , (byte)((f & 0xff00) >> 8)
-                        , (byte)(f & 0xff));
+                    //SOutData(page, mml, page.port[2]
+                    //    , (byte)(0x30 + 0 + 1 + 8)//0:port 1:slot2 8:ch3specialMode
+                    //    , (byte)((f & 0xff00) >> 8)
+                    //    , (byte)(f & 0xff));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xad //slot1
+                        , (byte)((f & 0xff00) >> 8));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xa9
+                        , (byte)f);
                 }
                 if ((page.slots & 2) != 0)
                 {
@@ -782,10 +800,16 @@ namespace Core
                     if (pw.slotFixedFnum[1] == -1) f = freq + page.slotDetune[1];
                     else f = pw.slotFixedFnum[1] + page.slotDetune[1];
 
-                    SOutData(page, mml, page.port[2]
-                        , (byte)(0x30 + 0 + 0 + 8)//0:port 0:slot1 8:ch3specialMode
-                        , (byte)((f & 0xff00) >> 8)
-                        , (byte)(f & 0xff));
+                    //SOutData(page, mml, page.port[2]
+                    //    , (byte)(0x30 + 0 + 0 + 8)//0:port 0:slot1 8:ch3specialMode
+                    //    , (byte)((f & 0xff00) >> 8)
+                    //    , (byte)(f & 0xff));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xae //slot2
+                        , (byte)((f & 0xff00) >> 8));
+                    SOutData(page, mml, page.port[0]
+                        , (byte)0xaa
+                        , (byte)f);
                 }
             }
             else

@@ -69,7 +69,7 @@ namespace mml2vgmIDE
         private uint[] psgVol = new uint[4];
 
         private int pendingFrame;
-        private static byte[] ch3FnumAdr = [0xa6, 0xac, 0xad, 0xae];
+        private static byte[] ch3FnumAdr = [0xad, 0xae, 0xac, 0xa6];//op1:0xad op2:0xae op3:0xac op4:0xa6
         private byte ch3KeyOn = 0;
         private bool vi = true;
 
@@ -517,9 +517,9 @@ namespace mml2vgmIDE
                 return;
             }
 
-            fmFreq[port][2][cs + 1] = (uint)(fmFreq[port][2][cs + 1] + (addOrsub == 0 ? 1 : -1) * freq);
-            WriteYM2612(true, new outDatum(ch3FnumAdr[cs + 1]), new outDatum((byte)(fmFreq[port][2][cs + 1] >> 8)));
-            WriteYM2612(true, new outDatum((byte)(ch3FnumAdr[cs + 1] - 4)), new outDatum((byte)fmFreq[port][2][cs + 1]));
+            fmFreq[port][2][cs] = (uint)(fmFreq[port][2][cs] + (addOrsub == 0 ? 1 : -1) * freq);
+            WriteYM2612(true, new outDatum(ch3FnumAdr[cs]), new outDatum((byte)(fmFreq[port][2][cs] >> 8)));
+            WriteYM2612(true, new outDatum((byte)(ch3FnumAdr[cs] - 4)), new outDatum((byte)fmFreq[port][2][cs]));
         }
 
         private void fmFreqSetAndKeyOffOn(outDatum val)
@@ -556,7 +556,7 @@ namespace mml2vgmIDE
             }
 
 
-            fmFreq[port][2][cs + 1] = freq;
+            fmFreq[port][2][cs] = freq;
 
             //byte m = (byte)(0x20 << cs);
             //if (keyOff != 0)
@@ -564,8 +564,8 @@ namespace mml2vgmIDE
             //    ch3KeyOn = (byte)(ch3KeyOn & (~m));
             //    WriteYM2612P0(0x28, (byte)(ch3KeyOn | 2));
             //}
-            WriteYM2612(true, new outDatum(ch3FnumAdr[cs + 1]),new outDatum( (byte)(fmFreq[port][2][cs + 1] >> 8)));
-            WriteYM2612(true, new outDatum((byte)(ch3FnumAdr[cs + 1] - 4)), new outDatum((byte)fmFreq[port][2][cs + 1]));
+            WriteYM2612(true, new outDatum(ch3FnumAdr[cs]),new outDatum( (byte)(fmFreq[port][2][cs] >> 8)));
+            WriteYM2612(true, new outDatum((byte)(ch3FnumAdr[cs] - 4)), new outDatum((byte)fmFreq[port][2][cs]));
             //if (keyOn != 0)
             //{
             //    ch3KeyOn = (byte)(ch3KeyOn | m);
