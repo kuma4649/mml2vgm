@@ -196,8 +196,8 @@ namespace mml2vgmIDE
                         dest.WriteByte((byte)(opnbMasterClock >> 0));
                         dest.WriteByte((byte)(opnbMasterClock >> 8));
                         dest.WriteByte((byte)(opnbMasterClock >> 16));
-                        if (useChips[i] == 3) dest.WriteByte(0);
-                        else dest.WriteByte(0x40);
+                        if (useChips[i] == 3) dest.WriteByte(0x80 + 0x00);//bit31:OPNB2  bit30:dualchip
+                        else dest.WriteByte(0x80 + 0x40);
                         break;
                     case 5:
                         dest.Position = 0x30;
@@ -588,10 +588,13 @@ namespace mml2vgmIDE
             {
                 if (partCount[0] > 0)
                 {
-                    uint n = 0;
+                    int n = 0;
                     for (int i = 0; i < partCount[0]; i++)
                     {
-                        n += pageCount[0][i];
+                        for (int j = 0; j < pageLength[0][i].Length; j++)
+                        {
+                            n += pageLength[0][i][j] > 1 ? 1 : 0;
+                        }
                     }
                     if (n > 0) ret[0] = 1;
                 }
@@ -601,10 +604,13 @@ namespace mml2vgmIDE
             {
                 if (partCount[1] > 0)
                 {
-                    uint n = 0;
+                    int n = 0;
                     for (int i = 0; i < partCount[1]; i++)
                     {
-                        n += pageCount[1][i];
+                        for (int j = 0; j < pageLength[1][i].Length; j++)
+                        {
+                            n += pageLength[1][i][j] > 1 ? 1 : 0;
+                        }
                     }
                     if (n > 0)
                     {
@@ -618,10 +624,13 @@ namespace mml2vgmIDE
             {
                 if (partCount[2] > 0)
                 {
-                    uint n = 0;
+                    int n = 0;
                     for (int i = 0; i < partCount[2]; i++)
                     {
-                        n += pageCount[2][i];
+                        for (int j = 0; j < pageLength[2][i].Length; j++)
+                        {
+                            n += pageLength[2][i][j] > 1 ? 1 : 0;
+                        }
                     }
                     if (n > 0) ret[2] = 3;
                 }
@@ -631,10 +640,13 @@ namespace mml2vgmIDE
             {
                 if (partCount[3] > 0)
                 {
-                    uint n = 0;
+                    int n = 0;
                     for (int i = 0; i < partCount[3]; i++)
                     {
-                        n += pageCount[3][i];
+                        for (int j = 0; j < pageLength[3][i].Length; j++)
+                        {
+                            n += pageLength[3][i][j] > 1 ? 1 : 0;
+                        }
                     }
                     if (n > 0) ret[3] = 4;
                 }
@@ -644,10 +656,13 @@ namespace mml2vgmIDE
             {
                 if (partCount[4] > 0)
                 {
-                    uint n = 0;
+                    int n = 0;
                     for (int i = 0; i < partCount[4]; i++)
                     {
-                        n += pageCount[4][i];
+                        for (int j = 0; j < pageLength[4][i].Length; j++)
+                        {
+                            n += pageLength[4][i][j] > 1 ? 1 : 0;
+                        }
                     }
                     if (n > 0) ret[4] = 5;
                 }

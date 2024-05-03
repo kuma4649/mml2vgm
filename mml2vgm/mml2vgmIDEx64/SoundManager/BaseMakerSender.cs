@@ -58,9 +58,11 @@ namespace SoundManager
                 System.Windows.Forms.Application.DoEvents();
             }
 
+            tokenSource.Cancel();
             if (task.Status == TaskStatus.Running)
             {
-                tokenSource.Cancel();
+                //tokenSource.Cancel();
+                task.Wait(1000, cancellationToken);
             }
             //task.Wait(1000, cancellationToken);
             return true;

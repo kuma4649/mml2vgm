@@ -5654,7 +5654,7 @@ namespace mml2vgmIDE
                 //sm.Release();
                 NAudioWrap.Stop();
 
-                sm.Release();
+                //sm.Release();
             }
             catch (Exception ex)
             {

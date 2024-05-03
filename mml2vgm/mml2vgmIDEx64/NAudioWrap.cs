@@ -58,136 +58,171 @@ namespace mml2vgmIDE
                 switch (setting.outputDevice.DeviceType)
                 {
                     case 0:
-                        log.ForcedWrite("NAudioWrap:Start:Start Wave Init.");
-                        waveOut = new WaveOutEvent();
-                        waveOut.DeviceNumber = 0;
-                        waveOut.DesiredLatency = setting.outputDevice.Latency;
-                        for (int i = 0; i < WaveOut.DeviceCount; i++)
-                        {
-                            if (setting.outputDevice.WaveOutDeviceName == WaveOut.GetCapabilities(i).ProductName)
-                            {
-                                waveOut.DeviceNumber = i;
-                                break;
-                            }
-                        }
-                        waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
-                        log.ForcedWrite("NAudioWrap:Start:Call Wave Init.");
-                        waveOut.Init(waveProvider);
-                        log.ForcedWrite("NAudioWrap:Start:Call Wave Play.");
-                        waveOut.Play();
+                        StartWaveOut(setting);
                         break;
                     case 1:
-                        log.ForcedWrite("NAudioWrap:Start:Start Directsound Init.");
-                        System.Guid g = System.Guid.Empty;
-                        foreach (DirectSoundDeviceInfo d in DirectSoundOut.Devices)
-                        {
-                            if (setting.outputDevice.DirectSoundDeviceName == d.Description)
-                            {
-                                g = d.Guid;
-                                break;
-                            }
-                        }
-                        if (g == System.Guid.Empty)
-                        {
-                            dsOut = new DirectSoundOut(setting.outputDevice.Latency);
-                        }
-                        else
-                        {
-                            dsOut = new DirectSoundOut(g, setting.outputDevice.Latency);
-                        }
-                        dsOut.PlaybackStopped += DeviceOut_PlaybackStopped;
-                        log.ForcedWrite("NAudioWrap:Start:Call Directsound Init.");
-                        dsOut.Init(waveProvider);
-                        log.ForcedWrite("NAudioWrap:Start:Call Directsound Play.");
-                        dsOut.Play();
+                        StartDirectSound(setting);
                         break;
                     case 2:
-                        log.ForcedWrite("NAudioWrap:Start:Start Wasapi Init.");
-                        MMDevice dev = null;
-                        var enumerator = new MMDeviceEnumerator();
-                        var endPoints = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-                        foreach (var endPoint in endPoints)
-                        {
-                            if (setting.outputDevice.WasapiDeviceName == string.Format("{0} ({1})", endPoint.FriendlyName, endPoint.DeviceFriendlyName))
-                            {
-                                dev = endPoint;
-                                break;
-                            }
-                        }
-                        if (dev == null)
-                        {
-                            wasapiOut = new WasapiOut(setting.outputDevice.WasapiShareMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, setting.outputDevice.Latency);
-                        }
-                        else
-                        {
-                            wasapiOut = new WasapiOut(dev, setting.outputDevice.WasapiShareMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, false, setting.outputDevice.Latency);
-                        }
-                        wasapiOut.PlaybackStopped += DeviceOut_PlaybackStopped;
-                        log.ForcedWrite("NAudioWrap:Start:Call Wasapi Init.");
-                        wasapiOut.Init(waveProvider);
-                        log.ForcedWrite("NAudioWrap:Start:Call Wasapi Play.");
-                        wasapiOut.Play();
+                        StartWasapi(setting);
                         break;
                     case 3:
-                        log.ForcedWrite("NAudioWrap:Start:Start ASIO Init.");
-                        if (AsioOut.isSupported())
-                        {
-                            int i = 0;
-                            foreach (string s in AsioOut.GetDriverNames())
-                            {
-                                if (setting.outputDevice.AsioDeviceName == s)
-                                {
-                                    break;
-                                }
-                                i++;
-                            }
-                            int retry = 1;
-                            do
-                            {
-                                try
-                                {
-                                    asioOut = new AsioOut(i);
-                                }
-                                catch
-                                {
-                                    asioOut = null;
-                                    Thread.Sleep(1000);
-                                    retry--;
-                                }
-                            } while (asioOut == null && retry > 0);
-                            asioOut.PlaybackStopped += DeviceOut_PlaybackStopped;
-                            log.ForcedWrite("NAudioWrap:Start:Call ASIO Init.");
-                            asioOut.Init(waveProvider);
-                            log.ForcedWrite("NAudioWrap:Start:Call ASIO Play.");
-                            asioOut.Play();
-                        }
+                        StartASIO(setting);
                         break;
 
                     case 5:
-                        log.ForcedWrite("NAudioWrap:Start:Start NULLDevice Init.");
-                        nullOut = new NullOut(true);
-                        nullOut.PlaybackStopped += DeviceOut_PlaybackStopped;
-                        log.ForcedWrite("NAudioWrap:Start:Call NULLDevice Init.");
-                        nullOut.Init(waveProvider);
-                        log.ForcedWrite("NAudioWrap:Start:Call NULLDevice Play.");
-                        nullOut.Play();
+                        StartNULL();
                         break;
                 }
             }
             catch (Exception ex)
             {
-                log.ForcedWrite("NAudioWrap:Start:Start Wave Init.(reinit)");
-                log.ForcedWrite(ex);
-                waveOut = new WaveOutEvent();
-                waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
-                log.ForcedWrite("NAudioWrap:Start:Call Wave Init.(reinit)");
-                waveOut.Init(waveProvider);
-                waveOut.DeviceNumber = 0;
-                log.ForcedWrite("NAudioWrap:Start:Call Wave Play.(reinit)");
-                waveOut.Play();
+                StartWave_reinit(ex);
             }
 
         }
+
+        private static void StartNULL()
+        {
+            log.ForcedWrite("NAudioWrap:Start:Start NULLDevice Init.");
+            nullOut = new NullOut(true);
+            nullOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+            log.ForcedWrite("NAudioWrap:Start:Call NULLDevice Init.");
+            nullOut.Init(waveProvider);
+            log.ForcedWrite("NAudioWrap:Start:Call NULLDevice Play.");
+            nullOut.Play();
+        }
+
+        private static void StartASIO(Setting setting)
+        {
+            log.ForcedWrite("NAudioWrap:Start:Start ASIO Init.");
+            if (AsioOut.isSupported())
+            {
+                int i = 0;
+                foreach (string s in AsioOut.GetDriverNames())
+                {
+                    if (setting.outputDevice.AsioDeviceName == s)
+                    {
+                        break;
+                    }
+                    i++;
+                }
+                int retry = 1;
+                do
+                {
+                    try
+                    {
+                        asioOut = new AsioOut(i);
+                    }
+                    catch
+                    {
+                        asioOut = null;
+                        retry--;
+                        if (retry > 0) Thread.Sleep(1000);
+                    }
+                } while (asioOut == null && retry > 0);
+                if (asioOut == null) throw new Exception("Not found ASIO device.");
+                asioOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                log.ForcedWrite("NAudioWrap:Start:Call ASIO Init.");
+                asioOut.Init(waveProvider);
+                log.ForcedWrite("NAudioWrap:Start:Call ASIO Play.");
+                asioOut.Play();
+            }
+        }
+
+        private static void StartWasapi(Setting setting)
+        {
+            log.ForcedWrite("NAudioWrap:Start:Start Wasapi Init.");
+            MMDevice dev = null;
+            var enumerator = new MMDeviceEnumerator();
+            var endPoints = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+            foreach (var endPoint in endPoints)
+            {
+                if (setting.outputDevice.WasapiDeviceName == string.Format("{0} ({1})", endPoint.FriendlyName, endPoint.DeviceFriendlyName))
+                {
+                    dev = endPoint;
+                    break;
+                }
+            }
+            if (dev == null)
+            {
+                wasapiOut = new WasapiOut(setting.outputDevice.WasapiShareMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, setting.outputDevice.Latency);
+            }
+            else
+            {
+                wasapiOut = new WasapiOut(dev, setting.outputDevice.WasapiShareMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, false, setting.outputDevice.Latency);
+            }
+            wasapiOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+            log.ForcedWrite("NAudioWrap:Start:Call Wasapi Init.");
+            wasapiOut.Init(waveProvider);
+            log.ForcedWrite("NAudioWrap:Start:Call Wasapi Play.");
+            wasapiOut.Play();
+        }
+
+        private static void StartDirectSound(Setting setting)
+        {
+            log.ForcedWrite("NAudioWrap:Start:Start Directsound Init.");
+            System.Guid g = System.Guid.Empty;
+            foreach (DirectSoundDeviceInfo d in DirectSoundOut.Devices)
+            {
+                if (setting.outputDevice.DirectSoundDeviceName == d.Description)
+                {
+                    g = d.Guid;
+                    break;
+                }
+            }
+            if (g == System.Guid.Empty)
+            {
+                dsOut = new DirectSoundOut(setting.outputDevice.Latency);
+            }
+            else
+            {
+                dsOut = new DirectSoundOut(g, setting.outputDevice.Latency);
+            }
+            dsOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+            log.ForcedWrite("NAudioWrap:Start:Call Directsound Init.");
+            dsOut.Init(waveProvider);
+            log.ForcedWrite("NAudioWrap:Start:Call Directsound Play.");
+            dsOut.Play();
+        }
+
+        private static void StartWaveOut(Setting setting)
+        {
+            log.ForcedWrite("NAudioWrap:Start:Start Wave Init.");
+            waveOut = new WaveOutEvent();
+            waveOut.DeviceNumber = 0;
+            waveOut.DesiredLatency = setting.outputDevice.Latency;
+            for (int i = 0; i < WaveOut.DeviceCount; i++)
+            {
+                if (setting.outputDevice.WaveOutDeviceName == WaveOut.GetCapabilities(i).ProductName)
+                {
+                    waveOut.DeviceNumber = i;
+                    break;
+                }
+            }
+            waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+            log.ForcedWrite("NAudioWrap:Start:Call Wave Init.");
+            waveOut.Init(waveProvider);
+            log.ForcedWrite("NAudioWrap:Start:Call Wave Play.");
+            waveOut.Play();
+        }
+
+        private static void StartWave_reinit(Exception ex)
+        {
+            log.ForcedWrite("NAudioWrap:Start:Start Wave Init.(reinit)");
+            log.ForcedWrite(ex);
+            waveOut = new WaveOutEvent();
+            waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+            log.ForcedWrite("NAudioWrap:Start:Call Wave Init.(reinit)");
+            waveOut.Init(waveProvider);
+            waveOut.DeviceNumber = 0;
+            log.ForcedWrite("NAudioWrap:Start:Call Wave Play.(reinit)");
+            waveOut.Play();
+        }
+
+
+
+
 
         public static void ShowControlPanel(string asioDriverName)
         {
