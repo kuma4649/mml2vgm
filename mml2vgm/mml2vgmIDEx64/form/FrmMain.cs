@@ -4852,21 +4852,29 @@ namespace mml2vgmIDE
 
                 if (d == null) return;
 
+                string ext = Path.GetExtension(d.gwiFullPath).ToLower();
+
+                if (ext != ".muc" && ext != ".mml" && ext != ".gwi")
+                {
+                    MessageBox.Show("この形式のエクスポートに対応していません。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 //コンパイル実施
                 Compile(false, false, false, false, true);
                 while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
 
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
+                if (ext == ".muc")
                 {
                     foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
                     outFn = Path.ChangeExtension(d.gwiFullPath, ".mub");
                 }
-                else if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
+                else if (ext == ".mml")
                 {
                     foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
                     outFn = Path.ChangeExtension(d.gwiFullPath, ".m");
                 }
-                else if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
+                else if (ext == ".gwi")
                 {
                     string sf = Path.Combine(
                         Common.GetApplicationDataFolder(true)

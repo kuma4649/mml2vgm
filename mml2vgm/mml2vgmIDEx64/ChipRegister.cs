@@ -5386,7 +5386,10 @@ namespace mml2vgmIDE
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
                     if (!ctYM3526[Chip.Number].UseScci && ctYM3526[Chip.Number].UseEmu)
+                    {
+                        //log.Write(string.Format("Adr:{0:X02} Dat:{1:X02}", (byte)address, (byte)data));
                         mds.WriteYM3526(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                    }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
                 {
