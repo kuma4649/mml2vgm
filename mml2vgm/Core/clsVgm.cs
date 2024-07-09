@@ -39,6 +39,7 @@ namespace Core
         public K051649[] k051649 = null;
         public QSound[] qsound = null;
         public K053260[] k053260 = null;
+        public K054539[] k054539 = null;
         public MidiGM[] midiGM = null;
         public NES[] nes = null;
         public DMG[] dmg = null;
@@ -498,6 +499,20 @@ namespace Core
             {
                 k053260 = lstK053260.ToArray();
                 chips.Add(enmChipType.K053260, k053260);
+            }
+
+            List<K054539> lstK054539 = new List<K054539>();
+            n = sp.dicChipPartName[enmChipType.K054539];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstK054539.Add(new K054539(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstK054539.Count > 0)
+            {
+                k054539 = lstK054539.ToArray();
+                chips.Add(enmChipType.K054539, k054539);
             }
 
             List<MidiGM> lstMidiGM = new List<MidiGM>();
@@ -1407,7 +1422,7 @@ namespace Core
         }
 
         /// <summary>
-        /// '@ P No , "FileName" , [BaseFreq] , Volume ( , [ChipName] , [Option] )
+        /// '@ P No , "FileName" , [BaseFreq] , Volume ( , [ChipName] , [Option...] )
         /// </summary>
         private void definePCMInstrumentEasy(Line line, string[] vs)
         {
@@ -1495,6 +1510,16 @@ namespace Core
                     opt = 36;
             }
 
+            object[] option = null;
+            if (vs.Length > 6)
+            {
+                option = new object[vs.Length - 6];
+                for (int i = 0; i < option.Length; i++)
+                {
+                    option[i] = vs[i + 6];
+                }
+            }
+
             for (int i = 0; i < instPCMDatSeq.Count; i++)
             {
                 clsPcmDatSeq ele = instPCMDatSeq[i];
@@ -1519,6 +1544,7 @@ namespace Core
                 , enmChip
                 , chipNumber
                 , opt
+                , option
                 ));
 
             //if (instPCM.ContainsKey(num))
@@ -4267,6 +4293,8 @@ namespace Core
             long useK051649_S = 0;
             long useK053260 = 0;
             long useK053260_S = 0;
+            long useK054539 = 0;
+            long useK054539_S = 0;
             long useNES = 0;
             long useNES_S = 0;
             long useQSound = 0;
@@ -4393,6 +4421,10 @@ namespace Core
                 if (k053260 != null && k053260.Length > i && k053260[i] != null)
                     foreach (partWork pw in k053260[i].lstPartWork)
                     { useK053260 += pw.clockCounter; if (k053260[i].ChipID == 1) useK053260_S += pw.clockCounter; }
+
+                if (k054539 != null && k054539.Length > i && k054539[i] != null)
+                    foreach (partWork pw in k054539[i].lstPartWork)
+                    { useK054539 += pw.clockCounter; if (k054539[i].ChipID == 1) useK054539_S += pw.clockCounter; }
             }
 
             if (info.Version >= 1.00f && useSN76489 != 0)
@@ -4522,8 +4554,12 @@ namespace Core
             }
             if (info.Version >= 1.61f && useQSound != 0)
                 Common.SetLE32(dat, 0xb4, (uint)qsound[0].Frequency);
+
             if (info.Version >= 1.61f && useK053260 != 0)
                 Common.SetLE32(dat, 0xac, (uint)k053260[0].Frequency);
+
+            if (info.Version >= 1.61f && useK054539 != 0)
+                Common.SetLE32(dat, 0xa0, (uint)k054539[0].Frequency | (uint)(useK054539_S == 0 ? 0 : 0x40000000));
 
             //if (info.Version == 1.51f)
             //{

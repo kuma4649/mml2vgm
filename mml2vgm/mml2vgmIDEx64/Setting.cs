@@ -142,6 +142,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _K054539Type = new ChipType();
+        public ChipType K054539Type
+        {
+            get
+            {
+                return _K054539Type;
+            }
+
+            set
+            {
+                _K054539Type = value;
+            }
+        }
+
         private ChipType _PPZ8Type = new ChipType();
         public ChipType PPZ8Type
         {
@@ -641,6 +655,20 @@ namespace mml2vgmIDE
             set
             {
                 _K053260SType = value;
+            }
+        }
+
+        private ChipType _K054539SType = new ChipType();
+        public ChipType K054539SType
+        {
+            get
+            {
+                return _K054539SType;
+            }
+
+            set
+            {
+                _K054539SType = value;
             }
         }
 

@@ -1633,6 +1633,7 @@ namespace Core
                         int v = (int)mml.args[2];
                         //SOutData(page, mml, port[3], 0x22, (byte)v);
                         //ページに関係なく即反映
+                        v = Common.CheckRange(v, 0, 127);
                         parent.OutData(mml, port[3], 0x22, (byte)v);
                         break;
                     case 'S':
@@ -1640,6 +1641,7 @@ namespace Core
                         //SOutData(page, mml, port[3], 0x23, ch);
                         //SOutData(page, mml, port[3], 0x24, (byte)sl);
                         //ページに関係なく即反映
+                        sl = Common.CheckRange(sl, 0, 15);
                         parent.OutData(mml, port[3], 0x23, ch);
                         parent.OutData(mml, port[3], 0x24, (byte)sl);
                         break;

@@ -29,6 +29,7 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK051649 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctK054539 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctNES = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctVRC6 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctGigatron = new Setting.ChipType[2] { null, null };
@@ -62,6 +63,7 @@ namespace mml2vgmIDE
         private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scK054539 = new RSoundChip[2] { null, null };
         private RSoundChip[] scNES = new RSoundChip[2] { null, null };
         private RSoundChip[] scVRC6 = new RSoundChip[2] { null, null };
         private RSoundChip[] scGigatron = new RSoundChip[2] { null, null };
@@ -336,6 +338,7 @@ namespace mml2vgmIDE
         private int[] HuC6280NowFadeoutVol = new int[] { 0, 0 };
         private int[] K051649NowFadeoutVol = new int[] { 0, 0 };
         private int[] K053260NowFadeoutVol = new int[] { 0, 0 };
+        private int[] K054539NowFadeoutVol = new int[] { 0, 0 };
         private int[] QSoundNowFadeoutVol = new int[] { 0, 0 };
 
         private bool[] maskOKIM6258 = new bool[2] { false, false };
@@ -425,6 +428,7 @@ namespace mml2vgmIDE
         public List<Chip> YM2612 = new List<Chip>();
         public List<Chip> QSound = new List<Chip>();
         public List<Chip> K053260 = new List<Chip>();
+        public List<Chip> K054539 = new List<Chip>();
         public List<Chip> PPZ8 = new List<Chip>();
         public List<Chip> PPSDRV = new List<Chip>();
         public List<Chip> P86 = new List<Chip>();
@@ -563,6 +567,21 @@ namespace mml2vgmIDE
                         if (K053260.Count < i + 1) K053260.Add(new Chip(4));
                         K053260[i].Model = ctK053260[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         K053260[i].Delay = (K053260[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.K054539:
+                    ctK054539 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < K054539.Count; i++)
+                    {
+                        K054539[i].Model = EnmVRModel.VirtualModel;
+                        K054539[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scK054539[i] = null;
+                        if (scK054539[i] != null) scK054539[i].init();
+                        if (K054539.Count < i + 1) K054539.Add(new Chip(8));
+                        K054539[i].Model = ctK054539[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        K054539[i].Delay = (K054539[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmZGMDevice.NESAPU:
@@ -1002,6 +1021,13 @@ namespace mml2vgmIDE
                 K053260[i].Number = i;
                 K053260[i].Hosei = 0;
 
+                if (K054539.Count < i + 1) K054539.Add(new Chip(8));
+                K054539[i].Use = false;
+                K054539[i].Model = EnmVRModel.None;
+                K054539[i].Device = EnmZGMDevice.K054539;
+                K054539[i].Number = i;
+                K054539[i].Hosei = 0;
+
                 if (NES.Count < i + 1) NES.Add(new Chip(5));
                 NES[i].Use = false;
                 NES[i].Model = EnmVRModel.None;
@@ -1185,6 +1211,7 @@ namespace mml2vgmIDE
             HuC6280.Clear();
             K051649.Clear();
             K053260.Clear();
+            K054539.Clear();
             QSound.Clear();
             RF5C164.Clear();
             AY8910.Clear();
@@ -1236,6 +1263,7 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
                 if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K053260) K053260.Add(c);
+                if (c is Driver.ZGM.ZgmChip.K054539) K054539.Add(c);
                 if (c is Driver.ZGM.ZgmChip.QSound) QSound.Add(c);
                 if (c is Driver.ZGM.ZgmChip.C352) C352.Add(c);
 
@@ -1273,6 +1301,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.K053260:
                     K053260SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.K054539:
+                    K054539SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.NESAPU:
                     NESSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -1369,6 +1400,7 @@ namespace mml2vgmIDE
             sendChipDataFunc.Add(EnmZGMDevice.HuC6280, HuC6280WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.K051649, K051649WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.K053260, K053260WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.K054539, K054539WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.NESAPU, NESWriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.VRC6, VRC6WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.Gigatron, GigatronWriteRegisterControl);
@@ -1516,6 +1548,7 @@ namespace mml2vgmIDE
             HuC6280SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             K051649SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             K053260SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
+            K054539SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 64.0));
             NESSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             QSoundSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 65535.0));
             RF5C164SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
@@ -2103,6 +2136,9 @@ namespace mml2vgmIDE
                 case 0xd2:
                     enq(od, Counter, K051649[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0xd3:
+                    enq(od, Counter, K054539[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
                 case 0xba:
                     enq(od, Counter, K053260[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
@@ -2159,6 +2195,7 @@ namespace mml2vgmIDE
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in HuC6280) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in K053260) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K054539) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in QSound) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
@@ -3780,6 +3817,151 @@ namespace mml2vgmIDE
             for (int i = 0; i < 4; i++)
             {
                 data.Add(new PackData(null, K053260[chipID], EnmDataType.Normal, (i + 1) * 8 + 7, 0x00, null));// volume:0
+            }
+
+            return data;
+        }
+
+        #endregion
+
+
+
+        #region K054539
+
+        private void K054539WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctK054539[Chip.Number].UseScci)
+                    {
+                        mds.WriteK054539(Chip.Index, (byte)Chip.Number, (int)address, (byte)data);
+                        //Debug.WriteLine("a adr{0:x04} dat{1:x02}",address,data);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                mds.WriteK054539(dat.Chip.Index, (byte)dat.Chip.Number, (int)dat.Address, (byte)dat.Data);
+                                //Debug.WriteLine("d adr{0:x04} dat{1:x02}", dat.Address, dat.Data);
+                            }
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                            mds.WriteK054539PCMData(Chip.Index, (byte)Chip.Number, (uint)((object[])exData)[0], (uint)((object[])exData)[1], (uint)((object[])exData)[2], (byte[])((object[])exData)[3], (uint)((object[])exData)[4]);
+                        else
+                        {
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void K054539SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctK054539 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriK054539 = 2;
+            else chipLED.SecK054539 = 2;
+
+            if (Address == 0x28)
+            {
+                dData =
+                    (Chip.ChMasks[0] ? 0 : (dData & 1))
+                    | (Chip.ChMasks[1] ? 0 : (dData & 2))
+                    | (Chip.ChMasks[2] ? 0 : (dData & 4))
+                    | (Chip.ChMasks[3] ? 0 : (dData & 8))
+                    ;
+            }
+        }
+
+        public void K054539SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, K054539[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void K054539SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, K054539[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void K054539WritePCMData(outDatum od, long Counter, byte chipID, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
+        {
+            enq(od, Counter, K054539[chipID], EnmDataType.Block, -1, -2, new object[] { ROMSize, DataStart, DataLength, romdata, SrcStartAdr });
+        }
+
+        public void K054539SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = K054539MakeSoftReset(chipID);
+            K054539SetRegister(null, Counter, chipID, data.ToArray());
+        }
+
+        public void K054539SetMask(long Counter, int chipID, int ch, bool mask)
+        {
+            if (mask)
+            {
+            }
+            else
+            {
+            }
+        }
+
+        public void K054539WriteClock(byte chipID, int clock)
+        {
+            if (scK054539 != null && scK054539.Length > chipID && scK054539[chipID] != null)
+            {
+                scK054539[chipID].dClock = scK054539[chipID].SetMasterClock((uint)clock);
+            }
+        }
+
+        public void K054539SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < K054539.Count; i++)
+            {
+                if (!K054539[i].Use) continue;
+                if (K054539[i].Model == EnmVRModel.VirtualModel) continue;
+                if (K054539NowFadeoutVol[i] == v) continue;
+
+                K054539NowFadeoutVol[i] = v;
+
+            }
+        }
+
+        public List<PackData> K054539MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+
+            data.Add(new PackData(null, K054539[chipID], EnmDataType.Normal, 0x28, 0x00, null));// KeyOff
+            for (int i = 0; i < 4; i++)
+            {
+                data.Add(new PackData(null, K054539[chipID], EnmDataType.Normal, (i + 1) * 8 + 7, 0x00, null));// volume:0
             }
 
             return data;

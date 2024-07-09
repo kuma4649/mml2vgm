@@ -52,10 +52,6 @@ namespace mml2vgmIDE
         public uint YM2413ClockValue;
         public uint HuC6280ClockValue;
         public uint QSoundClockValue;
-        public uint SAA1099ClockValue;
-        public uint WSwanClockValue;
-        public uint ES5503ClockValue;
-        public uint X1_010ClockValue;
         public uint C352ClockValue;
         public byte C352ClockDivider;
         public uint GA20ClockValue;
@@ -66,8 +62,6 @@ namespace mml2vgmIDE
         public uint DMGClockValue;
         public uint NESClockValue;
         public uint MultiPCMClockValue;
-        public uint uPD7759ClockValue;
-        public uint POKEYClockValue;
 
         public bool YM2612DualChipFlag;
         public bool YM2151DualChipFlag;
@@ -1041,7 +1035,7 @@ namespace mml2vgmIDE
                             //chipRegister.writeK054539PCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
                             pcmDat.Clear();
                             for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                            chipRegister.K054539WritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
+                            chipRegister.writeK054539PCMData(chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
                             //dumpData(model, "K054539_PCMData", vgmAdr + 15, bLen - 8);
                             break;
 
@@ -1443,9 +1437,9 @@ namespace mml2vgmIDE
         private void vcK054539(outDatum od)
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
-            int adr = (int)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
+            uint adr = (uint)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
             byte data = vgmBuf[vgmAdr + 3].val;
-            chipRegister.K054539SetRegister(od, Audio.DriverSeqCounter, id, adr, data);
+            chipRegister.writeK054539(id, adr, data);
             vgmAdr += 4;
         }
 

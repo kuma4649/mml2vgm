@@ -311,6 +311,12 @@ namespace Core
                 (info.format == enmFormat.XGM || info.format == enmFormat.XGM2) ? new string[] { } : new string[] { "O", "Os" })
                 ), new int[] { 2, 0, -1 }));
 
+            cp = new K054539(null, 0, null, null, 0);
+            cpn.Add(enmChipType.K054539, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "W", "Ws" } : (
+                (info.format == enmFormat.XGM || info.format == enmFormat.XGM2) ? new string[] { } : new string[] { "W", "Ws" })
+                ), new int[] { 2, 0, -1 }));
+
             cp = new MidiGM(null, 0, null, null, 0);
             cpn.Add(enmChipType.MIDI_GM, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { } : (

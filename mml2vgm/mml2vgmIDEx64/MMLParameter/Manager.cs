@@ -17,6 +17,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> HuC6280 = new List<Instrument>();
         public List<Instrument> K051649 = new List<Instrument>();
         public List<Instrument> K053260 = new List<Instrument>();
+        public List<Instrument> K054539 = new List<Instrument>();
         public List<Instrument> NES = new List<Instrument>();
         public List<Instrument> VRC6 = new List<Instrument>();
         public List<Instrument> Gigatron = new List<Instrument>();
@@ -69,6 +70,7 @@ namespace mml2vgmIDE.MMLParameter
             HuC6280.Clear();
             K051649.Clear();
             K053260.Clear();
+            K054539.Clear();
             QSound.Clear();
             RF5C164.Clear();
             SN76489.Clear();
@@ -184,6 +186,9 @@ namespace mml2vgmIDE.MMLParameter
                     break;
                 case "K053260":
                     SetupK053260(od);
+                    break;
+                case "K054539":
+                    SetupK054539(od);
                     break;
                 case "NES":
                     SetupNES(od);
@@ -373,6 +378,28 @@ namespace mml2vgmIDE.MMLParameter
             dicInstAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
             k53.isTrace = isTrace;
+        }
+
+        private void SetupK054539(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.K054539 != null
+                && od.linePos.chipIndex < Audio.chipRegister.K054539.Count)
+            {
+                chip = Audio.chipRegister.K054539[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.K054539[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            K054539 k54 = new K054539(chip, setting, midiKbd);
+            K054539.Add(k54);
+            dicInstAdd(k54, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(k54, od.linePos.chipIndex, od.linePos.chipNumber);
+            k54.isTrace = isTrace;
         }
 
         private void SetupK051649(outDatum od)

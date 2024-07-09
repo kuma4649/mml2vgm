@@ -70,6 +70,7 @@
         Gigatron=28,
         YM2612X2 = 29,
         SN76489X2 = 30,
+        K054539=31,
     }
 
     public enum EnmZGMDevice : int

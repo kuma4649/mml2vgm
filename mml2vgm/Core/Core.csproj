@@ -64,6 +64,7 @@
     <Compile Include="chips\Gigatron.cs" />
     <Compile Include="chips\HuC6280.cs" />
     <Compile Include="chips\K051649.cs" />
+    <Compile Include="chips\K054539.cs" />
     <Compile Include="chips\K053260.cs" />
     <Compile Include="chips\MidiGM.cs" />
     <Compile Include="chips\NES.cs" />

@@ -2355,14 +2355,6 @@ namespace Core
                 return;
             }
 
-            if (c == 'D')
-            {
-                n = Common.CheckRange(n, 0, 127);
-            }
-            else
-            {
-                n = Common.CheckRange(n, 0, 15);
-            }
             mml.args.Add(n);
 
         }

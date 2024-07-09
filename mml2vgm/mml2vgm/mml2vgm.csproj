@@ -190,6 +190,7 @@
     <None Include="sample\K053260\testK053260.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\K054539\testK054539.gwi" />
     <None Include="sample\MidiGM\testGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

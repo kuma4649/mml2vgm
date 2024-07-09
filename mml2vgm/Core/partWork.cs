@@ -970,7 +970,8 @@ namespace Core
             , int Volume
             , enmChipType chip
             , int chipNumber
-            , int LoopAdr)
+            , int LoopAdr
+            , params object[] option)
         {
             this.type = type;
             this.No = No;
@@ -980,6 +981,7 @@ namespace Core
             this.chip = chip;
             this.chipNumber = chipNumber;
             this.DatLoopAdr = LoopAdr;
+            this.Option = option;
         }
 
         public clsPcmDatSeq(

@@ -480,6 +480,7 @@ namespace Core
         /// </summary>
         public bool beforeTie = false;
         public bool keyOn = false;
+        public bool beforekeyOn = false;
         public bool keyOff = false;
         public int rhythmKeyOnData = -1;
         /// <summary>

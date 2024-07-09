@@ -1,0 +1,53 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =K054539 Test
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2024/07/06
+	Converted   =
+	Notes       =
+
+	ModeBeforeSend =All
+	ClockCount     =192
+	Octave-Rev     =FALSE
+
+
+}
+
+
+K054539 SPEC
+ channel : W1 ~ W8 (Pri)  Ws1 ~ Ws8 (Sec)
+ volume  : 0 ~ 64     ( 0x00 ~ 0x40 )
+ panning : left:15~7 center:8 right:(7~1) ( 8がCenter  )
+ PCM     : signed 8bit Liner PCM / signed 16bit Liner PCM / 4bit DPCM
+ reverb  : center reverb (実質echoエフェクト)
+
+
+
+PCM定義
+  Loop ループアドレス ( 24bit長 )
+  Type PCMの種類 ( 0 : 8bit  1 : 16bit  2 : 4bit dpcm) 
+       0 : unsigned  8bit PCMを使用してください。mml2vgmプログラム内部でsigned 8bit PCMにエンコードします。
+       1 :   signed 16bit PCMを使用してください。
+       2 : unsigned  8bit PCMを使用してください。mml2vgmプログラム内部で4bit dpcmにエンコードします。
+
+     No    Filename                     Freq    Volume(%)   Chip      Loop      Type
+'@ P 001 , "..\wav\Guitar.wav"        , 08000 ,       100 , K054539 , $003b00 , 0
+'@ P 002 , "..\wav\muteGuitar.wav"    , 08000 ,       100 , K054539 ,         , 0
+'@ P 003 , "..\wav\BD.wav"            , 08000 ,       100 , K054539 ,         , 2
+'@ P 004 , "..\wav\SD_16bit.wav"      , 16000 ,       100 , K054539 ,         , 1
+
+
+'W1 T146
+                 rev.Delay   pan
+'W1 l4 v64 @1 o4 XRvD65535   p1
+    rev.Volume(170未満だとほとんど聴こえない)
+'W1 XRvS0      Q8cde2_<e>Q4eee2 ; rev なし
+'W1 XRvS240    Q8cde2_<e>Q4eee2 ; rev 最大
+
+

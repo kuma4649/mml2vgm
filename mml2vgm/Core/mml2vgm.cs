@@ -734,7 +734,8 @@ namespace Core
                             , 0
                             , pds.DatLoopAdr
                             , false
-                            , 8000);
+                            , 8000
+                            , pds.Option);
                         desVGM.instPCM.Add(pds.No, new Tuple<string, clsPcm>("", v));
 
                         if (((desVGM.info.format == enmFormat.XGM|| desVGM.info.format == enmFormat.XGM2) && desVGM.pcmCache == null)
