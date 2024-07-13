@@ -1451,11 +1451,7 @@ namespace mml2vgmIDE
                 else hiyorimiNecessary = false;
 
                 log.Write("MDSound 初期化");
-
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                InitMDSound(lstChips);
 
                 if (setting.YM2612Type.UseEmu)
                 {
@@ -1678,11 +1674,7 @@ namespace mml2vgmIDE
                 else hiyorimiNecessary = false;
 
                 log.Write("MDSound 初期化");
-
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                InitMDSound(lstChips);
 
                 if (setting.YM2612Type.UseEmu)
                 {
@@ -2860,12 +2852,7 @@ namespace mml2vgmIDE
 
 
                 log.Write("MDSound 初期化");
-
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-
+                InitMDSound(lstChips);
 
                 log.Write("MDSound DAC control 初期化");
                 mds.dacControl.init((uint)Common.SampleRate, mds, ((Driver.ZGM.zgm)driver).PCMBank);
@@ -4605,10 +4592,7 @@ namespace mml2vgmIDE
 
                 log.Write("MDSound 初期化");
 
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                InitMDSound(lstChips);
 
                 log.Write("MDSound DAC control 初期化");
                 mds.dacControl.init((uint)Common.SampleRate, mds, ((vgm)driver).PCMBank);
@@ -4895,6 +4879,17 @@ namespace mml2vgmIDE
 
         }
 
+        public static void InitMDSound(List<MDSound.MDSound.Chip> lstChips)
+        {
+            MDSound.MDSound.Chip[] chips = null;
+            if (lstChips != null) chips = [.. lstChips];
+
+            if (mds == null)
+                mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, chips);
+            else
+                mds.Init((UInt32)Common.SampleRate, samplingBuffer, chips);
+        }
+
         public static bool mubPlay(Setting setting, Tuple<int, int, int> ch=null)
         {
 
@@ -5058,11 +5053,7 @@ namespace mml2vgmIDE
                 else hiyorimiNecessary = false;
 
                 log.Write("MDSound 初期化");
-
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                InitMDSound(lstChips);
 
                 string errMsg = mds.ReadErrMsgYM2608(0) + mds.ReadErrMsgYM2608(1);
                 if(!string.IsNullOrEmpty(errMsg))log.Write(errMsg);
@@ -5270,11 +5261,7 @@ namespace mml2vgmIDE
                 else hiyorimiNecessary = false;
 
                 log.Write("MDSound 初期化");
-
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                InitMDSound(lstChips);
 
                 log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
@@ -5413,11 +5400,7 @@ namespace mml2vgmIDE
                 else hiyorimiNecessary = false;
 
                 log.Write("MDSound 初期化");
-
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                InitMDSound(lstChips);
 
                 log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);

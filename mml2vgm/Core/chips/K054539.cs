@@ -174,6 +174,7 @@ namespace Core
                 {
                     case 0://8bit PCM (default)
                            //8bit unsigned -> 8bit signed
+                        dBuf.Add(0x80);//end mark追加(reverse向け)
                         for (int i = 0; i < buf.Length; i++)
                         {
                             byte d = (byte)(buf[i] - 0x80);
@@ -184,6 +185,8 @@ namespace Core
                         break;
                     case 1://16bit PCM
                         short s;
+                        dBuf.Add(0x00);//end mark追加(reverse向け)
+                        dBuf.Add(0x80);//end mark追加(reverse向け)
                         for (int i = 0; i < buf.Length; i+=2)
                         {
                             if (i + 1 == buf.Length) break;
@@ -196,6 +199,7 @@ namespace Core
                         dBuf.Add(0x80);//end mark追加
                         break;
                     case 2://4bit dPCM
+                        dBuf.Add(0x88);//end mark追加(reverse向け)
                         EncK054539Dpcm(dBuf, buf);
                         dBuf.Add(0x88);//end mark追加
                         buf = dBuf.ToArray();
@@ -220,8 +224,8 @@ namespace Core
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
-                        , freeAdr
-                        , freeAdr + size - 1
+                        , freeAdr + (op == 1 ? 2 : 1)
+                        , freeAdr + size - (op == 1 ? 2 : 1)
                         , size
                         , (v.Value.loopAdr == -1 ? v.Value.loopAdr : (v.Value.loopAdr + freeAdr))
                         , is16bit
@@ -368,7 +372,14 @@ namespace Core
 
             //Address shift
             int stAdr = page.pcmStartAddress + page.addressShift;
-            if (stAdr >= page.pcmEndAddress) stAdr = page.pcmEndAddress - 1;
+            if (!page.reversePlay)
+            {
+                if (stAdr >= page.pcmEndAddress) stAdr = page.pcmEndAddress - 1;
+            }
+            else
+            {
+                if (stAdr <= page.pcmEndAddress) stAdr = page.pcmEndAddress - 1;
+            }
 
             if (page.spg.beforepcmStartAddress != stAdr)
             {
@@ -423,6 +434,7 @@ namespace Core
                 , 0x200 + page.ch * 2 + 1
                 , (byte)(lpAdr != -1 ? 1 : 0)
                 );
+
 
             if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
             {
@@ -676,6 +688,12 @@ namespace Core
                 return;
             }
 
+            page.reversePlay = false;
+            if (type == 'R')
+            {
+                page.reversePlay = true;
+            }
+
             if (re) n = page.instrument + n;
             n = Common.CheckRange(n, 0, 255);
 
@@ -774,6 +792,7 @@ namespace Core
             //SetKeyOff(page, null);
 
             page.spg.instrument = -1;
+            page.spg.reversePlay = false;
 
             //周波数
             page.spg.freq = -1;
@@ -797,11 +816,20 @@ namespace Core
             {
                 partPage page = pw.cpg;
                 //instrument
-                if (page.spg.instrument != page.instrument)
+                if (page.spg.instrument != page.instrument||page.spg.reversePlay!=page.reversePlay)
                 {
                     page.spg.instrument = page.instrument;
-                    page.pcmStartAddress = (int)parent.instPCM[page.instrument].Item2.stAdr;
-                    page.pcmEndAddress = (int)parent.instPCM[page.instrument].Item2.edAdr;
+                    page.spg.reversePlay = page.reversePlay;
+                    if (!page.reversePlay)
+                    {
+                        page.pcmStartAddress = (int)parent.instPCM[page.instrument].Item2.stAdr;
+                        page.pcmEndAddress = (int)parent.instPCM[page.instrument].Item2.edAdr;
+                    }
+                    else
+                    {
+                        page.pcmEndAddress = (int)parent.instPCM[page.instrument].Item2.stAdr;
+                        page.pcmStartAddress = (int)parent.instPCM[page.instrument].Item2.edAdr;
+                    }
                     page.pcmLoopAddress = (int)parent.instPCM[page.instrument].Item2.loopAdr;
                     page.pcmBank = (int)(parent.instPCM[page.instrument].Item2.option[0]);
                     //page.keyOff = true;
@@ -856,7 +884,14 @@ namespace Core
 
                     //Address shift
                     int stAdr = pw.cpg.pcmStartAddress + pw.cpg.addressShift;
-                    if (stAdr >= pw.cpg.pcmEndAddress) stAdr = pw.cpg.pcmEndAddress - 1;
+                    if (!pw.cpg.reversePlay)
+                    {
+                        if (stAdr >= pw.cpg.pcmEndAddress) stAdr = pw.cpg.pcmEndAddress - 1;
+                    }
+                    else
+                    {
+                        if (stAdr <= pw.cpg.pcmEndAddress) stAdr = pw.cpg.pcmEndAddress - 1;
+                    }
 
                     //StartAdr Lsb
                     int adr = pw.cpg.ch * 0x20 + 0x0c;
@@ -878,7 +913,7 @@ namespace Core
                     adr = pw.cpg.ch * 0x2 + 0x200;
                     OutK054539Port(mml, port[0], pw.cpg
                         , adr + 0
-                        , (byte)(pw.cpg.pcmBank << 2)
+                        , (byte)((pw.cpg.pcmBank << 2) | (pw.cpg.reversePlay ? 0x20 : 0x00))//type (b2-3), reverse (b5) 
                         );
 
                     pw.cpg.spg.beforepcmStartAddress = stAdr;

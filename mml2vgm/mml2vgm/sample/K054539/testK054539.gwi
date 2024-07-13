@@ -44,10 +44,15 @@ PCM定義
 
 
 'W1 T146
-                 rev.Delay   pan
-'W1 l4 v64 @1 o4 XRvD65535   p1
+                 rev.Delay   pan center
+'W1 l4 v64 @1 o4 XRvD65535   p8
     rev.Volume(170未満だとほとんど聴こえない)
 'W1 XRvS0      Q8cde2_<e>Q4eee2 ; rev なし
-'W1 XRvS240    Q8cde2_<e>Q4eee2 ; rev 最大
-
+'W1 XRvS255    Q8cde2_<e>Q4eee2 ; rev 最大
+                             pan right
+'W1 l4 v64 @2 o4             p1
+'W1 XRvS0      Q8cde2_<e>Q4eee2 ; rev なし
+            R is reverse     pan left
+'W1        @R2               p15
+'W1            Q8cde2_<e>Q4eee2 ; rev なし
 

@@ -1651,6 +1651,7 @@ namespace mml2vgmIDE
 
             frmLog.ClearLog();
             stop();
+            Audio.InitMDSound(null);
 
             IDockContent dc = GetActiveDockContent();
             EnmMmlFileFormat isMuc = EnmMmlFileFormat.GWI;

@@ -202,6 +202,11 @@ namespace Core
         public int instrument = -1;
 
         /// <summary>
+        /// PCM系。発音時リバース再生する
+        /// </summary>
+        public bool reversePlay = false;
+
+        /// <summary>
         /// OPLLのサスティン
         /// </summary>
         public bool sus = false;
