@@ -304,6 +304,7 @@ namespace mml2vgmIDE
         {
             ReConvertCacheList();
 
+            ss.die = true;
             e.Cancel = true;
             this.Hide();
             parentUpdate?.Invoke();

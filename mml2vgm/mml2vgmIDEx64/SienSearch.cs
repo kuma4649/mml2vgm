@@ -21,6 +21,7 @@ namespace mml2vgmIDE
         private string reqMMLFileFormat = "";
         private object reqOption = null;
         private Action<List<SienItem>> reqCallback;
+        public bool die = false;
 
         public SienSearch(string filename)
         {
@@ -48,7 +49,11 @@ namespace mml2vgmIDE
                 Thread.CurrentThread.Name = "SienSearch";
                 while (true)
                 {
-                    while (req == null) Thread.Sleep(100);
+                    while (req == null)
+                    {
+                        if (die) return;
+                        Thread.Sleep(100);
+                    }
                     lock (lockObj)
                     {
                         reqText = req.Item1;
