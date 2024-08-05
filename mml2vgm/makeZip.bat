@@ -33,5 +33,7 @@ del /Q .\output\mml2vgmIDEx64\*.wav
 del /Q .\output\mml2vgm\*.pdb
 rem del /Q .\output\mml2vgm\*.config
 del /Q .\output\bin.zip
+del /Q .\output\mml2vgmIDEx64\scci.dll
+del /Q .\output\mml2vgmIDEx64\scciconfig.exe
 
 pause

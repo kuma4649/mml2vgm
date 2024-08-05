@@ -561,9 +561,6 @@
     <None Include="Instruments\OPM\testYM2151.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="scci.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="mmlSien.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -678,12 +675,6 @@
     <Content Include="Resource\Feli.mdp" />
     <Content Include="Resource\Feli.png" />
     <Content Include="Resource\Feli48.ico" />
-    <Content Include="scci.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="scciconfig.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resource\BreakPoint.png" />
     <Content Include="Resource\BreakPointMute.png" />
     <Content Include="Resource\ccFadeout.png" />

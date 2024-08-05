@@ -159,12 +159,6 @@
     <None Update="PMDDotNETDriver.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="scci.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="scciconfig.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Script\compileMuc.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
