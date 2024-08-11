@@ -29,16 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <NativeLibs Remove="Azuki.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Feli48.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Azuki">
-      <HintPath>Azuki.dll</HintPath>
+    <Reference Include="Azuki8">
+      <HintPath>Azuki8.dll</HintPath>
     </Reference>
     <Reference Include="MDSound">
       <HintPath>..\Core\MDSound.dll</HintPath>
