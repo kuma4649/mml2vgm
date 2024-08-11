@@ -111,10 +111,10 @@ namespace mml2vgmIDE
 
                 if (comment)
                 {
-                    for (int i = begin; i < end; i++)
+                    for (int i = begin, j = 0; i < end; i++, j++)
                     {
                         doc.SetCharClass(i, CharClass.Comment);
-                        t = lineContent[i - begin];
+                        t = lineContent[j];
                         if (t == '}')
                         {
                             comment = false;
@@ -154,39 +154,38 @@ namespace mml2vgmIDE
                     }
                     if (pattern.klassList[0] == CharClass.Keyword2)
                     {
-                        for (int i = patEnd; i < end; i++)
+                        for (int i = patEnd, j = patEnd - begin; i < end; i++, j++)
                         {
-                            t = lineContent[i - begin];
+                            t = lineContent[j];
                             if (t == ';')
                             {
                                 for (; i < end; i++)
                                     doc.SetCharClass(i, CharClass.Comment);
                                 break;
                             }
-                            else
-                                doc.SetCharClass(i, CharClass.Normal);
+                            doc.SetCharClass(i, CharClass.Normal);
                         }
                     }
                     if (pattern.klassList[0] != CharClass.Keyword) continue;
 
                     //更にJコマンドがあればそこも
                     tb = '\0';
-                    for (int i = patEnd; i < end; i++)
+                    for (int i = patEnd, j = patEnd - begin; i < end; i++, j++)
                     {
-                        t = lineContent[i - begin];
+                        t = lineContent[j];
 
+                        if (t == ';')
+                        {
+                            for (; i < end; i++)
+                                doc.SetCharClass(i, CharClass.Comment);
+                            break;
+                        }
                         if (t == 'J')
                             doc.SetCharClass(i, CharClass.Annotation);
                         else if (t == 'L' && (tb != 'T' && tb != 'S' && tb != 'M' && tb != 'O'))//TL,SL,ML,pOL
                             doc.SetCharClass(i, CharClass.Annotation);
                         else if (t == '!')
                             doc.SetCharClass(i, CharClass.Annotation);
-                        else if (t == ';')
-                        {
-                            for (; i < end; i++)
-                                doc.SetCharClass(i, CharClass.Comment);
-                            break;
-                        }
                         else
                             doc.SetCharClass(i, CharClass.Normal);
 

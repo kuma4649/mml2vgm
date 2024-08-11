@@ -346,6 +346,7 @@ namespace mml2vgmIDE
             tpMMLParameter = new TabPage();
             cbDispInstrumentName = new CheckBox();
             tpOther2 = new TabPage();
+            tbTABWidth = new TextBox();
             cbDispWarningMessage = new CheckBox();
             tbUseHistoryBackUp = new TextBox();
             cbUseHistoryBackUp = new CheckBox();
@@ -356,6 +357,7 @@ namespace mml2vgmIDE
             cbChangeEnterCode = new CheckBox();
             cbClearHistory = new CheckBox();
             tbOpacity = new TrackBar();
+            label56 = new Label();
             label52 = new Label();
             groupBox29 = new GroupBox();
             label36 = new Label();
@@ -429,8 +431,7 @@ namespace mml2vgmIDE
             textBoxDescription = new TextBox();
             llOpenGithub = new LinkLabel();
             cbHiyorimiMode = new CheckBox();
-            label56 = new Label();
-            tbTABWidth = new TextBox();
+            cbHilightOn = new CheckBox();
             gbWaveOut.SuspendLayout();
             gbAsioOut.SuspendLayout();
             gbWasapiOut.SuspendLayout();
@@ -536,7 +537,7 @@ namespace mml2vgmIDE
             // 
             btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnOK.Location = new Point(345, 569);
-            btnOK.Margin = new Padding(4, 4, 4, 4);
+            btnOK.Margin = new Padding(4);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(88, 29);
             btnOK.TabIndex = 0;
@@ -549,7 +550,7 @@ namespace mml2vgmIDE
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.Location = new Point(440, 569);
-            btnCancel.Margin = new Padding(4, 4, 4, 4);
+            btnCancel.Margin = new Padding(4);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(88, 29);
             btnCancel.TabIndex = 1;
@@ -561,9 +562,9 @@ namespace mml2vgmIDE
             gbWaveOut.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             gbWaveOut.Controls.Add(cmbWaveOutDevice);
             gbWaveOut.Location = new Point(7, 12);
-            gbWaveOut.Margin = new Padding(4, 4, 4, 4);
+            gbWaveOut.Margin = new Padding(4);
             gbWaveOut.Name = "gbWaveOut";
-            gbWaveOut.Padding = new Padding(4, 4, 4, 4);
+            gbWaveOut.Padding = new Padding(4);
             gbWaveOut.Size = new Size(373, 60);
             gbWaveOut.TabIndex = 1;
             gbWaveOut.TabStop = false;
@@ -574,7 +575,7 @@ namespace mml2vgmIDE
             cmbWaveOutDevice.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbWaveOutDevice.FormattingEnabled = true;
             cmbWaveOutDevice.Location = new Point(7, 22);
-            cmbWaveOutDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbWaveOutDevice.Margin = new Padding(4);
             cmbWaveOutDevice.Name = "cmbWaveOutDevice";
             cmbWaveOutDevice.Size = new Size(359, 23);
             cmbWaveOutDevice.TabIndex = 0;
@@ -584,7 +585,7 @@ namespace mml2vgmIDE
             rbWaveOut.AutoSize = true;
             rbWaveOut.Checked = true;
             rbWaveOut.Location = new Point(14, 8);
-            rbWaveOut.Margin = new Padding(4, 4, 4, 4);
+            rbWaveOut.Margin = new Padding(4);
             rbWaveOut.Name = "rbWaveOut";
             rbWaveOut.Size = new Size(74, 19);
             rbWaveOut.TabIndex = 0;
@@ -597,7 +598,7 @@ namespace mml2vgmIDE
             // 
             rbAsioOut.AutoSize = true;
             rbAsioOut.Location = new Point(14, 218);
-            rbAsioOut.Margin = new Padding(4, 4, 4, 4);
+            rbAsioOut.Margin = new Padding(4);
             rbAsioOut.Name = "rbAsioOut";
             rbAsioOut.Size = new Size(68, 19);
             rbAsioOut.TabIndex = 6;
@@ -609,7 +610,7 @@ namespace mml2vgmIDE
             // 
             rbWasapiOut.AutoSize = true;
             rbWasapiOut.Location = new Point(14, 146);
-            rbWasapiOut.Margin = new Padding(4, 4, 4, 4);
+            rbWasapiOut.Margin = new Padding(4);
             rbWasapiOut.Name = "rbWasapiOut";
             rbWasapiOut.Size = new Size(83, 19);
             rbWasapiOut.TabIndex = 4;
@@ -623,9 +624,9 @@ namespace mml2vgmIDE
             gbAsioOut.Controls.Add(btnASIOControlPanel);
             gbAsioOut.Controls.Add(cmbAsioDevice);
             gbAsioOut.Location = new Point(7, 221);
-            gbAsioOut.Margin = new Padding(4, 4, 4, 4);
+            gbAsioOut.Margin = new Padding(4);
             gbAsioOut.Name = "gbAsioOut";
-            gbAsioOut.Padding = new Padding(4, 4, 4, 4);
+            gbAsioOut.Padding = new Padding(4);
             gbAsioOut.Size = new Size(483, 62);
             gbAsioOut.TabIndex = 7;
             gbAsioOut.TabStop = false;
@@ -634,7 +635,7 @@ namespace mml2vgmIDE
             // 
             btnASIOControlPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnASIOControlPanel.Location = new Point(383, 10);
-            btnASIOControlPanel.Margin = new Padding(4, 4, 4, 4);
+            btnASIOControlPanel.Margin = new Padding(4);
             btnASIOControlPanel.Name = "btnASIOControlPanel";
             btnASIOControlPanel.Size = new Size(94, 49);
             btnASIOControlPanel.TabIndex = 8;
@@ -648,7 +649,7 @@ namespace mml2vgmIDE
             cmbAsioDevice.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAsioDevice.FormattingEnabled = true;
             cmbAsioDevice.Location = new Point(7, 22);
-            cmbAsioDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbAsioDevice.Margin = new Padding(4);
             cmbAsioDevice.Name = "cmbAsioDevice";
             cmbAsioDevice.Size = new Size(367, 23);
             cmbAsioDevice.TabIndex = 6;
@@ -657,7 +658,7 @@ namespace mml2vgmIDE
             // 
             rbDirectSoundOut.AutoSize = true;
             rbDirectSoundOut.Location = new Point(14, 78);
-            rbDirectSoundOut.Margin = new Padding(4, 4, 4, 4);
+            rbDirectSoundOut.Margin = new Padding(4);
             rbDirectSoundOut.Name = "rbDirectSoundOut";
             rbDirectSoundOut.Size = new Size(90, 19);
             rbDirectSoundOut.TabIndex = 2;
@@ -672,9 +673,9 @@ namespace mml2vgmIDE
             gbWasapiOut.Controls.Add(rbShare);
             gbWasapiOut.Controls.Add(cmbWasapiDevice);
             gbWasapiOut.Location = new Point(7, 151);
-            gbWasapiOut.Margin = new Padding(4, 4, 4, 4);
+            gbWasapiOut.Margin = new Padding(4);
             gbWasapiOut.Name = "gbWasapiOut";
-            gbWasapiOut.Padding = new Padding(4, 4, 4, 4);
+            gbWasapiOut.Padding = new Padding(4);
             gbWasapiOut.Size = new Size(483, 62);
             gbWasapiOut.TabIndex = 5;
             gbWasapiOut.TabStop = false;
@@ -684,7 +685,7 @@ namespace mml2vgmIDE
             rbExclusive.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             rbExclusive.AutoSize = true;
             rbExclusive.Location = new Point(388, 39);
-            rbExclusive.Margin = new Padding(4, 4, 4, 4);
+            rbExclusive.Margin = new Padding(4);
             rbExclusive.Name = "rbExclusive";
             rbExclusive.Size = new Size(49, 19);
             rbExclusive.TabIndex = 7;
@@ -697,7 +698,7 @@ namespace mml2vgmIDE
             rbShare.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             rbShare.AutoSize = true;
             rbShare.Location = new Point(388, 11);
-            rbShare.Margin = new Padding(4, 4, 4, 4);
+            rbShare.Margin = new Padding(4);
             rbShare.Name = "rbShare";
             rbShare.Size = new Size(49, 19);
             rbShare.TabIndex = 6;
@@ -711,7 +712,7 @@ namespace mml2vgmIDE
             cmbWasapiDevice.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbWasapiDevice.FormattingEnabled = true;
             cmbWasapiDevice.Location = new Point(7, 22);
-            cmbWasapiDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbWasapiDevice.Margin = new Padding(4);
             cmbWasapiDevice.Name = "cmbWasapiDevice";
             cmbWasapiDevice.Size = new Size(367, 23);
             cmbWasapiDevice.TabIndex = 4;
@@ -721,9 +722,9 @@ namespace mml2vgmIDE
             gbDirectSound.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             gbDirectSound.Controls.Add(cmbDirectSoundDevice);
             gbDirectSound.Location = new Point(7, 82);
-            gbDirectSound.Margin = new Padding(4, 4, 4, 4);
+            gbDirectSound.Margin = new Padding(4);
             gbDirectSound.Name = "gbDirectSound";
-            gbDirectSound.Padding = new Padding(4, 4, 4, 4);
+            gbDirectSound.Padding = new Padding(4);
             gbDirectSound.Size = new Size(484, 60);
             gbDirectSound.TabIndex = 3;
             gbDirectSound.TabStop = false;
@@ -734,7 +735,7 @@ namespace mml2vgmIDE
             cmbDirectSoundDevice.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDirectSoundDevice.FormattingEnabled = true;
             cmbDirectSoundDevice.Location = new Point(7, 22);
-            cmbDirectSoundDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbDirectSoundDevice.Margin = new Padding(4);
             cmbDirectSoundDevice.Name = "cmbDirectSoundDevice";
             cmbDirectSoundDevice.Size = new Size(471, 23);
             cmbDirectSoundDevice.TabIndex = 2;
@@ -758,7 +759,7 @@ namespace mml2vgmIDE
             tcSetting.Controls.Add(tpAbout);
             tcSetting.HotTrack = true;
             tcSetting.Location = new Point(1, 4);
-            tcSetting.Margin = new Padding(4, 4, 4, 4);
+            tcSetting.Margin = new Padding(4);
             tcSetting.Multiline = true;
             tcSetting.Name = "tcSetting";
             tcSetting.SelectedIndex = 0;
@@ -771,9 +772,9 @@ namespace mml2vgmIDE
             tpOutput.Controls.Add(cbUseRealChip);
             tpOutput.Controls.Add(tabControl1);
             tpOutput.Location = new Point(4, 44);
-            tpOutput.Margin = new Padding(4, 4, 4, 4);
+            tpOutput.Margin = new Padding(4);
             tpOutput.Name = "tpOutput";
-            tpOutput.Padding = new Padding(4, 4, 4, 4);
+            tpOutput.Padding = new Padding(4);
             tpOutput.Size = new Size(518, 510);
             tpOutput.TabIndex = 0;
             tpOutput.Text = "出力";
@@ -783,7 +784,7 @@ namespace mml2vgmIDE
             // 
             cbUseRealChip.AutoSize = true;
             cbUseRealChip.Location = new Point(7, 8);
-            cbUseRealChip.Margin = new Padding(4, 4, 4, 4);
+            cbUseRealChip.Margin = new Padding(4);
             cbUseRealChip.Name = "cbUseRealChip";
             cbUseRealChip.Size = new Size(245, 19);
             cbUseRealChip.TabIndex = 8;
@@ -798,7 +799,7 @@ namespace mml2vgmIDE
             tabControl1.Controls.Add(tabPage13);
             tabControl1.HotTrack = true;
             tabControl1.Location = new Point(4, 38);
-            tabControl1.Margin = new Padding(4, 4, 4, 4);
+            tabControl1.Margin = new Padding(4);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(507, 479);
@@ -828,9 +829,9 @@ namespace mml2vgmIDE
             tabPage11.Controls.Add(cmbLatency);
             tabPage11.Controls.Add(gbWaveOut);
             tabPage11.Location = new Point(4, 24);
-            tabPage11.Margin = new Padding(4, 4, 4, 4);
+            tabPage11.Margin = new Padding(4);
             tabPage11.Name = "tabPage11";
-            tabPage11.Padding = new Padding(4, 4, 4, 4);
+            tabPage11.Padding = new Padding(4);
             tabPage11.Size = new Size(499, 451);
             tabPage11.TabIndex = 0;
             tabPage11.Text = "Emulation";
@@ -865,7 +866,7 @@ namespace mml2vgmIDE
             cmbSampleRate.FormattingEnabled = true;
             cmbSampleRate.Items.AddRange(new object[] { "44100", "48000", "96000", "192000" });
             cmbSampleRate.Location = new Point(387, 32);
-            cmbSampleRate.Margin = new Padding(4, 4, 4, 4);
+            cmbSampleRate.Margin = new Padding(4);
             cmbSampleRate.Name = "cmbSampleRate";
             cmbSampleRate.Size = new Size(100, 23);
             cmbSampleRate.TabIndex = 10;
@@ -875,7 +876,7 @@ namespace mml2vgmIDE
             rbSPPCM.AutoSize = true;
             rbSPPCM.Enabled = false;
             rbSPPCM.Location = new Point(14, 288);
-            rbSPPCM.Margin = new Padding(4, 4, 4, 4);
+            rbSPPCM.Margin = new Padding(4);
             rbSPPCM.Name = "rbSPPCM";
             rbSPPCM.Size = new Size(63, 19);
             rbSPPCM.TabIndex = 2;
@@ -886,7 +887,7 @@ namespace mml2vgmIDE
             // rbNullDevice
             // 
             rbNullDevice.Location = new Point(262, 304);
-            rbNullDevice.Margin = new Padding(4, 4, 4, 4);
+            rbNullDevice.Margin = new Padding(4);
             rbNullDevice.Name = "rbNullDevice";
             rbNullDevice.Size = new Size(184, 36);
             rbNullDevice.TabIndex = 2;
@@ -903,9 +904,9 @@ namespace mml2vgmIDE
             groupBox3.Controls.Add(tbLatencySCCI);
             groupBox3.Controls.Add(label10);
             groupBox3.Location = new Point(301, 340);
-            groupBox3.Margin = new Padding(4, 4, 4, 4);
+            groupBox3.Margin = new Padding(4);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(4, 4, 4, 4);
+            groupBox3.Padding = new Padding(4);
             groupBox3.Size = new Size(184, 78);
             groupBox3.TabIndex = 6;
             groupBox3.TabStop = false;
@@ -944,7 +945,7 @@ namespace mml2vgmIDE
             // tbLatencyEmu
             // 
             tbLatencyEmu.Location = new Point(48, 19);
-            tbLatencyEmu.Margin = new Padding(4, 4, 4, 4);
+            tbLatencyEmu.Margin = new Padding(4);
             tbLatencyEmu.Name = "tbLatencyEmu";
             tbLatencyEmu.Size = new Size(98, 23);
             tbLatencyEmu.TabIndex = 1;
@@ -952,7 +953,7 @@ namespace mml2vgmIDE
             // tbLatencySCCI
             // 
             tbLatencySCCI.Location = new Point(48, 46);
-            tbLatencySCCI.Margin = new Padding(4, 4, 4, 4);
+            tbLatencySCCI.Margin = new Padding(4);
             tbLatencySCCI.Name = "tbLatencySCCI";
             tbLatencySCCI.Size = new Size(98, 23);
             tbLatencySCCI.TabIndex = 4;
@@ -992,9 +993,9 @@ namespace mml2vgmIDE
             groupBox16.Controls.Add(cmbSPPCMDevice);
             groupBox16.Enabled = false;
             groupBox16.Location = new Point(7, 291);
-            groupBox16.Margin = new Padding(4, 4, 4, 4);
+            groupBox16.Margin = new Padding(4);
             groupBox16.Name = "groupBox16";
-            groupBox16.Padding = new Padding(4, 4, 4, 4);
+            groupBox16.Padding = new Padding(4);
             groupBox16.Size = new Size(248, 60);
             groupBox16.TabIndex = 3;
             groupBox16.TabStop = false;
@@ -1005,7 +1006,7 @@ namespace mml2vgmIDE
             cmbSPPCMDevice.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSPPCMDevice.FormattingEnabled = true;
             cmbSPPCMDevice.Location = new Point(7, 24);
-            cmbSPPCMDevice.Margin = new Padding(4, 4, 4, 4);
+            cmbSPPCMDevice.Margin = new Padding(4);
             cmbSPPCMDevice.Name = "cmbSPPCMDevice";
             cmbSPPCMDevice.Size = new Size(234, 23);
             cmbSPPCMDevice.TabIndex = 2;
@@ -1036,7 +1037,7 @@ namespace mml2vgmIDE
             cmbWaitTime.FormattingEnabled = true;
             cmbWaitTime.Items.AddRange(new object[] { "0", "500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000" });
             cmbWaitTime.Location = new Point(125, 391);
-            cmbWaitTime.Margin = new Padding(4, 4, 4, 4);
+            cmbWaitTime.Margin = new Padding(4);
             cmbWaitTime.Name = "cmbWaitTime";
             cmbWaitTime.Size = new Size(140, 23);
             cmbWaitTime.TabIndex = 8;
@@ -1047,7 +1048,7 @@ namespace mml2vgmIDE
             cmbLatency.FormattingEnabled = true;
             cmbLatency.Items.AddRange(new object[] { "25", "50", "100", "150", "200", "300", "400", "500" });
             cmbLatency.Location = new Point(125, 359);
-            cmbLatency.Margin = new Padding(4, 4, 4, 4);
+            cmbLatency.Margin = new Padding(4);
             cmbLatency.Name = "cmbLatency";
             cmbLatency.Size = new Size(140, 23);
             cmbLatency.TabIndex = 8;
@@ -1056,10 +1057,10 @@ namespace mml2vgmIDE
             // 
             tabPage12.Controls.Add(groupBox27);
             tabPage12.Location = new Point(4, 24);
-            tabPage12.Margin = new Padding(4, 4, 4, 4);
+            tabPage12.Margin = new Padding(4);
             tabPage12.Name = "tabPage12";
-            tabPage12.Padding = new Padding(4, 4, 4, 4);
-            tabPage12.Size = new Size(499, 431);
+            tabPage12.Padding = new Padding(4);
+            tabPage12.Size = new Size(499, 451);
             tabPage12.TabIndex = 1;
             tabPage12.Text = "音源割り当て";
             tabPage12.UseVisualStyleBackColor = true;
@@ -1072,10 +1073,10 @@ namespace mml2vgmIDE
             groupBox27.Controls.Add(groupBox1);
             groupBox27.Dock = DockStyle.Fill;
             groupBox27.Location = new Point(4, 4);
-            groupBox27.Margin = new Padding(4, 4, 4, 4);
+            groupBox27.Margin = new Padding(4);
             groupBox27.Name = "groupBox27";
-            groupBox27.Padding = new Padding(4, 4, 4, 4);
-            groupBox27.Size = new Size(491, 423);
+            groupBox27.Padding = new Padding(4);
+            groupBox27.Size = new Size(491, 443);
             groupBox27.TabIndex = 9;
             groupBox27.TabStop = false;
             groupBox27.Text = "音源の割り当て";
@@ -1084,7 +1085,7 @@ namespace mml2vgmIDE
             // 
             rbManualDetect.AutoSize = true;
             rbManualDetect.Location = new Point(14, 89);
-            rbManualDetect.Margin = new Padding(4, 4, 4, 4);
+            rbManualDetect.Margin = new Padding(4);
             rbManualDetect.Name = "rbManualDetect";
             rbManualDetect.Size = new Size(49, 19);
             rbManualDetect.TabIndex = 10;
@@ -1096,7 +1097,7 @@ namespace mml2vgmIDE
             rbAutoDetect.AutoSize = true;
             rbAutoDetect.Checked = true;
             rbAutoDetect.Location = new Point(14, 21);
-            rbAutoDetect.Margin = new Padding(4, 4, 4, 4);
+            rbAutoDetect.Margin = new Padding(4);
             rbAutoDetect.Name = "rbAutoDetect";
             rbAutoDetect.Size = new Size(49, 19);
             rbAutoDetect.TabIndex = 10;
@@ -1110,9 +1111,9 @@ namespace mml2vgmIDE
             groupBox28.Controls.Add(rbSCCIDetect);
             groupBox28.Controls.Add(rbC86ctlDetect);
             groupBox28.Location = new Point(7, 22);
-            groupBox28.Margin = new Padding(4, 4, 4, 4);
+            groupBox28.Margin = new Padding(4);
             groupBox28.Name = "groupBox28";
-            groupBox28.Padding = new Padding(4, 4, 4, 4);
+            groupBox28.Padding = new Padding(4);
             groupBox28.Size = new Size(477, 58);
             groupBox28.TabIndex = 9;
             groupBox28.TabStop = false;
@@ -1121,7 +1122,7 @@ namespace mml2vgmIDE
             // 
             rbSCCIDetect.AutoSize = true;
             rbSCCIDetect.Location = new Point(247, 26);
-            rbSCCIDetect.Margin = new Padding(4, 4, 4, 4);
+            rbSCCIDetect.Margin = new Padding(4);
             rbSCCIDetect.Name = "rbSCCIDetect";
             rbSCCIDetect.Size = new Size(155, 19);
             rbSCCIDetect.TabIndex = 0;
@@ -1133,7 +1134,7 @@ namespace mml2vgmIDE
             rbC86ctlDetect.AutoSize = true;
             rbC86ctlDetect.Checked = true;
             rbC86ctlDetect.Location = new Point(24, 26);
-            rbC86ctlDetect.Margin = new Padding(4, 4, 4, 4);
+            rbC86ctlDetect.Margin = new Padding(4);
             rbC86ctlDetect.Name = "rbC86ctlDetect";
             rbC86ctlDetect.Size = new Size(164, 19);
             rbC86ctlDetect.TabIndex = 0;
@@ -1146,10 +1147,10 @@ namespace mml2vgmIDE
             groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox1.Controls.Add(ucSI);
             groupBox1.Location = new Point(7, 89);
-            groupBox1.Margin = new Padding(4, 4, 4, 4);
+            groupBox1.Margin = new Padding(4);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(4, 4, 4, 4);
-            groupBox1.Size = new Size(477, 327);
+            groupBox1.Padding = new Padding(4);
+            groupBox1.Size = new Size(477, 347);
             groupBox1.TabIndex = 8;
             groupBox1.TabStop = false;
             // 
@@ -1158,18 +1159,18 @@ namespace mml2vgmIDE
             ucSI.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             ucSI.AutoScroll = true;
             ucSI.Location = new Point(4, 22);
-            ucSI.Margin = new Padding(5, 5, 5, 5);
+            ucSI.Margin = new Padding(5);
             ucSI.Name = "ucSI";
-            ucSI.Size = new Size(470, 301);
+            ucSI.Size = new Size(470, 321);
             ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
             tabPage13.Controls.Add(splitContainer1);
             tabPage13.Location = new Point(4, 24);
-            tabPage13.Margin = new Padding(4, 4, 4, 4);
+            tabPage13.Margin = new Padding(4);
             tabPage13.Name = "tabPage13";
-            tabPage13.Size = new Size(499, 431);
+            tabPage13.Size = new Size(499, 451);
             tabPage13.TabIndex = 2;
             tabPage13.Text = "MIDI";
             tabPage13.UseVisualStyleBackColor = true;
@@ -1178,7 +1179,7 @@ namespace mml2vgmIDE
             // 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 0);
-            splitContainer1.Margin = new Padding(4, 4, 4, 4);
+            splitContainer1.Margin = new Padding(4);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
             // 
@@ -1194,8 +1195,8 @@ namespace mml2vgmIDE
             splitContainer1.Panel2.Controls.Add(label18);
             splitContainer1.Panel2.Controls.Add(btnAddMIDIout);
             splitContainer1.Panel2.Controls.Add(btnSubMIDIout);
-            splitContainer1.Size = new Size(499, 431);
-            splitContainer1.SplitterDistance = 171;
+            splitContainer1.Size = new Size(499, 451);
+            splitContainer1.SplitterDistance = 178;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 6;
             // 
@@ -1218,13 +1219,13 @@ namespace mml2vgmIDE
             dgvMIDIoutPallet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMIDIoutPallet.Columns.AddRange(new DataGridViewColumn[] { clmID, clmDeviceName, clmManufacturer, clmSpacer });
             dgvMIDIoutPallet.Location = new Point(2, 19);
-            dgvMIDIoutPallet.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutPallet.Margin = new Padding(4);
             dgvMIDIoutPallet.MultiSelect = false;
             dgvMIDIoutPallet.Name = "dgvMIDIoutPallet";
             dgvMIDIoutPallet.RowHeadersVisible = false;
             dgvMIDIoutPallet.RowTemplate.Height = 21;
             dgvMIDIoutPallet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutPallet.Size = new Size(491, 148);
+            dgvMIDIoutPallet.Size = new Size(491, 155);
             dgvMIDIoutPallet.TabIndex = 1;
             // 
             // clmID
@@ -1269,10 +1270,10 @@ namespace mml2vgmIDE
             tbcMIDIoutList.Controls.Add(tabPage3);
             tbcMIDIoutList.Controls.Add(tabPage4);
             tbcMIDIoutList.Location = new Point(4, 39);
-            tbcMIDIoutList.Margin = new Padding(4, 4, 4, 4);
+            tbcMIDIoutList.Margin = new Padding(4);
             tbcMIDIoutList.Name = "tbcMIDIoutList";
             tbcMIDIoutList.SelectedIndex = 0;
-            tbcMIDIoutList.Size = new Size(491, 213);
+            tbcMIDIoutList.Size = new Size(491, 225);
             tbcMIDIoutList.TabIndex = 4;
             // 
             // tabPage1
@@ -1281,10 +1282,10 @@ namespace mml2vgmIDE
             tabPage1.Controls.Add(btnUP_A);
             tabPage1.Controls.Add(btnDOWN_A);
             tabPage1.Location = new Point(4, 24);
-            tabPage1.Margin = new Padding(4, 4, 4, 4);
+            tabPage1.Margin = new Padding(4);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(4, 4, 4, 4);
-            tabPage1.Size = new Size(483, 185);
+            tabPage1.Padding = new Padding(4);
+            tabPage1.Size = new Size(483, 197);
             tabPage1.TabIndex = 0;
             tabPage1.Tag = "0";
             tabPage1.Text = "GM";
@@ -1299,13 +1300,13 @@ namespace mml2vgmIDE
             dgvMIDIoutListA.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMIDIoutListA.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, clmIsVST, clmFileName, dataGridViewTextBoxColumn2, clmType, ClmBeforeSend, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4 });
             dgvMIDIoutListA.Location = new Point(0, 0);
-            dgvMIDIoutListA.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListA.Margin = new Padding(4);
             dgvMIDIoutListA.MultiSelect = false;
             dgvMIDIoutListA.Name = "dgvMIDIoutListA";
             dgvMIDIoutListA.RowHeadersVisible = false;
             dgvMIDIoutListA.RowTemplate.Height = 21;
             dgvMIDIoutListA.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListA.Size = new Size(447, 171);
+            dgvMIDIoutListA.Size = new Size(447, 183);
             dgvMIDIoutListA.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -1375,7 +1376,7 @@ namespace mml2vgmIDE
             // 
             btnUP_A.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnUP_A.Location = new Point(454, 0);
-            btnUP_A.Margin = new Padding(4, 4, 4, 4);
+            btnUP_A.Margin = new Padding(4);
             btnUP_A.Name = "btnUP_A";
             btnUP_A.Size = new Size(26, 72);
             btnUP_A.TabIndex = 3;
@@ -1386,8 +1387,8 @@ namespace mml2vgmIDE
             // btnDOWN_A
             // 
             btnDOWN_A.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_A.Location = new Point(454, 99);
-            btnDOWN_A.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_A.Location = new Point(454, 111);
+            btnDOWN_A.Margin = new Padding(4);
             btnDOWN_A.Name = "btnDOWN_A";
             btnDOWN_A.Size = new Size(26, 72);
             btnDOWN_A.TabIndex = 3;
@@ -1401,10 +1402,10 @@ namespace mml2vgmIDE
             tabPage2.Controls.Add(btnUP_B);
             tabPage2.Controls.Add(btnDOWN_B);
             tabPage2.Location = new Point(4, 24);
-            tabPage2.Margin = new Padding(4, 4, 4, 4);
+            tabPage2.Margin = new Padding(4);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(4, 4, 4, 4);
-            tabPage2.Size = new Size(482, 180);
+            tabPage2.Padding = new Padding(4);
+            tabPage2.Size = new Size(483, 184);
             tabPage2.TabIndex = 1;
             tabPage2.Tag = "1";
             tabPage2.Text = "GS";
@@ -1418,20 +1419,20 @@ namespace mml2vgmIDE
             dgvMIDIoutListB.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvMIDIoutListB.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMIDIoutListB.Location = new Point(0, 0);
-            dgvMIDIoutListB.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListB.Margin = new Padding(4);
             dgvMIDIoutListB.MultiSelect = false;
             dgvMIDIoutListB.Name = "dgvMIDIoutListB";
             dgvMIDIoutListB.RowHeadersVisible = false;
             dgvMIDIoutListB.RowTemplate.Height = 21;
             dgvMIDIoutListB.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListB.Size = new Size(448, 188);
+            dgvMIDIoutListB.Size = new Size(449, 192);
             dgvMIDIoutListB.TabIndex = 7;
             // 
             // btnUP_B
             // 
             btnUP_B.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnUP_B.Location = new Point(455, 0);
-            btnUP_B.Margin = new Padding(4, 4, 4, 4);
+            btnUP_B.Location = new Point(456, 0);
+            btnUP_B.Margin = new Padding(4);
             btnUP_B.Name = "btnUP_B";
             btnUP_B.Size = new Size(26, 72);
             btnUP_B.TabIndex = 5;
@@ -1442,8 +1443,8 @@ namespace mml2vgmIDE
             // btnDOWN_B
             // 
             btnDOWN_B.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_B.Location = new Point(455, 115);
-            btnDOWN_B.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_B.Location = new Point(456, 119);
+            btnDOWN_B.Margin = new Padding(4);
             btnDOWN_B.Name = "btnDOWN_B";
             btnDOWN_B.Size = new Size(26, 72);
             btnDOWN_B.TabIndex = 6;
@@ -1457,9 +1458,9 @@ namespace mml2vgmIDE
             tabPage3.Controls.Add(btnUP_C);
             tabPage3.Controls.Add(btnDOWN_C);
             tabPage3.Location = new Point(4, 24);
-            tabPage3.Margin = new Padding(4, 4, 4, 4);
+            tabPage3.Margin = new Padding(4);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(482, 180);
+            tabPage3.Size = new Size(483, 184);
             tabPage3.TabIndex = 2;
             tabPage3.Tag = "2";
             tabPage3.Text = "XG";
@@ -1473,20 +1474,20 @@ namespace mml2vgmIDE
             dgvMIDIoutListC.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvMIDIoutListC.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMIDIoutListC.Location = new Point(0, 0);
-            dgvMIDIoutListC.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListC.Margin = new Padding(4);
             dgvMIDIoutListC.MultiSelect = false;
             dgvMIDIoutListC.Name = "dgvMIDIoutListC";
             dgvMIDIoutListC.RowHeadersVisible = false;
             dgvMIDIoutListC.RowTemplate.Height = 21;
             dgvMIDIoutListC.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListC.Size = new Size(448, 188);
+            dgvMIDIoutListC.Size = new Size(449, 192);
             dgvMIDIoutListC.TabIndex = 7;
             // 
             // btnUP_C
             // 
             btnUP_C.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnUP_C.Location = new Point(455, 0);
-            btnUP_C.Margin = new Padding(4, 4, 4, 4);
+            btnUP_C.Location = new Point(456, 0);
+            btnUP_C.Margin = new Padding(4);
             btnUP_C.Name = "btnUP_C";
             btnUP_C.Size = new Size(26, 72);
             btnUP_C.TabIndex = 5;
@@ -1497,8 +1498,8 @@ namespace mml2vgmIDE
             // btnDOWN_C
             // 
             btnDOWN_C.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_C.Location = new Point(455, 115);
-            btnDOWN_C.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_C.Location = new Point(456, 119);
+            btnDOWN_C.Margin = new Padding(4);
             btnDOWN_C.Name = "btnDOWN_C";
             btnDOWN_C.Size = new Size(26, 72);
             btnDOWN_C.TabIndex = 6;
@@ -1512,9 +1513,9 @@ namespace mml2vgmIDE
             tabPage4.Controls.Add(btnUP_D);
             tabPage4.Controls.Add(btnDOWN_D);
             tabPage4.Location = new Point(4, 24);
-            tabPage4.Margin = new Padding(4, 4, 4, 4);
+            tabPage4.Margin = new Padding(4);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(482, 180);
+            tabPage4.Size = new Size(483, 184);
             tabPage4.TabIndex = 3;
             tabPage4.Tag = "3";
             tabPage4.Text = "VSTi";
@@ -1528,20 +1529,20 @@ namespace mml2vgmIDE
             dgvMIDIoutListD.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvMIDIoutListD.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMIDIoutListD.Location = new Point(0, 0);
-            dgvMIDIoutListD.Margin = new Padding(4, 4, 4, 4);
+            dgvMIDIoutListD.Margin = new Padding(4);
             dgvMIDIoutListD.MultiSelect = false;
             dgvMIDIoutListD.Name = "dgvMIDIoutListD";
             dgvMIDIoutListD.RowHeadersVisible = false;
             dgvMIDIoutListD.RowTemplate.Height = 21;
             dgvMIDIoutListD.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListD.Size = new Size(448, 188);
+            dgvMIDIoutListD.Size = new Size(449, 192);
             dgvMIDIoutListD.TabIndex = 7;
             // 
             // btnUP_D
             // 
             btnUP_D.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnUP_D.Location = new Point(455, 0);
-            btnUP_D.Margin = new Padding(4, 4, 4, 4);
+            btnUP_D.Location = new Point(456, 0);
+            btnUP_D.Margin = new Padding(4);
             btnUP_D.Name = "btnUP_D";
             btnUP_D.Size = new Size(26, 72);
             btnUP_D.TabIndex = 5;
@@ -1552,8 +1553,8 @@ namespace mml2vgmIDE
             // btnDOWN_D
             // 
             btnDOWN_D.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_D.Location = new Point(455, 115);
-            btnDOWN_D.Margin = new Padding(4, 4, 4, 4);
+            btnDOWN_D.Location = new Point(456, 119);
+            btnDOWN_D.Margin = new Padding(4);
             btnDOWN_D.Name = "btnDOWN_D";
             btnDOWN_D.Size = new Size(26, 72);
             btnDOWN_D.TabIndex = 6;
@@ -1565,7 +1566,7 @@ namespace mml2vgmIDE
             // 
             btnAddVST.Enabled = false;
             btnAddVST.Location = new Point(307, 5);
-            btnAddVST.Margin = new Padding(4, 4, 4, 4);
+            btnAddVST.Margin = new Padding(4);
             btnAddVST.Name = "btnAddVST";
             btnAddVST.Size = new Size(88, 29);
             btnAddVST.TabIndex = 5;
@@ -1586,7 +1587,7 @@ namespace mml2vgmIDE
             // btnAddMIDIout
             // 
             btnAddMIDIout.Location = new Point(138, 5);
-            btnAddMIDIout.Margin = new Padding(4, 4, 4, 4);
+            btnAddMIDIout.Margin = new Padding(4);
             btnAddMIDIout.Name = "btnAddMIDIout";
             btnAddMIDIout.Size = new Size(77, 30);
             btnAddMIDIout.TabIndex = 3;
@@ -1597,7 +1598,7 @@ namespace mml2vgmIDE
             // btnSubMIDIout
             // 
             btnSubMIDIout.Location = new Point(222, 5);
-            btnSubMIDIout.Margin = new Padding(4, 4, 4, 4);
+            btnSubMIDIout.Margin = new Padding(4);
             btnSubMIDIout.Name = "btnSubMIDIout";
             btnSubMIDIout.Size = new Size(77, 30);
             btnSubMIDIout.TabIndex = 3;
@@ -1609,10 +1610,10 @@ namespace mml2vgmIDE
             // 
             tpNuked.BorderStyle = BorderStyle.FixedSingle;
             tpNuked.Controls.Add(tabControl2);
-            tpNuked.Location = new Point(4, 64);
-            tpNuked.Margin = new Padding(4, 4, 4, 4);
+            tpNuked.Location = new Point(4, 44);
+            tpNuked.Margin = new Padding(4);
             tpNuked.Name = "tpNuked";
-            tpNuked.Size = new Size(518, 490);
+            tpNuked.Size = new Size(518, 510);
             tpNuked.TabIndex = 14;
             tpNuked.Text = "チップ別";
             tpNuked.UseVisualStyleBackColor = true;
@@ -1624,20 +1625,20 @@ namespace mml2vgmIDE
             tabControl2.Dock = DockStyle.Fill;
             tabControl2.HotTrack = true;
             tabControl2.Location = new Point(0, 0);
-            tabControl2.Margin = new Padding(4, 4, 4, 4);
+            tabControl2.Margin = new Padding(4);
             tabControl2.Name = "tabControl2";
             tabControl2.SelectedIndex = 0;
-            tabControl2.Size = new Size(516, 488);
+            tabControl2.Size = new Size(516, 508);
             tabControl2.TabIndex = 1;
             // 
             // tabPage14
             // 
             tabPage14.Controls.Add(groupBox26);
             tabPage14.Location = new Point(4, 24);
-            tabPage14.Margin = new Padding(4, 4, 4, 4);
+            tabPage14.Margin = new Padding(4);
             tabPage14.Name = "tabPage14";
-            tabPage14.Padding = new Padding(4, 4, 4, 4);
-            tabPage14.Size = new Size(508, 460);
+            tabPage14.Padding = new Padding(4);
+            tabPage14.Size = new Size(508, 480);
             tabPage14.TabIndex = 0;
             tabPage14.Text = "Nuked-OPN2";
             tabPage14.UseVisualStyleBackColor = true;
@@ -1650,9 +1651,9 @@ namespace mml2vgmIDE
             groupBox26.Controls.Add(rbNukedOPN2OptionASIClp);
             groupBox26.Controls.Add(rbNukedOPN2OptionASIC);
             groupBox26.Location = new Point(7, 8);
-            groupBox26.Margin = new Padding(4, 4, 4, 4);
+            groupBox26.Margin = new Padding(4);
             groupBox26.Name = "groupBox26";
-            groupBox26.Padding = new Padding(4, 4, 4, 4);
+            groupBox26.Padding = new Padding(4);
             groupBox26.Size = new Size(371, 160);
             groupBox26.TabIndex = 0;
             groupBox26.TabStop = false;
@@ -1662,7 +1663,7 @@ namespace mml2vgmIDE
             // 
             rbNukedOPN2OptionYM2612u.AutoSize = true;
             rbNukedOPN2OptionYM2612u.Location = new Point(7, 105);
-            rbNukedOPN2OptionYM2612u.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionYM2612u.Margin = new Padding(4);
             rbNukedOPN2OptionYM2612u.Name = "rbNukedOPN2OptionYM2612u";
             rbNukedOPN2OptionYM2612u.Size = new Size(198, 19);
             rbNukedOPN2OptionYM2612u.TabIndex = 0;
@@ -1674,7 +1675,7 @@ namespace mml2vgmIDE
             // 
             rbNukedOPN2OptionYM2612.AutoSize = true;
             rbNukedOPN2OptionYM2612.Location = new Point(7, 78);
-            rbNukedOPN2OptionYM2612.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionYM2612.Margin = new Padding(4);
             rbNukedOPN2OptionYM2612.Name = "rbNukedOPN2OptionYM2612";
             rbNukedOPN2OptionYM2612.Size = new Size(197, 19);
             rbNukedOPN2OptionYM2612.TabIndex = 0;
@@ -1686,7 +1687,7 @@ namespace mml2vgmIDE
             // 
             rbNukedOPN2OptionDiscrete.AutoSize = true;
             rbNukedOPN2OptionDiscrete.Location = new Point(7, 22);
-            rbNukedOPN2OptionDiscrete.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionDiscrete.Margin = new Padding(4);
             rbNukedOPN2OptionDiscrete.Name = "rbNukedOPN2OptionDiscrete";
             rbNukedOPN2OptionDiscrete.Size = new Size(122, 19);
             rbNukedOPN2OptionDiscrete.TabIndex = 0;
@@ -1698,7 +1699,7 @@ namespace mml2vgmIDE
             // 
             rbNukedOPN2OptionASIClp.AutoSize = true;
             rbNukedOPN2OptionASIClp.Location = new Point(7, 132);
-            rbNukedOPN2OptionASIClp.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionASIClp.Margin = new Padding(4);
             rbNukedOPN2OptionASIClp.Name = "rbNukedOPN2OptionASIClp";
             rbNukedOPN2OptionASIClp.Size = new Size(151, 19);
             rbNukedOPN2OptionASIClp.TabIndex = 0;
@@ -1710,7 +1711,7 @@ namespace mml2vgmIDE
             // 
             rbNukedOPN2OptionASIC.AutoSize = true;
             rbNukedOPN2OptionASIC.Location = new Point(7, 50);
-            rbNukedOPN2OptionASIC.Margin = new Padding(4, 4, 4, 4);
+            rbNukedOPN2OptionASIC.Margin = new Padding(4);
             rbNukedOPN2OptionASIC.Name = "rbNukedOPN2OptionASIC";
             rbNukedOPN2OptionASIC.Size = new Size(181, 19);
             rbNukedOPN2OptionASIC.TabIndex = 0;
@@ -1722,10 +1723,10 @@ namespace mml2vgmIDE
             // 
             tabPage5.Controls.Add(groupBox34);
             tabPage5.Location = new Point(4, 24);
-            tabPage5.Margin = new Padding(4, 4, 4, 4);
+            tabPage5.Margin = new Padding(4);
             tabPage5.Name = "tabPage5";
-            tabPage5.Padding = new Padding(4, 4, 4, 4);
-            tabPage5.Size = new Size(506, 472);
+            tabPage5.Padding = new Padding(4);
+            tabPage5.Size = new Size(508, 460);
             tabPage5.TabIndex = 1;
             tabPage5.Text = "Gens";
             tabPage5.UseVisualStyleBackColor = true;
@@ -1735,9 +1736,9 @@ namespace mml2vgmIDE
             groupBox34.Controls.Add(cbGensSSGEG);
             groupBox34.Controls.Add(cbGensDACHPF);
             groupBox34.Location = new Point(7, 8);
-            groupBox34.Margin = new Padding(4, 4, 4, 4);
+            groupBox34.Margin = new Padding(4);
             groupBox34.Name = "groupBox34";
-            groupBox34.Padding = new Padding(4, 4, 4, 4);
+            groupBox34.Padding = new Padding(4);
             groupBox34.Size = new Size(371, 82);
             groupBox34.TabIndex = 1;
             groupBox34.TabStop = false;
@@ -1747,7 +1748,7 @@ namespace mml2vgmIDE
             // 
             cbGensSSGEG.AutoSize = true;
             cbGensSSGEG.Location = new Point(7, 50);
-            cbGensSSGEG.Margin = new Padding(4, 4, 4, 4);
+            cbGensSSGEG.Margin = new Padding(4);
             cbGensSSGEG.Name = "cbGensSSGEG";
             cbGensSSGEG.Size = new Size(103, 19);
             cbGensSSGEG.TabIndex = 1;
@@ -1758,7 +1759,7 @@ namespace mml2vgmIDE
             // 
             cbGensDACHPF.AutoSize = true;
             cbGensDACHPF.Location = new Point(7, 22);
-            cbGensDACHPF.Margin = new Padding(4, 4, 4, 4);
+            cbGensDACHPF.Margin = new Padding(4);
             cbGensDACHPF.Name = "cbGensDACHPF";
             cbGensDACHPF.Size = new Size(139, 19);
             cbGensDACHPF.TabIndex = 0;
@@ -1769,10 +1770,10 @@ namespace mml2vgmIDE
             // 
             tpNSF.BorderStyle = BorderStyle.FixedSingle;
             tpNSF.Controls.Add(tabControl3);
-            tpNSF.Location = new Point(4, 64);
-            tpNSF.Margin = new Padding(4, 4, 4, 4);
+            tpNSF.Location = new Point(4, 44);
+            tpNSF.Margin = new Padding(4);
             tpNSF.Name = "tpNSF";
-            tpNSF.Size = new Size(518, 490);
+            tpNSF.Size = new Size(518, 510);
             tpNSF.TabIndex = 9;
             tpNSF.Text = "MIDI詳細";
             tpNSF.UseVisualStyleBackColor = true;
@@ -1785,11 +1786,11 @@ namespace mml2vgmIDE
             tabControl3.Dock = DockStyle.Fill;
             tabControl3.HotTrack = true;
             tabControl3.Location = new Point(0, 0);
-            tabControl3.Margin = new Padding(4, 4, 4, 4);
+            tabControl3.Margin = new Padding(4);
             tabControl3.Multiline = true;
             tabControl3.Name = "tabControl3";
             tabControl3.SelectedIndex = 0;
-            tabControl3.Size = new Size(516, 488);
+            tabControl3.Size = new Size(516, 508);
             tabControl3.TabIndex = 9;
             // 
             // tabPage15
@@ -1800,10 +1801,10 @@ namespace mml2vgmIDE
             tabPage15.Controls.Add(groupBox12);
             tabPage15.Controls.Add(groupBox11);
             tabPage15.Location = new Point(4, 24);
-            tabPage15.Margin = new Padding(4, 4, 4, 4);
+            tabPage15.Margin = new Padding(4);
             tabPage15.Name = "tabPage15";
-            tabPage15.Padding = new Padding(4, 4, 4, 4);
-            tabPage15.Size = new Size(508, 460);
+            tabPage15.Padding = new Padding(4);
+            tabPage15.Size = new Size(508, 480);
             tabPage15.TabIndex = 0;
             tabPage15.Text = ".NSF";
             tabPage15.UseVisualStyleBackColor = true;
@@ -1815,9 +1816,9 @@ namespace mml2vgmIDE
             groupBox9.Controls.Add(cbNFSNes_NonLinearMixer);
             groupBox9.Controls.Add(cbNFSNes_UnmuteOnReset);
             groupBox9.Location = new Point(4, 4);
-            groupBox9.Margin = new Padding(4, 4, 4, 4);
+            groupBox9.Margin = new Padding(4);
             groupBox9.Name = "groupBox9";
-            groupBox9.Padding = new Padding(4, 4, 4, 4);
+            groupBox9.Padding = new Padding(4);
             groupBox9.Size = new Size(245, 134);
             groupBox9.TabIndex = 8;
             groupBox9.TabStop = false;
@@ -1827,7 +1828,7 @@ namespace mml2vgmIDE
             // 
             cbNFSNes_DutySwap.AutoSize = true;
             cbNFSNes_DutySwap.Location = new Point(7, 105);
-            cbNFSNes_DutySwap.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_DutySwap.Margin = new Padding(4);
             cbNFSNes_DutySwap.Name = "cbNFSNes_DutySwap";
             cbNFSNes_DutySwap.Size = new Size(81, 19);
             cbNFSNes_DutySwap.TabIndex = 7;
@@ -1838,7 +1839,7 @@ namespace mml2vgmIDE
             // 
             cbNFSNes_PhaseRefresh.AutoSize = true;
             cbNFSNes_PhaseRefresh.Location = new Point(7, 78);
-            cbNFSNes_PhaseRefresh.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_PhaseRefresh.Margin = new Padding(4);
             cbNFSNes_PhaseRefresh.Name = "cbNFSNes_PhaseRefresh";
             cbNFSNes_PhaseRefresh.Size = new Size(96, 19);
             cbNFSNes_PhaseRefresh.TabIndex = 7;
@@ -1849,7 +1850,7 @@ namespace mml2vgmIDE
             // 
             cbNFSNes_NonLinearMixer.AutoSize = true;
             cbNFSNes_NonLinearMixer.Location = new Point(7, 50);
-            cbNFSNes_NonLinearMixer.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_NonLinearMixer.Margin = new Padding(4);
             cbNFSNes_NonLinearMixer.Name = "cbNFSNes_NonLinearMixer";
             cbNFSNes_NonLinearMixer.Size = new Size(115, 19);
             cbNFSNes_NonLinearMixer.TabIndex = 7;
@@ -1860,7 +1861,7 @@ namespace mml2vgmIDE
             // 
             cbNFSNes_UnmuteOnReset.AutoSize = true;
             cbNFSNes_UnmuteOnReset.Location = new Point(7, 22);
-            cbNFSNes_UnmuteOnReset.Margin = new Padding(4, 4, 4, 4);
+            cbNFSNes_UnmuteOnReset.Margin = new Padding(4);
             cbNFSNes_UnmuteOnReset.Name = "cbNFSNes_UnmuteOnReset";
             cbNFSNes_UnmuteOnReset.Size = new Size(113, 19);
             cbNFSNes_UnmuteOnReset.TabIndex = 7;
@@ -1878,9 +1879,9 @@ namespace mml2vgmIDE
             groupBox10.Controls.Add(cbNSFDmc_NonLinearMixer);
             groupBox10.Controls.Add(cbNSFDmc_UnmuteOnReset);
             groupBox10.Location = new Point(257, 4);
-            groupBox10.Margin = new Padding(4, 4, 4, 4);
+            groupBox10.Margin = new Padding(4);
             groupBox10.Name = "groupBox10";
-            groupBox10.Padding = new Padding(4, 4, 4, 4);
+            groupBox10.Padding = new Padding(4);
             groupBox10.Size = new Size(245, 250);
             groupBox10.TabIndex = 8;
             groupBox10.TabStop = false;
@@ -1890,7 +1891,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_TriNull.AutoSize = true;
             cbNSFDmc_TriNull.Location = new Point(7, 214);
-            cbNSFDmc_TriNull.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_TriNull.Margin = new Padding(4);
             cbNSFDmc_TriNull.Name = "cbNSFDmc_TriNull";
             cbNSFDmc_TriNull.Size = new Size(65, 19);
             cbNSFDmc_TriNull.TabIndex = 7;
@@ -1901,7 +1902,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_TriMute.AutoSize = true;
             cbNSFDmc_TriMute.Location = new Point(7, 186);
-            cbNSFDmc_TriMute.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_TriMute.Margin = new Padding(4);
             cbNSFDmc_TriMute.Name = "cbNSFDmc_TriMute";
             cbNSFDmc_TriMute.Size = new Size(72, 19);
             cbNSFDmc_TriMute.TabIndex = 7;
@@ -1912,7 +1913,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_RandomizeNoise.AutoSize = true;
             cbNSFDmc_RandomizeNoise.Location = new Point(7, 160);
-            cbNSFDmc_RandomizeNoise.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_RandomizeNoise.Margin = new Padding(4);
             cbNSFDmc_RandomizeNoise.Name = "cbNSFDmc_RandomizeNoise";
             cbNSFDmc_RandomizeNoise.Size = new Size(115, 19);
             cbNSFDmc_RandomizeNoise.TabIndex = 7;
@@ -1923,7 +1924,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_DPCMAntiClick.AutoSize = true;
             cbNSFDmc_DPCMAntiClick.Location = new Point(7, 132);
-            cbNSFDmc_DPCMAntiClick.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_DPCMAntiClick.Margin = new Padding(4);
             cbNSFDmc_DPCMAntiClick.Name = "cbNSFDmc_DPCMAntiClick";
             cbNSFDmc_DPCMAntiClick.Size = new Size(109, 19);
             cbNSFDmc_DPCMAntiClick.TabIndex = 7;
@@ -1934,7 +1935,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_EnablePNoise.AutoSize = true;
             cbNSFDmc_EnablePNoise.Location = new Point(7, 105);
-            cbNSFDmc_EnablePNoise.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_EnablePNoise.Margin = new Padding(4);
             cbNSFDmc_EnablePNoise.Name = "cbNSFDmc_EnablePNoise";
             cbNSFDmc_EnablePNoise.Size = new Size(99, 19);
             cbNSFDmc_EnablePNoise.TabIndex = 7;
@@ -1945,7 +1946,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_Enable4011.AutoSize = true;
             cbNSFDmc_Enable4011.Location = new Point(7, 78);
-            cbNSFDmc_Enable4011.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_Enable4011.Margin = new Padding(4);
             cbNSFDmc_Enable4011.Name = "cbNSFDmc_Enable4011";
             cbNSFDmc_Enable4011.Size = new Size(94, 19);
             cbNSFDmc_Enable4011.TabIndex = 7;
@@ -1956,7 +1957,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_NonLinearMixer.AutoSize = true;
             cbNSFDmc_NonLinearMixer.Location = new Point(7, 50);
-            cbNSFDmc_NonLinearMixer.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_NonLinearMixer.Margin = new Padding(4);
             cbNSFDmc_NonLinearMixer.Name = "cbNSFDmc_NonLinearMixer";
             cbNSFDmc_NonLinearMixer.Size = new Size(115, 19);
             cbNSFDmc_NonLinearMixer.TabIndex = 7;
@@ -1967,7 +1968,7 @@ namespace mml2vgmIDE
             // 
             cbNSFDmc_UnmuteOnReset.AutoSize = true;
             cbNSFDmc_UnmuteOnReset.Location = new Point(7, 22);
-            cbNSFDmc_UnmuteOnReset.Margin = new Padding(4, 4, 4, 4);
+            cbNSFDmc_UnmuteOnReset.Margin = new Padding(4);
             cbNSFDmc_UnmuteOnReset.Name = "cbNSFDmc_UnmuteOnReset";
             cbNSFDmc_UnmuteOnReset.Size = new Size(113, 19);
             cbNSFDmc_UnmuteOnReset.TabIndex = 7;
@@ -1982,9 +1983,9 @@ namespace mml2vgmIDE
             groupBox8.Controls.Add(cbNFSFds_4085Reset);
             groupBox8.Controls.Add(cbNSFFDSWriteDisable8000);
             groupBox8.Location = new Point(4, 145);
-            groupBox8.Margin = new Padding(4, 4, 4, 4);
+            groupBox8.Margin = new Padding(4);
             groupBox8.Name = "groupBox8";
-            groupBox8.Padding = new Padding(4, 4, 4, 4);
+            groupBox8.Padding = new Padding(4);
             groupBox8.Size = new Size(245, 109);
             groupBox8.TabIndex = 8;
             groupBox8.TabStop = false;
@@ -2013,7 +2014,7 @@ namespace mml2vgmIDE
             // tbNSFFds_LPF
             // 
             tbNSFFds_LPF.Location = new Point(43, 16);
-            tbNSFFds_LPF.Margin = new Padding(4, 4, 4, 4);
+            tbNSFFds_LPF.Margin = new Padding(4);
             tbNSFFds_LPF.Name = "tbNSFFds_LPF";
             tbNSFFds_LPF.Size = new Size(116, 23);
             tbNSFFds_LPF.TabIndex = 9;
@@ -2022,7 +2023,7 @@ namespace mml2vgmIDE
             // 
             cbNFSFds_4085Reset.AutoSize = true;
             cbNFSFds_4085Reset.Location = new Point(7, 48);
-            cbNFSFds_4085Reset.Margin = new Padding(4, 4, 4, 4);
+            cbNFSFds_4085Reset.Margin = new Padding(4);
             cbNFSFds_4085Reset.Name = "cbNFSFds_4085Reset";
             cbNFSFds_4085Reset.Size = new Size(84, 19);
             cbNFSFds_4085Reset.TabIndex = 7;
@@ -2033,7 +2034,7 @@ namespace mml2vgmIDE
             // 
             cbNSFFDSWriteDisable8000.AutoSize = true;
             cbNSFFDSWriteDisable8000.Location = new Point(7, 75);
-            cbNSFFDSWriteDisable8000.Margin = new Padding(4, 4, 4, 4);
+            cbNSFFDSWriteDisable8000.Margin = new Padding(4);
             cbNSFFDSWriteDisable8000.Name = "cbNSFFDSWriteDisable8000";
             cbNSFFDSWriteDisable8000.Size = new Size(175, 19);
             cbNSFFDSWriteDisable8000.TabIndex = 7;
@@ -2044,9 +2045,9 @@ namespace mml2vgmIDE
             // 
             groupBox12.Controls.Add(cbNSFN160_Serial);
             groupBox12.Location = new Point(257, 261);
-            groupBox12.Margin = new Padding(4, 4, 4, 4);
+            groupBox12.Margin = new Padding(4);
             groupBox12.Name = "groupBox12";
-            groupBox12.Padding = new Padding(4, 4, 4, 4);
+            groupBox12.Padding = new Padding(4);
             groupBox12.Size = new Size(245, 78);
             groupBox12.TabIndex = 8;
             groupBox12.TabStop = false;
@@ -2056,7 +2057,7 @@ namespace mml2vgmIDE
             // 
             cbNSFN160_Serial.AutoSize = true;
             cbNSFN160_Serial.Location = new Point(7, 22);
-            cbNSFN160_Serial.Margin = new Padding(4, 4, 4, 4);
+            cbNSFN160_Serial.Margin = new Padding(4);
             cbNSFN160_Serial.Name = "cbNSFN160_Serial";
             cbNSFN160_Serial.Size = new Size(54, 19);
             cbNSFN160_Serial.TabIndex = 7;
@@ -2068,9 +2069,9 @@ namespace mml2vgmIDE
             groupBox11.Controls.Add(cbNSFMmc5_PhaseRefresh);
             groupBox11.Controls.Add(cbNSFMmc5_NonLinearMixer);
             groupBox11.Location = new Point(4, 261);
-            groupBox11.Margin = new Padding(4, 4, 4, 4);
+            groupBox11.Margin = new Padding(4);
             groupBox11.Name = "groupBox11";
-            groupBox11.Padding = new Padding(4, 4, 4, 4);
+            groupBox11.Padding = new Padding(4);
             groupBox11.Size = new Size(245, 78);
             groupBox11.TabIndex = 8;
             groupBox11.TabStop = false;
@@ -2080,7 +2081,7 @@ namespace mml2vgmIDE
             // 
             cbNSFMmc5_PhaseRefresh.AutoSize = true;
             cbNSFMmc5_PhaseRefresh.Location = new Point(7, 50);
-            cbNSFMmc5_PhaseRefresh.Margin = new Padding(4, 4, 4, 4);
+            cbNSFMmc5_PhaseRefresh.Margin = new Padding(4);
             cbNSFMmc5_PhaseRefresh.Name = "cbNSFMmc5_PhaseRefresh";
             cbNSFMmc5_PhaseRefresh.Size = new Size(96, 19);
             cbNSFMmc5_PhaseRefresh.TabIndex = 7;
@@ -2091,7 +2092,7 @@ namespace mml2vgmIDE
             // 
             cbNSFMmc5_NonLinearMixer.AutoSize = true;
             cbNSFMmc5_NonLinearMixer.Location = new Point(7, 22);
-            cbNSFMmc5_NonLinearMixer.Margin = new Padding(4, 4, 4, 4);
+            cbNSFMmc5_NonLinearMixer.Margin = new Padding(4);
             cbNSFMmc5_NonLinearMixer.Name = "cbNSFMmc5_NonLinearMixer";
             cbNSFMmc5_NonLinearMixer.Size = new Size(116, 19);
             cbNSFMmc5_NonLinearMixer.TabIndex = 7;
@@ -2106,10 +2107,10 @@ namespace mml2vgmIDE
             tabPage16.Controls.Add(label51);
             tabPage16.Controls.Add(tbSIDOutputBufferSize);
             tabPage16.Location = new Point(4, 24);
-            tabPage16.Margin = new Padding(4, 4, 4, 4);
+            tabPage16.Margin = new Padding(4);
             tabPage16.Name = "tabPage16";
-            tabPage16.Padding = new Padding(4, 4, 4, 4);
-            tabPage16.Size = new Size(506, 472);
+            tabPage16.Padding = new Padding(4);
+            tabPage16.Size = new Size(508, 460);
             tabPage16.TabIndex = 1;
             tabPage16.Text = ".SID";
             tabPage16.UseVisualStyleBackColor = true;
@@ -2124,9 +2125,9 @@ namespace mml2vgmIDE
             groupBox14.Controls.Add(rdSIDQ2);
             groupBox14.Controls.Add(rdSIDQ4);
             groupBox14.Location = new Point(4, 136);
-            groupBox14.Margin = new Padding(4, 4, 4, 4);
+            groupBox14.Margin = new Padding(4);
             groupBox14.Name = "groupBox14";
-            groupBox14.Padding = new Padding(4, 4, 4, 4);
+            groupBox14.Padding = new Padding(4);
             groupBox14.Size = new Size(327, 139);
             groupBox14.TabIndex = 2;
             groupBox14.TabStop = false;
@@ -2167,7 +2168,7 @@ namespace mml2vgmIDE
             rdSIDQ1.AutoSize = true;
             rdSIDQ1.Checked = true;
             rdSIDQ1.Location = new Point(7, 105);
-            rdSIDQ1.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ1.Margin = new Padding(4);
             rdSIDQ1.Name = "rdSIDQ1";
             rdSIDQ1.Size = new Size(112, 19);
             rdSIDQ1.TabIndex = 1;
@@ -2179,7 +2180,7 @@ namespace mml2vgmIDE
             // 
             rdSIDQ3.AutoSize = true;
             rdSIDQ3.Location = new Point(7, 50);
-            rdSIDQ3.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ3.Margin = new Padding(4);
             rdSIDQ3.Name = "rdSIDQ3";
             rdSIDQ3.Size = new Size(105, 19);
             rdSIDQ3.TabIndex = 1;
@@ -2190,7 +2191,7 @@ namespace mml2vgmIDE
             // 
             rdSIDQ2.AutoSize = true;
             rdSIDQ2.Location = new Point(7, 78);
-            rdSIDQ2.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ2.Margin = new Padding(4);
             rdSIDQ2.Name = "rdSIDQ2";
             rdSIDQ2.Size = new Size(82, 19);
             rdSIDQ2.TabIndex = 1;
@@ -2201,7 +2202,7 @@ namespace mml2vgmIDE
             // 
             rdSIDQ4.AutoSize = true;
             rdSIDQ4.Location = new Point(7, 22);
-            rdSIDQ4.Margin = new Padding(4, 4, 4, 4);
+            rdSIDQ4.Margin = new Padding(4);
             rdSIDQ4.Name = "rdSIDQ4";
             rdSIDQ4.Size = new Size(75, 19);
             rdSIDQ4.TabIndex = 1;
@@ -2221,10 +2222,10 @@ namespace mml2vgmIDE
             groupBox13.Controls.Add(label23);
             groupBox13.Controls.Add(label22);
             groupBox13.Location = new Point(4, 4);
-            groupBox13.Margin = new Padding(4, 4, 4, 4);
+            groupBox13.Margin = new Padding(4);
             groupBox13.Name = "groupBox13";
-            groupBox13.Padding = new Padding(4, 4, 4, 4);
-            groupBox13.Size = new Size(497, 125);
+            groupBox13.Padding = new Padding(4);
+            groupBox13.Size = new Size(499, 125);
             groupBox13.TabIndex = 0;
             groupBox13.TabStop = false;
             groupBox13.Text = "ROM Image";
@@ -2232,8 +2233,8 @@ namespace mml2vgmIDE
             // btnSIDBasic
             // 
             btnSIDBasic.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSIDBasic.Location = new Point(464, 55);
-            btnSIDBasic.Margin = new Padding(4, 4, 4, 4);
+            btnSIDBasic.Location = new Point(466, 55);
+            btnSIDBasic.Margin = new Padding(4);
             btnSIDBasic.Name = "btnSIDBasic";
             btnSIDBasic.Size = new Size(27, 29);
             btnSIDBasic.TabIndex = 2;
@@ -2244,8 +2245,8 @@ namespace mml2vgmIDE
             // btnSIDCharacter
             // 
             btnSIDCharacter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSIDCharacter.Location = new Point(464, 86);
-            btnSIDCharacter.Margin = new Padding(4, 4, 4, 4);
+            btnSIDCharacter.Location = new Point(466, 86);
+            btnSIDCharacter.Margin = new Padding(4);
             btnSIDCharacter.Name = "btnSIDCharacter";
             btnSIDCharacter.Size = new Size(27, 29);
             btnSIDCharacter.TabIndex = 2;
@@ -2256,8 +2257,8 @@ namespace mml2vgmIDE
             // btnSIDKernal
             // 
             btnSIDKernal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSIDKernal.Location = new Point(464, 24);
-            btnSIDKernal.Margin = new Padding(4, 4, 4, 4);
+            btnSIDKernal.Location = new Point(466, 24);
+            btnSIDKernal.Margin = new Padding(4);
             btnSIDKernal.Name = "btnSIDKernal";
             btnSIDKernal.Size = new Size(27, 29);
             btnSIDKernal.TabIndex = 2;
@@ -2269,27 +2270,27 @@ namespace mml2vgmIDE
             // 
             tbSIDCharacter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbSIDCharacter.Location = new Point(78, 89);
-            tbSIDCharacter.Margin = new Padding(4, 4, 4, 4);
+            tbSIDCharacter.Margin = new Padding(4);
             tbSIDCharacter.Name = "tbSIDCharacter";
-            tbSIDCharacter.Size = new Size(378, 23);
+            tbSIDCharacter.Size = new Size(380, 23);
             tbSIDCharacter.TabIndex = 1;
             // 
             // tbSIDBasic
             // 
             tbSIDBasic.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbSIDBasic.Location = new Point(78, 58);
-            tbSIDBasic.Margin = new Padding(4, 4, 4, 4);
+            tbSIDBasic.Margin = new Padding(4);
             tbSIDBasic.Name = "tbSIDBasic";
-            tbSIDBasic.Size = new Size(378, 23);
+            tbSIDBasic.Size = new Size(380, 23);
             tbSIDBasic.TabIndex = 1;
             // 
             // tbSIDKernal
             // 
             tbSIDKernal.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbSIDKernal.Location = new Point(78, 26);
-            tbSIDKernal.Margin = new Padding(4, 4, 4, 4);
+            tbSIDKernal.Margin = new Padding(4);
             tbSIDKernal.Name = "tbSIDKernal";
-            tbSIDKernal.Size = new Size(378, 23);
+            tbSIDKernal.Size = new Size(380, 23);
             tbSIDKernal.TabIndex = 1;
             // 
             // label24
@@ -2344,7 +2345,7 @@ namespace mml2vgmIDE
             // tbSIDOutputBufferSize
             // 
             tbSIDOutputBufferSize.Location = new Point(128, 282);
-            tbSIDOutputBufferSize.Margin = new Padding(4, 4, 4, 4);
+            tbSIDOutputBufferSize.Margin = new Padding(4);
             tbSIDOutputBufferSize.MaxLength = 10;
             tbSIDOutputBufferSize.Name = "tbSIDOutputBufferSize";
             tbSIDOutputBufferSize.Size = new Size(108, 23);
@@ -2354,9 +2355,9 @@ namespace mml2vgmIDE
             // 
             tabPage17.Controls.Add(groupBox15);
             tabPage17.Location = new Point(4, 24);
-            tabPage17.Margin = new Padding(4, 4, 4, 4);
+            tabPage17.Margin = new Padding(4);
             tabPage17.Name = "tabPage17";
-            tabPage17.Size = new Size(506, 472);
+            tabPage17.Size = new Size(508, 460);
             tabPage17.TabIndex = 2;
             tabPage17.Text = "Resetコマンド";
             tabPage17.UseVisualStyleBackColor = true;
@@ -2375,10 +2376,10 @@ namespace mml2vgmIDE
             groupBox15.Controls.Add(tbBeforeSend_GMReset);
             groupBox15.Controls.Add(label31);
             groupBox15.Location = new Point(4, 4);
-            groupBox15.Margin = new Padding(4, 4, 4, 4);
+            groupBox15.Margin = new Padding(4);
             groupBox15.Name = "groupBox15";
-            groupBox15.Padding = new Padding(4, 4, 4, 4);
-            groupBox15.Size = new Size(497, 249);
+            groupBox15.Padding = new Padding(4);
+            groupBox15.Size = new Size(499, 249);
             groupBox15.TabIndex = 0;
             groupBox15.TabStop = false;
             groupBox15.Text = "Before Send";
@@ -2386,8 +2387,8 @@ namespace mml2vgmIDE
             // btnBeforeSend_Default
             // 
             btnBeforeSend_Default.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnBeforeSend_Default.Location = new Point(404, 154);
-            btnBeforeSend_Default.Margin = new Padding(4, 4, 4, 4);
+            btnBeforeSend_Default.Location = new Point(406, 154);
+            btnBeforeSend_Default.Margin = new Padding(4);
             btnBeforeSend_Default.Name = "btnBeforeSend_Default";
             btnBeforeSend_Default.Size = new Size(88, 29);
             btnBeforeSend_Default.TabIndex = 2;
@@ -2399,24 +2400,24 @@ namespace mml2vgmIDE
             // 
             tbBeforeSend_Custom.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbBeforeSend_Custom.Location = new Point(105, 122);
-            tbBeforeSend_Custom.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_Custom.Margin = new Padding(4);
             tbBeforeSend_Custom.Name = "tbBeforeSend_Custom";
-            tbBeforeSend_Custom.Size = new Size(386, 23);
+            tbBeforeSend_Custom.Size = new Size(388, 23);
             tbBeforeSend_Custom.TabIndex = 1;
             // 
             // tbBeforeSend_XGReset
             // 
             tbBeforeSend_XGReset.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbBeforeSend_XGReset.Location = new Point(105, 60);
-            tbBeforeSend_XGReset.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_XGReset.Margin = new Padding(4);
             tbBeforeSend_XGReset.Name = "tbBeforeSend_XGReset";
-            tbBeforeSend_XGReset.Size = new Size(386, 23);
+            tbBeforeSend_XGReset.Size = new Size(388, 23);
             tbBeforeSend_XGReset.TabIndex = 1;
             // 
             // label35
             // 
             label35.AutoSize = true;
-            label35.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            label35.Font = new Font("Consolas", 9F);
             label35.Location = new Point(7, 160);
             label35.Margin = new Padding(4, 0, 4, 0);
             label35.Name = "label35";
@@ -2448,9 +2449,9 @@ namespace mml2vgmIDE
             // 
             tbBeforeSend_GSReset.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbBeforeSend_GSReset.Location = new Point(105, 91);
-            tbBeforeSend_GSReset.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_GSReset.Margin = new Padding(4);
             tbBeforeSend_GSReset.Name = "tbBeforeSend_GSReset";
-            tbBeforeSend_GSReset.Size = new Size(386, 23);
+            tbBeforeSend_GSReset.Size = new Size(388, 23);
             tbBeforeSend_GSReset.TabIndex = 1;
             // 
             // label33
@@ -2467,9 +2468,9 @@ namespace mml2vgmIDE
             // 
             tbBeforeSend_GMReset.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbBeforeSend_GMReset.Location = new Point(105, 29);
-            tbBeforeSend_GMReset.Margin = new Padding(4, 4, 4, 4);
+            tbBeforeSend_GMReset.Margin = new Padding(4);
             tbBeforeSend_GMReset.Name = "tbBeforeSend_GMReset";
-            tbBeforeSend_GMReset.Size = new Size(386, 23);
+            tbBeforeSend_GMReset.Size = new Size(388, 23);
             tbBeforeSend_GMReset.TabIndex = 1;
             // 
             // label31
@@ -2494,10 +2495,10 @@ namespace mml2vgmIDE
             tpPMDDotNET.Controls.Add(label37);
             tpPMDDotNET.Controls.Add(tbPMDCompilerArguments);
             tpPMDDotNET.Controls.Add(gbPMDManual);
-            tpPMDDotNET.Location = new Point(4, 64);
-            tpPMDDotNET.Margin = new Padding(4, 4, 4, 4);
+            tpPMDDotNET.Location = new Point(4, 44);
+            tpPMDDotNET.Margin = new Padding(4);
             tpPMDDotNET.Name = "tpPMDDotNET";
-            tpPMDDotNET.Size = new Size(518, 490);
+            tpPMDDotNET.Size = new Size(518, 510);
             tpPMDDotNET.TabIndex = 15;
             tpPMDDotNET.Text = "PMDDotNET";
             tpPMDDotNET.UseVisualStyleBackColor = true;
@@ -2506,7 +2507,7 @@ namespace mml2vgmIDE
             // 
             rbPMDManual.AutoSize = true;
             rbPMDManual.Location = new Point(10, 72);
-            rbPMDManual.Margin = new Padding(4, 4, 4, 4);
+            rbPMDManual.Margin = new Padding(4);
             rbPMDManual.Name = "rbPMDManual";
             rbPMDManual.Size = new Size(65, 19);
             rbPMDManual.TabIndex = 3;
@@ -2519,7 +2520,7 @@ namespace mml2vgmIDE
             // 
             rbPMDAuto.AutoSize = true;
             rbPMDAuto.Location = new Point(10, 44);
-            rbPMDAuto.Margin = new Padding(4, 4, 4, 4);
+            rbPMDAuto.Margin = new Padding(4);
             rbPMDAuto.Name = "rbPMDAuto";
             rbPMDAuto.Size = new Size(51, 19);
             rbPMDAuto.TabIndex = 3;
@@ -2530,7 +2531,7 @@ namespace mml2vgmIDE
             // btnPMDResetDriverArguments
             // 
             btnPMDResetDriverArguments.Location = new Point(439, 464);
-            btnPMDResetDriverArguments.Margin = new Padding(4, 4, 4, 4);
+            btnPMDResetDriverArguments.Margin = new Padding(4);
             btnPMDResetDriverArguments.Name = "btnPMDResetDriverArguments";
             btnPMDResetDriverArguments.Size = new Size(75, 29);
             btnPMDResetDriverArguments.TabIndex = 2;
@@ -2551,7 +2552,7 @@ namespace mml2vgmIDE
             // btnPMDResetCompilerArhguments
             // 
             btnPMDResetCompilerArhguments.Location = new Point(439, 10);
-            btnPMDResetCompilerArhguments.Margin = new Padding(4, 4, 4, 4);
+            btnPMDResetCompilerArhguments.Margin = new Padding(4);
             btnPMDResetCompilerArhguments.Name = "btnPMDResetCompilerArhguments";
             btnPMDResetCompilerArhguments.Size = new Size(75, 29);
             btnPMDResetCompilerArhguments.TabIndex = 2;
@@ -2562,7 +2563,7 @@ namespace mml2vgmIDE
             // tbPMDDriverArguments
             // 
             tbPMDDriverArguments.Location = new Point(140, 466);
-            tbPMDDriverArguments.Margin = new Padding(4, 4, 4, 4);
+            tbPMDDriverArguments.Margin = new Padding(4);
             tbPMDDriverArguments.Name = "tbPMDDriverArguments";
             tbPMDDriverArguments.Size = new Size(291, 23);
             tbPMDDriverArguments.TabIndex = 0;
@@ -2580,7 +2581,7 @@ namespace mml2vgmIDE
             // tbPMDCompilerArguments
             // 
             tbPMDCompilerArguments.Location = new Point(140, 12);
-            tbPMDCompilerArguments.Margin = new Padding(4, 4, 4, 4);
+            tbPMDCompilerArguments.Margin = new Padding(4);
             tbPMDCompilerArguments.Name = "tbPMDCompilerArguments";
             tbPMDCompilerArguments.Size = new Size(291, 23);
             tbPMDCompilerArguments.TabIndex = 0;
@@ -2594,9 +2595,9 @@ namespace mml2vgmIDE
             gbPMDManual.Controls.Add(gbPPSDRV);
             gbPMDManual.Controls.Add(gbPMDSetManualVolume);
             gbPMDManual.Location = new Point(19, 75);
-            gbPMDManual.Margin = new Padding(4, 4, 4, 4);
+            gbPMDManual.Margin = new Padding(4);
             gbPMDManual.Name = "gbPMDManual";
-            gbPMDManual.Padding = new Padding(4, 4, 4, 4);
+            gbPMDManual.Padding = new Padding(4);
             gbPMDManual.Size = new Size(495, 379);
             gbPMDManual.TabIndex = 9;
             gbPMDManual.TabStop = false;
@@ -2605,7 +2606,7 @@ namespace mml2vgmIDE
             // 
             cbPMDSetManualVolume.AutoSize = true;
             cbPMDSetManualVolume.Location = new Point(9, 69);
-            cbPMDSetManualVolume.Margin = new Padding(4, 4, 4, 4);
+            cbPMDSetManualVolume.Margin = new Padding(4);
             cbPMDSetManualVolume.Name = "cbPMDSetManualVolume";
             cbPMDSetManualVolume.Size = new Size(131, 19);
             cbPMDSetManualVolume.TabIndex = 10;
@@ -2617,7 +2618,7 @@ namespace mml2vgmIDE
             // 
             cbPMDUsePPZ8.AutoSize = true;
             cbPMDUsePPZ8.Location = new Point(7, 351);
-            cbPMDUsePPZ8.Margin = new Padding(4, 4, 4, 4);
+            cbPMDUsePPZ8.Margin = new Padding(4);
             cbPMDUsePPZ8.Name = "cbPMDUsePPZ8";
             cbPMDUsePPZ8.Size = new Size(75, 19);
             cbPMDUsePPZ8.TabIndex = 6;
@@ -2630,9 +2631,9 @@ namespace mml2vgmIDE
             groupBox32.Controls.Add(rbPMDSpbB);
             groupBox32.Controls.Add(rbPMDNrmB);
             groupBox32.Location = new Point(7, 22);
-            groupBox32.Margin = new Padding(4, 4, 4, 4);
+            groupBox32.Margin = new Padding(4);
             groupBox32.Name = "groupBox32";
-            groupBox32.Padding = new Padding(4, 4, 4, 4);
+            groupBox32.Padding = new Padding(4);
             groupBox32.Size = new Size(332, 45);
             groupBox32.TabIndex = 4;
             groupBox32.TabStop = false;
@@ -2643,7 +2644,7 @@ namespace mml2vgmIDE
             rbPMD86B.AutoSize = true;
             rbPMD86B.Enabled = false;
             rbPMD86B.Location = new Point(227, 18);
-            rbPMD86B.Margin = new Padding(4, 4, 4, 4);
+            rbPMD86B.Margin = new Padding(4);
             rbPMD86B.Name = "rbPMD86B";
             rbPMD86B.Size = new Size(71, 19);
             rbPMD86B.TabIndex = 0;
@@ -2655,7 +2656,7 @@ namespace mml2vgmIDE
             // 
             rbPMDSpbB.AutoSize = true;
             rbPMDSpbB.Location = new Point(120, 18);
-            rbPMDSpbB.Margin = new Padding(4, 4, 4, 4);
+            rbPMDSpbB.Margin = new Padding(4);
             rbPMDSpbB.Name = "rbPMDSpbB";
             rbPMDSpbB.Size = new Size(90, 19);
             rbPMDSpbB.TabIndex = 0;
@@ -2667,7 +2668,7 @@ namespace mml2vgmIDE
             // 
             rbPMDNrmB.AutoSize = true;
             rbPMDNrmB.Location = new Point(7, 18);
-            rbPMDNrmB.Margin = new Padding(4, 4, 4, 4);
+            rbPMDNrmB.Margin = new Padding(4);
             rbPMDNrmB.Name = "rbPMDNrmB";
             rbPMDNrmB.Size = new Size(98, 19);
             rbPMDNrmB.TabIndex = 0;
@@ -2679,7 +2680,7 @@ namespace mml2vgmIDE
             // 
             cbPMDUsePPSDRV.AutoSize = true;
             cbPMDUsePPSDRV.Location = new Point(7, 188);
-            cbPMDUsePPSDRV.Margin = new Padding(4, 4, 4, 4);
+            cbPMDUsePPSDRV.Margin = new Padding(4);
             cbPMDUsePPSDRV.Name = "cbPMDUsePPSDRV";
             cbPMDUsePPSDRV.Size = new Size(90, 19);
             cbPMDUsePPSDRV.TabIndex = 5;
@@ -2691,9 +2692,9 @@ namespace mml2vgmIDE
             // 
             gbPPSDRV.Controls.Add(groupBox33);
             gbPPSDRV.Location = new Point(14, 188);
-            gbPPSDRV.Margin = new Padding(4, 4, 4, 4);
+            gbPPSDRV.Margin = new Padding(4);
             gbPPSDRV.Name = "gbPPSDRV";
-            gbPPSDRV.Padding = new Padding(4, 4, 4, 4);
+            gbPPSDRV.Padding = new Padding(4);
             gbPPSDRV.Size = new Size(474, 156);
             gbPPSDRV.TabIndex = 8;
             gbPPSDRV.TabStop = false;
@@ -2710,9 +2711,9 @@ namespace mml2vgmIDE
             groupBox33.Controls.Add(tbPMDPPSDRVManualWait);
             groupBox33.Enabled = false;
             groupBox33.Location = new Point(7, 22);
-            groupBox33.Margin = new Padding(4, 4, 4, 4);
+            groupBox33.Margin = new Padding(4);
             groupBox33.Name = "groupBox33";
-            groupBox33.Padding = new Padding(4, 4, 4, 4);
+            groupBox33.Padding = new Padding(4);
             groupBox33.Size = new Size(460, 125);
             groupBox33.TabIndex = 12;
             groupBox33.TabStop = false;
@@ -2722,7 +2723,7 @@ namespace mml2vgmIDE
             // 
             rbPMDUsePPSDRVManualFreq.AutoSize = true;
             rbPMDUsePPSDRVManualFreq.Location = new Point(258, 55);
-            rbPMDUsePPSDRVManualFreq.Margin = new Padding(4, 4, 4, 4);
+            rbPMDUsePPSDRVManualFreq.Margin = new Padding(4);
             rbPMDUsePPSDRVManualFreq.Name = "rbPMDUsePPSDRVManualFreq";
             rbPMDUsePPSDRVManualFreq.Size = new Size(14, 13);
             rbPMDUsePPSDRVManualFreq.TabIndex = 8;
@@ -2744,7 +2745,7 @@ namespace mml2vgmIDE
             // 
             rbPMDUsePPSDRVFreqDefault.AutoSize = true;
             rbPMDUsePPSDRVFreqDefault.Location = new Point(258, 21);
-            rbPMDUsePPSDRVFreqDefault.Margin = new Padding(4, 4, 4, 4);
+            rbPMDUsePPSDRVFreqDefault.Margin = new Padding(4);
             rbPMDUsePPSDRVFreqDefault.Name = "rbPMDUsePPSDRVFreqDefault";
             rbPMDUsePPSDRVFreqDefault.Size = new Size(133, 19);
             rbPMDUsePPSDRVFreqDefault.TabIndex = 8;
@@ -2755,7 +2756,7 @@ namespace mml2vgmIDE
             // btnPMDPPSDRVManualWait
             // 
             btnPMDPPSDRVManualWait.Location = new Point(348, 89);
-            btnPMDPPSDRVManualWait.Margin = new Padding(4, 4, 4, 4);
+            btnPMDPPSDRVManualWait.Margin = new Padding(4);
             btnPMDPPSDRVManualWait.Name = "btnPMDPPSDRVManualWait";
             btnPMDPPSDRVManualWait.Size = new Size(75, 29);
             btnPMDPPSDRVManualWait.TabIndex = 2;
@@ -2776,7 +2777,7 @@ namespace mml2vgmIDE
             // tbPMDPPSDRVFreq
             // 
             tbPMDPPSDRVFreq.Location = new Point(281, 51);
-            tbPMDPPSDRVFreq.Margin = new Padding(4, 4, 4, 4);
+            tbPMDPPSDRVFreq.Margin = new Padding(4);
             tbPMDPPSDRVFreq.Name = "tbPMDPPSDRVFreq";
             tbPMDPPSDRVFreq.Size = new Size(116, 23);
             tbPMDPPSDRVFreq.TabIndex = 7;
@@ -2796,7 +2797,7 @@ namespace mml2vgmIDE
             // tbPMDPPSDRVManualWait
             // 
             tbPMDPPSDRVManualWait.Location = new Point(281, 91);
-            tbPMDPPSDRVManualWait.Margin = new Padding(4, 4, 4, 4);
+            tbPMDPPSDRVManualWait.Margin = new Padding(4);
             tbPMDPPSDRVManualWait.Name = "tbPMDPPSDRVManualWait";
             tbPMDPPSDRVManualWait.Size = new Size(59, 23);
             tbPMDPPSDRVManualWait.TabIndex = 7;
@@ -2815,9 +2816,9 @@ namespace mml2vgmIDE
             gbPMDSetManualVolume.Controls.Add(label45);
             gbPMDSetManualVolume.Controls.Add(tbPMDVolumeFM);
             gbPMDSetManualVolume.Location = new Point(15, 69);
-            gbPMDSetManualVolume.Margin = new Padding(4, 4, 4, 4);
+            gbPMDSetManualVolume.Margin = new Padding(4);
             gbPMDSetManualVolume.Name = "gbPMDSetManualVolume";
-            gbPMDSetManualVolume.Padding = new Padding(4, 4, 4, 4);
+            gbPMDSetManualVolume.Padding = new Padding(4);
             gbPMDSetManualVolume.Size = new Size(472, 116);
             gbPMDSetManualVolume.TabIndex = 11;
             gbPMDSetManualVolume.TabStop = false;
@@ -2845,7 +2846,7 @@ namespace mml2vgmIDE
             // tbPMDVolumeAdpcm
             // 
             tbPMDVolumeAdpcm.Location = new Point(399, 41);
-            tbPMDVolumeAdpcm.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeAdpcm.Margin = new Padding(4);
             tbPMDVolumeAdpcm.Name = "tbPMDVolumeAdpcm";
             tbPMDVolumeAdpcm.Size = new Size(59, 23);
             tbPMDVolumeAdpcm.TabIndex = 9;
@@ -2863,7 +2864,7 @@ namespace mml2vgmIDE
             // tbPMDVolumeRhythm
             // 
             tbPMDVolumeRhythm.Location = new Point(273, 41);
-            tbPMDVolumeRhythm.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeRhythm.Margin = new Padding(4);
             tbPMDVolumeRhythm.Name = "tbPMDVolumeRhythm";
             tbPMDVolumeRhythm.Size = new Size(59, 23);
             tbPMDVolumeRhythm.TabIndex = 9;
@@ -2881,7 +2882,7 @@ namespace mml2vgmIDE
             // tbPMDVolumeSSG
             // 
             tbPMDVolumeSSG.Location = new Point(148, 41);
-            tbPMDVolumeSSG.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeSSG.Margin = new Padding(4);
             tbPMDVolumeSSG.Name = "tbPMDVolumeSSG";
             tbPMDVolumeSSG.Size = new Size(59, 23);
             tbPMDVolumeSSG.TabIndex = 9;
@@ -2899,7 +2900,7 @@ namespace mml2vgmIDE
             // tbPMDVolumeGIMICSSG
             // 
             tbPMDVolumeGIMICSSG.Location = new Point(234, 76);
-            tbPMDVolumeGIMICSSG.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeGIMICSSG.Margin = new Padding(4);
             tbPMDVolumeGIMICSSG.Name = "tbPMDVolumeGIMICSSG";
             tbPMDVolumeGIMICSSG.Size = new Size(59, 23);
             tbPMDVolumeGIMICSSG.TabIndex = 9;
@@ -2917,7 +2918,7 @@ namespace mml2vgmIDE
             // tbPMDVolumeFM
             // 
             tbPMDVolumeFM.Location = new Point(43, 41);
-            tbPMDVolumeFM.Margin = new Padding(4, 4, 4, 4);
+            tbPMDVolumeFM.Margin = new Padding(4);
             tbPMDVolumeFM.Name = "tbPMDVolumeFM";
             tbPMDVolumeFM.Size = new Size(59, 23);
             tbPMDVolumeFM.TabIndex = 9;
@@ -2931,10 +2932,10 @@ namespace mml2vgmIDE
             tpExport.Controls.Add(label48);
             tpExport.Controls.Add(tbLoopTimes);
             tpExport.Controls.Add(lblLoopTimes);
-            tpExport.Location = new Point(4, 64);
-            tpExport.Margin = new Padding(4, 4, 4, 4);
+            tpExport.Location = new Point(4, 44);
+            tpExport.Margin = new Padding(4);
             tpExport.Name = "tpExport";
-            tpExport.Size = new Size(518, 490);
+            tpExport.Size = new Size(518, 510);
             tpExport.TabIndex = 17;
             tpExport.Text = "Export";
             tpExport.UseVisualStyleBackColor = true;
@@ -2943,7 +2944,7 @@ namespace mml2vgmIDE
             // 
             cbAlwaysAskForLoopCount.AutoSize = true;
             cbAlwaysAskForLoopCount.Location = new Point(16, 111);
-            cbAlwaysAskForLoopCount.Margin = new Padding(4, 4, 4, 4);
+            cbAlwaysAskForLoopCount.Margin = new Padding(4);
             cbAlwaysAskForLoopCount.Name = "cbAlwaysAskForLoopCount";
             cbAlwaysAskForLoopCount.Size = new Size(223, 19);
             cbAlwaysAskForLoopCount.TabIndex = 28;
@@ -2955,7 +2956,7 @@ namespace mml2vgmIDE
             // 
             cbFixedExportPlace.AutoSize = true;
             cbFixedExportPlace.Location = new Point(16, 44);
-            cbFixedExportPlace.Margin = new Padding(4, 4, 4, 4);
+            cbFixedExportPlace.Margin = new Padding(4);
             cbFixedExportPlace.Name = "cbFixedExportPlace";
             cbFixedExportPlace.Size = new Size(155, 19);
             cbFixedExportPlace.TabIndex = 28;
@@ -2970,9 +2971,9 @@ namespace mml2vgmIDE
             gpbFixedExportPlace.Controls.Add(label57);
             gpbFixedExportPlace.Controls.Add(tbFixedExportPlacePath);
             gpbFixedExportPlace.Location = new Point(8, 48);
-            gpbFixedExportPlace.Margin = new Padding(4, 4, 4, 4);
+            gpbFixedExportPlace.Margin = new Padding(4);
             gpbFixedExportPlace.Name = "gpbFixedExportPlace";
-            gpbFixedExportPlace.Padding = new Padding(4, 4, 4, 4);
+            gpbFixedExportPlace.Padding = new Padding(4);
             gpbFixedExportPlace.Size = new Size(503, 56);
             gpbFixedExportPlace.TabIndex = 29;
             gpbFixedExportPlace.TabStop = false;
@@ -2981,7 +2982,7 @@ namespace mml2vgmIDE
             // 
             btnFixedExportPlace.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnFixedExportPlace.Location = new Point(469, 20);
-            btnFixedExportPlace.Margin = new Padding(4, 4, 4, 4);
+            btnFixedExportPlace.Margin = new Padding(4);
             btnFixedExportPlace.Name = "btnFixedExportPlace";
             btnFixedExportPlace.Size = new Size(27, 29);
             btnFixedExportPlace.TabIndex = 16;
@@ -3003,7 +3004,7 @@ namespace mml2vgmIDE
             // 
             tbFixedExportPlacePath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbFixedExportPlacePath.Location = new Point(85, 22);
-            tbFixedExportPlacePath.Margin = new Padding(4, 4, 4, 4);
+            tbFixedExportPlacePath.Margin = new Padding(4);
             tbFixedExportPlacePath.Name = "tbFixedExportPlacePath";
             tbFixedExportPlacePath.Size = new Size(376, 23);
             tbFixedExportPlacePath.TabIndex = 15;
@@ -3021,7 +3022,7 @@ namespace mml2vgmIDE
             // tbLoopTimes
             // 
             tbLoopTimes.Location = new Point(250, 16);
-            tbLoopTimes.Margin = new Padding(4, 4, 4, 4);
+            tbLoopTimes.Margin = new Padding(4);
             tbLoopTimes.Name = "tbLoopTimes";
             tbLoopTimes.Size = new Size(60, 23);
             tbLoopTimes.TabIndex = 0;
@@ -3041,10 +3042,10 @@ namespace mml2vgmIDE
             tpMIDIExp.BorderStyle = BorderStyle.FixedSingle;
             tpMIDIExp.Controls.Add(cbUseMIDIExport);
             tpMIDIExp.Controls.Add(gbMIDIExport);
-            tpMIDIExp.Location = new Point(4, 64);
-            tpMIDIExp.Margin = new Padding(4, 4, 4, 4);
+            tpMIDIExp.Location = new Point(4, 44);
+            tpMIDIExp.Margin = new Padding(4);
             tpMIDIExp.Name = "tpMIDIExp";
-            tpMIDIExp.Size = new Size(518, 490);
+            tpMIDIExp.Size = new Size(518, 510);
             tpMIDIExp.TabIndex = 6;
             tpMIDIExp.Text = "MIDIExport";
             tpMIDIExp.UseVisualStyleBackColor = true;
@@ -3053,7 +3054,7 @@ namespace mml2vgmIDE
             // 
             cbUseMIDIExport.AutoSize = true;
             cbUseMIDIExport.Location = new Point(18, 4);
-            cbUseMIDIExport.Margin = new Padding(4, 4, 4, 4);
+            cbUseMIDIExport.Margin = new Padding(4);
             cbUseMIDIExport.Name = "cbUseMIDIExport";
             cbUseMIDIExport.Size = new Size(183, 19);
             cbUseMIDIExport.TabIndex = 1;
@@ -3072,9 +3073,9 @@ namespace mml2vgmIDE
             gbMIDIExport.Controls.Add(lblOutputPath);
             gbMIDIExport.Controls.Add(tbMIDIOutputPath);
             gbMIDIExport.Location = new Point(8, 4);
-            gbMIDIExport.Margin = new Padding(4, 4, 4, 4);
+            gbMIDIExport.Margin = new Padding(4);
             gbMIDIExport.Name = "gbMIDIExport";
-            gbMIDIExport.Padding = new Padding(4, 4, 4, 4);
+            gbMIDIExport.Padding = new Padding(4);
             gbMIDIExport.Size = new Size(503, 582);
             gbMIDIExport.TabIndex = 0;
             gbMIDIExport.TabStop = false;
@@ -3083,7 +3084,7 @@ namespace mml2vgmIDE
             // 
             cbMIDIKeyOnFnum.AutoSize = true;
             cbMIDIKeyOnFnum.Location = new Point(24, 82);
-            cbMIDIKeyOnFnum.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIKeyOnFnum.Margin = new Padding(4);
             cbMIDIKeyOnFnum.Name = "cbMIDIKeyOnFnum";
             cbMIDIKeyOnFnum.Size = new Size(176, 19);
             cbMIDIKeyOnFnum.TabIndex = 23;
@@ -3094,7 +3095,7 @@ namespace mml2vgmIDE
             // 
             cbMIDIUseVOPM.AutoSize = true;
             cbMIDIUseVOPM.Location = new Point(24, 55);
-            cbMIDIUseVOPM.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIUseVOPM.Margin = new Padding(4);
             cbMIDIUseVOPM.Name = "cbMIDIUseVOPM";
             cbMIDIUseVOPM.Size = new Size(197, 19);
             cbMIDIUseVOPM.TabIndex = 23;
@@ -3116,9 +3117,9 @@ namespace mml2vgmIDE
             groupBox6.Controls.Add(cbMIDIYM2203Sec);
             groupBox6.Controls.Add(cbMIDIYM2608);
             groupBox6.Location = new Point(23, 141);
-            groupBox6.Margin = new Padding(4, 4, 4, 4);
+            groupBox6.Margin = new Padding(4);
             groupBox6.Name = "groupBox6";
-            groupBox6.Padding = new Padding(4, 4, 4, 4);
+            groupBox6.Padding = new Padding(4);
             groupBox6.Size = new Size(219, 190);
             groupBox6.TabIndex = 22;
             groupBox6.TabStop = false;
@@ -3130,7 +3131,7 @@ namespace mml2vgmIDE
             cbMIDIYM2612.Checked = true;
             cbMIDIYM2612.CheckState = CheckState.Checked;
             cbMIDIYM2612.Location = new Point(7, 22);
-            cbMIDIYM2612.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2612.Margin = new Padding(4);
             cbMIDIYM2612.Name = "cbMIDIYM2612";
             cbMIDIYM2612.Size = new Size(68, 19);
             cbMIDIYM2612.TabIndex = 21;
@@ -3142,7 +3143,7 @@ namespace mml2vgmIDE
             cbMIDISN76489Sec.AutoSize = true;
             cbMIDISN76489Sec.Enabled = false;
             cbMIDISN76489Sec.Location = new Point(98, 160);
-            cbMIDISN76489Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDISN76489Sec.Margin = new Padding(4);
             cbMIDISN76489Sec.Name = "cbMIDISN76489Sec";
             cbMIDISN76489Sec.Size = new Size(97, 19);
             cbMIDISN76489Sec.TabIndex = 21;
@@ -3154,7 +3155,7 @@ namespace mml2vgmIDE
             cbMIDIYM2612Sec.AutoSize = true;
             cbMIDIYM2612Sec.Enabled = false;
             cbMIDIYM2612Sec.Location = new Point(98, 22);
-            cbMIDIYM2612Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2612Sec.Margin = new Padding(4);
             cbMIDIYM2612Sec.Name = "cbMIDIYM2612Sec";
             cbMIDIYM2612Sec.Size = new Size(94, 19);
             cbMIDIYM2612Sec.TabIndex = 21;
@@ -3166,7 +3167,7 @@ namespace mml2vgmIDE
             cbMIDISN76489.AutoSize = true;
             cbMIDISN76489.Enabled = false;
             cbMIDISN76489.Location = new Point(7, 160);
-            cbMIDISN76489.Margin = new Padding(4, 4, 4, 4);
+            cbMIDISN76489.Margin = new Padding(4);
             cbMIDISN76489.Name = "cbMIDISN76489";
             cbMIDISN76489.Size = new Size(71, 19);
             cbMIDISN76489.TabIndex = 21;
@@ -3177,7 +3178,7 @@ namespace mml2vgmIDE
             // 
             cbMIDIYM2151.AutoSize = true;
             cbMIDIYM2151.Location = new Point(7, 50);
-            cbMIDIYM2151.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2151.Margin = new Padding(4);
             cbMIDIYM2151.Name = "cbMIDIYM2151";
             cbMIDIYM2151.Size = new Size(68, 19);
             cbMIDIYM2151.TabIndex = 21;
@@ -3189,7 +3190,7 @@ namespace mml2vgmIDE
             cbMIDIYM2610BSec.AutoSize = true;
             cbMIDIYM2610BSec.Enabled = false;
             cbMIDIYM2610BSec.Location = new Point(98, 132);
-            cbMIDIYM2610BSec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2610BSec.Margin = new Padding(4);
             cbMIDIYM2610BSec.Name = "cbMIDIYM2610BSec";
             cbMIDIYM2610BSec.Size = new Size(101, 19);
             cbMIDIYM2610BSec.TabIndex = 21;
@@ -3201,7 +3202,7 @@ namespace mml2vgmIDE
             cbMIDIYM2151Sec.AutoSize = true;
             cbMIDIYM2151Sec.Enabled = false;
             cbMIDIYM2151Sec.Location = new Point(98, 50);
-            cbMIDIYM2151Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2151Sec.Margin = new Padding(4);
             cbMIDIYM2151Sec.Name = "cbMIDIYM2151Sec";
             cbMIDIYM2151Sec.Size = new Size(94, 19);
             cbMIDIYM2151Sec.TabIndex = 21;
@@ -3213,7 +3214,7 @@ namespace mml2vgmIDE
             cbMIDIYM2610B.AutoSize = true;
             cbMIDIYM2610B.Enabled = false;
             cbMIDIYM2610B.Location = new Point(7, 132);
-            cbMIDIYM2610B.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2610B.Margin = new Padding(4);
             cbMIDIYM2610B.Name = "cbMIDIYM2610B";
             cbMIDIYM2610B.Size = new Size(75, 19);
             cbMIDIYM2610B.TabIndex = 21;
@@ -3225,7 +3226,7 @@ namespace mml2vgmIDE
             cbMIDIYM2203.AutoSize = true;
             cbMIDIYM2203.Enabled = false;
             cbMIDIYM2203.Location = new Point(7, 78);
-            cbMIDIYM2203.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2203.Margin = new Padding(4);
             cbMIDIYM2203.Name = "cbMIDIYM2203";
             cbMIDIYM2203.Size = new Size(68, 19);
             cbMIDIYM2203.TabIndex = 21;
@@ -3237,7 +3238,7 @@ namespace mml2vgmIDE
             cbMIDIYM2608Sec.AutoSize = true;
             cbMIDIYM2608Sec.Enabled = false;
             cbMIDIYM2608Sec.Location = new Point(98, 105);
-            cbMIDIYM2608Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2608Sec.Margin = new Padding(4);
             cbMIDIYM2608Sec.Name = "cbMIDIYM2608Sec";
             cbMIDIYM2608Sec.Size = new Size(94, 19);
             cbMIDIYM2608Sec.TabIndex = 21;
@@ -3249,7 +3250,7 @@ namespace mml2vgmIDE
             cbMIDIYM2203Sec.AutoSize = true;
             cbMIDIYM2203Sec.Enabled = false;
             cbMIDIYM2203Sec.Location = new Point(98, 78);
-            cbMIDIYM2203Sec.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2203Sec.Margin = new Padding(4);
             cbMIDIYM2203Sec.Name = "cbMIDIYM2203Sec";
             cbMIDIYM2203Sec.Size = new Size(94, 19);
             cbMIDIYM2203Sec.TabIndex = 21;
@@ -3261,7 +3262,7 @@ namespace mml2vgmIDE
             cbMIDIYM2608.AutoSize = true;
             cbMIDIYM2608.Enabled = false;
             cbMIDIYM2608.Location = new Point(7, 105);
-            cbMIDIYM2608.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIYM2608.Margin = new Padding(4);
             cbMIDIYM2608.Name = "cbMIDIYM2608";
             cbMIDIYM2608.Size = new Size(68, 19);
             cbMIDIYM2608.TabIndex = 21;
@@ -3273,7 +3274,7 @@ namespace mml2vgmIDE
             cbMIDIPlayless.AutoSize = true;
             cbMIDIPlayless.Enabled = false;
             cbMIDIPlayless.Location = new Point(24, 28);
-            cbMIDIPlayless.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIPlayless.Margin = new Padding(4);
             cbMIDIPlayless.Name = "cbMIDIPlayless";
             cbMIDIPlayless.Size = new Size(142, 19);
             cbMIDIPlayless.TabIndex = 20;
@@ -3284,7 +3285,7 @@ namespace mml2vgmIDE
             // 
             btnMIDIOutputPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnMIDIOutputPath.Location = new Point(468, 108);
-            btnMIDIOutputPath.Margin = new Padding(4, 4, 4, 4);
+            btnMIDIOutputPath.Margin = new Padding(4);
             btnMIDIOutputPath.Name = "btnMIDIOutputPath";
             btnMIDIOutputPath.Size = new Size(27, 29);
             btnMIDIOutputPath.TabIndex = 19;
@@ -3306,7 +3307,7 @@ namespace mml2vgmIDE
             // 
             tbMIDIOutputPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbMIDIOutputPath.Location = new Point(90, 110);
-            tbMIDIOutputPath.Margin = new Padding(4, 4, 4, 4);
+            tbMIDIOutputPath.Margin = new Padding(4);
             tbMIDIOutputPath.Name = "tbMIDIOutputPath";
             tbMIDIOutputPath.Size = new Size(370, 23);
             tbMIDIOutputPath.TabIndex = 18;
@@ -3317,10 +3318,10 @@ namespace mml2vgmIDE
             tpMIDIKBD.Controls.Add(cbMIDIKbdAlwaysTop);
             tpMIDIKBD.Controls.Add(cbUseMIDIKeyboard);
             tpMIDIKBD.Controls.Add(gbMIDIKeyboard);
-            tpMIDIKBD.Location = new Point(4, 64);
-            tpMIDIKBD.Margin = new Padding(4, 4, 4, 4);
+            tpMIDIKBD.Location = new Point(4, 44);
+            tpMIDIKBD.Margin = new Padding(4);
             tpMIDIKBD.Name = "tpMIDIKBD";
-            tpMIDIKBD.Size = new Size(518, 490);
+            tpMIDIKBD.Size = new Size(518, 510);
             tpMIDIKBD.TabIndex = 5;
             tpMIDIKBD.Text = "MIDI鍵盤";
             tpMIDIKBD.UseVisualStyleBackColor = true;
@@ -3329,7 +3330,7 @@ namespace mml2vgmIDE
             // 
             cbMIDIKbdAlwaysTop.AutoSize = true;
             cbMIDIKbdAlwaysTop.Location = new Point(14, 80);
-            cbMIDIKbdAlwaysTop.Margin = new Padding(4, 4, 4, 4);
+            cbMIDIKbdAlwaysTop.Margin = new Padding(4);
             cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
             cbMIDIKbdAlwaysTop.Size = new Size(156, 19);
             cbMIDIKbdAlwaysTop.TabIndex = 2;
@@ -3340,7 +3341,7 @@ namespace mml2vgmIDE
             // 
             cbUseMIDIKeyboard.AutoSize = true;
             cbUseMIDIKeyboard.Location = new Point(13, 5);
-            cbUseMIDIKeyboard.Margin = new Padding(4, 4, 4, 4);
+            cbUseMIDIKeyboard.Margin = new Padding(4);
             cbUseMIDIKeyboard.Name = "cbUseMIDIKeyboard";
             cbUseMIDIKeyboard.Size = new Size(123, 19);
             cbUseMIDIKeyboard.TabIndex = 1;
@@ -3379,9 +3380,9 @@ namespace mml2vgmIDE
             gbMIDIKeyboard.Controls.Add(label5);
             gbMIDIKeyboard.Enabled = false;
             gbMIDIKeyboard.Location = new Point(4, 8);
-            gbMIDIKeyboard.Margin = new Padding(4, 4, 4, 4);
+            gbMIDIKeyboard.Margin = new Padding(4);
             gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            gbMIDIKeyboard.Padding = new Padding(4, 4, 4, 4);
+            gbMIDIKeyboard.Padding = new Padding(4);
             gbMIDIKeyboard.Size = new Size(507, 185);
             gbMIDIKeyboard.TabIndex = 0;
             gbMIDIKeyboard.TabStop = false;
@@ -3390,7 +3391,7 @@ namespace mml2vgmIDE
             // 
             pictureBox8.Image = Resources.ccNext;
             pictureBox8.Location = new Point(433, 321);
-            pictureBox8.Margin = new Padding(4, 4, 4, 4);
+            pictureBox8.Margin = new Padding(4);
             pictureBox8.Name = "pictureBox8";
             pictureBox8.Size = new Size(19, 20);
             pictureBox8.TabIndex = 4;
@@ -3401,7 +3402,7 @@ namespace mml2vgmIDE
             // 
             pictureBox7.Image = Resources.ccFast;
             pictureBox7.Location = new Point(304, 321);
-            pictureBox7.Margin = new Padding(4, 4, 4, 4);
+            pictureBox7.Margin = new Padding(4);
             pictureBox7.Name = "pictureBox7";
             pictureBox7.Size = new Size(19, 20);
             pictureBox7.TabIndex = 4;
@@ -3412,7 +3413,7 @@ namespace mml2vgmIDE
             // 
             pictureBox6.Image = Resources.ccPlay;
             pictureBox6.Location = new Point(177, 322);
-            pictureBox6.Margin = new Padding(4, 4, 4, 4);
+            pictureBox6.Margin = new Padding(4);
             pictureBox6.Name = "pictureBox6";
             pictureBox6.Size = new Size(19, 20);
             pictureBox6.TabIndex = 4;
@@ -3423,7 +3424,7 @@ namespace mml2vgmIDE
             // 
             pictureBox5.Image = Resources.ccSlow;
             pictureBox5.Location = new Point(49, 322);
-            pictureBox5.Margin = new Padding(4, 4, 4, 4);
+            pictureBox5.Margin = new Padding(4);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new Size(19, 20);
             pictureBox5.TabIndex = 4;
@@ -3434,7 +3435,7 @@ namespace mml2vgmIDE
             // 
             pictureBox4.Image = Resources.ccStop;
             pictureBox4.Location = new Point(49, 292);
-            pictureBox4.Margin = new Padding(4, 4, 4, 4);
+            pictureBox4.Margin = new Padding(4);
             pictureBox4.Name = "pictureBox4";
             pictureBox4.Size = new Size(19, 20);
             pictureBox4.TabIndex = 4;
@@ -3445,7 +3446,7 @@ namespace mml2vgmIDE
             // 
             pictureBox3.Image = Resources.ccPause;
             pictureBox3.Location = new Point(177, 292);
-            pictureBox3.Margin = new Padding(4, 4, 4, 4);
+            pictureBox3.Margin = new Padding(4);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(19, 20);
             pictureBox3.TabIndex = 4;
@@ -3456,7 +3457,7 @@ namespace mml2vgmIDE
             // 
             pictureBox2.Image = Resources.ccPrevious;
             pictureBox2.Location = new Point(433, 292);
-            pictureBox2.Margin = new Padding(4, 4, 4, 4);
+            pictureBox2.Margin = new Padding(4);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(19, 20);
             pictureBox2.TabIndex = 4;
@@ -3467,7 +3468,7 @@ namespace mml2vgmIDE
             // 
             pictureBox1.Image = Resources.ccFadeout;
             pictureBox1.Location = new Point(304, 292);
-            pictureBox1.Margin = new Padding(4, 4, 4, 4);
+            pictureBox1.Margin = new Padding(4);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(19, 20);
             pictureBox1.TabIndex = 4;
@@ -3477,7 +3478,7 @@ namespace mml2vgmIDE
             // tbCCFadeout
             // 
             tbCCFadeout.Location = new Point(262, 290);
-            tbCCFadeout.Margin = new Padding(4, 4, 4, 4);
+            tbCCFadeout.Margin = new Padding(4);
             tbCCFadeout.MaxLength = 3;
             tbCCFadeout.Name = "tbCCFadeout";
             tbCCFadeout.Size = new Size(34, 23);
@@ -3487,7 +3488,7 @@ namespace mml2vgmIDE
             // tbCCPause
             // 
             tbCCPause.Location = new Point(135, 290);
-            tbCCPause.Margin = new Padding(4, 4, 4, 4);
+            tbCCPause.Margin = new Padding(4);
             tbCCPause.MaxLength = 3;
             tbCCPause.Name = "tbCCPause";
             tbCCPause.Size = new Size(34, 23);
@@ -3497,7 +3498,7 @@ namespace mml2vgmIDE
             // tbCCSlow
             // 
             tbCCSlow.Location = new Point(7, 321);
-            tbCCSlow.Margin = new Padding(4, 4, 4, 4);
+            tbCCSlow.Margin = new Padding(4);
             tbCCSlow.MaxLength = 3;
             tbCCSlow.Name = "tbCCSlow";
             tbCCSlow.Size = new Size(34, 23);
@@ -3507,7 +3508,7 @@ namespace mml2vgmIDE
             // tbCCPrevious
             // 
             tbCCPrevious.Location = new Point(391, 290);
-            tbCCPrevious.Margin = new Padding(4, 4, 4, 4);
+            tbCCPrevious.Margin = new Padding(4);
             tbCCPrevious.MaxLength = 3;
             tbCCPrevious.Name = "tbCCPrevious";
             tbCCPrevious.Size = new Size(34, 23);
@@ -3517,7 +3518,7 @@ namespace mml2vgmIDE
             // tbCCNext
             // 
             tbCCNext.Location = new Point(391, 321);
-            tbCCNext.Margin = new Padding(4, 4, 4, 4);
+            tbCCNext.Margin = new Padding(4);
             tbCCNext.MaxLength = 3;
             tbCCNext.Name = "tbCCNext";
             tbCCNext.Size = new Size(34, 23);
@@ -3527,7 +3528,7 @@ namespace mml2vgmIDE
             // tbCCFast
             // 
             tbCCFast.Location = new Point(262, 321);
-            tbCCFast.Margin = new Padding(4, 4, 4, 4);
+            tbCCFast.Margin = new Padding(4);
             tbCCFast.MaxLength = 3;
             tbCCFast.Name = "tbCCFast";
             tbCCFast.Size = new Size(34, 23);
@@ -3537,7 +3538,7 @@ namespace mml2vgmIDE
             // tbCCStop
             // 
             tbCCStop.Location = new Point(7, 290);
-            tbCCStop.Margin = new Padding(4, 4, 4, 4);
+            tbCCStop.Margin = new Padding(4);
             tbCCStop.MaxLength = 3;
             tbCCStop.Name = "tbCCStop";
             tbCCStop.Size = new Size(34, 23);
@@ -3547,7 +3548,7 @@ namespace mml2vgmIDE
             // tbCCPlay
             // 
             tbCCPlay.Location = new Point(135, 321);
-            tbCCPlay.Margin = new Padding(4, 4, 4, 4);
+            tbCCPlay.Margin = new Padding(4);
             tbCCPlay.MaxLength = 3;
             tbCCPlay.Name = "tbCCPlay";
             tbCCPlay.Size = new Size(34, 23);
@@ -3557,7 +3558,7 @@ namespace mml2vgmIDE
             // tbCCCopyLog
             // 
             tbCCCopyLog.Location = new Point(7, 259);
-            tbCCCopyLog.Margin = new Padding(4, 4, 4, 4);
+            tbCCCopyLog.Margin = new Padding(4);
             tbCCCopyLog.MaxLength = 3;
             tbCCCopyLog.Name = "tbCCCopyLog";
             tbCCCopyLog.Size = new Size(34, 23);
@@ -3578,7 +3579,7 @@ namespace mml2vgmIDE
             // tbCCDelLog
             // 
             tbCCDelLog.Location = new Point(7, 228);
-            tbCCDelLog.Margin = new Padding(4, 4, 4, 4);
+            tbCCDelLog.Margin = new Padding(4);
             tbCCDelLog.MaxLength = 3;
             tbCCDelLog.Name = "tbCCDelLog";
             tbCCDelLog.Size = new Size(34, 23);
@@ -3599,7 +3600,7 @@ namespace mml2vgmIDE
             // tbCCChCopy
             // 
             tbCCChCopy.Location = new Point(7, 196);
-            tbCCChCopy.Margin = new Padding(4, 4, 4, 4);
+            tbCCChCopy.Margin = new Padding(4);
             tbCCChCopy.MaxLength = 3;
             tbCCChCopy.Name = "tbCCChCopy";
             tbCCChCopy.Size = new Size(34, 23);
@@ -3635,9 +3636,9 @@ namespace mml2vgmIDE
             gbUseChannel.Controls.Add(groupBox7);
             gbUseChannel.Controls.Add(groupBox2);
             gbUseChannel.Location = new Point(7, 55);
-            gbUseChannel.Margin = new Padding(4, 4, 4, 4);
+            gbUseChannel.Margin = new Padding(4);
             gbUseChannel.Name = "gbUseChannel";
-            gbUseChannel.Padding = new Padding(4, 4, 4, 4);
+            gbUseChannel.Padding = new Padding(4);
             gbUseChannel.Size = new Size(496, 108);
             gbUseChannel.TabIndex = 2;
             gbUseChannel.TabStop = false;
@@ -3649,7 +3650,7 @@ namespace mml2vgmIDE
             rbMONO.AutoSize = true;
             rbMONO.Checked = true;
             rbMONO.Location = new Point(14, 21);
-            rbMONO.Margin = new Padding(4, 4, 4, 4);
+            rbMONO.Margin = new Padding(4);
             rbMONO.Name = "rbMONO";
             rbMONO.Size = new Size(63, 19);
             rbMONO.TabIndex = 1;
@@ -3661,7 +3662,7 @@ namespace mml2vgmIDE
             // 
             rbPOLY.AutoSize = true;
             rbPOLY.Location = new Point(251, 21);
-            rbPOLY.Margin = new Padding(4, 4, 4, 4);
+            rbPOLY.Margin = new Padding(4);
             rbPOLY.Name = "rbPOLY";
             rbPOLY.Size = new Size(54, 19);
             rbPOLY.TabIndex = 3;
@@ -3677,9 +3678,9 @@ namespace mml2vgmIDE
             groupBox7.Controls.Add(rbFM4);
             groupBox7.Controls.Add(rbFM1);
             groupBox7.Location = new Point(7, 22);
-            groupBox7.Margin = new Padding(4, 4, 4, 4);
+            groupBox7.Margin = new Padding(4);
             groupBox7.Name = "groupBox7";
-            groupBox7.Padding = new Padding(4, 4, 4, 4);
+            groupBox7.Padding = new Padding(4);
             groupBox7.Size = new Size(230, 78);
             groupBox7.TabIndex = 0;
             groupBox7.TabStop = false;
@@ -3688,7 +3689,7 @@ namespace mml2vgmIDE
             // 
             rbFM6.AutoSize = true;
             rbFM6.Location = new Point(126, 50);
-            rbFM6.Margin = new Padding(4, 4, 4, 4);
+            rbFM6.Margin = new Padding(4);
             rbFM6.Name = "rbFM6";
             rbFM6.Size = new Size(48, 19);
             rbFM6.TabIndex = 5;
@@ -3699,7 +3700,7 @@ namespace mml2vgmIDE
             // 
             rbFM3.AutoSize = true;
             rbFM3.Location = new Point(126, 22);
-            rbFM3.Margin = new Padding(4, 4, 4, 4);
+            rbFM3.Margin = new Padding(4);
             rbFM3.Name = "rbFM3";
             rbFM3.Size = new Size(48, 19);
             rbFM3.TabIndex = 2;
@@ -3710,7 +3711,7 @@ namespace mml2vgmIDE
             // 
             rbFM5.AutoSize = true;
             rbFM5.Location = new Point(66, 50);
-            rbFM5.Margin = new Padding(4, 4, 4, 4);
+            rbFM5.Margin = new Padding(4);
             rbFM5.Name = "rbFM5";
             rbFM5.Size = new Size(48, 19);
             rbFM5.TabIndex = 4;
@@ -3721,7 +3722,7 @@ namespace mml2vgmIDE
             // 
             rbFM2.AutoSize = true;
             rbFM2.Location = new Point(66, 22);
-            rbFM2.Margin = new Padding(4, 4, 4, 4);
+            rbFM2.Margin = new Padding(4);
             rbFM2.Name = "rbFM2";
             rbFM2.Size = new Size(48, 19);
             rbFM2.TabIndex = 1;
@@ -3732,7 +3733,7 @@ namespace mml2vgmIDE
             // 
             rbFM4.AutoSize = true;
             rbFM4.Location = new Point(7, 50);
-            rbFM4.Margin = new Padding(4, 4, 4, 4);
+            rbFM4.Margin = new Padding(4);
             rbFM4.Name = "rbFM4";
             rbFM4.Size = new Size(48, 19);
             rbFM4.TabIndex = 3;
@@ -3744,7 +3745,7 @@ namespace mml2vgmIDE
             rbFM1.AutoSize = true;
             rbFM1.Checked = true;
             rbFM1.Location = new Point(7, 22);
-            rbFM1.Margin = new Padding(4, 4, 4, 4);
+            rbFM1.Margin = new Padding(4);
             rbFM1.Name = "rbFM1";
             rbFM1.Size = new Size(48, 19);
             rbFM1.TabIndex = 0;
@@ -3761,9 +3762,9 @@ namespace mml2vgmIDE
             groupBox2.Controls.Add(cbFM3);
             groupBox2.Controls.Add(cbFM4);
             groupBox2.Location = new Point(244, 22);
-            groupBox2.Margin = new Padding(4, 4, 4, 4);
+            groupBox2.Margin = new Padding(4);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(4, 4, 4, 4);
+            groupBox2.Padding = new Padding(4);
             groupBox2.Size = new Size(245, 78);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
@@ -3774,7 +3775,7 @@ namespace mml2vgmIDE
             cbFM1.Checked = true;
             cbFM1.CheckState = CheckState.Checked;
             cbFM1.Location = new Point(7, 22);
-            cbFM1.Margin = new Padding(4, 4, 4, 4);
+            cbFM1.Margin = new Padding(4);
             cbFM1.Name = "cbFM1";
             cbFM1.Size = new Size(49, 19);
             cbFM1.TabIndex = 0;
@@ -3787,7 +3788,7 @@ namespace mml2vgmIDE
             cbFM6.Checked = true;
             cbFM6.CheckState = CheckState.Checked;
             cbFM6.Location = new Point(128, 50);
-            cbFM6.Margin = new Padding(4, 4, 4, 4);
+            cbFM6.Margin = new Padding(4);
             cbFM6.Name = "cbFM6";
             cbFM6.Size = new Size(49, 19);
             cbFM6.TabIndex = 5;
@@ -3800,7 +3801,7 @@ namespace mml2vgmIDE
             cbFM2.Checked = true;
             cbFM2.CheckState = CheckState.Checked;
             cbFM2.Location = new Point(68, 22);
-            cbFM2.Margin = new Padding(4, 4, 4, 4);
+            cbFM2.Margin = new Padding(4);
             cbFM2.Name = "cbFM2";
             cbFM2.Size = new Size(49, 19);
             cbFM2.TabIndex = 1;
@@ -3813,7 +3814,7 @@ namespace mml2vgmIDE
             cbFM5.Checked = true;
             cbFM5.CheckState = CheckState.Checked;
             cbFM5.Location = new Point(68, 50);
-            cbFM5.Margin = new Padding(4, 4, 4, 4);
+            cbFM5.Margin = new Padding(4);
             cbFM5.Name = "cbFM5";
             cbFM5.Size = new Size(49, 19);
             cbFM5.TabIndex = 4;
@@ -3826,7 +3827,7 @@ namespace mml2vgmIDE
             cbFM3.Checked = true;
             cbFM3.CheckState = CheckState.Checked;
             cbFM3.Location = new Point(128, 22);
-            cbFM3.Margin = new Padding(4, 4, 4, 4);
+            cbFM3.Margin = new Padding(4);
             cbFM3.Name = "cbFM3";
             cbFM3.Size = new Size(49, 19);
             cbFM3.TabIndex = 2;
@@ -3839,7 +3840,7 @@ namespace mml2vgmIDE
             cbFM4.Checked = true;
             cbFM4.CheckState = CheckState.Checked;
             cbFM4.Location = new Point(7, 50);
-            cbFM4.Margin = new Padding(4, 4, 4, 4);
+            cbFM4.Margin = new Padding(4);
             cbFM4.Name = "cbFM4";
             cbFM4.Size = new Size(49, 19);
             cbFM4.TabIndex = 3;
@@ -3852,7 +3853,7 @@ namespace mml2vgmIDE
             cmbMIDIIN.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMIDIIN.FormattingEnabled = true;
             cmbMIDIIN.Location = new Point(84, 22);
-            cmbMIDIIN.Margin = new Padding(4, 4, 4, 4);
+            cmbMIDIIN.Margin = new Padding(4);
             cmbMIDIIN.Name = "cmbMIDIIN";
             cmbMIDIIN.Size = new Size(416, 23);
             cmbMIDIIN.TabIndex = 1;
@@ -3873,10 +3874,10 @@ namespace mml2vgmIDE
             tpKeyBoard.Controls.Add(btnInitializeShortCutKey);
             tpKeyBoard.Controls.Add(lblSKKey);
             tpKeyBoard.Controls.Add(dgvShortCutKey);
-            tpKeyBoard.Location = new Point(4, 64);
-            tpKeyBoard.Margin = new Padding(4, 4, 4, 4);
+            tpKeyBoard.Location = new Point(4, 44);
+            tpKeyBoard.Margin = new Padding(4);
             tpKeyBoard.Name = "tpKeyBoard";
-            tpKeyBoard.Size = new Size(518, 490);
+            tpKeyBoard.Size = new Size(518, 510);
             tpKeyBoard.TabIndex = 13;
             tpKeyBoard.Text = "ショートカットキー";
             tpKeyBoard.UseVisualStyleBackColor = true;
@@ -3885,7 +3886,7 @@ namespace mml2vgmIDE
             // 
             btnInitializeShortCutKey.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnInitializeShortCutKey.Location = new Point(390, 461);
-            btnInitializeShortCutKey.Margin = new Padding(4, 4, 4, 4);
+            btnInitializeShortCutKey.Margin = new Padding(4);
             btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
             btnInitializeShortCutKey.Size = new Size(121, 29);
             btnInitializeShortCutKey.TabIndex = 31;
@@ -3913,7 +3914,7 @@ namespace mml2vgmIDE
             dgvShortCutKey.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvShortCutKey.Columns.AddRange(new DataGridViewColumn[] { clmNumber, clmFunc, clmShift, clmCtrl, clmAlt, clmKey, clmSet, clmClr, clmKBDSpacer });
             dgvShortCutKey.Location = new Point(4, 4);
-            dgvShortCutKey.Margin = new Padding(4, 4, 4, 4);
+            dgvShortCutKey.Margin = new Padding(4);
             dgvShortCutKey.MultiSelect = false;
             dgvShortCutKey.Name = "dgvShortCutKey";
             dgvShortCutKey.RowHeadersVisible = false;
@@ -3995,10 +3996,10 @@ namespace mml2vgmIDE
             tpBalance.Controls.Add(groupBox25);
             tpBalance.Controls.Add(cbAutoBalanceUseThis);
             tpBalance.Controls.Add(groupBox18);
-            tpBalance.Location = new Point(4, 64);
-            tpBalance.Margin = new Padding(4, 4, 4, 4);
+            tpBalance.Location = new Point(4, 44);
+            tpBalance.Margin = new Padding(4);
             tpBalance.Name = "tpBalance";
-            tpBalance.Size = new Size(518, 490);
+            tpBalance.Size = new Size(518, 510);
             tpBalance.TabIndex = 12;
             tpBalance.Text = "ミキサーバランス";
             tpBalance.UseVisualStyleBackColor = true;
@@ -4009,9 +4010,9 @@ namespace mml2vgmIDE
             groupBox25.Controls.Add(rbAutoBalanceNotSamePositionAsSongData);
             groupBox25.Controls.Add(rbAutoBalanceSamePositionAsSongData);
             groupBox25.Location = new Point(8, 409);
-            groupBox25.Margin = new Padding(4, 4, 4, 4);
+            groupBox25.Margin = new Padding(4);
             groupBox25.Name = "groupBox25";
-            groupBox25.Padding = new Padding(4, 4, 4, 4);
+            groupBox25.Padding = new Padding(4);
             groupBox25.Size = new Size(503, 51);
             groupBox25.TabIndex = 1;
             groupBox25.TabStop = false;
@@ -4022,7 +4023,7 @@ namespace mml2vgmIDE
             rbAutoBalanceNotSamePositionAsSongData.AutoSize = true;
             rbAutoBalanceNotSamePositionAsSongData.Checked = true;
             rbAutoBalanceNotSamePositionAsSongData.Location = new Point(7, 22);
-            rbAutoBalanceNotSamePositionAsSongData.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotSamePositionAsSongData.Margin = new Padding(4);
             rbAutoBalanceNotSamePositionAsSongData.Name = "rbAutoBalanceNotSamePositionAsSongData";
             rbAutoBalanceNotSamePositionAsSongData.Size = new Size(113, 19);
             rbAutoBalanceNotSamePositionAsSongData.TabIndex = 0;
@@ -4034,7 +4035,7 @@ namespace mml2vgmIDE
             // 
             rbAutoBalanceSamePositionAsSongData.AutoSize = true;
             rbAutoBalanceSamePositionAsSongData.Location = new Point(142, 22);
-            rbAutoBalanceSamePositionAsSongData.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceSamePositionAsSongData.Margin = new Padding(4);
             rbAutoBalanceSamePositionAsSongData.Name = "rbAutoBalanceSamePositionAsSongData";
             rbAutoBalanceSamePositionAsSongData.Size = new Size(93, 19);
             rbAutoBalanceSamePositionAsSongData.TabIndex = 0;
@@ -4047,7 +4048,7 @@ namespace mml2vgmIDE
             cbAutoBalanceUseThis.Checked = true;
             cbAutoBalanceUseThis.CheckState = CheckState.Checked;
             cbAutoBalanceUseThis.Location = new Point(15, 4);
-            cbAutoBalanceUseThis.Margin = new Padding(4, 4, 4, 4);
+            cbAutoBalanceUseThis.Margin = new Padding(4);
             cbAutoBalanceUseThis.Name = "cbAutoBalanceUseThis";
             cbAutoBalanceUseThis.Size = new Size(220, 19);
             cbAutoBalanceUseThis.TabIndex = 1;
@@ -4060,9 +4061,9 @@ namespace mml2vgmIDE
             groupBox18.Controls.Add(groupBox24);
             groupBox18.Controls.Add(groupBox23);
             groupBox18.Location = new Point(8, 4);
-            groupBox18.Margin = new Padding(4, 4, 4, 4);
+            groupBox18.Margin = new Padding(4);
             groupBox18.Name = "groupBox18";
-            groupBox18.Padding = new Padding(4, 4, 4, 4);
+            groupBox18.Padding = new Padding(4);
             groupBox18.Size = new Size(503, 398);
             groupBox18.TabIndex = 0;
             groupBox18.TabStop = false;
@@ -4073,9 +4074,9 @@ namespace mml2vgmIDE
             groupBox24.Controls.Add(groupBox21);
             groupBox24.Controls.Add(groupBox22);
             groupBox24.Location = new Point(7, 231);
-            groupBox24.Margin = new Padding(4, 4, 4, 4);
+            groupBox24.Margin = new Padding(4);
             groupBox24.Name = "groupBox24";
-            groupBox24.Padding = new Padding(4, 4, 4, 4);
+            groupBox24.Padding = new Padding(4);
             groupBox24.Size = new Size(489, 159);
             groupBox24.TabIndex = 1;
             groupBox24.TabStop = false;
@@ -4087,9 +4088,9 @@ namespace mml2vgmIDE
             groupBox21.Controls.Add(rbAutoBalanceNotSaveSongBalance);
             groupBox21.Controls.Add(rbAutoBalanceSaveSongBalance);
             groupBox21.Location = new Point(7, 22);
-            groupBox21.Margin = new Padding(4, 4, 4, 4);
+            groupBox21.Margin = new Padding(4);
             groupBox21.Name = "groupBox21";
-            groupBox21.Padding = new Padding(4, 4, 4, 4);
+            groupBox21.Padding = new Padding(4);
             groupBox21.Size = new Size(475, 78);
             groupBox21.TabIndex = 0;
             groupBox21.TabStop = false;
@@ -4100,7 +4101,7 @@ namespace mml2vgmIDE
             rbAutoBalanceNotSaveSongBalance.AutoSize = true;
             rbAutoBalanceNotSaveSongBalance.Checked = true;
             rbAutoBalanceNotSaveSongBalance.Location = new Point(7, 50);
-            rbAutoBalanceNotSaveSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotSaveSongBalance.Margin = new Padding(4);
             rbAutoBalanceNotSaveSongBalance.Name = "rbAutoBalanceNotSaveSongBalance";
             rbAutoBalanceNotSaveSongBalance.Size = new Size(154, 19);
             rbAutoBalanceNotSaveSongBalance.TabIndex = 0;
@@ -4112,7 +4113,7 @@ namespace mml2vgmIDE
             // 
             rbAutoBalanceSaveSongBalance.AutoSize = true;
             rbAutoBalanceSaveSongBalance.Location = new Point(7, 22);
-            rbAutoBalanceSaveSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceSaveSongBalance.Margin = new Padding(4);
             rbAutoBalanceSaveSongBalance.Name = "rbAutoBalanceSaveSongBalance";
             rbAutoBalanceSaveSongBalance.Size = new Size(152, 19);
             rbAutoBalanceSaveSongBalance.TabIndex = 0;
@@ -4124,9 +4125,9 @@ namespace mml2vgmIDE
             groupBox22.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             groupBox22.Controls.Add(label4);
             groupBox22.Location = new Point(7, 108);
-            groupBox22.Margin = new Padding(4, 4, 4, 4);
+            groupBox22.Margin = new Padding(4);
             groupBox22.Name = "groupBox22";
-            groupBox22.Padding = new Padding(4, 4, 4, 4);
+            groupBox22.Padding = new Padding(4);
             groupBox22.Size = new Size(475, 44);
             groupBox22.TabIndex = 0;
             groupBox22.TabStop = false;
@@ -4148,9 +4149,9 @@ namespace mml2vgmIDE
             groupBox23.Controls.Add(groupBox19);
             groupBox23.Controls.Add(groupBox20);
             groupBox23.Location = new Point(7, 28);
-            groupBox23.Margin = new Padding(4, 4, 4, 4);
+            groupBox23.Margin = new Padding(4);
             groupBox23.Name = "groupBox23";
-            groupBox23.Padding = new Padding(4, 4, 4, 4);
+            groupBox23.Padding = new Padding(4);
             groupBox23.Size = new Size(489, 196);
             groupBox23.TabIndex = 1;
             groupBox23.TabStop = false;
@@ -4162,9 +4163,9 @@ namespace mml2vgmIDE
             groupBox19.Controls.Add(rbAutoBalanceNotLoadSongBalance);
             groupBox19.Controls.Add(rbAutoBalanceLoadSongBalance);
             groupBox19.Location = new Point(7, 22);
-            groupBox19.Margin = new Padding(4, 4, 4, 4);
+            groupBox19.Margin = new Padding(4);
             groupBox19.Name = "groupBox19";
-            groupBox19.Padding = new Padding(4, 4, 4, 4);
+            groupBox19.Padding = new Padding(4);
             groupBox19.Size = new Size(475, 79);
             groupBox19.TabIndex = 0;
             groupBox19.TabStop = false;
@@ -4175,7 +4176,7 @@ namespace mml2vgmIDE
             rbAutoBalanceNotLoadSongBalance.AutoSize = true;
             rbAutoBalanceNotLoadSongBalance.Checked = true;
             rbAutoBalanceNotLoadSongBalance.Location = new Point(7, 50);
-            rbAutoBalanceNotLoadSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotLoadSongBalance.Margin = new Padding(4);
             rbAutoBalanceNotLoadSongBalance.Name = "rbAutoBalanceNotLoadSongBalance";
             rbAutoBalanceNotLoadSongBalance.Size = new Size(104, 19);
             rbAutoBalanceNotLoadSongBalance.TabIndex = 0;
@@ -4187,7 +4188,7 @@ namespace mml2vgmIDE
             // 
             rbAutoBalanceLoadSongBalance.AutoSize = true;
             rbAutoBalanceLoadSongBalance.Location = new Point(7, 22);
-            rbAutoBalanceLoadSongBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceLoadSongBalance.Margin = new Padding(4);
             rbAutoBalanceLoadSongBalance.Name = "rbAutoBalanceLoadSongBalance";
             rbAutoBalanceLoadSongBalance.Size = new Size(149, 19);
             rbAutoBalanceLoadSongBalance.TabIndex = 0;
@@ -4200,9 +4201,9 @@ namespace mml2vgmIDE
             groupBox20.Controls.Add(rbAutoBalanceNotLoadDriverBalance);
             groupBox20.Controls.Add(rbAutoBalanceLoadDriverBalance);
             groupBox20.Location = new Point(7, 109);
-            groupBox20.Margin = new Padding(4, 4, 4, 4);
+            groupBox20.Margin = new Padding(4);
             groupBox20.Name = "groupBox20";
-            groupBox20.Padding = new Padding(4, 4, 4, 4);
+            groupBox20.Padding = new Padding(4);
             groupBox20.Size = new Size(475, 79);
             groupBox20.TabIndex = 0;
             groupBox20.TabStop = false;
@@ -4212,7 +4213,7 @@ namespace mml2vgmIDE
             // 
             rbAutoBalanceNotLoadDriverBalance.AutoSize = true;
             rbAutoBalanceNotLoadDriverBalance.Location = new Point(7, 50);
-            rbAutoBalanceNotLoadDriverBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceNotLoadDriverBalance.Margin = new Padding(4);
             rbAutoBalanceNotLoadDriverBalance.Name = "rbAutoBalanceNotLoadDriverBalance";
             rbAutoBalanceNotLoadDriverBalance.Size = new Size(104, 19);
             rbAutoBalanceNotLoadDriverBalance.TabIndex = 0;
@@ -4224,7 +4225,7 @@ namespace mml2vgmIDE
             rbAutoBalanceLoadDriverBalance.AutoSize = true;
             rbAutoBalanceLoadDriverBalance.Checked = true;
             rbAutoBalanceLoadDriverBalance.Location = new Point(7, 22);
-            rbAutoBalanceLoadDriverBalance.Margin = new Padding(4, 4, 4, 4);
+            rbAutoBalanceLoadDriverBalance.Margin = new Padding(4);
             rbAutoBalanceLoadDriverBalance.Name = "rbAutoBalanceLoadDriverBalance";
             rbAutoBalanceLoadDriverBalance.Size = new Size(343, 19);
             rbAutoBalanceLoadDriverBalance.TabIndex = 0;
@@ -4236,10 +4237,10 @@ namespace mml2vgmIDE
             // 
             tpMMLParameter.BorderStyle = BorderStyle.FixedSingle;
             tpMMLParameter.Controls.Add(cbDispInstrumentName);
-            tpMMLParameter.Location = new Point(4, 64);
-            tpMMLParameter.Margin = new Padding(4, 4, 4, 4);
+            tpMMLParameter.Location = new Point(4, 44);
+            tpMMLParameter.Margin = new Padding(4);
             tpMMLParameter.Name = "tpMMLParameter";
-            tpMMLParameter.Size = new Size(518, 490);
+            tpMMLParameter.Size = new Size(518, 510);
             tpMMLParameter.TabIndex = 16;
             tpMMLParameter.Text = "MMLParameter";
             tpMMLParameter.UseVisualStyleBackColor = true;
@@ -4248,7 +4249,7 @@ namespace mml2vgmIDE
             // 
             cbDispInstrumentName.AutoSize = true;
             cbDispInstrumentName.Location = new Point(27, 24);
-            cbDispInstrumentName.Margin = new Padding(4, 4, 4, 4);
+            cbDispInstrumentName.Margin = new Padding(4);
             cbDispInstrumentName.Name = "cbDispInstrumentName";
             cbDispInstrumentName.Size = new Size(140, 19);
             cbDispInstrumentName.TabIndex = 0;
@@ -4257,6 +4258,7 @@ namespace mml2vgmIDE
             // 
             // tpOther2
             // 
+            tpOther2.Controls.Add(cbHilightOn);
             tpOther2.Controls.Add(tbTABWidth);
             tpOther2.Controls.Add(cbDispWarningMessage);
             tpOther2.Controls.Add(tbUseHistoryBackUp);
@@ -4275,18 +4277,26 @@ namespace mml2vgmIDE
             tpOther2.Controls.Add(cbUseSIen);
             tpOther2.Controls.Add(cbRequestCacheClear);
             tpOther2.Location = new Point(4, 44);
-            tpOther2.Margin = new Padding(4, 4, 4, 4);
+            tpOther2.Margin = new Padding(4);
             tpOther2.Name = "tpOther2";
             tpOther2.Size = new Size(518, 510);
             tpOther2.TabIndex = 18;
             tpOther2.Text = "Other";
             tpOther2.UseVisualStyleBackColor = true;
             // 
+            // tbTABWidth
+            // 
+            tbTABWidth.Location = new Point(125, 472);
+            tbTABWidth.Margin = new Padding(4);
+            tbTABWidth.Name = "tbTABWidth";
+            tbTABWidth.Size = new Size(61, 23);
+            tbTABWidth.TabIndex = 31;
+            // 
             // cbDispWarningMessage
             // 
             cbDispWarningMessage.AutoSize = true;
             cbDispWarningMessage.Location = new Point(8, 279);
-            cbDispWarningMessage.Margin = new Padding(4, 4, 4, 4);
+            cbDispWarningMessage.Margin = new Padding(4);
             cbDispWarningMessage.Name = "cbDispWarningMessage";
             cbDispWarningMessage.Size = new Size(283, 19);
             cbDispWarningMessage.TabIndex = 30;
@@ -4296,7 +4306,7 @@ namespace mml2vgmIDE
             // tbUseHistoryBackUp
             // 
             tbUseHistoryBackUp.Location = new Point(402, 249);
-            tbUseHistoryBackUp.Margin = new Padding(4, 4, 4, 4);
+            tbUseHistoryBackUp.Margin = new Padding(4);
             tbUseHistoryBackUp.Name = "tbUseHistoryBackUp";
             tbUseHistoryBackUp.Size = new Size(61, 23);
             tbUseHistoryBackUp.TabIndex = 29;
@@ -4305,7 +4315,7 @@ namespace mml2vgmIDE
             // 
             cbUseHistoryBackUp.AutoSize = true;
             cbUseHistoryBackUp.Location = new Point(8, 251);
-            cbUseHistoryBackUp.Margin = new Padding(4, 4, 4, 4);
+            cbUseHistoryBackUp.Margin = new Padding(4);
             cbUseHistoryBackUp.Name = "cbUseHistoryBackUp";
             cbUseHistoryBackUp.Size = new Size(346, 19);
             cbUseHistoryBackUp.TabIndex = 28;
@@ -4316,7 +4326,7 @@ namespace mml2vgmIDE
             // 
             cbUseMoonDriverDotNET.AutoSize = true;
             cbUseMoonDriverDotNET.Location = new Point(8, 224);
-            cbUseMoonDriverDotNET.Margin = new Padding(4, 4, 4, 4);
+            cbUseMoonDriverDotNET.Margin = new Padding(4);
             cbUseMoonDriverDotNET.Name = "cbUseMoonDriverDotNET";
             cbUseMoonDriverDotNET.Size = new Size(237, 19);
             cbUseMoonDriverDotNET.TabIndex = 27;
@@ -4327,7 +4337,7 @@ namespace mml2vgmIDE
             // 
             cbUsePMDDotNET.AutoSize = true;
             cbUsePMDDotNET.Location = new Point(8, 196);
-            cbUsePMDDotNET.Margin = new Padding(4, 4, 4, 4);
+            cbUsePMDDotNET.Margin = new Padding(4);
             cbUsePMDDotNET.Name = "cbUsePMDDotNET";
             cbUsePMDDotNET.Size = new Size(200, 19);
             cbUsePMDDotNET.TabIndex = 27;
@@ -4338,7 +4348,7 @@ namespace mml2vgmIDE
             // 
             cbUseMucomDotNET.AutoSize = true;
             cbUseMucomDotNET.Location = new Point(8, 169);
-            cbUseMucomDotNET.Margin = new Padding(4, 4, 4, 4);
+            cbUseMucomDotNET.Margin = new Padding(4);
             cbUseMucomDotNET.Name = "cbUseMucomDotNET";
             cbUseMucomDotNET.Size = new Size(214, 19);
             cbUseMucomDotNET.TabIndex = 27;
@@ -4349,7 +4359,7 @@ namespace mml2vgmIDE
             // 
             cbUseScript.AutoSize = true;
             cbUseScript.Location = new Point(8, 141);
-            cbUseScript.Margin = new Padding(4, 4, 4, 4);
+            cbUseScript.Margin = new Padding(4);
             cbUseScript.Name = "cbUseScript";
             cbUseScript.Size = new Size(177, 19);
             cbUseScript.TabIndex = 27;
@@ -4360,7 +4370,7 @@ namespace mml2vgmIDE
             // 
             cbChangeEnterCode.AutoSize = true;
             cbChangeEnterCode.Location = new Point(8, 31);
-            cbChangeEnterCode.Margin = new Padding(4, 4, 4, 4);
+            cbChangeEnterCode.Margin = new Padding(4);
             cbChangeEnterCode.Name = "cbChangeEnterCode";
             cbChangeEnterCode.Size = new Size(256, 19);
             cbChangeEnterCode.TabIndex = 24;
@@ -4371,7 +4381,7 @@ namespace mml2vgmIDE
             // 
             cbClearHistory.AutoSize = true;
             cbClearHistory.Location = new Point(8, 4);
-            cbClearHistory.Margin = new Padding(4, 4, 4, 4);
+            cbClearHistory.Margin = new Padding(4);
             cbClearHistory.Name = "cbClearHistory";
             cbClearHistory.Size = new Size(232, 19);
             cbClearHistory.TabIndex = 26;
@@ -4381,7 +4391,7 @@ namespace mml2vgmIDE
             // tbOpacity
             // 
             tbOpacity.Location = new Point(125, 416);
-            tbOpacity.Margin = new Padding(4, 4, 4, 4);
+            tbOpacity.Margin = new Padding(4);
             tbOpacity.Maximum = 100;
             tbOpacity.Minimum = 1;
             tbOpacity.Name = "tbOpacity";
@@ -4391,6 +4401,16 @@ namespace mml2vgmIDE
             tbOpacity.TickStyle = TickStyle.Both;
             tbOpacity.Value = 1;
             tbOpacity.Scroll += tbOpacity_Scroll;
+            // 
+            // label56
+            // 
+            label56.AutoSize = true;
+            label56.Location = new Point(8, 475);
+            label56.Margin = new Padding(4, 0, 4, 0);
+            label56.Name = "label56";
+            label56.Size = new Size(37, 15);
+            label56.TabIndex = 19;
+            label56.Text = "タブ幅";
             // 
             // label52
             // 
@@ -4412,9 +4432,9 @@ namespace mml2vgmIDE
             groupBox29.Controls.Add(lblFontSize);
             groupBox29.Controls.Add(lblFontStyle);
             groupBox29.Location = new Point(299, 392);
-            groupBox29.Margin = new Padding(4, 4, 4, 4);
+            groupBox29.Margin = new Padding(4);
             groupBox29.Name = "groupBox29";
-            groupBox29.Padding = new Padding(4, 4, 4, 4);
+            groupBox29.Padding = new Padding(4);
             groupBox29.Size = new Size(215, 106);
             groupBox29.TabIndex = 21;
             groupBox29.TabStop = false;
@@ -4433,7 +4453,7 @@ namespace mml2vgmIDE
             // btFont
             // 
             btFont.Location = new Point(181, 69);
-            btFont.Margin = new Padding(4, 4, 4, 4);
+            btFont.Margin = new Padding(4);
             btFont.Name = "btFont";
             btFont.Size = new Size(27, 29);
             btFont.TabIndex = 18;
@@ -4495,7 +4515,7 @@ namespace mml2vgmIDE
             // 
             cbInfiniteOfflineMode.AutoSize = true;
             cbInfiniteOfflineMode.Location = new Point(8, 114);
-            cbInfiniteOfflineMode.Margin = new Padding(4, 4, 4, 4);
+            cbInfiniteOfflineMode.Margin = new Padding(4);
             cbInfiniteOfflineMode.Name = "cbInfiniteOfflineMode";
             cbInfiniteOfflineMode.Size = new Size(139, 19);
             cbInfiniteOfflineMode.TabIndex = 23;
@@ -4506,7 +4526,7 @@ namespace mml2vgmIDE
             // 
             cbUseSIen.AutoSize = true;
             cbUseSIen.Location = new Point(8, 86);
-            cbUseSIen.Margin = new Padding(4, 4, 4, 4);
+            cbUseSIen.Margin = new Padding(4);
             cbUseSIen.Name = "cbUseSIen";
             cbUseSIen.Size = new Size(150, 19);
             cbUseSIen.TabIndex = 23;
@@ -4517,7 +4537,7 @@ namespace mml2vgmIDE
             // 
             cbRequestCacheClear.AutoSize = true;
             cbRequestCacheClear.Location = new Point(8, 59);
-            cbRequestCacheClear.Margin = new Padding(4, 4, 4, 4);
+            cbRequestCacheClear.Margin = new Padding(4);
             cbRequestCacheClear.Name = "cbRequestCacheClear";
             cbRequestCacheClear.Size = new Size(213, 19);
             cbRequestCacheClear.TabIndex = 23;
@@ -4547,7 +4567,7 @@ namespace mml2vgmIDE
             tpOther.Controls.Add(cbAutoOpen);
             tpOther.Controls.Add(cbUseLoopTimes);
             tpOther.Location = new Point(4, 44);
-            tpOther.Margin = new Padding(4, 4, 4, 4);
+            tpOther.Margin = new Padding(4);
             tpOther.Name = "tpOther";
             tpOther.Size = new Size(518, 510);
             tpOther.TabIndex = 2;
@@ -4558,7 +4578,7 @@ namespace mml2vgmIDE
             // 
             cbWavSwitch.AutoSize = true;
             cbWavSwitch.Location = new Point(16, 252);
-            cbWavSwitch.Margin = new Padding(4, 4, 4, 4);
+            cbWavSwitch.Margin = new Padding(4);
             cbWavSwitch.Name = "cbWavSwitch";
             cbWavSwitch.Size = new Size(181, 19);
             cbWavSwitch.TabIndex = 0;
@@ -4576,9 +4596,9 @@ namespace mml2vgmIDE
             groupBox17.Controls.Add(label3);
             groupBox17.Controls.Add(label2);
             groupBox17.Location = new Point(8, 320);
-            groupBox17.Margin = new Padding(4, 4, 4, 4);
+            groupBox17.Margin = new Padding(4);
             groupBox17.Name = "groupBox17";
-            groupBox17.Padding = new Padding(4, 4, 4, 4);
+            groupBox17.Padding = new Padding(4);
             groupBox17.Size = new Size(262, 104);
             groupBox17.TabIndex = 1;
             groupBox17.TabStop = false;
@@ -4588,7 +4608,7 @@ namespace mml2vgmIDE
             // 
             tbImageExt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbImageExt.Location = new Point(61, 72);
-            tbImageExt.Margin = new Padding(4, 4, 4, 4);
+            tbImageExt.Margin = new Padding(4);
             tbImageExt.Name = "tbImageExt";
             tbImageExt.Size = new Size(188, 23);
             tbImageExt.TabIndex = 1;
@@ -4597,7 +4617,7 @@ namespace mml2vgmIDE
             // 
             tbMMLExt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbMMLExt.Location = new Point(61, 44);
-            tbMMLExt.Margin = new Padding(4, 4, 4, 4);
+            tbMMLExt.Margin = new Padding(4);
             tbMMLExt.Name = "tbMMLExt";
             tbMMLExt.Size = new Size(188, 23);
             tbMMLExt.TabIndex = 1;
@@ -4606,7 +4626,7 @@ namespace mml2vgmIDE
             // 
             tbTextExt.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbTextExt.Location = new Point(61, 15);
-            tbTextExt.Margin = new Padding(4, 4, 4, 4);
+            tbTextExt.Margin = new Padding(4);
             tbTextExt.Name = "tbTextExt";
             tbTextExt.Size = new Size(188, 23);
             tbTextExt.TabIndex = 1;
@@ -4645,7 +4665,7 @@ namespace mml2vgmIDE
             // 
             cbUseGetInst.AutoSize = true;
             cbUseGetInst.Location = new Point(16, 39);
-            cbUseGetInst.Margin = new Padding(4, 4, 4, 4);
+            cbUseGetInst.Margin = new Padding(4);
             cbUseGetInst.Name = "cbUseGetInst";
             cbUseGetInst.Size = new Size(289, 19);
             cbUseGetInst.TabIndex = 12;
@@ -4659,9 +4679,9 @@ namespace mml2vgmIDE
             groupBox4.Controls.Add(cmbInstFormat);
             groupBox4.Controls.Add(lblInstFormat);
             groupBox4.Location = new Point(8, 39);
-            groupBox4.Margin = new Padding(4, 4, 4, 4);
+            groupBox4.Margin = new Padding(4);
             groupBox4.Name = "groupBox4";
-            groupBox4.Padding = new Padding(4, 4, 4, 4);
+            groupBox4.Padding = new Padding(4);
             groupBox4.Size = new Size(503, 56);
             groupBox4.TabIndex = 23;
             groupBox4.TabStop = false;
@@ -4673,7 +4693,7 @@ namespace mml2vgmIDE
             cmbInstFormat.FormattingEnabled = true;
             cmbInstFormat.Items.AddRange(new object[] { "FMP7", "MDX", ".TFI(ファイル出力)", "MUSIC LALF #1", "MUSIC LALF #2", "MML2VGM", "NRTDRV", "HuSIC" });
             cmbInstFormat.Location = new Point(348, 24);
-            cmbInstFormat.Margin = new Padding(4, 4, 4, 4);
+            cmbInstFormat.Margin = new Padding(4);
             cmbInstFormat.Name = "cmbInstFormat";
             cmbInstFormat.Size = new Size(148, 23);
             cmbInstFormat.TabIndex = 18;
@@ -4692,7 +4712,7 @@ namespace mml2vgmIDE
             // 
             cbDumpSwitch.AutoSize = true;
             cbDumpSwitch.Location = new Point(16, 190);
-            cbDumpSwitch.Margin = new Padding(4, 4, 4, 4);
+            cbDumpSwitch.Margin = new Padding(4);
             cbDumpSwitch.Name = "cbDumpSwitch";
             cbDumpSwitch.Size = new Size(222, 19);
             cbDumpSwitch.TabIndex = 0;
@@ -4707,9 +4727,9 @@ namespace mml2vgmIDE
             gbWav.Controls.Add(label7);
             gbWav.Controls.Add(tbWavPath);
             gbWav.Location = new Point(8, 256);
-            gbWav.Margin = new Padding(4, 4, 4, 4);
+            gbWav.Margin = new Padding(4);
             gbWav.Name = "gbWav";
-            gbWav.Padding = new Padding(4, 4, 4, 4);
+            gbWav.Padding = new Padding(4);
             gbWav.Size = new Size(503, 56);
             gbWav.TabIndex = 22;
             gbWav.TabStop = false;
@@ -4718,7 +4738,7 @@ namespace mml2vgmIDE
             // 
             btnWavPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnWavPath.Location = new Point(469, 20);
-            btnWavPath.Margin = new Padding(4, 4, 4, 4);
+            btnWavPath.Margin = new Padding(4);
             btnWavPath.Name = "btnWavPath";
             btnWavPath.Size = new Size(27, 29);
             btnWavPath.TabIndex = 16;
@@ -4740,7 +4760,7 @@ namespace mml2vgmIDE
             // 
             tbWavPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbWavPath.Location = new Point(85, 22);
-            tbWavPath.Margin = new Padding(4, 4, 4, 4);
+            tbWavPath.Margin = new Padding(4);
             tbWavPath.Name = "tbWavPath";
             tbWavPath.Size = new Size(376, 23);
             tbWavPath.TabIndex = 15;
@@ -4752,9 +4772,9 @@ namespace mml2vgmIDE
             gbDump.Controls.Add(label6);
             gbDump.Controls.Add(tbDumpPath);
             gbDump.Location = new Point(8, 192);
-            gbDump.Margin = new Padding(4, 4, 4, 4);
+            gbDump.Margin = new Padding(4);
             gbDump.Name = "gbDump";
-            gbDump.Padding = new Padding(4, 4, 4, 4);
+            gbDump.Padding = new Padding(4);
             gbDump.Size = new Size(503, 56);
             gbDump.TabIndex = 22;
             gbDump.TabStop = false;
@@ -4763,7 +4783,7 @@ namespace mml2vgmIDE
             // 
             btnDumpPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnDumpPath.Location = new Point(469, 20);
-            btnDumpPath.Margin = new Padding(4, 4, 4, 4);
+            btnDumpPath.Margin = new Padding(4);
             btnDumpPath.Name = "btnDumpPath";
             btnDumpPath.Size = new Size(27, 29);
             btnDumpPath.TabIndex = 16;
@@ -4785,7 +4805,7 @@ namespace mml2vgmIDE
             // 
             tbDumpPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbDumpPath.Location = new Point(85, 22);
-            tbDumpPath.Margin = new Padding(4, 4, 4, 4);
+            tbDumpPath.Margin = new Padding(4);
             tbDumpPath.Name = "tbDumpPath";
             tbDumpPath.Size = new Size(376, 23);
             tbDumpPath.TabIndex = 15;
@@ -4803,7 +4823,7 @@ namespace mml2vgmIDE
             // tbScreenFrameRate
             // 
             tbScreenFrameRate.Location = new Point(93, 161);
-            tbScreenFrameRate.Margin = new Padding(4, 4, 4, 4);
+            tbScreenFrameRate.Margin = new Padding(4);
             tbScreenFrameRate.Name = "tbScreenFrameRate";
             tbScreenFrameRate.Size = new Size(58, 23);
             tbScreenFrameRate.TabIndex = 20;
@@ -4822,7 +4842,7 @@ namespace mml2vgmIDE
             // 
             btnDataPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnDataPath.Location = new Point(477, 128);
-            btnDataPath.Margin = new Padding(4, 4, 4, 4);
+            btnDataPath.Margin = new Padding(4);
             btnDataPath.Name = "btnDataPath";
             btnDataPath.Size = new Size(27, 29);
             btnDataPath.TabIndex = 16;
@@ -4834,7 +4854,7 @@ namespace mml2vgmIDE
             // 
             tbDataPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbDataPath.Location = new Point(93, 130);
-            tbDataPath.Margin = new Padding(4, 4, 4, 4);
+            tbDataPath.Margin = new Padding(4);
             tbDataPath.Name = "tbDataPath";
             tbDataPath.Size = new Size(376, 23);
             tbDataPath.TabIndex = 15;
@@ -4853,7 +4873,7 @@ namespace mml2vgmIDE
             // 
             btnResetPosition.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnResetPosition.Location = new Point(192, 468);
-            btnResetPosition.Margin = new Padding(4, 4, 4, 4);
+            btnResetPosition.Margin = new Padding(4);
             btnResetPosition.Name = "btnResetPosition";
             btnResetPosition.Size = new Size(166, 29);
             btnResetPosition.TabIndex = 13;
@@ -4865,7 +4885,7 @@ namespace mml2vgmIDE
             // 
             btnOpenSettingFolder.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnOpenSettingFolder.Location = new Point(365, 468);
-            btnOpenSettingFolder.Margin = new Padding(4, 4, 4, 4);
+            btnOpenSettingFolder.Margin = new Padding(4);
             btnOpenSettingFolder.Name = "btnOpenSettingFolder";
             btnOpenSettingFolder.Size = new Size(146, 29);
             btnOpenSettingFolder.TabIndex = 13;
@@ -4878,7 +4898,7 @@ namespace mml2vgmIDE
             cbEmptyPlayList.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             cbEmptyPlayList.AutoSize = true;
             cbEmptyPlayList.Location = new Point(304, 385);
-            cbEmptyPlayList.Margin = new Padding(4, 4, 4, 4);
+            cbEmptyPlayList.Margin = new Padding(4);
             cbEmptyPlayList.Name = "cbEmptyPlayList";
             cbEmptyPlayList.Size = new Size(180, 19);
             cbEmptyPlayList.TabIndex = 0;
@@ -4890,7 +4910,7 @@ namespace mml2vgmIDE
             // 
             cbInitAlways.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             cbInitAlways.Location = new Point(278, 329);
-            cbInitAlways.Margin = new Padding(4, 4, 4, 4);
+            cbInitAlways.Margin = new Padding(4);
             cbInitAlways.Name = "cbInitAlways";
             cbInitAlways.Size = new Size(226, 49);
             cbInitAlways.TabIndex = 0;
@@ -4902,7 +4922,7 @@ namespace mml2vgmIDE
             // 
             cbAutoOpen.AutoSize = true;
             cbAutoOpen.Location = new Point(8, 102);
-            cbAutoOpen.Margin = new Padding(4, 4, 4, 4);
+            cbAutoOpen.Margin = new Padding(4);
             cbAutoOpen.Name = "cbAutoOpen";
             cbAutoOpen.Size = new Size(170, 19);
             cbAutoOpen.TabIndex = 0;
@@ -4914,7 +4934,7 @@ namespace mml2vgmIDE
             // 
             cbUseLoopTimes.AutoSize = true;
             cbUseLoopTimes.Location = new Point(8, 9);
-            cbUseLoopTimes.Margin = new Padding(4, 4, 4, 4);
+            cbUseLoopTimes.Margin = new Padding(4);
             cbUseLoopTimes.Name = "cbUseLoopTimes";
             cbUseLoopTimes.Size = new Size(215, 19);
             cbUseLoopTimes.TabIndex = 0;
@@ -4931,10 +4951,10 @@ namespace mml2vgmIDE
             tpOmake.Controls.Add(btVST);
             tpOmake.Controls.Add(tbVST);
             tpOmake.Controls.Add(groupBox5);
-            tpOmake.Location = new Point(4, 64);
-            tpOmake.Margin = new Padding(4, 4, 4, 4);
+            tpOmake.Location = new Point(4, 44);
+            tpOmake.Margin = new Padding(4);
             tpOmake.Name = "tpOmake";
-            tpOmake.Size = new Size(518, 490);
+            tpOmake.Size = new Size(518, 510);
             tpOmake.TabIndex = 7;
             tpOmake.Text = "おまけ";
             tpOmake.UseVisualStyleBackColor = true;
@@ -4946,9 +4966,9 @@ namespace mml2vgmIDE
             groupBox31.Controls.Add(rbLoglevelDEBUG);
             groupBox31.Controls.Add(rbLoglevelTRACE);
             groupBox31.Location = new Point(8, 151);
-            groupBox31.Margin = new Padding(4, 4, 4, 4);
+            groupBox31.Margin = new Padding(4);
             groupBox31.Name = "groupBox31";
-            groupBox31.Padding = new Padding(4, 4, 4, 4);
+            groupBox31.Padding = new Padding(4);
             groupBox31.Size = new Size(503, 54);
             groupBox31.TabIndex = 25;
             groupBox31.TabStop = false;
@@ -4959,7 +4979,7 @@ namespace mml2vgmIDE
             rbLoglevelINFO.AutoSize = true;
             rbLoglevelINFO.Checked = true;
             rbLoglevelINFO.Location = new Point(13, 20);
-            rbLoglevelINFO.Margin = new Padding(4, 4, 4, 4);
+            rbLoglevelINFO.Margin = new Padding(4);
             rbLoglevelINFO.Name = "rbLoglevelINFO";
             rbLoglevelINFO.Size = new Size(52, 19);
             rbLoglevelINFO.TabIndex = 3;
@@ -4971,7 +4991,7 @@ namespace mml2vgmIDE
             // 
             rbLoglevelDEBUG.AutoSize = true;
             rbLoglevelDEBUG.Location = new Point(77, 20);
-            rbLoglevelDEBUG.Margin = new Padding(4, 4, 4, 4);
+            rbLoglevelDEBUG.Margin = new Padding(4);
             rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
             rbLoglevelDEBUG.Size = new Size(62, 19);
             rbLoglevelDEBUG.TabIndex = 3;
@@ -4982,7 +5002,7 @@ namespace mml2vgmIDE
             // 
             rbLoglevelTRACE.AutoSize = true;
             rbLoglevelTRACE.Location = new Point(156, 20);
-            rbLoglevelTRACE.Margin = new Padding(4, 4, 4, 4);
+            rbLoglevelTRACE.Margin = new Padding(4);
             rbLoglevelTRACE.Name = "rbLoglevelTRACE";
             rbLoglevelTRACE.Size = new Size(59, 19);
             rbLoglevelTRACE.TabIndex = 3;
@@ -4996,9 +5016,9 @@ namespace mml2vgmIDE
             groupBox30.Controls.Add(rbDateTime);
             groupBox30.Controls.Add(rbStopWatch);
             groupBox30.Location = new Point(8, 212);
-            groupBox30.Margin = new Padding(4, 4, 4, 4);
+            groupBox30.Margin = new Padding(4);
             groupBox30.Name = "groupBox30";
-            groupBox30.Padding = new Padding(4, 4, 4, 4);
+            groupBox30.Padding = new Padding(4);
             groupBox30.Size = new Size(503, 106);
             groupBox30.TabIndex = 24;
             groupBox30.TabStop = false;
@@ -5008,7 +5028,7 @@ namespace mml2vgmIDE
             // 
             rbQueryPerformanceCounter.AutoSize = true;
             rbQueryPerformanceCounter.Location = new Point(7, 78);
-            rbQueryPerformanceCounter.Margin = new Padding(4, 4, 4, 4);
+            rbQueryPerformanceCounter.Margin = new Padding(4);
             rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
             rbQueryPerformanceCounter.Size = new Size(225, 19);
             rbQueryPerformanceCounter.TabIndex = 2;
@@ -5019,7 +5039,7 @@ namespace mml2vgmIDE
             // 
             rbDateTime.AutoSize = true;
             rbDateTime.Location = new Point(7, 50);
-            rbDateTime.Margin = new Padding(4, 4, 4, 4);
+            rbDateTime.Margin = new Padding(4);
             rbDateTime.Name = "rbDateTime";
             rbDateTime.Size = new Size(96, 19);
             rbDateTime.TabIndex = 1;
@@ -5031,7 +5051,7 @@ namespace mml2vgmIDE
             rbStopWatch.AutoSize = true;
             rbStopWatch.Checked = true;
             rbStopWatch.Location = new Point(7, 22);
-            rbStopWatch.Margin = new Padding(4, 4, 4, 4);
+            rbStopWatch.Margin = new Padding(4);
             rbStopWatch.Name = "rbStopWatch";
             rbStopWatch.Size = new Size(143, 19);
             rbStopWatch.TabIndex = 0;
@@ -5053,7 +5073,7 @@ namespace mml2vgmIDE
             // btVST
             // 
             btVST.Location = new Point(486, 468);
-            btVST.Margin = new Padding(4, 4, 4, 4);
+            btVST.Margin = new Padding(4);
             btVST.Name = "btVST";
             btVST.Size = new Size(27, 29);
             btVST.TabIndex = 18;
@@ -5065,7 +5085,7 @@ namespace mml2vgmIDE
             // tbVST
             // 
             tbVST.Location = new Point(103, 470);
-            tbVST.Margin = new Padding(4, 4, 4, 4);
+            tbVST.Margin = new Padding(4);
             tbVST.Name = "tbVST";
             tbVST.Size = new Size(376, 23);
             tbVST.TabIndex = 17;
@@ -5079,9 +5099,9 @@ namespace mml2vgmIDE
             groupBox5.Controls.Add(cbLogWarning);
             groupBox5.Controls.Add(cbDispFrameCounter);
             groupBox5.Location = new Point(8, 4);
-            groupBox5.Margin = new Padding(4, 4, 4, 4);
+            groupBox5.Margin = new Padding(4);
             groupBox5.Name = "groupBox5";
-            groupBox5.Padding = new Padding(4, 4, 4, 4);
+            groupBox5.Padding = new Padding(4);
             groupBox5.Size = new Size(503, 140);
             groupBox5.TabIndex = 3;
             groupBox5.TabStop = false;
@@ -5091,7 +5111,7 @@ namespace mml2vgmIDE
             // 
             cbSinWave.AutoSize = true;
             cbSinWave.Location = new Point(8, 106);
-            cbSinWave.Margin = new Padding(4, 4, 4, 4);
+            cbSinWave.Margin = new Padding(4);
             cbSinWave.Name = "cbSinWave";
             cbSinWave.Size = new Size(94, 19);
             cbSinWave.TabIndex = 2;
@@ -5102,7 +5122,7 @@ namespace mml2vgmIDE
             // 
             cbPlayDeviceCB.AutoSize = true;
             cbPlayDeviceCB.Location = new Point(7, 79);
-            cbPlayDeviceCB.Margin = new Padding(4, 4, 4, 4);
+            cbPlayDeviceCB.Margin = new Padding(4);
             cbPlayDeviceCB.Name = "cbPlayDeviceCB";
             cbPlayDeviceCB.Size = new Size(160, 19);
             cbPlayDeviceCB.TabIndex = 2;
@@ -5113,7 +5133,7 @@ namespace mml2vgmIDE
             // 
             cbLogWarning.AutoSize = true;
             cbLogWarning.Location = new Point(7, 49);
-            cbLogWarning.Margin = new Padding(4, 4, 4, 4);
+            cbLogWarning.Margin = new Padding(4);
             cbLogWarning.Name = "cbLogWarning";
             cbLogWarning.Size = new Size(150, 19);
             cbLogWarning.TabIndex = 2;
@@ -5124,7 +5144,7 @@ namespace mml2vgmIDE
             // 
             cbDispFrameCounter.AutoSize = true;
             cbDispFrameCounter.Location = new Point(7, 21);
-            cbDispFrameCounter.Margin = new Padding(4, 4, 4, 4);
+            cbDispFrameCounter.Margin = new Padding(4);
             cbDispFrameCounter.Name = "cbDispFrameCounter";
             cbDispFrameCounter.Size = new Size(127, 19);
             cbDispFrameCounter.TabIndex = 2;
@@ -5135,11 +5155,11 @@ namespace mml2vgmIDE
             // 
             tpAbout.BorderStyle = BorderStyle.FixedSingle;
             tpAbout.Controls.Add(tableLayoutPanel);
-            tpAbout.Location = new Point(4, 64);
-            tpAbout.Margin = new Padding(4, 4, 4, 4);
+            tpAbout.Location = new Point(4, 44);
+            tpAbout.Margin = new Padding(4);
             tpAbout.Name = "tpAbout";
-            tpAbout.Padding = new Padding(4, 4, 4, 4);
-            tpAbout.Size = new Size(518, 490);
+            tpAbout.Padding = new Padding(4);
+            tpAbout.Size = new Size(518, 510);
             tpAbout.TabIndex = 1;
             tpAbout.Text = "About";
             tpAbout.UseVisualStyleBackColor = true;
@@ -5158,7 +5178,7 @@ namespace mml2vgmIDE
             tableLayoutPanel.Controls.Add(llOpenGithub, 1, 5);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(4, 4);
-            tableLayoutPanel.Margin = new Padding(4, 4, 4, 4);
+            tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 6;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
@@ -5167,7 +5187,7 @@ namespace mml2vgmIDE
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 8.070175F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 53.33333F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 8.421053F));
-            tableLayoutPanel.Size = new Size(508, 480);
+            tableLayoutPanel.Size = new Size(508, 500);
             tableLayoutPanel.TabIndex = 1;
             // 
             // logoPictureBox
@@ -5175,10 +5195,10 @@ namespace mml2vgmIDE
             logoPictureBox.Dock = DockStyle.Fill;
             logoPictureBox.Image = Resources.ccPlay;
             logoPictureBox.Location = new Point(4, 4);
-            logoPictureBox.Margin = new Padding(4, 4, 4, 4);
+            logoPictureBox.Margin = new Padding(4);
             logoPictureBox.Name = "logoPictureBox";
             tableLayoutPanel.SetRowSpan(logoPictureBox, 6);
-            logoPictureBox.Size = new Size(159, 472);
+            logoPictureBox.Size = new Size(159, 492);
             logoPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
             logoPictureBox.TabIndex = 12;
             logoPictureBox.TabStop = false;
@@ -5198,7 +5218,7 @@ namespace mml2vgmIDE
             // labelVersion
             // 
             labelVersion.Dock = DockStyle.Fill;
-            labelVersion.Location = new Point(174, 48);
+            labelVersion.Location = new Point(174, 50);
             labelVersion.Margin = new Padding(7, 0, 4, 0);
             labelVersion.MaximumSize = new Size(0, 20);
             labelVersion.Name = "labelVersion";
@@ -5210,7 +5230,7 @@ namespace mml2vgmIDE
             // labelCopyright
             // 
             labelCopyright.Dock = DockStyle.Fill;
-            labelCopyright.Location = new Point(174, 96);
+            labelCopyright.Location = new Point(174, 100);
             labelCopyright.Margin = new Padding(7, 0, 4, 0);
             labelCopyright.MaximumSize = new Size(0, 20);
             labelCopyright.Name = "labelCopyright";
@@ -5222,7 +5242,7 @@ namespace mml2vgmIDE
             // labelCompanyName
             // 
             labelCompanyName.Dock = DockStyle.Fill;
-            labelCompanyName.Location = new Point(174, 144);
+            labelCompanyName.Location = new Point(174, 150);
             labelCompanyName.Margin = new Padding(7, 0, 4, 0);
             labelCompanyName.MaximumSize = new Size(0, 20);
             labelCompanyName.Name = "labelCompanyName";
@@ -5234,13 +5254,13 @@ namespace mml2vgmIDE
             // textBoxDescription
             // 
             textBoxDescription.Dock = DockStyle.Fill;
-            textBoxDescription.Location = new Point(174, 186);
+            textBoxDescription.Location = new Point(174, 194);
             textBoxDescription.Margin = new Padding(7, 4, 4, 4);
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.ReadOnly = true;
             textBoxDescription.ScrollBars = ScrollBars.Both;
-            textBoxDescription.Size = new Size(330, 248);
+            textBoxDescription.Size = new Size(330, 259);
             textBoxDescription.TabIndex = 23;
             textBoxDescription.TabStop = false;
             textBoxDescription.Text = "説明";
@@ -5249,10 +5269,10 @@ namespace mml2vgmIDE
             // 
             llOpenGithub.AutoSize = true;
             llOpenGithub.Dock = DockStyle.Fill;
-            llOpenGithub.Location = new Point(171, 438);
+            llOpenGithub.Location = new Point(171, 457);
             llOpenGithub.Margin = new Padding(4, 0, 4, 0);
             llOpenGithub.Name = "llOpenGithub";
-            llOpenGithub.Size = new Size(333, 42);
+            llOpenGithub.Size = new Size(333, 43);
             llOpenGithub.TabIndex = 24;
             llOpenGithub.TabStop = true;
             llOpenGithub.Text = "Open latest version page of Github.";
@@ -5264,7 +5284,7 @@ namespace mml2vgmIDE
             cbHiyorimiMode.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             cbHiyorimiMode.AutoSize = true;
             cbHiyorimiMode.Location = new Point(13, 570);
-            cbHiyorimiMode.Margin = new Padding(4, 4, 4, 4);
+            cbHiyorimiMode.Margin = new Padding(4);
             cbHiyorimiMode.Name = "cbHiyorimiMode";
             cbHiyorimiMode.Size = new Size(222, 34);
             cbHiyorimiMode.TabIndex = 6;
@@ -5272,23 +5292,15 @@ namespace mml2vgmIDE
             cbHiyorimiMode.UseVisualStyleBackColor = true;
             cbHiyorimiMode.Visible = false;
             // 
-            // label56
+            // cbHilightOn
             // 
-            label56.AutoSize = true;
-            label56.Location = new Point(8, 475);
-            label56.Margin = new Padding(4, 0, 4, 0);
-            label56.Name = "label56";
-            label56.Size = new Size(37, 15);
-            label56.TabIndex = 19;
-            label56.Text = "タブ幅";
-            // 
-            // tbTABWidth
-            // 
-            tbTABWidth.Location = new Point(125, 472);
-            tbTABWidth.Margin = new Padding(4);
-            tbTABWidth.Name = "tbTABWidth";
-            tbTABWidth.Size = new Size(61, 23);
-            tbTABWidth.TabIndex = 31;
+            cbHilightOn.AutoSize = true;
+            cbHilightOn.Location = new Point(8, 305);
+            cbHilightOn.Name = "cbHilightOn";
+            cbHilightOn.Size = new Size(121, 19);
+            cbHilightOn.TabIndex = 32;
+            cbHilightOn.Text = "ハイライトを使用する";
+            cbHilightOn.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5301,7 +5313,7 @@ namespace mml2vgmIDE
             Controls.Add(btnCancel);
             Controls.Add(btnOK);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             MinimumSize = new Size(557, 651);
             Name = "FrmSetting";
             StartPosition = FormStartPosition.CenterParent;
@@ -5867,5 +5879,6 @@ namespace mml2vgmIDE
         private CheckBox cbDispWarningMessage;
         private TextBox tbTABWidth;
         private Label label56;
+        private CheckBox cbHilightOn;
     }
 }

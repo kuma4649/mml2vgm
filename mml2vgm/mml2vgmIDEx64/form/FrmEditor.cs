@@ -49,11 +49,14 @@ namespace mml2vgmIDE
             InitializeComponent();
             this.setting = setting;
             IHighlighter ih = null;
-            if (fmt == EnmMmlFileFormat.GWI) ih = setHighlighterVGMZGMZGM();
-            else if (fmt == EnmMmlFileFormat.MUC) ih = setHighlighterMUC();
-            else if (fmt == EnmMmlFileFormat.MML) ih = setHighlighterMML();
-            else if (fmt == EnmMmlFileFormat.MDL) ih = setHighlighterMDL();
-            else ih = setHighlighterVGMZGMZGM();
+            if (setting.other.HilightOn)
+            {
+                if (fmt == EnmMmlFileFormat.GWI) ih = setHighlighterVGMZGMZGM();
+                else if (fmt == EnmMmlFileFormat.MUC) ih = setHighlighterMUC();
+                else if (fmt == EnmMmlFileFormat.MML) ih = setHighlighterMML();
+                else if (fmt == EnmMmlFileFormat.MDL) ih = setHighlighterMDL();
+                else ih = setHighlighterVGMZGMZGM();
+            }
             setHighlighterCommon(ih);
 
             //frmSien = sien;

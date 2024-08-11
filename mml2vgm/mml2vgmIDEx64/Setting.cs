@@ -2027,6 +2027,9 @@ namespace mml2vgmIDE
             private bool _UsePMDDotNET = true;
             public bool UsePMDDotNET { get => _UsePMDDotNET; set => _UsePMDDotNET = value; }
             private bool _UseMoonDriverDotNET = true;
+            public bool HilightOn { get => _HilightOn; set => _HilightOn = value; }
+            private bool _HilightOn = true;
+
             public bool UseMoonDriverDotNET { get => _UseMoonDriverDotNET; set => _UseMoonDriverDotNET = value; }
             public bool UseHistoryBackUp { get; set; } = false;
             public int HistoryBackUpKeepFileCount { get; set; } = 5;
@@ -2072,6 +2075,7 @@ namespace mml2vgmIDE
                 other.UseScript = this.UseScript;
                 other.UseMucomDotNET = this.UseMucomDotNET;
                 other.UsePMDDotNET = this.UsePMDDotNET;
+                other.HilightOn = this.HilightOn;
                 other.UseMoonDriverDotNET = this.UseMoonDriverDotNET;
                 other.SearchWordHistory = this.SearchWordHistory;
                 other.SearchWordCaseSenstivity = this.SearchWordCaseSenstivity;

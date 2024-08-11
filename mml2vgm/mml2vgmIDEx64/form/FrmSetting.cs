@@ -731,6 +731,7 @@ namespace mml2vgmIDE
             cbUseMucomDotNET.Checked = setting.other.UseMucomDotNET;
             cbUsePMDDotNET.Checked = setting.other.UsePMDDotNET;
             cbUseMoonDriverDotNET.Checked = setting.other.UseMoonDriverDotNET;
+            cbHilightOn.Checked= setting.other.HilightOn;
 
             cbDispInstrumentName.Checked = setting.MMLParameter.dispInstrumentName;
             cbDispWarningMessage.Checked = setting.other.DispWarningMessage;
@@ -1380,6 +1381,8 @@ namespace mml2vgmIDE
             setting.other.UseMucomDotNET = cbUseMucomDotNET.Checked;
             setting.other.UsePMDDotNET = cbUsePMDDotNET.Checked;
             setting.other.UseMoonDriverDotNET = cbUseMoonDriverDotNET.Checked;
+            setting.other.HilightOn = cbHilightOn.Checked;
+
             setting.other.UseHistoryBackUp = cbUseHistoryBackUp.Checked;
             if (int.TryParse(tbUseHistoryBackUp.Text, out i))
             {
