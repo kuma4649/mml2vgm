@@ -18,6 +18,7 @@ namespace mml2vgmIDE
     {
 
         public static int clockAY8910 = 1789750;
+        public static int clockPOKEY = 1789772;
         public static int clockK051649 = 1500000;
         public static int clockC140 = 21390;
         public static int clockC352 = 24192000;
@@ -316,6 +317,21 @@ namespace mml2vgmIDE
                 if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmZGMDevice.AY8910, chipRegister.AY8910[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            chipType = new Setting.ChipType[Math.Max(chipRegister.POKEY.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.POKEY.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.POKEY.Count <= i) continue;
+                if (!chipRegister.POKEY[i].Use) continue;
+                chipRegister.POKEY[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+                SearchRealChip(chipType, ret, i, EnmZGMDevice.Pokey, chipRegister.POKEY[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
+                if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmZGMDevice.Pokey, chipRegister.POKEY[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.Pokey, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.C140.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.C140.Count, 2); i++)
@@ -2390,6 +2406,39 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.POKEY)) continue;
+
+                        zCnt++;
+                        MDSound.pokey pokey = new MDSound.pokey();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.POKEY;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = pokey;
+                        chip.Update = pokey.Update;
+                        chip.Start = pokey.Start;
+                        chip.Stop = pokey.Stop;
+                        chip.Reset = pokey.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.PokeyVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.POKEYType.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use POKEY(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.POKEY[zCnt].Use = true;
+                        chipRegister.POKEY[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.POKEY[zCnt].Device = EnmZGMDevice.Pokey;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.DMG)) continue;
 
                         zCnt++;
@@ -2945,6 +2994,15 @@ namespace mml2vgmIDE
                     break;
                 }
 
+                foreach (Chip c in chipRegister.POKEY)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetPOKEYVolume(true, setting.balance.PokeyVolume);
+                    break;
+                }
+
                 foreach (Chip c in chipRegister.DMG)
                 {
                     if (!c.Use) continue;
@@ -3081,7 +3139,10 @@ namespace mml2vgmIDE
 
                 log.Write("Clock 設定");
 
-                for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) chipRegister.AY8910WriteClock((byte)i, (int)zgmDriver.AY8910ClockValue);
+                for (int i = 0; i < chipRegister.AY8910.Count; i++)
+                    if (chipRegister.AY8910[i].Use) chipRegister.AY8910WriteClock((byte)i, (int)zgmDriver.AY8910ClockValue);
+                for (int i = 0; i < chipRegister.POKEY.Count; i++)
+                    if (chipRegister.POKEY[i].Use) chipRegister.POKEYWriteClock((byte)i, (int)zgmDriver.POKEYClockValue);
                 for (int i = 0; i < chipRegister.C140.Count; i++)
                     if (chipRegister.C140[i].Use)
                     {
@@ -3236,6 +3297,48 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.AY8910[i].Use = true;
+
+                            if (chip.Instrument != null) lstChips.Add(chip);
+                        }
+                    }
+
+                    if (vgmDriver.POKEYClockValue != 0)
+                    {
+                        MDSound.pokey pokey = new MDSound.pokey();
+                        for (int i = 0; i < (((vgm)driver).POKEYDualChipFlag ? 2 : 1); i++)
+                        {
+                            chip = new MDSound.MDSound.Chip();
+                            chip.type = MDSound.MDSound.enmInstrumentType.POKEY;
+                            chip.ID = (byte)i;
+                            chip.Instrument = pokey;
+                            chip.Update = pokey.Update;
+                            chip.Start = pokey.Start;
+                            chip.Stop = pokey.Stop;
+                            chip.Reset = pokey.Reset;
+                            chip.SamplingRate = (UInt32)Common.SampleRate;
+                            chip.Volume = setting.balance.PokeyVolume;
+                            chip.Clock = (((vgm)driver).POKEYClockValue & 0x7fffffff) / 2;
+                            clockPOKEY = (int)chip.Clock;
+                            chip.Option = null;
+                            hiyorimiDeviceFlag |= 0x2;
+
+                            if (i == 0)
+                            {
+                                chipLED.PriPOKEY = 1;
+                                useChip.Add(EnmChip.POKEY);
+                            }
+                            else
+                            {
+                                chipLED.SecPOKEY = 1;
+                                useChip.Add(EnmChip.S_POKEY);
+                            }
+
+                            log.Write(string.Format("Use POKEY({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.POKEY[i].Use = true;
 
                             if (chip.Instrument != null) lstChips.Add(chip);
                         }
@@ -4592,6 +4695,12 @@ namespace mml2vgmIDE
                         if (chipRegister.AY8910[i].Model == EnmVRModel.RealModel) useReal = true;
                     }
 
+                    if (chipRegister.POKEY[i].Use)
+                    {
+                        if (chipRegister.POKEY[i].Model == EnmVRModel.VirtualModel) useEmu = true;
+                        if (chipRegister.POKEY[i].Model == EnmVRModel.RealModel) useReal = true;
+                    }
+
                     if (chipRegister.C140[i].Use)
                     {
                         if (chipRegister.C140[i].Model == EnmVRModel.VirtualModel) useEmu = true;
@@ -4785,6 +4894,7 @@ namespace mml2vgmIDE
                 for (int i = 0; i < 2; i++)
                 {
                     if (chipRegister.AY8910[i].Use) chipRegister.AY8910WriteClock((byte)i, (int)vgmDriver.AY8910ClockValue);
+                    if (chipRegister.POKEY[i].Use) chipRegister.POKEYWriteClock((byte)i, (int)vgmDriver.POKEYClockValue);
                     if (chipRegister.C140[i].Use)
                     {
                         chipRegister.C140WriteClock((byte)i, (int)vgmDriver.C140ClockValue);
@@ -5888,6 +5998,7 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) chipRegister.ConductorSoftReset(counter, i);
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) chipRegister.AY8910SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.POKEY.Count; i++) if (chipRegister.POKEY[i].Use) chipRegister.POKEYSoftReset(counter, i);
             for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) chipRegister.C140SoftReset(counter, i);
             for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) chipRegister.DMGSoftReset(counter, i);
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280SoftReset(counter, i);
@@ -5925,6 +6036,7 @@ namespace mml2vgmIDE
             List<PackData> data = new List<PackData>();
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) data.AddRange(chipRegister.ConductorMakeSoftReset(i));
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.POKEY.Count; i++) if (chipRegister.POKEY[i].Use) data.AddRange(chipRegister.POKEYMakeSoftReset(i));
             for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
             for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) data.AddRange(chipRegister.DMGMakeSoftReset(i));
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
@@ -5965,6 +6077,7 @@ namespace mml2vgmIDE
 
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) data.AddRange(chipRegister.ConductorMakeSoftReset(i));
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.POKEY.Count; i++) if (chipRegister.POKEY[i].Use) data.AddRange(chipRegister.POKEYMakeSoftReset(i));
             for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
             for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) data.AddRange(chipRegister.DMGMakeSoftReset(i));
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
@@ -6812,6 +6925,16 @@ namespace mml2vgmIDE
             {
                 mds.setVolumeAY8910(setting.balance.AY8910Volume
                     = Common.Range((isAbs ? 0 : setting.balance.AY8910Volume) + volume, -192, 20));
+            }
+            catch { }
+        }
+
+        public static void SetPOKEYVolume(bool isAbs, int volume)
+        {
+            try
+            {
+                mds.setVolumePOKEY(setting.balance.PokeyVolume
+                    = Common.Range((isAbs ? 0 : setting.balance.PokeyVolume) + volume, -192, 20));
             }
             catch { }
         }

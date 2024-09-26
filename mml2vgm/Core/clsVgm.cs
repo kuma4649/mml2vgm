@@ -1,4 +1,5 @@
-﻿using musicDriverInterface;
+﻿using Core.chips;
+using musicDriverInterface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -36,6 +37,7 @@ namespace Core
         public C140[] c140 = null;
         public C352[] c352 = null;
         public AY8910[] ay8910 = null;
+        public Pokey[] pokey = null;
         public K051649[] k051649 = null;
         public QSound[] qsound = null;
         public K053260[] k053260 = null;
@@ -457,6 +459,20 @@ namespace Core
             {
                 ay8910 = lstAY8910.ToArray();
                 chips.Add(enmChipType.AY8910, ay8910);
+            }
+
+            List<Pokey> lstPokey = new List<Pokey>();
+            n = sp.dicChipPartName[enmChipType.POKEY];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstPokey.Add(new Pokey(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstPokey.Count > 0)
+            {
+                pokey = lstPokey.ToArray();
+                chips.Add(enmChipType.POKEY, pokey);
             }
 
             List<K051649> lstK051649 = new List<K051649>();
@@ -4281,6 +4297,8 @@ namespace Core
 
             long useAY8910 = 0;
             long useAY8910_S = 0;
+            long usePOKEY = 0;
+            long usePOKEY_S = 0;
             long useC140 = 0;
             long useC140_S = 0;
             long useC352 = 0;
@@ -4369,6 +4387,10 @@ namespace Core
                 if (ay8910 != null && ay8910.Length > i && ay8910[i] != null)
                     foreach (partWork pw in ay8910[i].lstPartWork)
                     { useAY8910 += pw.clockCounter; if (ay8910[i].ChipID == 1) useAY8910_S += pw.clockCounter; }
+
+                if (pokey != null && pokey.Length > i && pokey[i] != null)
+                    foreach (partWork pw in pokey[i].lstPartWork)
+                    { usePOKEY += pw.clockCounter; if (pokey[i].ChipID == 1) usePOKEY_S += pw.clockCounter; }
 
                 if (c140 != null && c140.Length > i && c140[i] != null)
                     foreach (partWork pw in c140[i].lstPartWork)
@@ -4505,6 +4527,11 @@ namespace Core
                 dat[0x79] = new outDatum(enmMMLType.unknown, null, null, a.Flags);
                 dat[0x7a] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x7b] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
+            if (info.Version >= 1.61f && usePOKEY != 0)
+            {
+                Pokey a = pokey[0] != null ? pokey[0] : pokey[1];
+                Common.SetLE32(dat, 0xb0, (uint)a.Frequency | (uint)(usePOKEY_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useDMG != 0)
             {

@@ -54,6 +54,7 @@
     , YM2203
     , YM2610
     , AY8910
+    , POKEY
     , HuC6280
     , YM2413
     , NES
@@ -98,6 +99,7 @@
     , S_YM2203
     , S_YM2610
     , S_AY8910
+    , S_POKEY
     , S_HuC6280
     , S_YM2413
     , S_NES

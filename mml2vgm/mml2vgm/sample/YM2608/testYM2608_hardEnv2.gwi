@@ -1,0 +1,31 @@
+﻿'{
+
+	TitleName            =
+	TitleNameJ           =
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =
+	ComposerJ            =
+	ReleaseDate          =
+	Converted            =
+	Notes                =
+
+	ClockCount   =192
+
+}
+
+
+
+
+'P01 T126
+
+ PSG/SSG hardware envelope test 
+
+
+'P10 v13q3l8
+'P10 EHON EHT10 EH6000
+'P10 o3 cdefgab r4
+
+

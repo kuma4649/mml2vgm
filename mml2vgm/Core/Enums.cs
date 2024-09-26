@@ -71,6 +71,7 @@
         YM2612X2 = 29,
         SN76489X2 = 30,
         K054539=31,
+        POKEY=32
     }
 
     public enum EnmZGMDevice : int

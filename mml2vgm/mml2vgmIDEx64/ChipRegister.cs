@@ -23,6 +23,7 @@ namespace mml2vgmIDE
         private Dictionary<MDSound.MDSound.enmInstrumentType, MDSound.MDSound.Chip> dicChipsInfo = new Dictionary<MDSound.MDSound.enmInstrumentType, MDSound.MDSound.Chip>();
 
         private Setting.ChipType[] ctAY8910 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctPOKEY = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctC140 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctC352 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctDMG = new Setting.ChipType[2] { null, null };
@@ -57,6 +58,7 @@ namespace mml2vgmIDE
 
         private RealChip realChip = null;
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scPOKEY = new RSoundChip[2] { null, null };
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC352 = new RSoundChip[2] { null, null };
         private RSoundChip[] scDMG = new RSoundChip[2] { null, null };
@@ -332,6 +334,16 @@ namespace mml2vgmIDE
             ,new bool[3] { false, false, false }
         };
 
+        private int[] POKEYChFreq = new int[] { 0, 0, 0 };
+        public int[][] POKEYPsgRegister = new int[][] { null, null };
+        public int[][] POKEYPsgKeyOn = new int[][] { null, null };
+        private int[] POKEYNowFadeoutVol = new int[] { 0, 0 };
+        public int[][] POKEYPsgVol = new int[][] { new int[4], new int[4] };
+        private bool[][] POKEYMaskPSGCh = new bool[][] {
+            new bool[4] { false, false, false, false }
+            ,new bool[4] { false, false, false, false }
+        };
+
         private int[] C140NowFadeoutVol = new int[] { 0, 0 };
         private int[] RF5C164NowFadeoutVol = new int[] { 0, 0 };
         private int[] SEGAPCMNowFadeoutVol = new int[] { 0, 0 };
@@ -403,6 +415,7 @@ namespace mml2vgmIDE
         public List<Chip> CONDUCTOR = new List<Chip>();
         public List<Chip> DACControl = new List<Chip>();
         public List<Chip> AY8910 = new List<Chip>();
+        public List<Chip> POKEY = new List<Chip>();
         public List<Chip> C140 = new List<Chip>();
         public List<Chip> C352 = new List<Chip>();
         public List<Chip> MIDI = new List<Chip>();
@@ -477,6 +490,21 @@ namespace mml2vgmIDE
                         if (AY8910.Count < i + 1) AY8910.Add(new Chip(3));
                         AY8910[i].Model = ctAY8910[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         AY8910[i].Delay = (AY8910[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.Pokey:
+                    ctPOKEY = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < POKEY.Count; i++)
+                    {
+                        POKEY[i].Model = EnmVRModel.VirtualModel;
+                        POKEY[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scPOKEY[i] = realChip.GetRealChip(ctPOKEY[i]);
+                        if (scPOKEY[i] != null) scPOKEY[i].init();
+                        if (POKEY.Count < i + 1) POKEY.Add(new Chip(3));
+                        POKEY[i].Model = ctPOKEY[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        POKEY[i].Delay = (POKEY[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmZGMDevice.C140:
@@ -979,6 +1007,13 @@ namespace mml2vgmIDE
                 AY8910[i].Number = i;
                 AY8910[i].Hosei = 0;
 
+                if (POKEY.Count < i + 1) POKEY.Add(new Chip(4));
+                POKEY[i].Use = false;
+                POKEY[i].Model = EnmVRModel.None;
+                POKEY[i].Device = EnmZGMDevice.Pokey;
+                POKEY[i].Number = i;
+                POKEY[i].Hosei = 0;
+
                 if (C140.Count < i + 1) C140.Add(new Chip(24));
                 C140[i].Use = false;
                 C140[i].Model = EnmVRModel.None;
@@ -1215,6 +1250,7 @@ namespace mml2vgmIDE
             QSound.Clear();
             RF5C164.Clear();
             AY8910.Clear();
+            POKEY.Clear();
             DMG.Clear();
             NES.Clear();
             VRC6.Clear();
@@ -1255,6 +1291,7 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.YMF271) YMF271.Add(c);
                 if (c is Driver.ZGM.ZgmChip.RF5C164) RF5C164.Add(c);
                 if (c is Driver.ZGM.ZgmChip.AY8910) AY8910.Add(c);
+                if (c is Driver.ZGM.ZgmChip.POKEY) POKEY.Add(c);
                 if (c is Driver.ZGM.ZgmChip.DMG) DMG.Add(c);
                 if (c is Driver.ZGM.ZgmChip.NES) NES.Add(c);
                 if (c is Driver.ZGM.ZgmChip.VRC6) VRC6.Add(c);
@@ -1283,6 +1320,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.AY8910:
                     AY8910SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.Pokey:
+                    POKEYSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.C140:
                     C140SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -2124,6 +2164,9 @@ namespace mml2vgmIDE
                 case 0xb9:
                     enq(od, Counter, HuC6280[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0xbb:
+                    enq(od, Counter, POKEY[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
                 case 0xc0:
                     enq(od, Counter, SEGAPCM[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
@@ -2188,6 +2231,7 @@ namespace mml2vgmIDE
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF271) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in RF5C164) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in AY8910) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in POKEY) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in DMG) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in NES) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in VRC6) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
@@ -2611,6 +2655,227 @@ namespace mml2vgmIDE
 
         #endregion
 
+
+        #region POKEY
+
+        private void POKEYWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctPOKEY[Chip.Number].UseScci && ctPOKEY[Chip.Number].UseEmu)
+                    {
+                        mds.WritePOKEY(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                        //Console.WriteLine("{0}:{1}:{2}:{3}", Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scPOKEY[Chip.Number] != null)
+                    {
+                        int skip = 0x0;
+                        //if(scPOKEY[Chip.Number] is RC86ctlSoundChip)
+                        //{
+                        //    if(((RC86ctlSoundChip)scPOKEY[Chip.Number]).chiptype== Nc86ctl.ChipType.CHIP_UNKNOWN)
+                        //    {
+                        //        skip = 0x100;
+                        //    }
+                        //}
+                        scPOKEY[Chip.Number].setRegister(address + skip, data);
+                    }
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WritePOKEY(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        if (scPOKEY[Chip.Number] != null)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                int skip = 0x0;
+                                //if (scPOKEY[Chip.Number] is RC86ctlSoundChip)
+                                //{
+                                //    if (((RC86ctlSoundChip)scPOKEY[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                //    {
+                                //        skip = 0x100;
+                                //    }
+                                //}
+                                scPOKEY[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void POKEYSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctPOKEY == null) return;
+            if (Address == -1 && dData == -1) return;
+            if (!POKEY[Chip.Number].Use) return;
+
+            if (Chip.Number == 0) chipLED.PriAY10 = 2;
+            else chipLED.SecAY10 = 2;
+
+            int dAddr = (Address & 0xff);
+
+            POKEYPsgRegister[Chip.Number][dAddr] = dData;
+
+            //ssg level
+            if ((dAddr == 0x08 || dAddr == 0x09 || dAddr == 0x0a))
+            {
+                int d = POKEYNowFadeoutVol[Chip.Number];// >> 3;
+                dData = Math.Max(dData - d, 0);
+                dData = Chip.ChMasks[dAddr - 0x08] ? 0 : dData;
+            }
+
+            if (POKEY[Chip.Number].Model == EnmVRModel.RealModel && scPOKEY[Chip.Number].mul != 1.0)
+            {
+                if (dAddr >= 0x00 && dAddr <= 0x05)
+                {
+                    int ch = dAddr >> 1;
+                    int b = dAddr & 1;
+                    int nowFreq = POKEYChFreq[ch];
+                    dData &= 0xff;
+                    if (b == 0)
+                    {
+                        POKEYChFreq[ch] = (POKEYChFreq[ch] & 0xf00) | dData;
+                    }
+                    else
+                    {
+                        POKEYChFreq[ch] = (POKEYChFreq[ch] & 0x0ff) | (dData << 8);
+                    }
+
+                    if (nowFreq != POKEYChFreq[ch])
+                    {
+                        nowFreq = (int)(POKEYChFreq[ch] * scPOKEY[Chip.Number].mul);
+                        PackData[] pdata = new PackData[2] { new PackData(), new PackData() };
+
+                        pdata[0].Address = ch * 2;
+                        pdata[0].Data = (byte)nowFreq;
+                        pdata[1].Address = ch * 2 + 1;
+                        pdata[1].Data = (byte)(nowFreq >> 8);
+
+                        Type = EnmDataType.Block;
+                        ExData = pdata;
+                    }
+                }
+                if (dAddr == 0x06)
+                {
+
+                }
+            }
+
+        }
+
+        public void POKEYSetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, POKEY[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void POKEYSetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, POKEY[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void POKEYSoftReset(long Counter, int ChipID)
+        {
+            List<PackData> data = POKEYMakeSoftReset(ChipID);
+            POKEYSetRegister(null, Counter, ChipID, data.ToArray());
+        }
+
+        public List<PackData> POKEYMakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            int i;
+
+
+            return data;
+        }
+
+        public void POKEYSetMask(long Counter, int chipID, int ch, bool mask, bool noSend = false)
+        {
+            POKEYMaskPSGCh[chipID][ch] = mask;
+
+            if (noSend) return;
+
+            int c = ch;
+            if (ch < 3)
+            {
+                POKEYSetRegister(null, Counter, (byte)chipID, 0x08 + c, POKEYPsgRegister[chipID][0x08 + c]);
+            }
+        }
+
+        public void POKEYWriteClock(byte chipID, int clock)
+        {
+            if (scPOKEY != null && scPOKEY[chipID] != null)
+            {
+                if (scPOKEY[chipID] is RC86ctlSoundChip)
+                {
+                    Nc86ctl.ChipType ct = ((RC86ctlSoundChip)scPOKEY[chipID]).chiptype;
+                    //OPNA/OPN3Lが選ばれている場合は周波数を2倍にする
+                    if (ct == Nc86ctl.ChipType.CHIP_OPN3L || ct == Nc86ctl.ChipType.CHIP_OPNA)
+                    {
+                        clock *= 4;
+                    }
+                }
+
+                scPOKEY[chipID].dClock = scPOKEY[chipID].SetMasterClock((uint)clock);
+                scPOKEY[chipID].mul = (double)scPOKEY[chipID].dClock / (double)clock;
+
+                if (scPOKEY[chipID] is RC86ctlSoundChip)
+                {
+                    if (((RC86ctlSoundChip)scPOKEY[chipID]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                    {
+                        scPOKEY[chipID].mul = 1.0;
+                    }
+                }
+            }
+        }
+
+        public void POKEYSetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < POKEY.Count; i++)
+            {
+                if (!POKEY[i].Use) continue;
+                if (POKEY[i].Model == EnmVRModel.VirtualModel) continue;
+                if (POKEYNowFadeoutVol[i] == v) continue;
+
+                POKEYNowFadeoutVol[i] = v;
+                for (int c = 0; c < 3; c++)
+                {
+                    POKEYSetRegister(null, Counter, i, 0x08 + c, POKEYPsgRegister[i][0x08 + c]);
+                }
+            }
+        }
+
+        public void POKEYSetSSGVolume(byte chipID, int vol)
+        {
+            if (scPOKEY != null && scPOKEY[chipID] != null)
+            {
+                scPOKEY[chipID].setSSGVolume((byte)vol);
+            }
+        }
+
+        #endregion
 
 
         #region DMG

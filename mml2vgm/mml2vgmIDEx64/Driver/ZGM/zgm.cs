@@ -51,6 +51,7 @@ namespace mml2vgmIDE.Driver.ZGM
         public uint YMF278BClockValue;
         public uint YMZ280BClockValue;
         public uint AY8910ClockValue;
+        public uint POKEYClockValue;
         public uint YM2413ClockValue;
         public uint HuC6280ClockValue;
         public uint QSoundClockValue;
@@ -1643,6 +1644,7 @@ namespace mml2vgmIDE.Driver.ZGM
             C140ClockValue = 0;
             OKIM6295ClockValue = 0;
             AY8910ClockValue = 0;
+            POKEYClockValue = 0;
             YM2413ClockValue = 0;
             HuC6280ClockValue = 0;
             K054539ClockValue = 0;

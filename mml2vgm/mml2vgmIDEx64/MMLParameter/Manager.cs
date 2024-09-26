@@ -10,6 +10,7 @@ namespace mml2vgmIDE.MMLParameter
     {
         public List<Instrument> Conductor = new List<Instrument>();
         public List<Instrument> AY8910 = new List<Instrument>();
+        public List<Instrument> POKEY = new List<Instrument>();
         public List<Instrument> C140 = new List<Instrument>();
         public List<Instrument> C352 = new List<Instrument>();
         public List<Instrument> DMG = new List<Instrument>();
@@ -166,6 +167,9 @@ namespace mml2vgmIDE.MMLParameter
                 case "AY8910":
                     SetupAY8910(od);
                     break;
+                case "POKEY":
+                    SetupPOKEY(od);
+                    break;
                 case "C140":
                     SetupC140(od);
                     break;
@@ -291,6 +295,27 @@ namespace mml2vgmIDE.MMLParameter
             AY8910.Add(ay891);
             dicInstAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
+        }
+
+        private void SetupPOKEY(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister.POKEY == null) return;
+            if (od.linePos.chipIndex < Audio.chipRegister.POKEY.Count)
+            {
+                chip = Audio.chipRegister.POKEY[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.POKEY[zChip.Index];
+            }
+            POKEY pOKEY = new POKEY(chip, setting, midiKbd);
+            pOKEY.isTrace = isTrace;
+
+            POKEY.Add(pOKEY);
+            dicInstAdd(pOKEY, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(pOKEY, od.linePos.chipIndex, od.linePos.chipNumber);
         }
 
         private void SetupC140(outDatum od)

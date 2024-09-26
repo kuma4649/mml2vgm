@@ -45,7 +45,7 @@ namespace mml2vgmIDE
 
             //SCCIの存在確認
             int n;
-            log.ForcedWrite("RealChip:Ctr:STEP 01 Check SCCI");
+            log.ForcedWrite("RealChip:Ctr:STEP 01 Check SCCI2");
             try
             {
                 nScci = new NScci.NScci();
@@ -54,11 +54,11 @@ namespace mml2vgmIDE
                 {
                     if (nScci != null) nScci.Dispose();
                     nScci = null;
-                    log.ForcedWrite("RealChip:Ctr:Not found SCCI.");
+                    log.ForcedWrite("RealChip:Ctr:Not found SCCI2.");
                 }
                 else
                 {
-                    log.ForcedWrite(string.Format("RealChip:Ctr:Found SCCI.(Interface count={0})", n));
+                    log.ForcedWrite(string.Format("RealChip:Ctr:Found SCCI2.(Interface count={0})", n));
                     getScciInstances();
                     nScci.NSoundInterfaceManager_.setLevelDisp(false);
                 }

@@ -301,6 +301,7 @@ namespace mml2vgmIDE
             newParam.YMZ280B.Volume = parent.setting.balance.YMZ280BVolume;
             newParam.YMF271.Volume = parent.setting.balance.YMF271Volume;
             newParam.AY8910.Volume = parent.setting.balance.AY8910Volume;
+            newParam.POKEY.Volume = parent.setting.balance.PokeyVolume;
             newParam.SN76489.Volume = parent.setting.balance.SN76489Volume;
             newParam.HuC6280.Volume = parent.setting.balance.HuC6280Volume;
 
@@ -509,6 +510,13 @@ namespace mml2vgmIDE
             {
                 newParam.AY8910.VisVolume2 = newParam.AY8910.VisVolume1;
                 newParam.AY8910.VisVol2Cnt = 30;
+            }
+
+            newParam.POKEY.VisVolume1 = Common.Range(Audio.visVolume.pokey / 120, 0, 44);//(short.MaxValue / 44);
+            if (newParam.POKEY.VisVolume2 <= newParam.POKEY.VisVolume1)
+            {
+                newParam.POKEY.VisVolume2 = newParam.POKEY.VisVolume1;
+                newParam.POKEY.VisVol2Cnt = 30;
             }
 
             newParam.SN76489.VisVolume1 = Common.Range(Audio.visVolume.sn76489 / 120, 0, 44);//(short.MaxValue / 44);
@@ -724,7 +732,7 @@ namespace mml2vgmIDE
             num++; oVI = oldParam.SN76489; nVI = newParam.SN76489; drawVolAndFader(num, oVI, nVI);
             num++; oVI = oldParam.HuC6280; nVI = newParam.HuC6280; drawVolAndFader(num, oVI, nVI);
             num++;
-            num++;
+            num++; oVI = oldParam.POKEY; nVI = newParam.POKEY; drawVolAndFader(num, oVI, nVI);
             num++;
             num++;
 

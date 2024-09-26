@@ -416,6 +416,7 @@
             public VolumeInfo YMF278B = new VolumeInfo();//OPL4
             public VolumeInfo YMF271 = new VolumeInfo();//OPX
             public VolumeInfo AY8910 = new VolumeInfo();
+            public VolumeInfo POKEY = new VolumeInfo();
             public VolumeInfo SN76489 = new VolumeInfo();
             public VolumeInfo HuC6280 = new VolumeInfo();
 

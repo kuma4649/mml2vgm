@@ -87,6 +87,7 @@ namespace mml2vgmIDE
         public bool RF5C68DualChipFlag;
         public bool RF5C164DualChipFlag;
         public bool AY8910DualChipFlag;
+        public bool POKEYDualChipFlag;
         public bool YM2413DualChipFlag;
         public bool HuC6280DualChipFlag;
         public bool C140DualChipFlag;

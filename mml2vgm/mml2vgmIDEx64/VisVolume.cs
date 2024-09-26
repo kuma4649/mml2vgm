@@ -30,6 +30,7 @@
         public short ay8910 = 0;
         public short sn76489 = 0;
         public short huc6280 = 0;
+        public short pokey = 0;
 
         public short rf5c164 = 0;
         public short rf5c68 = 0;

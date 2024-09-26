@@ -68,6 +68,7 @@
     <Compile Include="chips\K053260.cs" />
     <Compile Include="chips\MidiGM.cs" />
     <Compile Include="chips\NES.cs" />
+    <Compile Include="chips\Pokey.cs" />
     <Compile Include="chips\QSound.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fnum\FNUM_POKEY.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fnum\FNUM_Gigatron.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

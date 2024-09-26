@@ -58,6 +58,34 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _POKEYType = new ChipType();
+        public ChipType POKEYType
+        {
+            get
+            {
+                return _POKEYType;
+            }
+
+            set
+            {
+                _POKEYType = value;
+            }
+        }
+
+        private ChipType _POKEYSType = new ChipType();
+        public ChipType POKEYSType
+        {
+            get
+            {
+                return _POKEYSType;
+            }
+
+            set
+            {
+                _POKEYSType = value;
+            }
+        }
+
         private ChipType _YM2151Type = new ChipType();
         public ChipType YM2151Type
         {
@@ -2364,6 +2392,22 @@ namespace mml2vgmIDE
                 }
             }
 
+            private int _PokeyVolume = 0;
+            public int PokeyVolume
+            {
+                get
+                {
+                    if (_PokeyVolume > 20 || _PokeyVolume < -192) _PokeyVolume = 0;
+                    return _PokeyVolume;
+                }
+
+                set
+                {
+                    _PokeyVolume = value;
+                    if (_PokeyVolume > 20 || _PokeyVolume < -192) _PokeyVolume = 0;
+                }
+            }
+
             private int _YM2413Volume = 0;
             public int YM2413Volume
             {
@@ -3058,6 +3102,7 @@ namespace mml2vgmIDE
 
                 Balance.YM2612Volume = this.YM2612Volume;
                 Balance.AY8910Volume = this.AY8910Volume;
+                Balance.PokeyVolume = this.PokeyVolume;
                 Balance.SN76489Volume = this.SN76489Volume;
                 Balance.HuC6280Volume = this.HuC6280Volume;
                 Balance.RF5C164Volume = this.RF5C164Volume;
@@ -4384,8 +4429,8 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JumpAnchorNext,"次の//まで飛ぶ",false,true,false,"Next")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JumpAnchorPrev,"前の//まで飛ぶ",false,true,false,"PageUp")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff,"コメント化する/しない",false,true,false,"Divide")
-            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff+1,"コメント化する/しない",false,true,false,"OemQuestion")
-            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.PartEnter,"改行時にパート情報自動挿入",true,false,false,"Return")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff+1,"コメント化する/しない",false,true,false,"Oem2")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.PartEnter,"改行時にパート情報自動挿入",true,false,false,"Enter")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Home,"キャレットをホームポジション/パート情報後に移動",false,false,false,"Home")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportDriverFormat,"エクスポートtoDriverFormat",false,false,false,"F7")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportWav,"エクスポートtoWav",false,false,false,"")
@@ -4447,6 +4492,10 @@ namespace mml2vgmIDE
                 {
                     if (newAry[i].number != setting.shortCutKey.Info[j].number) continue;
                     newAry[i] = setting.shortCutKey.Info[j].Copy();
+                    if (newAry[i].key.IndexOf("Return") > -1)
+                    {
+                        newAry[i].key=newAry[i].key.Replace("Return", "Enter");
+                    }
                     break;
                 }
             }

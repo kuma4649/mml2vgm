@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.chips;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -346,6 +347,18 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { } : (
                 (info.format == enmFormat.XGM || info.format == enmFormat.XGM2) ? new string[] { } : new string[] { "Gg", "Gh" })
                 ), new int[] { 0, 0, -1 }));
+
+            cp = new Pokey(null, 0, null, null, 0);
+            cpn.Add(enmChipType.POKEY, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "Pa", "Pb" } : (
+                (info.format == enmFormat.XGM || info.format == enmFormat.XGM2) ? new string[] { } : new string[] { "Pa", "Pb" })
+                ), new int[] { 2, 0, -1 }));
+            //                vgm xgm zgm
+
+            // 使ったパート名
+            // Cn A  B  D  E  F  G  Ga Gg H  I  J  K  L  M  N  Na O  P  Pa Q  R  S  T  U  V  Va W  X  Y  Z
+            //    As Bs Ds    Fs    Gb Gh Hs Is Js Ks Ls Ms Ns Nb Os Ps Pb Qs Rs Ss Ts Us Vs Vb Ws Xs Ys Zs
+            // 
 
 
 

@@ -1161,6 +1161,7 @@ namespace mml2vgmIDE
                 Keys k = keyData & ~Keys.Shift;
                 k = k & ~Keys.Control;
                 k = k & ~Keys.Alt;
+                //Debug.WriteLine(keyData.ToString());
                 if (setting.shortCutKey.Info[i].key != k.ToString()) continue;
 
                 Document doc;

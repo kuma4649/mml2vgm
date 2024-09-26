@@ -21,6 +21,7 @@
         public byte PriC140 = 0;
         public byte PriSPCM = 0;
         public byte PriAY10 = 0;
+        public byte PriPOKEY = 0;
         public byte PriOPLL = 0;
         public byte PriHuC = 0;
         public byte PriQsnd = 0;
@@ -66,6 +67,7 @@
         public byte SecC140 = 0;
         public byte SecSPCM = 0;
         public byte SecAY10 = 0;
+        public byte SecPOKEY = 0;
         public byte SecOPLL = 0;
         public byte SecHuC = 0;
         public byte SecC352 = 0;
