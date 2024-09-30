@@ -502,7 +502,7 @@ namespace mml2vgmIDE
 
                         scPOKEY[i] = realChip.GetRealChip(ctPOKEY[i]);
                         if (scPOKEY[i] != null) scPOKEY[i].init();
-                        if (POKEY.Count < i + 1) POKEY.Add(new Chip(3));
+                        if (POKEY.Count < i + 1) POKEY.Add(new Chip(4));
                         POKEY[i].Model = ctPOKEY[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         POKEY[i].Delay = (POKEY[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -1433,6 +1433,7 @@ namespace mml2vgmIDE
         {
             sendChipDataFunc.Add(EnmZGMDevice.DACControl, DACControlWriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.AY8910, AY8910WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.Pokey, POKEYWriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.C140, C140WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.C352, C352WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.GameBoyDMG, DMGWriteRegisterControl);
@@ -1760,6 +1761,13 @@ namespace mml2vgmIDE
                     AY8910PsgRegister[chipID][i] = 0;
                 }
                 AY8910PsgKeyOn[chipID] = new int[3] { 0, 0, 0 };
+
+                POKEYPsgRegister[chipID] = new int[0x100];
+                for (int i = 0; i < 0x100; i++)
+                {
+                    POKEYPsgRegister[chipID][i] = 0;
+                }
+                POKEYPsgKeyOn[chipID] = new int[4] { 0, 0, 0, 0 };
 
                 pcmRegisterC140[chipID] = new byte[0x200];
                 pcmKeyOnC140[chipID] = new bool[24];
@@ -2740,49 +2748,16 @@ namespace mml2vgmIDE
             POKEYPsgRegister[Chip.Number][dAddr] = dData;
 
             //ssg level
-            if ((dAddr == 0x08 || dAddr == 0x09 || dAddr == 0x0a))
+            if ((dAddr == 0x01 || dAddr == 0x03 || dAddr == 0x05 || dAddr == 0x07))
             {
                 int d = POKEYNowFadeoutVol[Chip.Number];// >> 3;
-                dData = Math.Max(dData - d, 0);
-                dData = Chip.ChMasks[dAddr - 0x08] ? 0 : dData;
+                int v = dData & 0xf;
+                v = Math.Max(v - d, 0);
+                v = Chip.ChMasks[dAddr/2] ? 0 : v;
+                dData &= 0xf0;
+                dData |= v;
             }
 
-            if (POKEY[Chip.Number].Model == EnmVRModel.RealModel && scPOKEY[Chip.Number].mul != 1.0)
-            {
-                if (dAddr >= 0x00 && dAddr <= 0x05)
-                {
-                    int ch = dAddr >> 1;
-                    int b = dAddr & 1;
-                    int nowFreq = POKEYChFreq[ch];
-                    dData &= 0xff;
-                    if (b == 0)
-                    {
-                        POKEYChFreq[ch] = (POKEYChFreq[ch] & 0xf00) | dData;
-                    }
-                    else
-                    {
-                        POKEYChFreq[ch] = (POKEYChFreq[ch] & 0x0ff) | (dData << 8);
-                    }
-
-                    if (nowFreq != POKEYChFreq[ch])
-                    {
-                        nowFreq = (int)(POKEYChFreq[ch] * scPOKEY[Chip.Number].mul);
-                        PackData[] pdata = new PackData[2] { new PackData(), new PackData() };
-
-                        pdata[0].Address = ch * 2;
-                        pdata[0].Data = (byte)nowFreq;
-                        pdata[1].Address = ch * 2 + 1;
-                        pdata[1].Data = (byte)(nowFreq >> 8);
-
-                        Type = EnmDataType.Block;
-                        ExData = pdata;
-                    }
-                }
-                if (dAddr == 0x06)
-                {
-
-                }
-            }
 
         }
 

@@ -478,7 +478,7 @@ namespace mml2vgmIDE
             vgmCmdTbl[0xb8] = vcOKIM6295;
             vgmCmdTbl[0xb9] = vcHuC6280;
             vgmCmdTbl[0xba] = vcK053260;
-            vgmCmdTbl[0xbb] = vcDummy2Ope;
+            vgmCmdTbl[0xbb] = vcPokey;
             vgmCmdTbl[0xbc] = vcDummy2Ope;
             vgmCmdTbl[0xbd] = vcDummy2Ope;
             vgmCmdTbl[0xbe] = vcDummy2Ope;
@@ -1441,6 +1441,15 @@ namespace mml2vgmIDE
             vgmAdr += 3;
         }
 
+        private void vcPokey(outDatum od)
+        {
+            byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
+            int adr = (int)(vgmBuf[vgmAdr + 1].val & 0x7f);
+            byte data = vgmBuf[vgmAdr + 2].val;
+            chipRegister.POKEYSetRegister(od, Audio.DriverSeqCounter, id, adr, data);
+            vgmAdr += 3;
+        }
+
         private void vcK054539(outDatum od)
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
@@ -1913,6 +1922,7 @@ namespace mml2vgmIDE
             C140ClockValue = 0;// defaultC140ClockValue;
             OKIM6295ClockValue = 0;//defaultOKIM6295ClockValue;
             AY8910ClockValue = 0;
+            POKEYClockValue = 0;
             YM2413ClockValue = 0;
             HuC6280ClockValue = 0;
             K054539ClockValue = 0;
@@ -2305,6 +2315,19 @@ namespace mml2vgmIDE
                             K053260DualChipFlag = (K053260clock & 0x40000000) != 0;
                             if (K053260DualChipFlag) chips.Add("K053260x2");
                             else chips.Add("K053260");
+                        }
+                    }
+
+                    if (vgmDataOffset > 0xb0)
+                    {
+
+                        uint POKEYclock = getLE32(0xb0);
+                        if (POKEYclock != 0)
+                        {
+                            POKEYClockValue = POKEYclock & 0x3fffffff;
+                            POKEYDualChipFlag = (POKEYclock & 0x40000000) != 0;
+                            if (POKEYDualChipFlag) chips.Add("POKEYx2");
+                            else chips.Add("POKEY");
                         }
                     }
 

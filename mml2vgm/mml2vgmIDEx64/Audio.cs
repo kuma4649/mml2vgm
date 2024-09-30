@@ -265,6 +265,7 @@ namespace mml2vgmIDE
         public static void RealChipManualDetect(Setting setting)
         {
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, setting.AY8910Type, setting.AY8910SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.Pokey, setting.POKEYType, setting.POKEYSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.GameBoyDMG, setting.DMGType, setting.DMGSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.NESAPU, setting.NESType, setting.NESSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.VRC6, setting.VRC6Type, setting.VRC6SType, setting.LatencyEmulation, setting.LatencySCCI);
@@ -3317,7 +3318,7 @@ namespace mml2vgmIDE
                             chip.Reset = pokey.Reset;
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.PokeyVolume;
-                            chip.Clock = (((vgm)driver).POKEYClockValue & 0x7fffffff) / 2;
+                            chip.Clock = (((vgm)driver).POKEYClockValue & 0x7fffffff);
                             clockPOKEY = (int)chip.Clock;
                             chip.Option = null;
                             hiyorimiDeviceFlag |= 0x2;

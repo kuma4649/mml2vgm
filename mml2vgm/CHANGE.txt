@@ -1,4 +1,7 @@
 XV—š—ð
+TAG743 2024/10/01
+  Core:POKEY‚ÉŽb’è‘Î‰ž_2nd
+
 TAG742 2024/09/26
   Core:POKEY‚ÉŽb’è‘Î‰ž
   IDE:muc2vgm‚Ìˆ—C³

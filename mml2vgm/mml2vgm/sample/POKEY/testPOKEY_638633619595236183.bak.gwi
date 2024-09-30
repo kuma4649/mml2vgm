@@ -15,20 +15,14 @@
 }
 
 
-'Cn1 T60
+'Cn1 T120
 Cn1 L
 
-'Pa1 v15o5q4
-'A1  v15o5q4
-
-'Pa1 rcc rc+c+ rdd rd+d+ ree
-'A1  crc c+rc+ drd d+rd+ ere
-
-'Pa1 rff rf+f+ rgg rg+g+
-'A1  frf f+rf+ grg g+rg+
-
-'Pa1 raa ra+a+ rbb 
-'A1  ara a+ra+ brb 
+'Pa1-4 v15o4q0l4
+'Pa1 c1     r4 c2
+'Pa2 re2.   r4 e2
+'Pa3 rrg2   r4 g2
+'Pa4 rrr>c4 r4 c2
 
 
 
