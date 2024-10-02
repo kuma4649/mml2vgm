@@ -1,6 +1,6 @@
 ﻿'{
 
-	TitleName   =
+	TitleName   = POKEY TEST
 	TitleNameJ  =
 	GameName    =
 	GameNameJ   =
@@ -18,11 +18,23 @@
 'Cn1 T120
 Cn1 L
 
-'Pa1-4 v10o4q0l4
-'Pa1 c1     r4 c2
-'Pa2 re2.   r4 e2
-'Pa3 rrg2   r4 g2
-'Pa4 rrr>c4 r4 c2
+ トーンテスト
+'Pa1-4 v10o4q0l4w0
+'Pa1 c1     r c2 r
+'Pa2 re2.   r e2 r
+'Pa3 rrg2   r g2 r
+'Pa4 rrr>c4 r c2 r
 
 
+ ノイズテスト
+'Pa1-4 v10q0l4
+
+'Pa1     w1 o7c_<<<c rrr ;  4bit poly only
+'Pa2 r   w2 o7c_<<<c rr  ; pure tone
+'Pa3 rr  w3 o7c_<<<c r   ; 17bit poly only
+'Pa4 rrr w4 o7c_<<<c     ;  5bit poly only
+'Pa1     w5 o7c_<<<c rrr ;  5bit then 4bit polys
+'Pa2 r   w6 o7c_<<<c rr  ;  5bit poly only
+'Pa3 rr  w7 o7c_<<<c r   ;  5bit then 17bit polynomials
+'Pa4 rrr w0 o7c_<<<c     ; pure tone (default)
 

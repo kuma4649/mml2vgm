@@ -22,6 +22,9 @@ namespace Core.chips
         private const byte AUDF4 = 0x06;
         private const byte AUDC4 = 0x07;
 
+        public byte AUDCTLvalue = 0x00;
+        public byte AUDCTLvalueBefore = 0xff;
+
         public Pokey(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.POKEY;
@@ -104,6 +107,8 @@ namespace Core.chips
                 pg.noise = 7;
             }
 
+            AUDCTLvalue = 0x00;
+            AUDCTLvalueBefore = 0xff;
         }
 
         public override void InitChip()
@@ -226,6 +231,28 @@ namespace Core.chips
         {
         }
 
+        public override void SetToneDoubler(partPage page, MML mml)
+        {
+        }
+
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
+        {
+            return GetSsgFNum(page, mml, octave, cmd, shift, pitchShift);
+        }
+
+        public override void CmdNoise(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 7);
+            page.noise = 7 - n;
+        }
+
+
 
         public override void MultiChannelCommand(MML mml)
         {
@@ -258,9 +285,13 @@ namespace Core.chips
             }
 
 
-            //Bit 7          Bit 6      Bit 5      Bit 4     Bit 3     Bit 2     Bit 1     Bit 0
-            //17 vs 9 Poly   CH1 1.79   CH3 1.79   CH2 + 1   CH4 + 3   FI1 + 3   FI2 + 4   64 vs 15 kHz
-            parent.OutData(mml, port[0], AUDCTL, 0x00);
+            if (AUDCTLvalue != AUDCTLvalueBefore)
+            {
+                //Bit 7          Bit 6      Bit 5      Bit 4     Bit 3     Bit 2     Bit 1     Bit 0
+                //17 vs 9 Poly   CH1 1.79   CH3 1.79   CH2 + 1   CH4 + 3   FI1 + 3   FI2 + 4   64 vs 15 kHz
+                parent.OutData(mml, port[0], AUDCTL, AUDCTLvalue);
+                AUDCTLvalueBefore = AUDCTLvalue;
+            }
         }
 
     }
