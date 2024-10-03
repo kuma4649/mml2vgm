@@ -252,10 +252,38 @@ namespace Core.chips
             page.noise = 7 - n;
         }
 
+        public override void CmdHardEnvelope(partPage page, MML mml)
+        {
+            string cmd = (string)mml.args[0];
+            //int n = 0;
+
+            switch (cmd)
+            {
+                case "EH":
+                    page.HardEnvelopeSpeed = (int)mml.args[1];
+                    break;
+                case "EHON":
+                    page.HardEnvelopeSw = true;
+                    break;
+                case "EHOF":
+                    page.HardEnvelopeSw = false;
+                    break;
+                case "EHT":
+                    page.HardEnvelopeType = (int)mml.args[1];
+                    break;
+            }
+        }
+
+        public override void CmdLoopExtProc(partPage page, MML mml)
+        {
+            page.spg.freq = -1;
+        }
 
 
         public override void MultiChannelCommand(MML mml)
         {
+            AUDCTLvalue = 0;
+
             foreach (partWork pw in lstPartWork)
             {
                 byte c = 0;
@@ -281,6 +309,30 @@ namespace Core.chips
                 {
                     page.beforeTL[0] = c;
                     parent.OutData(mml, port[0], (byte)(AUDC1 + page.ch * 2), c);
+                }
+
+                if (page.HardEnvelopeSw)
+                {
+                    AUDCTLvalue |= (byte)((page.ch == 0 || page.ch == 2) ? 0x04 : ((page.ch == 1 || page.ch == 3) ? 0x02 : 0x00));
+                    if (page.HardEnvelopeType != page.hardLfoAMD)
+                    {
+                        page.hardLfoAMD = page.HardEnvelopeType;
+                        switch (page.ch)
+                        {
+                            case 0://ch1 のときはch3のfnumを変更
+                                parent.OutData(mml, port[0], AUDF3, (byte)page.HardEnvelopeType);
+                                break;
+                            case 1://ch2 のときはch4のfnumを変更
+                                parent.OutData(mml, port[0], AUDF4, (byte)page.HardEnvelopeType);
+                                break;
+                            case 2://ch3 のときはch1のfnumを変更
+                                parent.OutData(mml, port[0], AUDF1, (byte)page.HardEnvelopeType);
+                                break;
+                            case 3://ch4 のときはch2のfnumを変更
+                                parent.OutData(mml, port[0], AUDF2, (byte)page.HardEnvelopeType);
+                                break;
+                        }
+                    }
                 }
             }
 

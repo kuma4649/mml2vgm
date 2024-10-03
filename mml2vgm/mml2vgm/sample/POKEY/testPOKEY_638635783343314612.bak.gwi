@@ -38,7 +38,6 @@ Cn1 L
  'Pa3 rr  w7 o7c_<<<c r   ;  5bit then 17bit polynomials
  'Pa4 rrr w0 o7c_<<<c     ; pure tone (default)
 
-
  HPFテスト
    HPF? は Ch1とCh3、又はCh2とCh4を 組み合わせて発音される
    EHON / EHOF コマンドでHPFモードを切り替える
