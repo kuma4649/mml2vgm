@@ -3780,113 +3780,124 @@ namespace Core
 
         public void DecAllPartWaitCounter(long waitCounter)
         {
-            if (waitCounter != long.MaxValue)
+            if (waitCounter == long.MaxValue) return;
+
+            // waitcounterを減らす
+
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
             {
-
-                // waitcounterを減らす
-
-                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+                foreach (ClsChip chip in kvp.Value)
                 {
-                    foreach (ClsChip chip in kvp.Value)
+                    if (chip == null) continue;
+
+                    foreach (partWork pw in chip.lstPartWork)
                     {
-                        if (chip == null) continue;
-
-                        foreach (partWork pw in chip.lstPartWork)
+                        foreach (partPage pg in pw.pg)
                         {
-                            foreach (partPage pg in pw.pg)
+                            if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= waitCounter;
+
+                            if (pg.waitRR15Counter > 0)
+                                pg.waitRR15Counter -= waitCounter;
+
+                            if (pg.waitCounter > 0) pg.waitCounter -= waitCounter;
+
+                            if (pg.bendWaitCounter > 0) pg.bendWaitCounter -= waitCounter;
+
+                            for (int lfo = 0; lfo < 4; lfo++)
                             {
-                                if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= waitCounter;
+                                if (!pg.lfo[lfo].sw) continue;
+                                if (pg.lfo[lfo].waitCounter == -1) continue;
 
-                                if (pg.waitRR15Counter > 0) 
-                                    pg.waitRR15Counter -= waitCounter;
-
-                                if (pg.waitCounter > 0) pg.waitCounter -= waitCounter;
-
-                                if (pg.bendWaitCounter > 0) pg.bendWaitCounter -= waitCounter;
-
-                                for (int lfo = 0; lfo < 4; lfo++)
+                                if (pg.lfo[lfo].waitCounter > 0)
                                 {
-                                    if (!pg.lfo[lfo].sw) continue;
-                                    if (pg.lfo[lfo].waitCounter == -1) continue;
-
-                                    if (pg.lfo[lfo].waitCounter > 0)
-                                    {
-                                        pg.lfo[lfo].waitCounter -= waitCounter;
-                                        if (pg.lfo[lfo].waitCounter < 0) pg.lfo[lfo].waitCounter = 0;
-                                    }
+                                    pg.lfo[lfo].waitCounter -= waitCounter;
+                                    if (pg.lfo[lfo].waitCounter < 0) pg.lfo[lfo].waitCounter = 0;
                                 }
+                            }
 
-                                if (pg.pcmWaitKeyOnCounter > 0)
-                                    pg.pcmWaitKeyOnCounter -= waitCounter;
+                            if (pg.pcmWaitKeyOnCounter > 0)
+                                pg.pcmWaitKeyOnCounter -= waitCounter;
 
-                                if (pg.envelopeMode && pg.envIndex != -1)
-                                    pg.envCounter -= (int)waitCounter;
+                            if (pg.envelopeMode && pg.envIndex != -1)
+                                pg.envCounter -= (int)waitCounter;
 
-                                if (pg.arpeggioMode && pg.arpIndex != -1)
-                                    pg.arpCounter -= (int)waitCounter;
+                            if (pg.arpeggioMode && pg.arpIndex != -1)
+                                pg.arpCounter -= (int)waitCounter;
 
-                                if (pg.varpeggioMode && pg.varpIndex != -1)
-                                    pg.varpCounter -= (int)waitCounter;
+                            if (pg.varpeggioMode && pg.varpIndex != -1)
+                                pg.varpCounter -= (int)waitCounter;
 
-                                foreach (CommandArpeggio ca in pg.commandArpeggio.Values)
+                            foreach (CommandArpeggio ca in pg.commandArpeggio.Values)
+                            {
+                                if (!ca.Sw) continue;
+                                if (ca.Ptr == -1) continue;
+                                ca.WaitCounter -= (int)waitCounter;
+                            }
+
+                            if (pg.keyOnDelay.sw)
+                            {
+                                for (int i = 0; i < 4; i++)
                                 {
-                                    if (!ca.Sw) continue;
-                                    if (ca.Ptr == -1) continue;
-                                    ca.WaitCounter -= (int)waitCounter;
+                                    if (pg.keyOnDelay.delayWrk[i] <= 0) continue;
+                                    pg.keyOnDelay.delayWrk[i] -= (int)waitCounter;
                                 }
+                            }
 
-                                if (pg.keyOnDelay.sw)
-                                {
-                                    for (int i = 0; i < 4; i++)
-                                    {
-                                        if (pg.keyOnDelay.delayWrk[i] <= 0) continue;
-                                        pg.keyOnDelay.delayWrk[i] -= (int)waitCounter;
-                                    }
-                                }
-
-                                if (pg.noteOns == null) continue;
-                                for (int i = 0; i < pg.noteOns.Length; i++)
-                                {
-                                    if (pg.noteOns[i] == null) continue;
-                                    if (pg.noteOns[i].length < 1) continue;
-                                    pg.noteOns[i].length -= waitCounter;
-                                }
+                            if (pg.noteOns == null) continue;
+                            for (int i = 0; i < pg.noteOns.Length; i++)
+                            {
+                                if (pg.noteOns[i] == null) continue;
+                                if (pg.noteOns[i].length < 1) continue;
+                                pg.noteOns[i].length -= waitCounter;
                             }
                         }
                     }
                 }
-
-                // wait発行
-
-                if (!doJumping)
-                {
-                    if (info.format == enmFormat.XGM2)
-                    {
-                        lClock += waitCounter;
-                        bSample += info.samplesPerClock * waitCounter;
-                        OutWaitNSamples((long)bSample);
-                        dSample += (long)bSample;
-                        bSample -= (long)bSample;
-                    }
-                    else
-                    {
-                        lClock += waitCounter;
-                        dSample += (long)(info.samplesPerClock * waitCounter);
-                        bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
-                        dSample += (long)bSample;
-                        bSample -= (long)bSample;
-
-                        bool flg = false;
-                        if (ym2612 != null && ym2612[0] != null)
-                        {
-                            if (ym2612[0].lstPartWork[5].cpg.pcmWaitKeyOnCounter > 0) flg = true;
-                        }
-                        if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
-                        else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
-                    }
-                }
-
             }
+
+            // wait発行
+
+            if (!doJumping)
+            {
+                if (info.format == enmFormat.XGM2)
+                {
+                    lClock += waitCounter;
+                    bSample += info.samplesPerClock * waitCounter;
+                    OutWaitNSamples((long)bSample);
+                    dSample += (long)bSample;
+                    bSample -= (long)bSample;
+                }
+                else
+                {
+                    lClock += waitCounter;
+                    dSample += (long)(info.samplesPerClock * waitCounter);
+                    bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
+                    dSample += (long)bSample;
+                    bSample -= (long)bSample;
+
+                    bool flg = false;
+                    if (ym2612 != null && ym2612[0] != null)
+                    {
+                        if (ym2612[0].lstPartWork[5].cpg.pcmWaitKeyOnCounter > 0) flg = true;
+                    }
+                    if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
+                    else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                }
+            }
+            else
+            {
+                if (info.format == enmFormat.XGM2)
+                {
+                    bSample += info.samplesPerClock * waitCounter;
+                    bSample -= (long)bSample;
+                }
+                else
+                {
+                    bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
+                    bSample -= (long)bSample;
+                }
+            }
+
         }
 
         public long ComputeAllPartDistance()
@@ -5141,17 +5152,18 @@ namespace Core
             }
 
 
+            // wait発行
             if (!doJumping)
             {
-                // wait発行
                 lClock += cnt;
-                //dSample += (long)(info.samplesPerClock * cnt);
-                //Console.WriteLine("pw.ppg[pw.cpgNum].ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
-
                 sampleB += info.samplesPerClock * cnt;
-                //Console.WriteLine("samplesPerClock{0}", info.samplesPerClock);
                 OutWaitNSamples((long)(sampleB));
                 dSample += (long)sampleB;
+                sampleB -= (long)sampleB;
+            }
+            else
+            {
+                sampleB += info.samplesPerClock * cnt;
                 sampleB -= (long)sampleB;
             }
         }
