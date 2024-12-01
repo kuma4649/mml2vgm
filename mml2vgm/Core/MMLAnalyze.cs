@@ -724,6 +724,7 @@ namespace Core
                         (
                         pw.cpg.Type == enmChannelType.FMOPN
                         || pw.cpg.Type == enmChannelType.FMOPNex
+                        || pw.cpg.Type == enmChannelType.FMPCM
                         )
                     && (
                         a == 'N'
