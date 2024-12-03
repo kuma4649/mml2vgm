@@ -761,36 +761,51 @@ namespace Core
 
         protected void GetPortVchSsg(partPage page, out int port, out int adr, out int vch)
         {
-            int m = (page.chip is YM2203) ? 0 : 3;
-            vch = (byte)(page.ch - (m + 6));
-            port = 0;
-            adr = 0;
+            if (!(page.chip is YM2609))
+            {
+                int m = (page.chip is YM2203) ? 0 : 3;
+                vch = (byte)(page.ch - (m + 6));
+                port = 0;
+                adr = 0;
 
-            if (!(page.chip is YM2609)) return;
+                return;
+            }
 
-            if (page.ch >= 18 && page.ch <= 20)
+            if (page.ch < 18)
+            {
+                vch = (byte)(page.ch - (3 + 6));
+                port = 0;
+                adr = 0;
+            }
+            else if (page.ch <= 20)
             {
                 port = 0;
                 vch = (byte)(page.ch - 18);
                 adr = 0;
             }
-            else if (page.ch >= 21 && page.ch <= 23)
+            else if (page.ch <= 23)
             {
                 port = 1;
                 vch = (byte)(page.ch - 21);
                 adr = 0x20;
             }
-            else if (page.ch >= 24 && page.ch <= 26)
+            else if (page.ch <= 26)
             {
                 port = 2;
                 vch = (byte)(page.ch - 24);
                 adr = 0;
             }
-            else if (page.ch >= 27 && page.ch <= 29)
+            else if (page.ch <= 29)
             {
                 port = 2;
                 vch = (byte)(page.ch - 27);
                 adr = 0x10;
+            }
+            else
+            {
+                vch = (byte)(page.ch - (3 + 6));
+                port = 0;
+                adr = 0;
             }
         }
 

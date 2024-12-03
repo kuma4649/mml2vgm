@@ -6891,6 +6891,9 @@ namespace Core
             //log.ForcedWrite(msg);
         }
 
+        private byte[] zgmWaitCmd1 = new byte[] { 0x01 };
+        private byte[] zgmWaitCmd2 = new byte[] { 0x01, 0x00 };
+        private byte[] vgmWaitCmd = new byte[] { 0x61 };
 
         private void OutWaitNSamples(long n)
         {
@@ -6898,10 +6901,10 @@ namespace Core
             byte[] cmd;
             if (info.format == enmFormat.ZGM)
             {
-                if (ChipCommandSize == 2) cmd = new byte[] { 0x01, 0x00 };
-                else cmd = new byte[] { 0x01 };
+                if (ChipCommandSize == 2) cmd = zgmWaitCmd2;
+                else cmd = zgmWaitCmd1;
             }
-            else cmd = new byte[] { 0x61 };
+            else cmd = vgmWaitCmd;
 
             while (m > 0)
             {
