@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExtensionXGM" xml:space="preserve">
+    <value>.xgm</value>
+  </data>
   <data name="ExtensionVGM" xml:space="preserve">
     <value>.vgm</value>
   </data>
   <data name="ExtensionVGZ" xml:space="preserve">
     <value>.vgz</value>
-  </data>
-  <data name="ExtensionXGM" xml:space="preserve">
-    <value>.xgm</value>
   </data>
 </root>

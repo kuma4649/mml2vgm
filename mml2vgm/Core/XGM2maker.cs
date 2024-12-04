@@ -26,6 +26,7 @@ namespace Core
         private bool existGD3;
         private bool packedData;
         private bool exportMode = false;
+        public  bool forcePCMMode = false;//ユーザーによるPCM発音指示受け
         private XGMSampleID[] sampleID;
 
         private uint[] fmID = new uint[128];
@@ -443,7 +444,7 @@ namespace Core
                                 fmFrameLength++;
                                 break;
                             case 0x10://size 2
-                                if (exportMode)
+                                if (!forcePCMMode && exportMode)
                                 {
                                     //PCM発音すると雑音が酷いためカット
                                     ret.RemoveAt(ret.Count - 1);

@@ -1,7 +1,7 @@
 ﻿'{
 
-	TitleName   =
-	TitleNameJ  =
+	TitleName   =template
+	TitleNameJ  =テンプレ
 	GameName    =
 	GameNameJ   =
 	SystemName  =
@@ -11,11 +11,11 @@
 	ReleaseDate =
 	Converted   =
 	Notes       =
-
+	Format      =VGM
 }
 
-lead synthっぽいなにか
-'@ N 000
+
+'@ N 000 "lead synthっぽいなにか"
    AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
 '@ 031,001,001,001,005,026,000,001,002,000,000
 '@ 031,004,003,008,010,000,000,000,003,000,000

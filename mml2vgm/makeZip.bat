@@ -1,8 +1,14 @@
 echo mml2vgm
 
 del /Q .\output\*.*
+del /Q .\output\mml2vgmx64\*.*
+del /Q .\output\mml2vgmx64\fnum\*.*
+del /Q .\output\mml2vgmx64\lang\*.*
+
 xcopy .\mml2vgm\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 del /Q .\output\mml2vgm\*.pdb
+xcopy .\mml2vgmx64\bin\Release\net8.0-windows\*.* .\output\mml2vgmx64 /E /R /Y /I /K
+del /Q .\output\mml2vgmx64\*.pdb
 
 xcopy .\mvc\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 xcopy .\mml2vgm\sample\*.* .\output\mml2vgm\sample /E /R /Y /I /K

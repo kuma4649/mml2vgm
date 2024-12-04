@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControlTest", "Custom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mml2vgmIDEx64", "mml2vgmIDEx64\mml2vgmIDEx64.csproj", "{79C6C74D-2D78-47DF-812B-7E93434132CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mml2vgmx64", "mml2vgmx64\mml2vgmx64.csproj", "{A979DE92-16E9-4913-9894-DF6CB570DB8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,18 @@ Global
 		{79C6C74D-2D78-47DF-812B-7E93434132CA}.Release|x64.ActiveCfg = Release|x64
 		{79C6C74D-2D78-47DF-812B-7E93434132CA}.Release|x64.Build.0 = Release|x64
 		{79C6C74D-2D78-47DF-812B-7E93434132CA}.Release|x86.ActiveCfg = Release|x64
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Debug|x64.Build.0 = Debug|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Debug|x86.Build.0 = Debug|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Release|x64.ActiveCfg = Release|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Release|x64.Build.0 = Release|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Release|x86.ActiveCfg = Release|Any CPU
+		{A979DE92-16E9-4913-9894-DF6CB570DB8C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

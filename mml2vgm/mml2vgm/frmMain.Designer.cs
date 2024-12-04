@@ -225,7 +225,7 @@
             // tsbOpen
             // 
             this.tsbOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbOpen.Image = global::mml2vgm.Properties.Resources.icon1;
+            this.tsbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpen.Image")));
             this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpen.Name = "tsbOpen";
             this.tsbOpen.Size = new System.Drawing.Size(23, 22);
@@ -235,7 +235,7 @@
             // tsbCompile
             // 
             this.tsbCompile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbCompile.Image = global::mml2vgm.Properties.Resources.icon2;
+            this.tsbCompile.Image = ((System.Drawing.Image)(resources.GetObject("tsbCompile.Image")));
             this.tsbCompile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCompile.Name = "tsbCompile";
             this.tsbCompile.Size = new System.Drawing.Size(23, 22);
@@ -251,7 +251,7 @@
             // 
             this.tsbOnPlay.CheckOnClick = true;
             this.tsbOnPlay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbOnPlay.Image = global::mml2vgm.Properties.Resources.icon3;
+            this.tsbOnPlay.Image = ((System.Drawing.Image)(resources.GetObject("tsbOnPlay.Image")));
             this.tsbOnPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOnPlay.Name = "tsbOnPlay";
             this.tsbOnPlay.Size = new System.Drawing.Size(23, 22);
@@ -261,7 +261,7 @@
             // 
             this.tsbWatcher.CheckOnClick = true;
             this.tsbWatcher.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbWatcher.Image = global::mml2vgm.Properties.Resources.icon4;
+            this.tsbWatcher.Image = ((System.Drawing.Image)(resources.GetObject("tsbWatcher.Image")));
             this.tsbWatcher.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbWatcher.Name = "tsbWatcher";
             this.tsbWatcher.Size = new System.Drawing.Size(23, 22);
@@ -272,7 +272,7 @@
             // 
             this.tsbToVGZ.CheckOnClick = true;
             this.tsbToVGZ.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbToVGZ.Image = global::mml2vgm.Properties.Resources.icon5;
+            this.tsbToVGZ.Image = ((System.Drawing.Image)(resources.GetObject("tsbToVGZ.Image")));
             this.tsbToVGZ.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbToVGZ.Name = "tsbToVGZ";
             this.tsbToVGZ.Size = new System.Drawing.Size(23, 22);
@@ -282,7 +282,7 @@
             // 
             this.tsbUseCache.CheckOnClick = true;
             this.tsbUseCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbUseCache.Image = global::mml2vgm.Properties.Resources.icon6;
+            this.tsbUseCache.Image = ((System.Drawing.Image)(resources.GetObject("tsbUseCache.Image")));
             this.tsbUseCache.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUseCache.Name = "tsbUseCache";
             this.tsbUseCache.Size = new System.Drawing.Size(23, 22);

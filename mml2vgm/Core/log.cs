@@ -40,7 +40,7 @@ namespace Core
                     DateTime dtNow = DateTime.Now;
                     string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
 
-                    Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+                    Encoding sjisEnc = Encoding.UTF8;// Encoding.GetEncoding("Shift_JIS");
                     lock (locker)
                     {
                         //using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
@@ -76,7 +76,7 @@ namespace Core
                 DateTime dtNow = DateTime.Now;
                 string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
 
-                Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+                Encoding sjisEnc = Encoding.UTF8;// Encoding.GetEncoding("Shift_JIS");
                 lock (locker)
                 {
                     //using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
@@ -119,7 +119,7 @@ namespace Core
                 DateTime dtNow = DateTime.Now;
                 string timefmt = dtNow.ToString("yyyy/MM/dd HH:mm:ss\t");
 
-                Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+                Encoding sjisEnc = Encoding.UTF8;// Encoding.GetEncoding("Shift_JIS");
                 lock (locker)
                 {
                     writer.WriteLine(timefmt + msg);
@@ -143,7 +143,8 @@ namespace Core
                     path = Path.Combine(fullPath, "log.txt");
                     if (File.Exists(path)) File.Delete(path);
                 }
-                Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+
+                Encoding sjisEnc = Encoding.UTF8;// Encoding.GetEncoding("Shift_JIS");
                 if (writer == null)
                 {
                     writer = new StreamWriter(path, true, sjisEnc);

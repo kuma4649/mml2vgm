@@ -37,6 +37,7 @@ namespace Core
         public bool usePCMCacheFromGUI = false;
         public bool isIDE = false;
         private bool doJumping=false;
+        public bool forceXGM2PCMMode = false;
 
         /// <summary>
         /// コンストラクタ
@@ -181,6 +182,7 @@ namespace Core
                     XGM2maker xmake = new XGM2maker(Disp);
                     desVGM.jumpPointClock = -1;
                     desVGM.jumpChannels = new List<Tuple<enmChipType, int>>();
+                    xmake.forcePCMMode = forceXGM2PCMMode;
                     desBuf = xmake.Build(desVGM, outVgmFile, writeFileMode);
                     Disp(msg.get("I04027"));
 

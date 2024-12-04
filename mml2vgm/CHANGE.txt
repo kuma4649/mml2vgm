@@ -1,4 +1,8 @@
 更新履歴
+TAG749 2024/12/4
+  mml2vgm(簡易UI版):x64 .NET8 で新規作成
+  mml2vgm(簡易UI版):XGM2:x64のみ:XGM2 forcePCMModeボタン追加。PCMを発音するXGM2を出力します。
+
 TAG748 2024/12/3
   Core:.gwi(.vgm/.xgm/.xgm2):コンパイルの速度少しアップ
 

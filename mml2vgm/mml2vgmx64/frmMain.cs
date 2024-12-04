@@ -1,12 +1,8 @@
-ï»¿using Core;
-using System;
-using System.Collections.Generic;
+using Core;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
-using System.Windows.Forms;
 
-namespace mml2vgm
+namespace mml2vgmx64
 {
     public partial class frmMain : Form
     {
@@ -197,7 +193,28 @@ namespace mml2vgm
                 {
                     try
                     {
-                        Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format == enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
+                        //Process.Start(Path.ChangeExtension(args[1], 
+                        //    (mv.desVGM.info.format == enmFormat.VGM) ?
+                        //    Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
+
+                        //System.Diagnostics.ProcessStartInfo psi =
+                        //    new System.Diagnostics.ProcessStartInfo();
+                        //psi.FileName = Path.ChangeExtension(args[1],
+                        //    (mv.desVGM.info.format == enmFormat.VGM) ?
+                        //    Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM);
+                        //psi.CreateNoWindow = true;
+                        //psi.UseShellExecute = false;
+                        //psi.RedirectStandardOutput = true;
+                        //System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
+
+                        Process.Start(new ProcessStartInfo
+                        {
+                            UseShellExecute = true,
+                            FileName = Path.ChangeExtension(args[1],
+                            (mv.desVGM.info.format == enmFormat.VGM) ?
+                            Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM)
+                        }).Dispose();
+
                     }
                     catch (Exception)
                     {
@@ -244,11 +261,11 @@ namespace mml2vgm
                 mv = new Mml2vgm(null, arg, desfn, stPath, Disp);
                 mv.isIDE = false;
                 mv.doSkip = true;
-                if(tsbUseCache.Checked)
+                if (tsbUseCache.Checked)
                 {
                     mv.usePCMCacheFromGUI = true;
                 }
-
+                mv.forceXGM2PCMMode = tsbXGM2ForcePCMMode.Checked;
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;
@@ -325,7 +342,6 @@ namespace mml2vgm
 
         private void tsbWatcher_CheckedChanged(object sender, EventArgs e)
         {
-            
             if (args == null || args.Length < 2)
             {
                 tsbWatcher.Checked = false;
@@ -401,11 +417,10 @@ namespace mml2vgm
                     tsbCompile_Click(null, null);
                     break;
                 default:
-                    //â†“KeyDataç¢ºèªç”¨
-                    //log.Write(string.Format("å‹•ä½œæœªå®šç¾©ã®ã‚­ãƒ¼ï¼š{0}",e.KeyData));
+                    //«KeyDataŠm”F—p
+                    //log.Write(string.Format("“®ì–¢’è‹`‚ÌƒL[F{0}",e.KeyData));
                     break;
             }
         }
     }
-
 }
