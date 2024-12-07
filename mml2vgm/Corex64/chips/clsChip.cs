@@ -2218,23 +2218,26 @@ namespace Corex64
 
         public virtual void CmdLyric(partPage page, MML mml)
         {
-            string str = (string)mml.args[0];
-            int ml = (int)mml.args[1];
-
-            if (ml < 1)
+            if (mml.args.Count > 1)
             {
-                msgBox.setErrMsg(msg.get("E10013")
-                    , mml.line.Lp);
-                ml = (int)page.length;
+                string str = (string)mml.args[0];
+                int ml = (int)mml.args[1];
+
+                if (ml < 1)
+                {
+                    msgBox.setErrMsg(msg.get("E10013")
+                        , mml.line.Lp);
+                    ml = (int)page.length;
+                }
+
+                str = string.Format("[{0}]{1}", parent.dSample.ToString(), str);
+                parent.lyric += str;
+                //WaitClockの決定
+                page.waitCounter = ml;
+                page.tie = false;
+
+                page.clockCounter += page.waitCounter;
             }
-
-            str = string.Format("[{0}]{1}", parent.dSample.ToString(), str);
-            parent.lyric += str;
-            //WaitClockの決定
-            page.waitCounter = ml;
-            page.tie = false;
-
-            page.clockCounter += page.waitCounter;
             SetDummyData(page, mml);
         }
 

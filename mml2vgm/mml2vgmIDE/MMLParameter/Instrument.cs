@@ -27,6 +27,7 @@ namespace mml2vgmIDE.MMLParameter
         public string[] lfoSw;
         public string[] lfo;
         public string[] hlfo;
+        public string[] memo;
         public int?[] detune;
         public int?[] keyShift;
         public int?[] keyOnMeter;
@@ -62,6 +63,7 @@ namespace mml2vgmIDE.MMLParameter
             lfoSw = new string[n];
             lfo = new string[n];
             hlfo = new string[n];
+            memo = new string[n];
             detune = new int?[n];
             keyShift = new int?[n];
             keyOnMeter = new int?[n];

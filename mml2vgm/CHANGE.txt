@@ -1,4 +1,7 @@
 更新履歴
+TAG752 2024/12/7 3rd
+  Core:PartCounter:.gwi:memo欄追加
+
 TAG751 2024/12/7 2nd
   Core:OPN系(OPNA2除く):yDT,yML,yyDT,yyML,yKS,yAR,yyKS,yyAR,yAM,yDR,yyAM,yyDR,ySL,yRR,yySL,yyRRコマンド追加
 

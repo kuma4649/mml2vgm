@@ -27,6 +27,7 @@ namespace mml2vgmIDEx64.MMLParameter
         public string[] lfoSw;
         public string[] lfo;
         public string[] hlfo;
+        public string[] memo;
         public int?[] detune;
         public int?[] keyShift;
         public int?[] keyOnMeter;
@@ -62,6 +63,7 @@ namespace mml2vgmIDEx64.MMLParameter
             lfoSw = new string[n];
             lfo = new string[n];
             hlfo = new string[n];
+            memo = new string[n];
             detune = new int?[n];
             keyShift = new int?[n];
             keyOnMeter = new int?[n];
@@ -356,6 +358,14 @@ namespace mml2vgmIDEx64.MMLParameter
 
         protected virtual void SetLyric(outDatum od, int ch, int cc)
         {
+            if (od.args.Count > 1)
+            {
+                //通常の歌詞
+                return;
+            }
+
+            //メモ
+            memo[ch]=(string)od.args[0];
         }
 
         protected virtual void SetVelocity(outDatum od, int ch, int cc)

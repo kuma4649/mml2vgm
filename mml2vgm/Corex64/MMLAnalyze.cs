@@ -283,6 +283,10 @@ namespace Corex64
                     log.Write("lylic");
                     CmdLyric(pw, page, mml);
                     break;
+                case '\'':
+                    log.Write("memo");
+                    CmdMemo(pw, page, mml);
+                    break;
                 case '_':
                     log.Write("bend / Portament one shot");
                     CmdBend(pw, page, mml);
@@ -4091,6 +4095,38 @@ namespace Corex64
             }
             length += futen;
             mml.args.Add(length);
+        }
+
+        private void CmdMemo(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            mml.type = enmMMLType.Lyric;
+            mml.args = new List<object>();
+            string str = "";
+            while (true)
+            {
+                char ch = pw.getChar(page);
+                if (ch == '\'')
+                {
+                    pw.incPos(page);
+                    break;
+                }
+                if (ch == '\\')
+                {
+                    pw.incPos(page);
+                    if (ch != '\'')
+                    {
+                        str += '\\';
+                    }
+                    ch = pw.getChar(page);
+                }
+                if (ch == '\0') break;
+
+                str += ch;
+                pw.incPos(page);
+            }
+            mml.args.Add(str);
+
         }
 
         private void CmdBend(partWork pw, partPage page, MML mml)

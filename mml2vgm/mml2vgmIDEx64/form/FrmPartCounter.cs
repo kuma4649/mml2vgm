@@ -419,6 +419,7 @@ namespace mml2vgmIDEx64
                 dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmMemo"].Value = mmli.memo[r] == null ? "" : mmli.memo[r].ToString();
                 DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
             }
 
@@ -730,6 +731,7 @@ namespace mml2vgmIDEx64
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmDetune"     ,"Detune"     ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMemo"       ,"Memo"       ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSpacer"     ,""           ,true,DataGridViewContentAlignment.NotSet)
         };
 

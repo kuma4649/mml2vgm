@@ -419,6 +419,7 @@ namespace mml2vgmIDE
                 dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmMemo"].Value = mmli.memo[r] == null ? "" : mmli.memo[r].ToString();
                 DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
             }
 
