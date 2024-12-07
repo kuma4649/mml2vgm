@@ -1,10 +1,10 @@
-﻿using Core;
+﻿using Corex64;
 using SoundManager;
 using System;
 using System.Collections.Generic;
 using static MDSound.dacControl;
 
-namespace mml2vgmIDE.Driver.ZGM
+namespace mml2vgmIDEx64.Driver.ZGM
 {
     public class zgm : baseDriver
     {
@@ -74,7 +74,7 @@ namespace mml2vgmIDE.Driver.ZGM
         //public Setting setting = null;
 
         public delegate void RefAction<T1, T2>(T1 arg1, ref T2 arg2);
-        private Dictionary<int, RefAction<outDatum, uint>> vgmCmdTbl = new Dictionary<int, RefAction<outDatum, uint>>();
+        private Dictionary<int, RefAction<outDatum, uint>> vgmCmdTbl = [];
 
         public List<Chip> chips = null;
 
@@ -88,16 +88,16 @@ namespace mml2vgmIDE.Driver.ZGM
 
         private const int PCM_BANK_COUNT = 0x40;
         public VGM_PCM_BANK[] PCMBank = new VGM_PCM_BANK[PCM_BANK_COUNT];
-        private PCMBANK_TBL PCMTbl = new PCMBANK_TBL();
+        private PCMBANK_TBL PCMTbl = new();
         private byte DacCtrlUsed;
         private byte[] DacCtrlUsg = new byte[0xFF];
         private DACCTRL_DATA[] DacCtrl = new DACCTRL_DATA[0xFF];
 
-        private byte[][] ym2609AdpcmA = new byte[2][] { null, null };
-        private byte[][] ym2610AdpcmA = new byte[2][] { null, null };
-        private byte[][] ym2610AdpcmB = new byte[2][] { null, null };
+        private byte[][] ym2609AdpcmA = [null, null];
+        private byte[][] ym2610AdpcmA = [null, null];
+        private byte[][] ym2610AdpcmB = [null, null];
 
-        private List<byte> pcmDat = new List<byte>();
+        private List<byte> pcmDat = [];
         private int chipCommandSize = 1;
 
         public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime, long jumpPointClock)
@@ -111,8 +111,8 @@ namespace mml2vgmIDE.Driver.ZGM
 
             //dumpCounter = 0;
 
-            ym2610AdpcmA = new byte[2][] { null, null };
-            ym2610AdpcmB = new byte[2][] { null, null };
+            ym2610AdpcmA = [null, null];
+            ym2610AdpcmB = [null, null];
 
             if (!getInformationHeader()) return false;
 
@@ -497,7 +497,7 @@ namespace mml2vgmIDE.Driver.ZGM
                 case Driver.ZGM.ZgmChip.YM2612 _:
                     pcmDat.Clear();
                     for (uint i = bAdr; i < bAdr + bLen; i++) pcmDat.Add(vgmBuf[i].val);
-                    chipRegister.DACControlAddPCMData(bType, bLen, 0, pcmDat.ToArray());
+                    chipRegister.DACControlAddPCMData(bType, bLen, 0, [.. pcmDat]);
                     //AddPCMData(bType, bLen, bAdr);
                     vgmAdr += (uint)bLen + 7;
                     break;
@@ -592,14 +592,14 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint segapcm_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.SEGAPCMWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, segapcm_romSize, segapcm_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.SEGAPCMWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, segapcm_romSize, segapcm_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
                 case Driver.ZGM.ZgmChip.YM2608 _:
                     //uint opna_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
                     uint opna_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
-                    List<PackData> opna_data = new List<PackData>
-                            {
+                    List<PackData> opna_data =
+                            [
                                 new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x20,null),
                                 new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x21,null),
                                 new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x00,null),
@@ -617,7 +617,7 @@ namespace mml2vgmIDE.Driver.ZGM
                                 new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x05, 0xff,null),
                                 new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x0c, 0xff,null),
                                 new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x0d, 0xff,null)
-                            };
+                            ];
 
                     // データ転送
                     for (int cnt = 0; cnt < bLen - 8; cnt++)
@@ -649,13 +649,14 @@ namespace mml2vgmIDE.Driver.ZGM
                     //chipRegister.setYM2608Register(0x1, 0x00, 0x00, model);
                     //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
 
-                    SoundManager.Chip opna_dummyChip = new SoundManager.Chip(1);
-
-                    opna_dummyChip.Model = chipRegister.YM2608[chip.Index].Model;
-                    opna_dummyChip.Delay = chipRegister.YM2608[chip.Index].Delay;
-                    opna_dummyChip.Device = chipRegister.YM2608[chip.Index].Device;
-                    opna_dummyChip.Number = chipRegister.YM2608[chip.Index].Number;
-                    opna_dummyChip.Use = chipRegister.YM2608[chip.Index].Use;
+                    SoundManager.Chip opna_dummyChip = new(1)
+                    {
+                        Model = chipRegister.YM2608[chip.Index].Model,
+                        Delay = chipRegister.YM2608[chip.Index].Delay,
+                        Device = chipRegister.YM2608[chip.Index].Device,
+                        Number = chipRegister.YM2608[chip.Index].Number,
+                        Use = chipRegister.YM2608[chip.Index].Use
+                    };
 
                     if (chipRegister.YM2608[chip.Index].Model == EnmVRModel.RealModel)
                     {
@@ -669,7 +670,7 @@ namespace mml2vgmIDE.Driver.ZGM
                         }
                     }
 
-                    chipRegister.YM2608SetRegister(od, Audio.DriverSeqCounter, opna_dummyChip, opna_data.ToArray());
+                    chipRegister.YM2608SetRegister(od, Audio.DriverSeqCounter, opna_dummyChip, [.. opna_data]);
 
                     //dumpData(dummyChip, "YM2608_ADPCM", vgmAdr + 15, bLen - 8);
                     vgmAdr += (uint)bLen + 7;
@@ -717,7 +718,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint ymf278B_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
                     uint ymf278B_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                    chipRegister.writeYMF278BPCMData((byte)chip.Index, ymf278B_romSize, ymf278B_startAddress, bLen - 8, pcmDat.ToArray(), 0);
+                    chipRegister.writeYMF278BPCMData((byte)chip.Index, ymf278B_romSize, ymf278B_startAddress, bLen - 8, [.. pcmDat], 0);
                     //dumpData(model, "YMF278B_PCMData", vgmAdr + 15, bLen - 8);
                     break;
 
@@ -780,7 +781,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint c140_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.C140WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, c140_romSize, c140_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.C140WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, c140_romSize, c140_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
 
@@ -789,7 +790,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint c352_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.C352WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, c352_romSize, c352_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.C352WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, c352_romSize, c352_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
 
@@ -798,7 +799,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint K053260_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.K053260WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, K053260_romSize, K053260_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.K053260WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, K053260_romSize, K053260_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
 
@@ -807,7 +808,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint K054539_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.K054539WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, K054539_romSize, K054539_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.K054539WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, K054539_romSize, K054539_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
 
@@ -816,7 +817,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint QSound_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.QSoundWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, QSound_romSize, QSound_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.QSoundWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, QSound_romSize, QSound_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     //            // QSound
                     //            //chipRegister.writeQSoundPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
@@ -831,7 +832,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint RF5C164_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.RF5C164WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, RF5C164_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.RF5C164WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, RF5C164_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
 
@@ -840,7 +841,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     uint NES_startAddress = Common.getLE32(vgmBuf, vgmAdr + 7);// 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
-                    chipRegister.NESWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, NES_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    chipRegister.NESWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, NES_startAddress, (uint)pcmDat.Count, [.. pcmDat], 0);
                     vgmAdr += (uint)bLen + 7;
                     break;
 
@@ -1624,7 +1625,7 @@ namespace mml2vgmIDE.Driver.ZGM
 
         protected bool getInformationHeader()
         {
-            chips = new List<Chip>();
+            chips = [];
             UsedChips = "";
 
             SN76489ClockValue = 0;
@@ -1695,7 +1696,7 @@ namespace mml2vgmIDE.Driver.ZGM
 
             uint pos = defineAddress;
 
-            Dictionary<string, int> chipCount = new Dictionary<string, int>();
+            Dictionary<string, int> chipCount = [];
             for (int i = 0; i < defineCount; i++)
             {
                 fcc = Common.getLE24(vgmBuf, pos);
@@ -1731,13 +1732,13 @@ namespace mml2vgmIDE.Driver.ZGM
         private string GetUsedChipsString(List<Chip> chips)
         {
             //同じチップの数をそれぞれ集計する
-            Dictionary<string, int> c = new Dictionary<string, int>();
+            Dictionary<string, int> c = [];
             foreach (ZgmChip.ZgmChip chip in chips)
             {
                 if (c.ContainsKey(chip.name)) c[chip.name]++;
                 else c.Add(chip.name, 1);
             }
-            List<string> cc = new List<string>();
+            List<string> cc = [];
             foreach (string k in c.Keys)
             {
                 cc.Add(k + (c[k] < 2 ? "" : string.Format(" x{0}", c[k])));

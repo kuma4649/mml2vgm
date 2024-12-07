@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class Document
     {

@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Corex64;
 using mml2vgmIDEx64.Properties;
 using musicDriverInterface;
 using NAudio.Midi;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class MIDIKbd
     {

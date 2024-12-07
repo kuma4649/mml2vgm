@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE.form
+namespace mml2vgmIDEx64.form
 {
     public partial class FrmReplaceBox : Form
     {

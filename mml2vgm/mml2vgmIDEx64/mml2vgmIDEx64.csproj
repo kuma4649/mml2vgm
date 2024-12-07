@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Corex64\Corex64.csproj" />
     <ProjectReference Include="..\CustomControl\CustomControl.csproj" />
   </ItemGroup>
 

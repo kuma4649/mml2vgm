@@ -1,6 +1,6 @@
-﻿using Core;
+﻿using Corex64;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public abstract class baseDriver
     {

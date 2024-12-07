@@ -1,13 +1,13 @@
-﻿namespace mml2vgmIDE
+﻿namespace mml2vgmIDEx64
 {
     public class RealTimeMML
     {
-        public double samplesPerClock = Core.Information.DEFAULT_SAMPLES_PER_CLOCK;
-        public long tempo = Core.Information.DEFAULT_TEMPO;
-        public long clockCount = Core.Information.DEFAULT_CLOCK_COUNT;
+        public double samplesPerClock = Corex64.Information.DEFAULT_SAMPLES_PER_CLOCK;
+        public long tempo = Corex64.Information.DEFAULT_TEMPO;
+        public long clockCount = Corex64.Information.DEFAULT_CLOCK_COUNT;
         public double sampleCount = 0.0;
-        public Core.ClsChip chip = null;
-        public Core.ClsVgm vgm = null;
+        public Corex64.ClsChip chip = null;
+        public Corex64.ClsVgm vgm = null;
 
         public void OneFrameSeq()
         {
@@ -18,7 +18,7 @@
             clockCount = Audio.sm.CurrentClockCount;
 
             //割り込み回数が１クロック当たりのサンプル数を超えたかチェック
-            samplesPerClock = Core.Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (tempo * clockCount);
+            samplesPerClock = Corex64.Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (tempo * clockCount);
             sampleCount++;
             if (sampleCount < samplesPerClock) return;
             sampleCount -= samplesPerClock;
@@ -30,7 +30,7 @@
 
         private void vgm_getByteData()
         {
-            Core.partWork pw;
+            Corex64.partWork pw;
             for (int i = 0; i < chip.lstPartWork.Count; i++)
             {
                 pw = chip.lstPartWork[
@@ -51,7 +51,7 @@
 
         private void DecWaitCounter()
         {
-            foreach (Core.partWork pw in chip.lstPartWork)
+            foreach (Corex64.partWork pw in chip.lstPartWork)
             {
 
                 if (pw.pg[0].waitKeyOnCounter > 0) pw.pg[0].waitKeyOnCounter--;

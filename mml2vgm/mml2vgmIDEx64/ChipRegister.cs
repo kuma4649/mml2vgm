@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Corex64;
 using MDSound.np.chip;
 using MDSound.np.cpu;
 using MDSound.np.memory;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class ChipRegister
     {

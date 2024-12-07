@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class EnvironmentE
     {

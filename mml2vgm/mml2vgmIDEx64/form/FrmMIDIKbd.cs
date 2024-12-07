@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Corex64;
 using mml2vgmIDEx64.Properties;
 using musicDriverInterface;
 using NAudio.Midi;
@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public partial class FrmMIDIKbd : Form
     {

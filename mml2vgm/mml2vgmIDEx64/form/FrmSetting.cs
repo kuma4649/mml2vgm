@@ -8,7 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public partial class FrmSetting : Form
     {

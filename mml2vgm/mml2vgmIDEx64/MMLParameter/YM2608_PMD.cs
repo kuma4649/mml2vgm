@@ -1,11 +1,11 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mml2vgmIDE.MMLParameter
+namespace mml2vgmIDEx64.MMLParameter
 {
     public class YM2608_PMD : Instrument
     {

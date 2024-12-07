@@ -1,6 +1,6 @@
 ﻿using mml2vgmIDEx64.Properties;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     partial class FrmLog
     {

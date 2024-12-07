@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     [Serializable]
     public class ColorScheme

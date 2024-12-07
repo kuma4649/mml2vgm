@@ -1,9 +1,9 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 using System.Net.Http.Headers;
 using static MDSound.XGMFunction;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class xgm2 : baseDriver
     {
@@ -329,7 +329,7 @@ namespace mml2vgmIDE
 
                 if (dat.type == musicDriverInterface.enmMMLType.IDE && dat.args.Count > 0 && dat.args[0] is outDatum)
                 {
-                    if (Core.Common.CheckDummyCommand(((outDatum)dat.args[0]).type))
+                    if (Corex64.Common.CheckDummyCommand(((outDatum)dat.args[0]).type))
                         chipRegister.YM2612SetRegister(((outDatum)dat.args[0]), Audio.DriverSeqCounter, 0, 0, -1, -1);
                     continue;
                 }
@@ -650,7 +650,7 @@ namespace mml2vgmIDE
 
                 if (odDat.type == musicDriverInterface.enmMMLType.IDE && odDat.args.Count > 0 && odDat.args[0] is outDatum)
                 {
-                    if (Core.Common.CheckDummyCommand(((outDatum)odDat.args[0]).type))
+                    if (Corex64.Common.CheckDummyCommand(((outDatum)odDat.args[0]).type))
                         chipRegister.YM2612SetRegister(((outDatum)odDat.args[0]), Audio.DriverSeqCounter, 0, 0, -1, -1);
                     continue;
                 }

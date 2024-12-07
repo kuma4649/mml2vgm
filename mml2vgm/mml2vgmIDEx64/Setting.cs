@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     [Serializable]
     public class Setting

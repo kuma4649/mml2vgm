@@ -1,7 +1,7 @@
-﻿using Core;
+﻿using Corex64;
 using System.Collections.Generic;
 
-namespace mml2vgmIDE.Driver.ZGM.ZgmChip
+namespace mml2vgmIDEx64.Driver.ZGM.ZgmChip
 {
     public abstract class ZgmChip : SoundManager.Chip
     {
@@ -10,7 +10,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
         protected outDatum[] vgmBuf;
 
         public string name;
-        public Core.DefineInfo defineInfo;
+        public Corex64.DefineInfo defineInfo;
 
         public ZgmChip(int ch) : base(ch)
         {
@@ -19,7 +19,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
         public virtual void Setup(int chipIndex, ref uint dataPos, ref Dictionary<int, Driver.ZGM.zgm.RefAction<outDatum, uint>> cmdTable)
         {
             this.Index = chipIndex;
-            defineInfo = new Core.DefineInfo();
+            defineInfo = new Corex64.DefineInfo();
             defineInfo.length = vgmBuf[dataPos + 0x03].val;
             defineInfo.chipIdentNo = Common.getLE32(vgmBuf, dataPos + 0x4);
             defineInfo.commandNo = (int)Common.getLE16(vgmBuf, dataPos + 0x8);

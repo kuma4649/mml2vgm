@@ -1,0 +1,4 @@
+﻿' OPLL(FM) : Fnum = 9 * 2^(22-B) * ftone / M       ftone:Hz M:MasterClock B:Block
+'       c    c+   d    d+   e    f    f+   g    g+   a    a+   b
+FNUM_00=$158,$16a,$180,$198,$1b0,$1ca,$1e4,$202,$220,$240,$262,$286,$2b0
+

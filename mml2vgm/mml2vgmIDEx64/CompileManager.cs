@@ -1,11 +1,11 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class CompileManager
     {

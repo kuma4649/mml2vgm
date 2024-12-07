@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE.form
+namespace mml2vgmIDEx64.form
 {
     public partial class FormN88Files : Form
     {

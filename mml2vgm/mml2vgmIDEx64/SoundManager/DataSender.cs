@@ -1,5 +1,5 @@
-﻿using Core;
-using mml2vgmIDE;
+﻿using Corex64;
+using mml2vgmIDEx64;
 using musicDriverInterface;
 using System;
 using System.Diagnostics;
@@ -362,7 +362,7 @@ namespace SoundManager
             }
             catch (Exception ex)
             {
-                mml2vgmIDE.log.ForcedWrite(ex);
+                mml2vgmIDEx64.log.ForcedWrite(ex);
                 lock (lockObj)
                 {
                     isRunning = false;

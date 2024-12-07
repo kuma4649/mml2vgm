@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class InstrumentAtValSound
     {

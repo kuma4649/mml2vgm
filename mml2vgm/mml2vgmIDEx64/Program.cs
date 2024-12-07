@@ -1,4 +1,3 @@
-using mml2vgmIDE;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 

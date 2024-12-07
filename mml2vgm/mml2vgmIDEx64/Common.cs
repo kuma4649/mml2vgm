@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Collections;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public static class Common
     {

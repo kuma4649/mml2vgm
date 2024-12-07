@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Corex64;
 using IronPython.Hosting;
 using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public static class ScriptInterface
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mml2vgmIDE.Tool.CSM
+namespace mml2vgmIDEx64.Tool.CSM
 {
     //参照元:
     //「NRTDRV」

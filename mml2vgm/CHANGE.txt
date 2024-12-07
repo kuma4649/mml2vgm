@@ -1,4 +1,8 @@
 更新履歴
+TAG750 2024/12/7
+  mvc:x64 .NET8 で新規作成
+  Core:x64 .NET8 で新規作成(mml2vgmx64,mml2vgmIDEx64,mvcx64で使用します)
+
 TAG749 2024/12/4
   mml2vgm(簡易UI版):x64 .NET8 で新規作成
   mml2vgm(簡易UI版):XGM2:x64のみ:XGM2 forcePCMModeボタン追加。PCMを発音するXGM2を出力します。

@@ -3,7 +3,7 @@ using Sgry.Azuki;
 using System.Text.RegularExpressions;
 using System.Drawing;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class VGMHighlighter : IHighlighter
     {

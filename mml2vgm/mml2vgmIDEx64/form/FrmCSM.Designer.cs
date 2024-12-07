@@ -1,5 +1,5 @@
 ﻿
-namespace mml2vgmIDE.form
+namespace mml2vgmIDEx64.form
 {
     partial class FrmCSM
     {

@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class NullOut : IWavePlayer, IDisposable
     {

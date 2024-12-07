@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class InstrumentAtLocal
     {
@@ -128,7 +128,7 @@ namespace mml2vgmIDE
             try
             {
                 string stPath = System.Windows.Forms.Application.StartupPath;
-                Core.Mml2vgm mv = new Core.Mml2vgm(null, srcFn, "", stPath, Disp);
+                Corex64.Mml2vgm mv = new Corex64.Mml2vgm(null, srcFn, "", stPath, Disp);
                 mv.isIDE = true;
                 if (mv.Start_Analyze() != 0) return null;
 
@@ -194,7 +194,7 @@ namespace mml2vgmIDE
                 Dictionary<int, Tuple<string, byte[]>> instOPL = mv.desVGM.instOPL;
                 foreach (int num in instOPL.Keys)
                 {
-                    if (instOPL[num].Item2.Length == Core.Const.OPLL_INSTRUMENT_SIZE)
+                    if (instOPL[num].Item2.Length == Corex64.Const.OPLL_INSTRUMENT_SIZE)
                     {
                         string name = instOPL[num].Item1;
                         if (string.IsNullOrEmpty(name))
@@ -207,7 +207,7 @@ namespace mml2vgmIDE
                             ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str, ""));
                         }
                     }
-                    else if (instOPL[num].Item2.Length == Core.Const.OPL3_INSTRUMENT_SIZE)
+                    else if (instOPL[num].Item2.Length == Corex64.Const.OPL3_INSTRUMENT_SIZE)
                     {
                         string name = instOPL[num].Item1;
                         if (string.IsNullOrEmpty(name))
@@ -220,7 +220,7 @@ namespace mml2vgmIDE
                             ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
                         }
                     }
-                    else if (instOPL[num].Item2.Length == Core.Const.OPL_OP4_INSTRUMENT_SIZE)
+                    else if (instOPL[num].Item2.Length == Corex64.Const.OPL_OP4_INSTRUMENT_SIZE)
                     {
                         string name = instOPL[num].Item1;
                         if (string.IsNullOrEmpty(name))

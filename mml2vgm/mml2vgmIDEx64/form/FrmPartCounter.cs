@@ -1,4 +1,4 @@
-﻿using mml2vgmIDE.MMLParameter;
+﻿using mml2vgmIDEx64.MMLParameter;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public partial class FrmPartCounter : DockContent, IForm
     {

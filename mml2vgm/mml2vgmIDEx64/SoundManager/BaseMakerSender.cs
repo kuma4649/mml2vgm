@@ -1,5 +1,5 @@
-﻿using Core;
-using mml2vgmIDE;
+﻿using Corex64;
+using mml2vgmIDEx64;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

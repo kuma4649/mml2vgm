@@ -1,11 +1,11 @@
-﻿using Core;
+﻿using Corex64;
 using SoundManager;
 using System;
 using System.Collections.Generic;
 using static MDSound.dacControl;
 using System.Text;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class vgm : baseDriver
     {

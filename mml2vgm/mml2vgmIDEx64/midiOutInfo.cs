@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     [Serializable]
     public class midiOutInfo

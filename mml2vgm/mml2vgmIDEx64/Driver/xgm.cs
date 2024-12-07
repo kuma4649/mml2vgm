@@ -1,7 +1,7 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class xgm : baseDriver
     {
@@ -199,7 +199,7 @@ namespace mml2vgmIDE
                 }
 
                 //TODO: Dummy Command
-                if (cmd.val == 0x60 && Core.Common.CheckDummyCommand(cmd.type))
+                if (cmd.val == 0x60 && Corex64.Common.CheckDummyCommand(cmd.type))
                 {
                     chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, -1, -1);
                     musicPtr += 2;

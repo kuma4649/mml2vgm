@@ -1,10 +1,10 @@
-﻿using Core;
+﻿using Corex64;
 using musicDriverInterface;
 using SoundManager;
 using System;
 using System.Collections.Generic;
 
-namespace mml2vgmIDE.MMLParameter
+namespace mml2vgmIDEx64.MMLParameter
 {
     public class Manager
     {

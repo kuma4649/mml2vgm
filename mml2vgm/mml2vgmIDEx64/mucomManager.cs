@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class mucomManager
     {

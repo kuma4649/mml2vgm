@@ -1,9 +1,9 @@
-﻿using Core;
+﻿using Corex64;
 using musicDriverInterface;
 using System;
 using System.Linq;
 
-namespace mml2vgmIDE.MMLParameter
+namespace mml2vgmIDEx64.MMLParameter
 {
     public class YM2610B_mucom : Instrument
     {

@@ -1,4 +1,4 @@
-﻿namespace mml2vgmIDE
+﻿namespace mml2vgmIDEx64
 {
     public enum EnmRealChipType : int
     {

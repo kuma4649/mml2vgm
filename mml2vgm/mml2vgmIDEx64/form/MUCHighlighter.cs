@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class MUCHighlighter : IHighlighter
     {

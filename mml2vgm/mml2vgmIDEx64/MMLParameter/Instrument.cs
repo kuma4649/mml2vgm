@@ -1,11 +1,11 @@
-﻿using Core;
+﻿using Corex64;
 using musicDriverInterface;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace mml2vgmIDE.MMLParameter
+namespace mml2vgmIDEx64.MMLParameter
 {
     public abstract class Instrument
     {
@@ -315,9 +315,9 @@ namespace mml2vgmIDE.MMLParameter
         protected virtual void SetNote(outDatum od, int ch, int cc)
         {
             if (ch >= notecmd.Length) return;
-            if (!(od.args[0] is Core.Note)) return;
+            if (!(od.args[0] is Corex64.Note)) return;
 
-            Core.Note nt = (Core.Note)od.args[0];
+            Corex64.Note nt = (Corex64.Note)od.args[0];
             int shift = nt.shift;
             string f = Math.Sign(shift) >= 0 ? string.Concat(Enumerable.Repeat("+", shift)) : string.Concat(Enumerable.Repeat("-", -shift));
             if (nt.trueKeyOn)
@@ -345,9 +345,9 @@ namespace mml2vgmIDE.MMLParameter
         protected virtual void SetRest(outDatum od, int ch, int cc)
         {
             if (ch >= notecmd.Length) return;
-            if (!(od.args[0] is Core.Rest)) return;
+            if (!(od.args[0] is Corex64.Rest)) return;
 
-            Core.Rest rs = (Core.Rest)od.args[0];
+            Corex64.Rest rs = (Corex64.Rest)od.args[0];
             notecmd[ch] = "r";
             length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
         }
@@ -393,7 +393,7 @@ namespace mml2vgmIDE.MMLParameter
             ;
         }
 
-        public void bendOctaveHosei(outDatum od,Core.Note nt)
+        public void bendOctaveHosei(outDatum od,Corex64.Note nt)
         {
             if (!nt.bendSw) return;
             foreach (MML o in nt.bendOctave)

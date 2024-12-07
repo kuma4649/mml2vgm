@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class SienSearch
     {

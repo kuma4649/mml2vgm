@@ -1,4 +1,4 @@
-using Core;
+using Corex64;
 using System.Diagnostics;
 using System.IO;
 
@@ -17,13 +17,13 @@ namespace mml2vgmx64
         {
             InitializeComponent();
 #if DEBUG
-            Core.log.debug = true;
+            Corex64.log.debug = true;
 #endif
         }
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
+            Corex64.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             string[] args = Environment.GetCommandLineArgs();
             if (args != null && args.Length > 1)
             {
@@ -228,8 +228,8 @@ namespace mml2vgmx64
 
         private void startCompile()
         {
-            Core.log.Open();
-            Core.log.Write("start compile thread");
+            Corex64.log.Open();
+            Corex64.log.Write("start compile thread");
 
             Action dmy = updateTitle;
             string stPath = System.Windows.Forms.Application.StartupPath;
@@ -246,7 +246,7 @@ namespace mml2vgmx64
                 title = Path.GetFileName(arg);
                 this.Invoke(dmy);
 
-                Core.log.Write(string.Format("  compile at [{0}]", args[i]));
+                Corex64.log.Write(string.Format("  compile at [{0}]", args[i]));
 
                 msgBox.clear();
 
@@ -256,7 +256,7 @@ namespace mml2vgmx64
                     desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
                 }
 
-                Core.log.Write("Call mml2vgm core");
+                Corex64.log.Write("Call mml2vgm core");
 
                 mv = new Mml2vgm(null, arg, desfn, stPath, Disp);
                 mv.isIDE = false;
@@ -272,23 +272,23 @@ namespace mml2vgmx64
                     break;
                 }
 
-                Core.log.Write("Return mml2vgm core");
+                Corex64.log.Write("Return mml2vgm core");
             }
 
-            Core.log.Write("Disp Result");
+            Corex64.log.Write("Disp Result");
 
             dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Core.log.Write("end compile thread");
-            Core.log.Close();
+            Corex64.log.Write("end compile thread");
+            Corex64.log.Close();
         }
 
         private void Disp(string msg)
         {
             Action<string> msgDisp = MsgDisp;
             this.Invoke(msgDisp, msg);
-            Core.log.Write(msg);
+            Corex64.log.Write(msg);
         }
 
         private void MsgDisp(string msg)

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class SienItem
     {

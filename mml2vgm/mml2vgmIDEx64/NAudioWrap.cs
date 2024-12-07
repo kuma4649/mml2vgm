@@ -3,7 +3,7 @@ using NAudio.Wave;
 using System;
 using System.Threading;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public static class NAudioWrap
     {
@@ -42,15 +42,15 @@ namespace mml2vgmIDE
         public static void Start(Setting setting)
         {
             NAudioWrap.setting = setting;
-            if (waveOut != null) waveOut.Dispose();
+            waveOut?.Dispose();
             waveOut = null;
-            if (wasapiOut != null) wasapiOut.Dispose();
+            wasapiOut?.Dispose();
             wasapiOut = null;
-            if (dsOut != null) dsOut.Dispose();
+            dsOut?.Dispose();
             dsOut = null;
-            if (asioOut != null) asioOut.Dispose();
+            asioOut?.Dispose();
             asioOut = null;
-            if (nullOut != null) nullOut.Dispose();
+            nullOut?.Dispose();
             nullOut = null;
 
             try
@@ -189,9 +189,11 @@ namespace mml2vgmIDE
         private static void StartWaveOut(Setting setting)
         {
             log.ForcedWrite("NAudioWrap:Start:Start Wave Init.");
-            waveOut = new WaveOutEvent();
-            waveOut.DeviceNumber = 0;
-            waveOut.DesiredLatency = setting.outputDevice.Latency;
+            waveOut = new WaveOutEvent
+            {
+                DeviceNumber = 0,
+                DesiredLatency = setting.outputDevice.Latency
+            };
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
                 if (setting.outputDevice.WaveOutDeviceName == WaveOut.GetCapabilities(i).ProductName)
@@ -226,10 +228,7 @@ namespace mml2vgmIDE
 
         public static void ShowControlPanel(string asioDriverName)
         {
-            if (asioOut != null)
-            {
-                asioOut.Dispose();
-            }
+            asioOut?.Dispose();
 
             int i = 0;
             foreach (string s in AsioOut.GetDriverNames())

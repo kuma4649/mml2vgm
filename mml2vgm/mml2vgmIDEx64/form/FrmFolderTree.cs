@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public partial class FrmFolderTree : WeifenLuo.WinFormsUI.Docking.DockContent
     {
@@ -673,7 +673,7 @@ namespace mml2vgmIDE
                 }
                 if (!tn.Checked && !tn.IsSelected) continue;
 
-                string fullpath = Core.Common.PathCombine(Core.Common.GetDirectoryName(basePath), Path.GetFullPath(tn.FullPath));
+                string fullpath = Corex64.Common.PathCombine(Corex64.Common.GetDirectoryName(basePath), Path.GetFullPath(tn.FullPath));
                 lstFullPath.Add(fullpath);
             }
         }

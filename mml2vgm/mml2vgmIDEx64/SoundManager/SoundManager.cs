@@ -1,5 +1,5 @@
-﻿using Core;
-using mml2vgmIDE;
+﻿using Corex64;
+using mml2vgmIDEx64;
 using System;
 using System.Windows.Forms;
 
@@ -198,7 +198,7 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
-                        mml2vgmIDE.log.Write("timeout : stop request at dataMaker");
+                        mml2vgmIDEx64.log.Write("timeout : stop request at dataMaker");
                         break;
                     }
                 }
@@ -215,7 +215,7 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
-                        mml2vgmIDE.log.Write("timeout : stop request at dataSender");
+                        mml2vgmIDEx64.log.Write("timeout : stop request at dataSender");
                         break;
                     }
                 }
@@ -232,7 +232,7 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
-                        mml2vgmIDE.log.Write("timeout : stop request at emuChipSender");
+                        mml2vgmIDEx64.log.Write("timeout : stop request at emuChipSender");
                         //emuChipSender.recvBuffer.Init(DATA_SEQUENCE_FREQUENCE);
                         emuChipSender.recvBuffer.Clear();
                         break;
@@ -252,7 +252,7 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
-                        mml2vgmIDE.log.Write("timeout : stop request at realChipSender");
+                        mml2vgmIDEx64.log.Write("timeout : stop request at realChipSender");
                         break;
                     }
                 }

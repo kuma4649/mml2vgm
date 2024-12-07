@@ -2,7 +2,7 @@
 using NiseC86ctl;
 using NScci;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class RealChip : IDisposable
     {

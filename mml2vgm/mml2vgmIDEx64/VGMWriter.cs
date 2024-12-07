@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class VGMWriter
     {
@@ -234,7 +234,7 @@ namespace mml2vgmIDE
             if (chip.Model != EnmVRModel.VirtualModel) return;
             if (chip.Index != 0) return;
 
-            if (chip.Device == Core.EnmZGMDevice.YM2608)
+            if (chip.Device == Corex64.EnmZGMDevice.YM2608)
             {
                 if (address == -1 && data == -1)
                 {
@@ -251,7 +251,7 @@ namespace mml2vgmIDE
                     WriteYM2608(chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                 }
             }
-            else if (chip.Device == Core.EnmZGMDevice.YM2610B)
+            else if (chip.Device == Corex64.EnmZGMDevice.YM2610B)
             {
                 if (type == EnmDataType.Block)
                 {
@@ -283,7 +283,7 @@ namespace mml2vgmIDE
                     WriteYM2610(chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                 }
             }
-            else if (chip.Device == Core.EnmZGMDevice.YM2151)
+            else if (chip.Device == Corex64.EnmZGMDevice.YM2151)
             {
                 if (address == -1 && data == -1)
                 {

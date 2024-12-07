@@ -1,4 +1,4 @@
-﻿namespace mml2vgmIDE
+﻿namespace mml2vgmIDEx64
 {
     internal class ChannelInfo
     {

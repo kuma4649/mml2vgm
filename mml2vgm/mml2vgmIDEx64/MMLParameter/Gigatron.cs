@@ -1,11 +1,11 @@
-﻿using Core;
+﻿using Corex64;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mml2vgmIDE.MMLParameter
+namespace mml2vgmIDEx64.MMLParameter
 {
     public class Gigatron:Instrument
     {
@@ -27,7 +27,7 @@ namespace mml2vgmIDE.MMLParameter
 
         protected override void SetNote(outDatum od, int ch, int cc)
         {
-            Core.Note nt = (Core.Note)od.args[0];
+            Corex64.Note nt = (Corex64.Note)od.args[0];
             int shift = nt.shift;
             string f = Math.Sign(shift) >= 0 ? string.Concat(Enumerable.Repeat("+", shift)) : string.Concat(Enumerable.Repeat("-", -shift));
             if (nt.trueKeyOn)

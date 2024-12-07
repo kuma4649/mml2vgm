@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public partial class FrmLog : WeifenLuo.WinFormsUI.Docking.DockContent
     {

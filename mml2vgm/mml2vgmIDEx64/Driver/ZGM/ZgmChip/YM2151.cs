@@ -1,7 +1,7 @@
-﻿using Core;
+﻿using Corex64;
 using System.Collections.Generic;
 
-namespace mml2vgmIDE.Driver.ZGM.ZgmChip
+namespace mml2vgmIDEx64.Driver.ZGM.ZgmChip
 {
     public class YM2151 : ZgmChip
     {

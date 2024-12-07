@@ -1,6 +1,6 @@
-﻿using Core;
-using mml2vgmIDE.D88N88;
-using mml2vgmIDE.form;
+﻿using Corex64;
+using mml2vgmIDEx64.D88N88;
+using mml2vgmIDEx64.form;
 using mml2vgmIDEx64.Properties;
 using musicDriverInterface;
 using Sgry.Azuki.WinForms;
@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public partial class FrmMain : Form
     {
@@ -176,7 +176,7 @@ namespace mml2vgmIDE
         private void Form1_Shown(object sender, EventArgs e)
         {
             UpdateControl();
-            Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
+            Corex64.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             if(setting.other.UseMucomDotNET) CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             if (setting.other.UsePMDDotNET) CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             if (setting.other.UseMoonDriverDotNET) CheckAndLoadMoonDriverDotNET(System.Windows.Forms.Application.StartupPath, Disp);
@@ -1789,16 +1789,16 @@ namespace mml2vgmIDE
 
         private void startPreprocess()
         {
-            Core.log.Open();
-            Core.log.Write("start preprocess thread");
+            Corex64.log.Open();
+            Corex64.log.Write("start preprocess thread");
             Action dmy = updateTitle;
             this.Invoke(dmy);
-            Core.log.Write(string.Format("  preprocess at [{0}]", title));
+            Corex64.log.Write(string.Format("  preprocess at [{0}]", title));
             msgBox.clear();
 
             Compiling |= 8;
 
-            Core.log.Write("Call M98DotNET preprocessor");
+            Corex64.log.Write("Call M98DotNET preprocessor");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -1821,14 +1821,14 @@ namespace mml2vgmIDE
                 isSuccess = false;
             }
 
-            Core.log.Write("Return M98DotNET preprocessor");
-            Core.log.Write("Disp Result");
+            Corex64.log.Write("Return M98DotNET preprocessor");
+            Corex64.log.Write("Disp Result");
 
             dmy = finishedPreprocess;
             this.Invoke(dmy);
 
-            Core.log.Write("end preprocess thread");
-            Core.log.Close();
+            Corex64.log.Write("end preprocess thread");
+            Corex64.log.Close();
 
         }
 
@@ -1887,8 +1887,8 @@ namespace mml2vgmIDE
 
         private void startCompile()
         {
-            Core.log.Open();
-            Core.log.Write("start compile thread");
+            Corex64.log.Open();
+            Corex64.log.Write("start compile thread");
 
             Action dmy = updateTitle;
 
@@ -1903,7 +1903,7 @@ namespace mml2vgmIDE
 
             this.Invoke(dmy);
 
-            Core.log.Write(string.Format("  compile at [{0}]", title));
+            Corex64.log.Write(string.Format("  compile at [{0}]", title));
 
             msgBox.clear();
 
@@ -1946,7 +1946,7 @@ namespace mml2vgmIDE
 
         private void startCompileGWI()
         {
-            Core.log.Write("Call mml2vgm core");
+            Corex64.log.Write("Call mml2vgm core");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
             if (!doExport)
@@ -1967,21 +1967,21 @@ namespace mml2vgmIDE
                 //break;
             }
 
-            Core.log.Write("Return mml2vgm core");
+            Corex64.log.Write("Return mml2vgm core");
             //}
 
-            Core.log.Write("Disp Result");
+            Corex64.log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Core.log.Write("end compile thread");
-            Core.log.Close();
+            Corex64.log.Write("end compile thread");
+            Corex64.log.Close();
         }
 
         private void startCompileMUC()
         {
-            Core.log.Write("Call mucomDotNET compiler");
+            Corex64.log.Write("Call mucomDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -1999,21 +1999,21 @@ namespace mml2vgmIDE
                 isSuccess = false;
             }
 
-            Core.log.Write("Return mucomDotNET compiler");
+            Corex64.log.Write("Return mucomDotNET compiler");
             //}
 
-            Core.log.Write("Disp Result");
+            Corex64.log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Core.log.Write("end compile thread");
-            Core.log.Close();
+            Corex64.log.Write("end compile thread");
+            Corex64.log.Close();
         }
 
         private void startCompileMML()
         {
-            Core.log.Write("Call PMDDotNET compiler");
+            Corex64.log.Write("Call PMDDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -2031,21 +2031,21 @@ namespace mml2vgmIDE
                 isSuccess = false;
             }
 
-            Core.log.Write("Return PMDDotNET compiler");
+            Corex64.log.Write("Return PMDDotNET compiler");
             //}
 
-            Core.log.Write("Disp Result");
+            Corex64.log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Core.log.Write("end compile thread");
-            Core.log.Close();
+            Corex64.log.Write("end compile thread");
+            Corex64.log.Close();
         }
 
         private void startCompileMDL()
         {
-            Core.log.Write("Call MoonDriverDotNET compiler");
+            Corex64.log.Write("Call MoonDriverDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -2063,16 +2063,16 @@ namespace mml2vgmIDE
                 isSuccess = false;
             }
 
-            Core.log.Write("Return MoonDriverDotNET compiler");
+            Corex64.log.Write("Return MoonDriverDotNET compiler");
             //}
 
-            Core.log.Write("Disp Result");
+            Corex64.log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Core.log.Write("end compile thread");
-            Core.log.Close();
+            Corex64.log.Write("end compile thread");
+            Corex64.log.Close();
         }
 
         private void updateTitle()
@@ -2091,7 +2091,7 @@ namespace mml2vgmIDE
         {
             Action<string> msgDisp = MsgDisp;
             this.Invoke(msgDisp, msg);
-            Core.log.Write(msg);
+            Corex64.log.Write(msg);
         }
 
         public void MsgDisp(string msg)

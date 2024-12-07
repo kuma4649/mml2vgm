@@ -1,8 +1,8 @@
-﻿using Core;
-using mml2vgmIDE.Driver.ZGM;
+﻿using Corex64;
+using mml2vgmIDEx64.Driver.ZGM;
 using System;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class dacControl_
     {

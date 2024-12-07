@@ -1,4 +1,4 @@
-﻿namespace mml2vgmIDE
+﻿namespace mml2vgmIDEx64
 {
     public class MDChipParams
     {
@@ -466,7 +466,9 @@
             public string cChip = "";
             public int cCh = 0;
             public int cQuantize = -1;
-            public Core.clsLfo[] lfo = new Core.clsLfo[] { new Core.clsLfo(), new Core.clsLfo(), new Core.clsLfo(), new Core.clsLfo() };
+            public Corex64.clsLfo[] lfo = [
+                new Corex64.clsLfo(), new Corex64.clsLfo()
+                , new Corex64.clsLfo(), new Corex64.clsLfo() ];
         }
         public MIDIKbd mIDIKbd = new MIDIKbd();
     }

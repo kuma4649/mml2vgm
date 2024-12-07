@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mml2vgmIDE.D88N88
+namespace mml2vgmIDEx64.D88N88
 {
     public class D88
     {

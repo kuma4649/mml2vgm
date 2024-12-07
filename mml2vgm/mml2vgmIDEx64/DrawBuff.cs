@@ -3,7 +3,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public static class DrawBuff
     {

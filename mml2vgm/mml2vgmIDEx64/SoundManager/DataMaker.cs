@@ -1,4 +1,4 @@
-﻿using mml2vgmIDE;
+﻿using mml2vgmIDEx64;
 using System;
 using System.Threading;
 

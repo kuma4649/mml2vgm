@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDEx64
 {
     public class FrameBuffer
     {
