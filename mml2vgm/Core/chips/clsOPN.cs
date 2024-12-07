@@ -1190,6 +1190,8 @@ namespace Core
                     break;
             }
 
+            page.currentInstrument = parent.instFM[n];
+
             if (!(page.chip is YM2612X2))
             {
                 for (int ope = 0; ope < 4; ope++)

@@ -1,4 +1,7 @@
 更新履歴
+TAG751 2024/12/7 2nd
+  Core:OPN系(OPNA2除く):yDT,yML,yyDT,yyML,yKS,yAR,yyKS,yyAR,yAM,yDR,yyAM,yyDR,ySL,yRR,yySL,yyRRコマンド追加
+
 TAG750 2024/12/7
   mvc:x64 .NET8 で新規作成
   Core:x64 .NET8 で新規作成(mml2vgmx64,mml2vgmIDEx64,mvcx64で使用します)

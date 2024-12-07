@@ -1190,6 +1190,8 @@ namespace Corex64
                     break;
             }
 
+            page.currentInstrument = CopyInstrument(parent.instFM[n]);
+
             if (!(page.chip is YM2612X2))
             {
                 for (int ope = 0; ope < 4; ope++)
@@ -1422,6 +1424,18 @@ namespace Corex64
                 }
             }
 
+        }
+
+        protected Tuple<string, byte[]> CopyInstrument(Tuple<string, byte[]> inst)
+        {
+            if (inst == null) return null;
+            if (inst.Item2 == null) return null;
+
+            string nm = inst.Item1;
+            List<byte> dat = [];
+            foreach (byte b in inst.Item2) dat.Add(b);
+
+            return new Tuple<string, byte[]>(nm, [.. dat]);
         }
 
         public virtual void OutFmKeyOff(partPage page, MML mml)
@@ -3119,10 +3133,43 @@ namespace Corex64
                 byte op = (byte)(int)mml.args[1];
                 byte dat = (byte)(int)mml.args[2];
 
+                int dt, ml, ks, ar, am, dr, sl, rr;
                 switch (toneparamName)
                 {
                     case "DTML":
                         CmdY_ToneParamOPN(mml, 0x30, page, op, dat);
+                        break;
+                    case "DT":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 7);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 9] = dat;
+                        dt = dat;
+                        ml = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                        OutFmSetDtMl(mml, page, op, dt, ml);
+                        break;
+                    case "ML":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 15);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 8] = dat;
+                        dt = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 9];
+                        ml = dat;
+                        OutFmSetDtMl(mml, page, op, dt, ml);
+                        break;
+                    case "DT+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 9] + (sbyte)dat) & 7);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 9] = dat;
+                        dt = dat;
+                        ml = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                        OutFmSetDtMl(mml, page, op, dt, ml);
+                        break;
+                    case "ML+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 8] + (sbyte)dat) & 15);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 8] = dat;
+                        dt = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 9];
+                        ml = dat;
+                        OutFmSetDtMl(mml, page, op, dt, ml);
                         break;
                     case "TL":
                         CmdY_ToneParamOPN(mml, 0x40, page, op, dat);
@@ -3130,14 +3177,110 @@ namespace Corex64
                     case "KSAR":
                         CmdY_ToneParamOPN(mml, 0x50, page, op, dat);
                         break;
+                    case "KS":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 3);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 7] = dat;
+                        ks = dat;
+                        ar = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 1];
+                        OutFmSetKsAr(mml, page, op, ks, ar);
+                        break;
+                    case "AR":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 31);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 1] = dat;
+                        ks = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 7];
+                        ar = dat;
+                        OutFmSetKsAr(mml, page, op, ks, ar);
+                        break;
+                    case "KS+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 7] + (sbyte)dat) & 3);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 7] = dat;
+                        ks = dat;
+                        ar = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 1];
+                        OutFmSetKsAr(mml, page, op, ks, ar);
+                        break;
+                    case "AR+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 1] + (sbyte)dat) & 31);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 1] = dat;
+                        ks = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 7];
+                        ar = dat;
+                        OutFmSetKsAr(mml, page, op, ks, ar);
+                        break;
                     case "AMDR":
                         CmdY_ToneParamOPN(mml, 0x60, page, op, dat);
+                        break;
+                    case "AM":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 1);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 10] = dat;
+                        am = dat;
+                        dr = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 2];
+                        OutFmSetAmDr(mml, page, op, am, dr);
+                        break;
+                    case "DR":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 31);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 2] = dat;
+                        am = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                        dr = dat;
+                        OutFmSetAmDr(mml, page, op, am, dr);
+                        break;
+                    case "AM+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 10] + (sbyte)dat) & 1);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 10] = dat;
+                        am = dat;
+                        dr = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 2];
+                        OutFmSetAmDr(mml, page, op, am, dr);
+                        break;
+                    case "DR+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 2] + (sbyte)dat) & 31);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 2] = dat;
+                        am = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                        dr = dat;
+                        OutFmSetAmDr(mml, page, op, am, dr);
                         break;
                     case "SR":
                         CmdY_ToneParamOPN(mml, 0x70, page, op, dat);
                         break;
                     case "SLRR":
                         CmdY_ToneParamOPN(mml, 0x80, page, op, dat);
+                        break;
+                    case "SL":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 15);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 5] = dat;
+                        sl = dat;
+                        rr = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 4];
+                        OutFmSetSlRr(mml, page, op, sl, rr);
+                        break;
+                    case "RR":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)(dat & 15);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 4] = dat;
+                        sl = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 5];
+                        rr = dat;
+                        OutFmSetSlRr(mml, page, op, sl, rr);
+                        break;
+                    case "SL+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 5] + (sbyte)dat) & 15);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 5] = dat;
+                        sl = dat;
+                        rr = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 4];
+                        OutFmSetSlRr(mml, page, op, sl, rr);
+                        break;
+                    case "RR+-":
+                        if (page.currentInstrument == null) break;
+                        dat = (byte)((page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 4] + (sbyte)dat) & 15);
+                        page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 4] = dat;
+                        sl = page.currentInstrument.Item2[op * Const.INSTRUMENT_M_OPERATOR_SIZE + 5];
+                        rr = dat;
+                        OutFmSetSlRr(mml, page, op, sl, rr);
                         break;
                     case "SSG":
                         CmdY_ToneParamOPN(mml, 0x90, page, op, dat);

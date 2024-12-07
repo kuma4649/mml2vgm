@@ -2249,6 +2249,8 @@ namespace Corex64
                     break;
             }
 
+            page.currentInstrument = CopyInstrument(parent.instFM[n]);
+
             if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
             {
                 OutFmSetInstrumentOPNA(page,vpg, mml, n, vol,UMop,isDef, FBALG);

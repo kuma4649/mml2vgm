@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Corex64
 {
@@ -2672,51 +2673,116 @@ namespace Corex64
             if (relative != 0) mml.args.Add(relative);
         }
 
+        private static readonly string[] YcmdTbl =
+        [
+                    //長い順に定義すること
+                    "PANFLCON"  //,n1
+                    ,"PANFBAL"  //,n1
+                    ,"PMSAMS"   //,n1
+                    ,"DT1MUL"   //,n1,n2
+                    ,"AMED1R"   //,n1,n2
+                    ,"DT2D2R"   //,n1,n2
+                    ,"DTMUL"    //,n1,n2
+                    ,"DT1ML"    //,n1,n2
+                    ,"DT2SR"    //,n1,n2
+                    ,"D1LRR"    //,n1,n2
+                    ,"DTML"     //,n1,n2
+                    ,"KSAR"     //,n1,n2
+                    ,"AMDR"     //,n1,n2
+                    ,"SLRR"     //,n1,n2
+                    ,"FBAL"     //,n1
+                    ,"SSG"      //,n1,n2
+                    ,"DT1"      //,n1,n2
+                    ,"MUL"      //,n1,n2
+                    ,"DT2"      //,n1,n2
+                    ,"D1L"      //,n1,n2
+                    ,"D2R"      //,n1,n2
+                    ,"AME"      //,n1,n2
+                    ,"PAN"      //,n1
+                    ,"CON"      //,n1
+                    ,"PMS"      //,n1
+                    ,"AMS"      //,n1
+                    ,"TL"       //,n1,n2
+                    ,"SR"       //,n1,n2
+                    ,"DT"       //,n1,n2
+                    ,"ML"       //,n1,n2
+                    ,"KS"       //,n1,n2
+                    ,"AR"       //,n1,n2
+                    ,"AM"       //,n1,n2
+                    ,"DR"       //,n1,n2
+                    ,"SL"       //,n1,n2
+                    ,"RR"       //,n1,n2
+                    ,"FB"       //,n1
+                    ,"AL"       //,n1
+        ];
+
         private void CmdY(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             int dat = 0;
             int op = 0;
             pw.incPos(page);
+            bool relative = false;
 
             char c = pw.getChar(page);
+            if (c == 'y')
+            {
+                relative = true;
+                pw.incPos(page);
+                c = pw.getChar(page);
+            }
+
             if (c >= 'A' && c <= 'Z')
             {
+                //とりあえず最長のコマンド分まで読み込む
                 string toneparamName = "" + c;
                 pw.incPos(page);
-                toneparamName += pw.getChar(page);
-                pw.incPos(page);
-                if (toneparamName != "TL" && toneparamName != "SR")
+                for (int i = 0; i < YcmdTbl[0].Length - 1; i++)
                 {
                     toneparamName += pw.getChar(page);
                     pw.incPos(page);
-                    if (toneparamName != "SSG")
-                    {
-                        toneparamName += pw.getChar(page);
-                        pw.incPos(page);
-                    }
                 }
-
-                if (toneparamName == "DT1M" || toneparamName == "DT2S" || toneparamName == "PMSA")
+                for (int i = 0; i < toneparamName.Length - 1; i++) pw.decPos(page);
+                //コマンドテーブルと順に比較
+                bool fnd = false;
+                foreach(string cmd in YcmdTbl)
                 {
-                    toneparamName += pw.getChar(page);
-                    pw.incPos(page);
-                    if (toneparamName == "PMSAM")
-                    {
-                        toneparamName += pw.getChar(page);
-                        pw.incPos(page);
-                    }
+                    if(cmd.Length < toneparamName.Length)
+                        toneparamName = toneparamName.Substring(0, cmd.Length);
+                    if (cmd != toneparamName) continue;
+                    fnd = true;
+                    break;
                 }
+                if (!fnd)
+                {
+                    msgBox.setErrMsg(msg.get("E05091"), mml.line.Lp);
+                    return;
+                }
+                for (int i = 0; i < toneparamName.Length - 1; i++) pw.incPos(page);
 
+                pw.skipTabSpace(page);
                 pw.incPos(page);
+                pw.skipTabSpace(page);
 
-                if (toneparamName != "FBAL" && toneparamName != "PMSAMS")
+                if (toneparamName != "PANFLCON"
+                    && toneparamName != "PANFBAL"
+                    && toneparamName != "PMSAMS"
+                    && toneparamName != "FBAL"
+                    && toneparamName != "PAN"
+                    && toneparamName != "CON"
+                    && toneparamName != "PMS"
+                    && toneparamName != "AMS"
+                    && toneparamName != "FB"
+                    && toneparamName != "AL"
+                    )
                 {
                     if (pw.getNum(page, out n))
                     {
                         op = (byte)(Common.CheckRange(n & 0xff, 1, 4) - 1);
                     }
+                    pw.skipTabSpace(page);
                     pw.incPos(page);
+                    pw.skipTabSpace(page);
                 }
 
                 if (pw.getNum(page, out n))
@@ -2725,10 +2791,7 @@ namespace Corex64
                 }
 
                 mml.type = enmMMLType.Y;
-                mml.args = new List<object>();
-                mml.args.Add(toneparamName);
-                mml.args.Add(op);
-                mml.args.Add(dat);
+                mml.args = [toneparamName + (relative ? "+-" : ""), op, dat];
                 return;
             }
 

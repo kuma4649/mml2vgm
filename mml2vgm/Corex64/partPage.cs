@@ -709,6 +709,8 @@ namespace Corex64
         public int RR15 { get; set; } = 0;
         public int voperator { get; set; } = 0;
         public bool vguard { get; set; } = false;
+        public Tuple<string, byte[]> currentInstrument { get; set; }
+
         public Dictionary<byte, byte> TLOFS = new Dictionary<byte, byte>();
 
         public bool PASwitch = false;
