@@ -2276,6 +2276,12 @@ namespace Corex64
             SetDummyData(page, mml);
         }
 
+        public virtual void CmdPartPriority(partPage page, MML mml)
+        {
+            //
+            SetDummyData(page, mml);
+        }
+        
         public void CheckInterrupt(partWork pw, partPage page)
         {
             if (!page.requestInterrupt) return;

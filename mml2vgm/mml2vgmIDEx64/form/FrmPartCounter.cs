@@ -1,5 +1,6 @@
 ﻿using mml2vgmIDEx64.MMLParameter;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using static IronPython.SQLite.PythonSQLite;
 
 namespace mml2vgmIDEx64
 {
@@ -17,17 +19,55 @@ namespace mml2vgmIDEx64
         private Setting setting = null;
         private Brush[][] meterBrush = new Brush[64][];
         private bool SoloMode = false;
-        //private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
 
         private const string clmKBDAssign = "ClmKBDAssign";
         private const string Assign = "Assign";
         private const string vbcs = "VolumeBarColorScheme.txt";
+        private Tuple<string, string, string, bool, DataGridViewContentAlignment>[] colName = new Tuple<string, string, string, bool, DataGridViewContentAlignment>[] {
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPriority"   ,"priority"   ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMuteMngKey" ,"mmKey"      ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMute"       ,"M"          ,true,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSolo"       ,"S"          ,true,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPush"       ,"P"          ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKBDAssign"  ,"KBD"        ,true,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipIndex"  ,"ChipIndex"  ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipNumber" ,"ChipNumber" ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartNumber" ,"PartNumber" ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPart"       ,"Part"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartType"   ,"PartType"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMIDICh"     ,"MIDI Ch"    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChip"       ,"Chip"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmCounter"    ,"Counter"    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLoopCounter","LoopCounter",true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmInstrument" ,"Instrument" ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvelope"   ,"Envelope"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVolume"     ,"Volume"     ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmExpression" ,"Expression" ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVelocity"   ,"Velocity"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPan"        ,"Pan"        ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmNote"       ,"Note"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmGateTime"   ,"GateTime"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLength"     ,"Length(#)"  ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvSw"      ,"Env.Sw."    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfoSw"      ,"LFO Sw."    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfo"        ,"LFO"        ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmHLfo"       ,"Hard LFO"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmDetune"     ,"Detune"     ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMemo"       ,"Memo"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSpacer"     ,""           ,true,DataGridViewContentAlignment.NotSet)
+        };
+
+        private PartRowComparer comparer;
+        private bool requiresSorting=true;
 
 
         public FrmPartCounter(Setting setting)
         {
             InitializeComponent();
             this.setting = setting;
+            comparer=new PartRowComparer(SortOrder.Descending);
 
             dgvPartCounter.BackgroundColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
@@ -358,69 +398,78 @@ namespace mml2vgmIDEx64
         {
             if (mmlParams == null) return;
 
-            //パラメータ取得
 
-            //パラメータ描画
             dgvPartCounter.SuspendLayout();
 
-            for (int p = 0; p < dgvPartCounter.Rows.Count; p++)
+            //行ソート
+            if (requiresSorting)
             {
-                string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
-                int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value -1;
-                if (r < 0)
-                    continue;
-                int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
-                int chipNumber = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
+                dgvPartCounter.Sort(comparer);
+                requiresSorting = false;
+            }
 
-                if (!mmlParams.Insts.ContainsKey(chip)) 
-                    continue;
-                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) 
+            //パラメータ描画
+            foreach (DataGridViewRow row in dgvPartCounter.Rows)
+            {
+                string chip = (string)row.Cells["ClmChip"].Value;
+                int r = (int)row.Cells["ClmPartNumber"].Value -1;
+                if (r < 0) continue;
+                int chipIndex = (int)row.Cells["ClmChipIndex"].Value;
+                int chipNumber = (int)row.Cells["ClmChipNumber"].Value;
+
+                if (!mmlParams.Insts.ContainsKey(chip)
+                    || !mmlParams.Insts[chip].ContainsKey(chipIndex) 
+                    || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) 
                     continue;
 
                 MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 
                 if(mmli is YM2608_mucom)
                 {
-                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    string cp = (string)row.Cells["ClmPart"].Value;
                     int ch = cp[0]- (chipNumber == 0 ? 'A' : 'L');
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
                 else if (mmli is YM2610B_mucom)
                 {
-                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    string cp = (string)row.Cells["ClmPart"].Value;
                     int ch = cp[0] - (chipNumber == 0 ? 'a' : 'l');
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
                 else if (mmli is YM2151_mucom)
                 {
-                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    string cp = (string)row.Cells["ClmPart"].Value;
                     int ch = (cp[0] < 'w') ? (cp[0] - 'W') : (cp[0] - 'w' + 4);
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
-
                 if (r >= mmli.inst.Length) continue;
 
-                dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmVelocity"].Value = mmli.velocity[r] == null ? "-" : mmli.velocity[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
-                dgvPartCounter.Rows[p].Cells["ClmGateTime"].Value = mmli.gatetime[r] == null ? "-" : mmli.gatetime[r];
-                dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
-                dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
-                dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
-                dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
-                dgvPartCounter.Rows[p].Cells["ClmLfo"].Value = mmli.lfo[r] == null ? "-" : mmli.lfo[r];
-                dgvPartCounter.Rows[p].Cells["ClmHLfo"].Value = mmli.hlfo[r] == null ? "-" : mmli.hlfo[r];
-                dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmMemo"].Value = mmli.memo[r] == null ? "" : mmli.memo[r].ToString();
-                DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
+                if (row.Cells["ClmPriority"].Value == null || (int)row.Cells["ClmPriority"].Value != mmli.partPriority[r])
+                {
+                    row.Cells["ClmPriority"].Value = mmli.partPriority[r];
+                    requiresSorting = true;
+                }
+                row.Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
+                row.Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
+                row.Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
+                row.Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
+                row.Cells["ClmVelocity"].Value = mmli.velocity[r] == null ? "-" : mmli.velocity[r].ToString();
+                row.Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
+                row.Cells["ClmGateTime"].Value = mmli.gatetime[r] == null ? "-" : mmli.gatetime[r];
+                row.Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
+                row.Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
+                row.Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
+                row.Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
+                row.Cells["ClmLfo"].Value = mmli.lfo[r] == null ? "-" : mmli.lfo[r];
+                row.Cells["ClmHLfo"].Value = mmli.hlfo[r] == null ? "-" : mmli.hlfo[r];
+                row.Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
+                row.Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
+                row.Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
+                row.Cells["ClmMemo"].Value = mmli.memo[r] == null ? "" : mmli.memo[r].ToString();
+                DrawMeter(row.Cells["ClmMeter"], mmli, r);
             }
 
             dgvPartCounter.ResumeLayout();
@@ -487,7 +536,7 @@ namespace mml2vgmIDEx64
                 ((ToolStripMenuItem)cmsMenu.Items[cmsMenu.Items.Count - 1]).Checked = c.Visible;
             }
 
-            cmsMenu.Show(Cursor.Position);
+            cmsMenu.Show(System.Windows.Forms.Cursor.Position);
 
         }
 
@@ -700,40 +749,6 @@ namespace mml2vgmIDEx64
             return ret.ToArray();
         }
 
-        private Tuple<string,string,string,bool,DataGridViewContentAlignment>[] colName = new Tuple<string, string,string,bool, DataGridViewContentAlignment>[] {
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMuteMngKey" ,"mmKey"     ,false,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMute"       ,"M"          ,true,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSolo"       ,"S"          ,true,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPush"       ,"P"         ,false,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKBDAssign"  ,"KBD"        ,true,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipIndex"  ,"ChipIndex" ,false,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipNumber" ,"ChipNumber",false,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartNumber" ,"PartNumber",false,DataGridViewContentAlignment.MiddleCenter),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPart"       ,"Part"       ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartType"   ,"PartType"   ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMIDICh"     ,"MIDI Ch"    ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChip"       ,"Chip"       ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmCounter"    ,"Counter"    ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLoopCounter","LoopCounter",true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmInstrument" ,"Instrument" ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvelope"   ,"Envelope"   ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVolume"     ,"Volume"     ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmExpression" ,"Expression" ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVelocity"   ,"Velocity"   ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPan"        ,"Pan"        ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmNote"       ,"Note"       ,true,DataGridViewContentAlignment.NotSet),  
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmGateTime"   ,"GateTime"   ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLength"     ,"Length(#)"  ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvSw"      ,"Env.Sw."    ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfoSw"      ,"LFO Sw."    ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfo"        ,"LFO"        ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmHLfo"       ,"Hard LFO"   ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmDetune"     ,"Detune"     ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMemo"       ,"Memo"       ,true,DataGridViewContentAlignment.NotSet),
-            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSpacer"     ,""           ,true,DataGridViewContentAlignment.NotSet)
-        };
 
         private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
         {
@@ -1309,5 +1324,37 @@ namespace mml2vgmIDEx64
         public int displayIndex = 0;
         public int size = 10;
         public bool visible = true;
+    }
+
+    public class PartRowComparer : IComparer
+    {
+        private int sortOrder;
+        private Comparer comparer;
+
+        public PartRowComparer(SortOrder order)
+        {
+            this.sortOrder = (order == SortOrder.Descending ? -1 : 1);
+            this.comparer = new Comparer(
+                System.Globalization.CultureInfo.CurrentCulture);
+        }
+
+        //並び替え方を定義する
+        public int Compare(object x, object y)
+        {
+            //https://dobon.net/vb/dotnet/datagridview/autosort.html
+
+            DataGridViewRow rowx = (DataGridViewRow)x;
+            DataGridViewRow rowy = (DataGridViewRow)y;
+
+            object ox = rowx.Cells["ClmPriority"].Value;
+            object oy = rowy.Cells["ClmPriority"].Value;
+            if (ox == null || oy == null) return 1 * sortOrder;
+
+            int xx = (int)ox;
+            int yy = (int)oy;
+
+            //結果を返す
+            return Math.Sign(xx - yy) * sortOrder;
+        }
     }
 }

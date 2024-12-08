@@ -35,6 +35,7 @@ namespace mml2vgmIDEx64.MMLParameter
         public bool[] beforeTie;
         public int[] clockCounter;
         public int[] partColor;
+        public int[] partPriority;
 
         public ConcurrentQueue<outDatum>[] TraceInfo;
         public outDatum[] TraceInfoOld;
@@ -71,6 +72,7 @@ namespace mml2vgmIDEx64.MMLParameter
             clockCounter = new int[n];
             MIDIch = new int?[n];
             partColor = new int[n];
+            partPriority = new int[n];
 
             TraceInfo = new ConcurrentQueue<outDatum>[n];
             for (int i = 0; i < n; i++)
@@ -81,6 +83,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 volMode[i] = 0;
                 beforeTie[i] = false;
                 partColor[i] = 1;
+                partPriority[i] = 100;
             }
             TraceInfoOld = new outDatum[n];
             this.chip = chip;
@@ -114,7 +117,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 null,                null,             null,         null,            null,
                 null,                SetHardLFO,       null,         null,            null,
                 //80 -                                 
-                null,                null,             null,         null,            null,
+                null,                SetPartPriority,  null,         null,            null,
                 null,                null,             null,         null,            null,
             };
         }
@@ -396,6 +399,13 @@ namespace mml2vgmIDEx64.MMLParameter
             if (ch >= partColor.Length) return;
 
             partColor[ch] = (int)od.args[0];
+        }
+
+        protected virtual void SetPartPriority(outDatum od, int ch, int cc)
+        {
+            if (ch >= partPriority.Length) return;
+
+            partPriority[ch] = (int)od.args[0];
         }
 
         protected virtual void SetHardLFO(outDatum od, int ch, int cc)

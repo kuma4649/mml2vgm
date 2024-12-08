@@ -354,7 +354,7 @@ namespace Corex64
                     CmdPan(pw, page, mml);
                     break;
                 case 'P': // noise or tone mixer or phase reset or Page Direct send or Portament
-                    log.Write("noise or tone mixer or phase reset or Page Direct send or Portament");
+                    log.Write("noise or tone mixer or phase reset or Page Direct send or Portament or PartPriority");
                     CmdMixer(pw, page, mml);
                     break;
                 case 'q': // gatetime
@@ -2955,6 +2955,20 @@ namespace Corex64
             {
                 pw.incPos(page);
                 CmdPortament(pw, page, mml);
+                return;
+            }
+            else if (pw.getChar(page) == 'P')//PP
+            {
+                pw.incPos(page);
+                if (!pw.getNum(page, out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05092"), mml.line.Lp);
+                    return;
+
+                }
+                mml.type = enmMMLType.PartPriority;
+                mml.args = new List<object>();
+                mml.args.Add(n);
                 return;
             }
 

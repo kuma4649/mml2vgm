@@ -6542,6 +6542,11 @@ namespace Core
                     page.chip.CmdPartColor(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.PartPriority:
+                    log.Write("PartPriority");
+                    page.chip.CmdPartPriority(page, mml);
+                    page.mmlPos++;
+                    break;
                 case enmMMLType.PartArpeggio_Start:
                     log.Write("PartArpeggio_Start");
                     page.chip.CmdPartArpeggio_Start(page, mml);

@@ -491,6 +491,7 @@ namespace Corex64
                 || typ == enmMMLType.Lfo
                 || typ == enmMMLType.TraceUpdateStack
                 || typ == enmMMLType.PartColor
+                || typ == enmMMLType.PartPriority
                 )
             {
                 return true;

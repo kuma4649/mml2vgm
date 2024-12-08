@@ -1737,18 +1737,25 @@ namespace mml2vgmIDEx64
                         string ASIODeviceName = cmbAsioDevice.SelectedItem.ToString();
                         int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
 
-                        //再生周波数サポートチェック
-                        using (AsioOut ao = new AsioOut(ASIODeviceName))
+                        try
                         {
-                            if (!ao.IsSampleRateSupported(SampleRate))
+                            //再生周波数サポートチェック
+                            using (AsioOut ao = new AsioOut(ASIODeviceName))
                             {
-                                MessageBox.Show(
-                                    "Not supported this SampleRate."
-                                    , "Error"
-                                    , MessageBoxButtons.OK
-                                    , MessageBoxIcon.Error);
-                                return false;
+                                if (!ao.IsSampleRateSupported(SampleRate))
+                                {
+                                    MessageBox.Show(
+                                        "Not supported this SampleRate."
+                                        , "Error"
+                                        , MessageBoxButtons.OK
+                                        , MessageBoxIcon.Error);
+                                    return false;
+                                }
                             }
+                        }
+                        catch 
+                        {
+                            ;
                         }
                     }
                 }

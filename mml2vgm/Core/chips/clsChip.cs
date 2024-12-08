@@ -2272,6 +2272,12 @@ namespace Core
             //
             SetDummyData(page, mml);
         }
+        
+        public virtual void CmdPartPriority(partPage page, MML mml)
+        {
+            //
+            SetDummyData(page, mml);
+        }
 
         public void CheckInterrupt(partWork pw, partPage page)
         {

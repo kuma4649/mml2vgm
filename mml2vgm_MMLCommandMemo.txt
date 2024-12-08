@@ -953,6 +953,7 @@ TGOF            -oo----oo---oo---oo----oo-o----------------------------  ボリ�
 Sx1n            -oo--oooooooooooooooooooooooooooooooooooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
 rn              ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
 "xxx"n          ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  歌詞
+'xxx'           ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  メモ
 [               ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ開始位置
 ]n              ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ終了位置
 /               ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ脱出位置指定
@@ -1071,6 +1072,8 @@ ___             -oooooooooooooooooooooooooooooooooooooooooooooooooooooo  局所�
 PCn             ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 63 def:1)IDEのパート色を指定する。
                                                                            0:黒 1:青 2:赤 3:紫 4:緑 5:水 6:黄 7:白
                                                                            8:muap風味色 9-15:最大音量時、赤になる。 16以降63までは繰り返し
+PPn             ooooooooooooooooooooooooooooooooooooooooooooooooooooooo  パート表示優先度(0 - 65535 def:100)
+                                                                           partcounter画面での表示順を変更する。値が大きいほど上に表示されます(重いです)
                                                                        
 c               -oooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ド
 d               -oooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符レ

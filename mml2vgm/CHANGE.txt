@@ -1,4 +1,7 @@
 更新履歴
+TAG753 2024/12/8
+  Core:PartCounter:.gwi:PPコマンド追加。パートの表示順を指定できます。
+
 TAG752 2024/12/7 3rd
   Core:PartCounter:.gwi:memo欄追加
 
