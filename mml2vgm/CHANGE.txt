@@ -1,4 +1,10 @@
 更新履歴
+TAG754 2024/12/8 2nd
+  Core:PartCounter:.gwi:PPコマンド修正。
+  Core:OPN系(OPNA2除く):yXXコマンドCh3Ex向け修正。
+    参照パラメータがEXパート同士で共有されません。
+    音色部分適応機能の考慮はしません。(これはCh3Ex以外でも同じ)
+
 TAG753 2024/12/8
   Core:PartCounter:.gwi:PPコマンド追加。パートの表示順を指定できます。
 

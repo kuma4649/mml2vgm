@@ -1190,7 +1190,44 @@ namespace Corex64
                     break;
             }
 
+
+            //現在の音色のパラメータを記憶する(yコマンドで参照される)
             page.currentInstrument = CopyInstrument(parent.instFM[n]);
+            if (!(page.chip is YM2609))
+            {
+                if (isDef && (page.ch == 2 || page.ch == m + 3 || page.ch == m + 4 || page.ch == m + 5))
+                {
+                    page.chip.lstPartWork[2].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                    page.chip.lstPartWork[m + 3].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                    page.chip.lstPartWork[m + 4].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                    page.chip.lstPartWork[m + 5].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                }
+            }
+            else
+            {
+                if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+                {
+                    if (isDef)
+                    {
+                        page.chip.lstPartWork[2].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                        page.chip.lstPartWork[12].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                        page.chip.lstPartWork[13].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                        page.chip.lstPartWork[14].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                    }
+                }
+                if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+                {
+                    if (isDef)
+                    {
+                        page.chip.lstPartWork[8].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                        page.chip.lstPartWork[15].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                        page.chip.lstPartWork[16].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                        page.chip.lstPartWork[17].cpg.currentInstrument = CopyInstrument(parent.instFM[n]);
+                    }
+                }
+            }
+
+
 
             if (!(page.chip is YM2612X2))
             {

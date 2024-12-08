@@ -83,7 +83,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 volMode[i] = 0;
                 beforeTie[i] = false;
                 partColor[i] = 1;
-                partPriority[i] = 100;
+                partPriority[i] = i;
             }
             TraceInfoOld = new outDatum[n];
             this.chip = chip;

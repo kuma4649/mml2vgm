@@ -67,7 +67,7 @@ namespace mml2vgmIDEx64
         {
             InitializeComponent();
             this.setting = setting;
-            comparer=new PartRowComparer(SortOrder.Descending);
+            comparer=new PartRowComparer(SortOrder.Ascending);
 
             dgvPartCounter.BackgroundColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
