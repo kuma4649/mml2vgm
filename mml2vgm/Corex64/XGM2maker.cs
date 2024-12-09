@@ -317,6 +317,7 @@ namespace Corex64
                 sampleID[c].size = (uint)p.Item2.size;
                 ptr+= (uint)p.Item2.size;
                 c++;
+                if (c < sampleID.Length) sampleID[c].addr = ptr;
             }
 
         }

@@ -1,4 +1,7 @@
 更新履歴
+TAG755 2024/12/9
+  Core:XGM2:PCMテーブル生成のバグ修正
+
 TAG754 2024/12/8 2nd
   Core:PartCounter:.gwi:PPコマンド修正。
   Core:OPN系(OPNA2除く):yXXコマンドCh3Ex向け修正。
