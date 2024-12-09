@@ -1,4 +1,7 @@
 更新履歴
+TAG756 2024/12/9 2nd
+  Core:PartCounter:mucomDotNETを演奏時、パート順が乱れるのを修正
+
 TAG755 2024/12/9
   Core:XGM2:PCMテーブル生成のバグ修正
 

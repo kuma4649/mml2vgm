@@ -60,7 +60,7 @@ namespace mml2vgmIDEx64
         };
 
         private PartRowComparer comparer;
-        private bool requiresSorting=true;
+        private bool requiresSorting=false;
 
 
         public FrmPartCounter(Setting setting)
@@ -447,11 +447,14 @@ namespace mml2vgmIDEx64
                 }
                 if (r >= mmli.inst.Length) continue;
 
-                if (row.Cells["ClmPriority"].Value == null || (int)row.Cells["ClmPriority"].Value != mmli.partPriority[r])
+                if (
+                    (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom) && !(mmli is YM2151_mucom))
+                    && (row.Cells["ClmPriority"].Value == null || (int)row.Cells["ClmPriority"].Value != mmli.partPriority[r]))
                 {
                     row.Cells["ClmPriority"].Value = mmli.partPriority[r];
                     requiresSorting = true;
                 }
+
                 row.Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
                 row.Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
                 row.Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
