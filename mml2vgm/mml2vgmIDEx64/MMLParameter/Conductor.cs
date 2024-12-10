@@ -49,10 +49,17 @@ namespace mml2vgmIDEx64.MMLParameter
 
         protected override void SetLyric(outDatum od, int ch, int cc)
         {
-            int ls = (int)od.args[1];
-            notecmd[od.linePos.ch] = "lyric";
-            length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / ls, ls);
-            keyOnMeter[od.linePos.ch] = (int)(255.0);
+            if (od.args.Count > 1)
+            {
+                int ls = (int)od.args[1];
+                notecmd[od.linePos.ch] = "lyric";
+                length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / ls, ls);
+                keyOnMeter[od.linePos.ch] = (int)(255.0);
+                return;
+            }
+
+            //メモ
+            memo[ch] = (string)od.args[0];
         }
 
     }

@@ -1,4 +1,7 @@
 更新履歴
+TAG757 2024/12/10
+  Core:PartCounter:memo欄のbug修正
+
 TAG756 2024/12/9 2nd
   Core:PartCounter:mucomDotNETを演奏時、パート順が乱れるのを修正
 
