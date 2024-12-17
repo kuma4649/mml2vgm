@@ -290,6 +290,7 @@ namespace Corex64
                             n0 = n;
 
                             if (!int.TryParse(n0, out int s)) return null;
+                            if (string.IsNullOrEmpty(a)) return null;
                             string p = string.Format("{0}{1:00}", a, s);
                             ret.Add(p);
                         }
