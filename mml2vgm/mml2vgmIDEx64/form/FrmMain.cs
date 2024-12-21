@@ -81,6 +81,10 @@ namespace mml2vgmIDEx64
         private musicDriverInterface.CompilerInfo mubCompilerInfo = null;
         private bool jumpSoloModeSw = false;
 
+        private string getScriptsPath;
+        private TreeNode getScriptsTn;
+        private SimpleMIDIKbd simpleMidiKbd;
+
 
 
 
@@ -199,8 +203,16 @@ namespace mml2vgmIDEx64
 
             OpenLatestFile(startFn);
 
-            midikbd = new MIDIKbd(this.setting, newParam.mIDIKbd);
-            midikbd.StartMIDIInMonitoring();
+            if (setting.midiKbd.useOldFunction)
+            {
+                midikbd = new MIDIKbd(this.setting, newParam.mIDIKbd);
+                midikbd.StartMIDIInMonitoring();
+            }
+            else
+            {
+                simpleMidiKbd = new SimpleMIDIKbd(this, this.setting);
+                simpleMidiKbd.StartMIDIInMonitoring();
+            }
         }
 
         private List<byte[]> LoadRhythmSample(string startupPath, Action<string> disp)
@@ -3209,6 +3221,18 @@ namespace mml2vgmIDEx64
                 frmDebug.Show();
             }
 
+            if (setting.midiKbd.useOldFunction)
+            {
+                midikbd = new MIDIKbd(this.setting, newParam.mIDIKbd);
+                midikbd.StartMIDIInMonitoring();
+            }
+            else
+            {
+                if (simpleMidiKbd != null) simpleMidiKbd.StopMIDIInMonitoring();
+                simpleMidiKbd = new SimpleMIDIKbd(this,this.setting);
+                simpleMidiKbd.StartMIDIInMonitoring();
+            }
+
             flgReinit = false;
 
             for (int i = 0; i < 500; i++)
@@ -3238,7 +3262,8 @@ namespace mml2vgmIDEx64
 
                 timer.Enabled = false;
 
-                midikbd.StopMIDIInMonitoring();
+                midikbd?.StopMIDIInMonitoring();
+                simpleMidiKbd?.StopMIDIInMonitoring();
 
                 Audio.Close();
                 Audio.RealChipClose();
@@ -4226,9 +4251,6 @@ namespace mml2vgmIDEx64
             return false;
         }
 
-        private string getScriptsPath;
-        private TreeNode getScriptsTn;
-
         private void GetScripts(ToolStripMenuItem tsmiScript, ToolStripMenuItem tsmiTreeView, string path)
         {
             getScriptsPath = path;
@@ -4448,7 +4470,7 @@ namespace mml2vgmIDEx64
             return chi;
         }
 
-        private Document GetActiveDocument()
+        public Document GetActiveDocument()
         {
             DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
@@ -5808,5 +5830,67 @@ namespace mml2vgmIDEx64
             tsslStatus.Text = v;
             StatusDelay = 100;
         }
+
+        public void WriteDocument(string msg)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(WriteDocument), new object[] { msg });
+                return;
+            }
+            Document doc = GetActiveDocument();
+            if (doc == null) return;
+            doc.editor.azukiControl.Document.Replace(msg);
+        }
+
+        public void WriteEnter()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(WriteEnter));
+                return;
+            }
+            Document doc = GetActiveDocument();
+            doc = GetActiveDocument();
+            if (doc != null) doc.editor.ActionShiftEnter(null);
+        }
+
+
+
+        public void UndoDocument()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(UndoDocument));
+                return;
+            }
+            Document doc = GetActiveDocument();
+            if (doc == null) return;
+            doc.editor.azukiControl.Document.Undo();
+        }
+
+        public void RedoDocument()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(RedoDocument));
+                return;
+            }
+            Document doc = GetActiveDocument();
+            if (doc == null) return;
+            doc.editor.azukiControl.Document.Redo();
+        }
+
+        public void SetSimpleMIDIKbdPreviewMode(bool previewMode)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<bool>(SetSimpleMIDIKbdPreviewMode), new object[] { previewMode });
+                return;
+            }
+
+            tsslSimpleKbdMode.Text = previewMode ? "[Prv]" : "[Ins]";
+        }
+
     }
 }

@@ -81,7 +81,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 chip.silentVoice[17] = flg;
             }
 
-            midiKbd.SetAssignChipCh(EnmChip.YM2608, ch);
+            midiKbd?.SetAssignChipCh(EnmChip.YM2608, ch);
         }
 
         protected override void SetPan(outDatum od, int ch, int cc)

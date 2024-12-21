@@ -448,6 +448,24 @@ namespace mml2vgmIDEx64
 
             cbUseMIDIKeyboard.Checked = setting.midiKbd.UseMIDIKeyboard;
 
+            rbSK_Prev_Note.Checked = setting.midiKbd.simpleChangePreviewMode_Type == 1;
+            rbSK_Prev_Cc.Checked = setting.midiKbd.simpleChangePreviewMode_Type == 0;
+            rbSK_Prev_Unuse.Checked = setting.midiKbd.simpleChangePreviewMode_Type == -1;
+            tbSK_Prev.Text = setting.midiKbd.simpleChangePreviewMode_Adr.ToString();
+            rbSK_Undo_Note.Checked = setting.midiKbd.simpleUndo_Type == 1;
+            rbSK_Undo_Cc.Checked = setting.midiKbd.simpleUndo_Type == 0;
+            rbSK_Undo_Unuse.Checked = setting.midiKbd.simpleUndo_Type == -1;
+            tbSK_Undo.Text = setting.midiKbd.simpleUndo_Adr.ToString();
+            rbSK_Spc_Note.Checked = setting.midiKbd.simpleWriteSpace_Type == 1;
+            rbSK_Spc_Cc.Checked = setting.midiKbd.simpleWriteSpace_Type == 0;
+            rbSK_Spc_Unuse.Checked = setting.midiKbd.simpleWriteSpace_Type == -1;
+            tbSK_Spc.Text = setting.midiKbd.simpleWriteSpace_Adr.ToString();
+            rbSK_Ent_Note.Checked = setting.midiKbd.simpleWriteEnter_Type == 1;
+            rbSK_Ent_Cc.Checked = setting.midiKbd.simpleWriteEnter_Type == 0;
+            rbSK_Ent_Unuse.Checked = setting.midiKbd.simpleWriteEnter_Type == -1;
+            tbSK_Ent.Text = setting.midiKbd.simpleWriteEnter_Adr.ToString();
+            cbSK_octRev.Checked = setting.midiKbd.simpleOctaveChange;
+
             cbFM1.Checked = setting.midiKbd.UseChannel[0];
             cbFM2.Checked = setting.midiKbd.UseChannel[1];
             cbFM3.Checked = setting.midiKbd.UseChannel[2];
@@ -1296,6 +1314,15 @@ namespace mml2vgmIDEx64
             setting.midiKbd.UseChannel[5] = cbFM6.Checked;
 
             setting.midiKbd.UseMIDIKeyboard = cbUseMIDIKeyboard.Checked;
+            setting.midiKbd.simpleChangePreviewMode_Type = rbSK_Prev_Cc.Checked ? 0 : (rbSK_Prev_Note.Checked ? 1 : -1);
+            if (int.TryParse(tbSK_Prev.Text, out i)) setting.midiKbd.simpleChangePreviewMode_Adr = (byte)i;
+            setting.midiKbd.simpleUndo_Type = rbSK_Undo_Cc.Checked ? 0 : (rbSK_Undo_Note.Checked ? 1 : -1);
+            if (int.TryParse(tbSK_Undo.Text, out i)) setting.midiKbd.simpleUndo_Adr = (byte)i;
+            setting.midiKbd.simpleWriteSpace_Type = rbSK_Spc_Cc.Checked ? 0 : (rbSK_Spc_Note.Checked ? 1 : -1);
+            if (int.TryParse(tbSK_Spc.Text, out i)) setting.midiKbd.simpleWriteSpace_Adr = (byte)i;
+            setting.midiKbd.simpleWriteEnter_Type = rbSK_Ent_Cc.Checked ? 0 : (rbSK_Ent_Note.Checked ? 1 : -1);
+            if (int.TryParse(tbSK_Ent.Text, out i)) setting.midiKbd.simpleWriteEnter_Adr = (byte)i;
+            setting.midiKbd.simpleOctaveChange= cbSK_octRev.Checked;
 
             setting.midiKbd.IsMONO = rbMONO.Checked;
             setting.midiKbd.UseMONOChannel = rbFM1.Checked ? 0 : (rbFM2.Checked ? 1 : (rbFM3.Checked ? 2 : (rbFM4.Checked ? 3 : (rbFM5.Checked ? 4 : (rbFM6.Checked ? 5 : -1)))));

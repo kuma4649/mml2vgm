@@ -266,9 +266,9 @@ namespace mml2vgmIDEx64
             lblOutputPath = new Label();
             tbMIDIOutputPath = new TextBox();
             tpMIDIKBD = new TabPage();
-            cbMIDIKbdAlwaysTop = new CheckBox();
             cbUseMIDIKeyboard = new CheckBox();
             gbMIDIKeyboard = new GroupBox();
+            cbMIDIKbdAlwaysTop = new CheckBox();
             pictureBox8 = new PictureBox();
             pictureBox7 = new PictureBox();
             pictureBox6 = new PictureBox();
@@ -346,6 +346,7 @@ namespace mml2vgmIDEx64
             tpMMLParameter = new TabPage();
             cbDispInstrumentName = new CheckBox();
             tpOther2 = new TabPage();
+            cbHilightOn = new CheckBox();
             tbTABWidth = new TextBox();
             cbDispWarningMessage = new CheckBox();
             tbUseHistoryBackUp = new TextBox();
@@ -431,7 +432,31 @@ namespace mml2vgmIDEx64
             textBoxDescription = new TextBox();
             llOpenGithub = new LinkLabel();
             cbHiyorimiMode = new CheckBox();
-            cbHilightOn = new CheckBox();
+            rbSK_Prev_Note = new RadioButton();
+            rbSK_Prev_Cc = new RadioButton();
+            groupBox35 = new GroupBox();
+            tbSK_Prev = new TextBox();
+            groupBox36 = new GroupBox();
+            rbSK_Undo_Note = new RadioButton();
+            rbSK_Undo_Cc = new RadioButton();
+            tbSK_Undo = new TextBox();
+            label58 = new Label();
+            rbSK_Prev_Unuse = new RadioButton();
+            label59 = new Label();
+            rbSK_Undo_Unuse = new RadioButton();
+            groupBox37 = new GroupBox();
+            rbSK_Spc_Note = new RadioButton();
+            rbSK_Spc_Unuse = new RadioButton();
+            rbSK_Spc_Cc = new RadioButton();
+            tbSK_Spc = new TextBox();
+            label60 = new Label();
+            groupBox38 = new GroupBox();
+            rbSK_Ent_Note = new RadioButton();
+            rbSK_Ent_Unuse = new RadioButton();
+            rbSK_Ent_Cc = new RadioButton();
+            tbSK_Ent = new TextBox();
+            label61 = new Label();
+            cbSK_octRev = new CheckBox();
             gbWaveOut.SuspendLayout();
             gbAsioOut.SuspendLayout();
             gbWasapiOut.SuspendLayout();
@@ -531,6 +556,10 @@ namespace mml2vgmIDEx64
             tpAbout.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)logoPictureBox).BeginInit();
+            groupBox35.SuspendLayout();
+            groupBox36.SuspendLayout();
+            groupBox37.SuspendLayout();
+            groupBox38.SuspendLayout();
             SuspendLayout();
             // 
             // btnOK
@@ -1273,7 +1302,7 @@ namespace mml2vgmIDEx64
             tbcMIDIoutList.Margin = new Padding(4);
             tbcMIDIoutList.Name = "tbcMIDIoutList";
             tbcMIDIoutList.SelectedIndex = 0;
-            tbcMIDIoutList.Size = new Size(491, 225);
+            tbcMIDIoutList.Size = new Size(491, 222);
             tbcMIDIoutList.TabIndex = 4;
             // 
             // tabPage1
@@ -1285,7 +1314,7 @@ namespace mml2vgmIDEx64
             tabPage1.Margin = new Padding(4);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(4);
-            tabPage1.Size = new Size(483, 197);
+            tabPage1.Size = new Size(483, 194);
             tabPage1.TabIndex = 0;
             tabPage1.Tag = "0";
             tabPage1.Text = "GM";
@@ -1306,7 +1335,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListA.RowHeadersVisible = false;
             dgvMIDIoutListA.RowTemplate.Height = 21;
             dgvMIDIoutListA.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListA.Size = new Size(447, 183);
+            dgvMIDIoutListA.Size = new Size(447, 180);
             dgvMIDIoutListA.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -1387,7 +1416,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_A
             // 
             btnDOWN_A.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_A.Location = new Point(454, 111);
+            btnDOWN_A.Location = new Point(454, 108);
             btnDOWN_A.Margin = new Padding(4);
             btnDOWN_A.Name = "btnDOWN_A";
             btnDOWN_A.Size = new Size(26, 72);
@@ -1405,7 +1434,7 @@ namespace mml2vgmIDEx64
             tabPage2.Margin = new Padding(4);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(4);
-            tabPage2.Size = new Size(483, 184);
+            tabPage2.Size = new Size(483, 194);
             tabPage2.TabIndex = 1;
             tabPage2.Tag = "1";
             tabPage2.Text = "GS";
@@ -1425,7 +1454,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListB.RowHeadersVisible = false;
             dgvMIDIoutListB.RowTemplate.Height = 21;
             dgvMIDIoutListB.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListB.Size = new Size(449, 192);
+            dgvMIDIoutListB.Size = new Size(449, 202);
             dgvMIDIoutListB.TabIndex = 7;
             // 
             // btnUP_B
@@ -1443,7 +1472,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_B
             // 
             btnDOWN_B.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_B.Location = new Point(456, 119);
+            btnDOWN_B.Location = new Point(456, 129);
             btnDOWN_B.Margin = new Padding(4);
             btnDOWN_B.Name = "btnDOWN_B";
             btnDOWN_B.Size = new Size(26, 72);
@@ -1460,7 +1489,7 @@ namespace mml2vgmIDEx64
             tabPage3.Location = new Point(4, 24);
             tabPage3.Margin = new Padding(4);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(483, 184);
+            tabPage3.Size = new Size(483, 194);
             tabPage3.TabIndex = 2;
             tabPage3.Tag = "2";
             tabPage3.Text = "XG";
@@ -1480,7 +1509,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListC.RowHeadersVisible = false;
             dgvMIDIoutListC.RowTemplate.Height = 21;
             dgvMIDIoutListC.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListC.Size = new Size(449, 192);
+            dgvMIDIoutListC.Size = new Size(449, 202);
             dgvMIDIoutListC.TabIndex = 7;
             // 
             // btnUP_C
@@ -1498,7 +1527,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_C
             // 
             btnDOWN_C.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_C.Location = new Point(456, 119);
+            btnDOWN_C.Location = new Point(456, 129);
             btnDOWN_C.Margin = new Padding(4);
             btnDOWN_C.Name = "btnDOWN_C";
             btnDOWN_C.Size = new Size(26, 72);
@@ -1515,7 +1544,7 @@ namespace mml2vgmIDEx64
             tabPage4.Location = new Point(4, 24);
             tabPage4.Margin = new Padding(4);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(483, 184);
+            tabPage4.Size = new Size(483, 194);
             tabPage4.TabIndex = 3;
             tabPage4.Tag = "3";
             tabPage4.Text = "VSTi";
@@ -1535,7 +1564,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListD.RowHeadersVisible = false;
             dgvMIDIoutListD.RowTemplate.Height = 21;
             dgvMIDIoutListD.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListD.Size = new Size(449, 192);
+            dgvMIDIoutListD.Size = new Size(449, 202);
             dgvMIDIoutListD.TabIndex = 7;
             // 
             // btnUP_D
@@ -1553,7 +1582,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_D
             // 
             btnDOWN_D.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_D.Location = new Point(456, 119);
+            btnDOWN_D.Location = new Point(456, 129);
             btnDOWN_D.Margin = new Padding(4);
             btnDOWN_D.Name = "btnDOWN_D";
             btnDOWN_D.Size = new Size(26, 72);
@@ -1726,7 +1755,7 @@ namespace mml2vgmIDEx64
             tabPage5.Margin = new Padding(4);
             tabPage5.Name = "tabPage5";
             tabPage5.Padding = new Padding(4);
-            tabPage5.Size = new Size(508, 460);
+            tabPage5.Size = new Size(508, 480);
             tabPage5.TabIndex = 1;
             tabPage5.Text = "Gens";
             tabPage5.UseVisualStyleBackColor = true;
@@ -2110,7 +2139,7 @@ namespace mml2vgmIDEx64
             tabPage16.Margin = new Padding(4);
             tabPage16.Name = "tabPage16";
             tabPage16.Padding = new Padding(4);
-            tabPage16.Size = new Size(508, 460);
+            tabPage16.Size = new Size(508, 480);
             tabPage16.TabIndex = 1;
             tabPage16.Text = ".SID";
             tabPage16.UseVisualStyleBackColor = true;
@@ -2357,7 +2386,7 @@ namespace mml2vgmIDEx64
             tabPage17.Location = new Point(4, 24);
             tabPage17.Margin = new Padding(4);
             tabPage17.Name = "tabPage17";
-            tabPage17.Size = new Size(508, 460);
+            tabPage17.Size = new Size(508, 480);
             tabPage17.TabIndex = 2;
             tabPage17.Text = "Resetコマンド";
             tabPage17.UseVisualStyleBackColor = true;
@@ -3315,7 +3344,6 @@ namespace mml2vgmIDEx64
             // tpMIDIKBD
             // 
             tpMIDIKBD.BorderStyle = BorderStyle.FixedSingle;
-            tpMIDIKBD.Controls.Add(cbMIDIKbdAlwaysTop);
             tpMIDIKBD.Controls.Add(cbUseMIDIKeyboard);
             tpMIDIKBD.Controls.Add(gbMIDIKeyboard);
             tpMIDIKBD.Location = new Point(4, 44);
@@ -3325,17 +3353,6 @@ namespace mml2vgmIDEx64
             tpMIDIKBD.TabIndex = 5;
             tpMIDIKBD.Text = "MIDI鍵盤";
             tpMIDIKBD.UseVisualStyleBackColor = true;
-            // 
-            // cbMIDIKbdAlwaysTop
-            // 
-            cbMIDIKbdAlwaysTop.AutoSize = true;
-            cbMIDIKbdAlwaysTop.Location = new Point(14, 80);
-            cbMIDIKbdAlwaysTop.Margin = new Padding(4);
-            cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
-            cbMIDIKbdAlwaysTop.Size = new Size(156, 19);
-            cbMIDIKbdAlwaysTop.TabIndex = 2;
-            cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
-            cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
             // 
             // cbUseMIDIKeyboard
             // 
@@ -3352,6 +3369,20 @@ namespace mml2vgmIDEx64
             // gbMIDIKeyboard
             // 
             gbMIDIKeyboard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gbMIDIKeyboard.Controls.Add(cbSK_octRev);
+            gbMIDIKeyboard.Controls.Add(label61);
+            gbMIDIKeyboard.Controls.Add(label60);
+            gbMIDIKeyboard.Controls.Add(tbSK_Ent);
+            gbMIDIKeyboard.Controls.Add(label59);
+            gbMIDIKeyboard.Controls.Add(tbSK_Spc);
+            gbMIDIKeyboard.Controls.Add(label58);
+            gbMIDIKeyboard.Controls.Add(groupBox38);
+            gbMIDIKeyboard.Controls.Add(tbSK_Undo);
+            gbMIDIKeyboard.Controls.Add(groupBox37);
+            gbMIDIKeyboard.Controls.Add(tbSK_Prev);
+            gbMIDIKeyboard.Controls.Add(groupBox36);
+            gbMIDIKeyboard.Controls.Add(groupBox35);
+            gbMIDIKeyboard.Controls.Add(cbMIDIKbdAlwaysTop);
             gbMIDIKeyboard.Controls.Add(pictureBox8);
             gbMIDIKeyboard.Controls.Add(pictureBox7);
             gbMIDIKeyboard.Controls.Add(pictureBox6);
@@ -3383,14 +3414,26 @@ namespace mml2vgmIDEx64
             gbMIDIKeyboard.Margin = new Padding(4);
             gbMIDIKeyboard.Name = "gbMIDIKeyboard";
             gbMIDIKeyboard.Padding = new Padding(4);
-            gbMIDIKeyboard.Size = new Size(507, 185);
+            gbMIDIKeyboard.Size = new Size(507, 496);
             gbMIDIKeyboard.TabIndex = 0;
             gbMIDIKeyboard.TabStop = false;
+            // 
+            // cbMIDIKbdAlwaysTop
+            // 
+            cbMIDIKbdAlwaysTop.AutoSize = true;
+            cbMIDIKbdAlwaysTop.Location = new Point(5, 472);
+            cbMIDIKbdAlwaysTop.Margin = new Padding(4);
+            cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
+            cbMIDIKbdAlwaysTop.Size = new Size(156, 19);
+            cbMIDIKbdAlwaysTop.TabIndex = 2;
+            cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
+            cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
+            cbMIDIKbdAlwaysTop.Visible = false;
             // 
             // pictureBox8
             // 
             pictureBox8.Image = Resources.ccNext;
-            pictureBox8.Location = new Point(433, 321);
+            pictureBox8.Location = new Point(429, 441);
             pictureBox8.Margin = new Padding(4);
             pictureBox8.Name = "pictureBox8";
             pictureBox8.Size = new Size(19, 20);
@@ -3401,7 +3444,7 @@ namespace mml2vgmIDEx64
             // pictureBox7
             // 
             pictureBox7.Image = Resources.ccFast;
-            pictureBox7.Location = new Point(304, 321);
+            pictureBox7.Location = new Point(300, 441);
             pictureBox7.Margin = new Padding(4);
             pictureBox7.Name = "pictureBox7";
             pictureBox7.Size = new Size(19, 20);
@@ -3412,7 +3455,7 @@ namespace mml2vgmIDEx64
             // pictureBox6
             // 
             pictureBox6.Image = Resources.ccPlay;
-            pictureBox6.Location = new Point(177, 322);
+            pictureBox6.Location = new Point(173, 442);
             pictureBox6.Margin = new Padding(4);
             pictureBox6.Name = "pictureBox6";
             pictureBox6.Size = new Size(19, 20);
@@ -3423,7 +3466,7 @@ namespace mml2vgmIDEx64
             // pictureBox5
             // 
             pictureBox5.Image = Resources.ccSlow;
-            pictureBox5.Location = new Point(49, 322);
+            pictureBox5.Location = new Point(45, 442);
             pictureBox5.Margin = new Padding(4);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new Size(19, 20);
@@ -3434,7 +3477,7 @@ namespace mml2vgmIDEx64
             // pictureBox4
             // 
             pictureBox4.Image = Resources.ccStop;
-            pictureBox4.Location = new Point(49, 292);
+            pictureBox4.Location = new Point(45, 412);
             pictureBox4.Margin = new Padding(4);
             pictureBox4.Name = "pictureBox4";
             pictureBox4.Size = new Size(19, 20);
@@ -3445,7 +3488,7 @@ namespace mml2vgmIDEx64
             // pictureBox3
             // 
             pictureBox3.Image = Resources.ccPause;
-            pictureBox3.Location = new Point(177, 292);
+            pictureBox3.Location = new Point(173, 412);
             pictureBox3.Margin = new Padding(4);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(19, 20);
@@ -3456,7 +3499,7 @@ namespace mml2vgmIDEx64
             // pictureBox2
             // 
             pictureBox2.Image = Resources.ccPrevious;
-            pictureBox2.Location = new Point(433, 292);
+            pictureBox2.Location = new Point(429, 412);
             pictureBox2.Margin = new Padding(4);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(19, 20);
@@ -3467,7 +3510,7 @@ namespace mml2vgmIDEx64
             // pictureBox1
             // 
             pictureBox1.Image = Resources.ccFadeout;
-            pictureBox1.Location = new Point(304, 292);
+            pictureBox1.Location = new Point(300, 412);
             pictureBox1.Margin = new Padding(4);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(19, 20);
@@ -3477,7 +3520,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCFadeout
             // 
-            tbCCFadeout.Location = new Point(262, 290);
+            tbCCFadeout.Location = new Point(258, 410);
             tbCCFadeout.Margin = new Padding(4);
             tbCCFadeout.MaxLength = 3;
             tbCCFadeout.Name = "tbCCFadeout";
@@ -3487,7 +3530,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCPause
             // 
-            tbCCPause.Location = new Point(135, 290);
+            tbCCPause.Location = new Point(131, 410);
             tbCCPause.Margin = new Padding(4);
             tbCCPause.MaxLength = 3;
             tbCCPause.Name = "tbCCPause";
@@ -3497,7 +3540,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCSlow
             // 
-            tbCCSlow.Location = new Point(7, 321);
+            tbCCSlow.Location = new Point(3, 441);
             tbCCSlow.Margin = new Padding(4);
             tbCCSlow.MaxLength = 3;
             tbCCSlow.Name = "tbCCSlow";
@@ -3507,7 +3550,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCPrevious
             // 
-            tbCCPrevious.Location = new Point(391, 290);
+            tbCCPrevious.Location = new Point(387, 410);
             tbCCPrevious.Margin = new Padding(4);
             tbCCPrevious.MaxLength = 3;
             tbCCPrevious.Name = "tbCCPrevious";
@@ -3517,7 +3560,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCNext
             // 
-            tbCCNext.Location = new Point(391, 321);
+            tbCCNext.Location = new Point(387, 441);
             tbCCNext.Margin = new Padding(4);
             tbCCNext.MaxLength = 3;
             tbCCNext.Name = "tbCCNext";
@@ -3527,7 +3570,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCFast
             // 
-            tbCCFast.Location = new Point(262, 321);
+            tbCCFast.Location = new Point(258, 441);
             tbCCFast.Margin = new Padding(4);
             tbCCFast.MaxLength = 3;
             tbCCFast.Name = "tbCCFast";
@@ -3537,7 +3580,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCStop
             // 
-            tbCCStop.Location = new Point(7, 290);
+            tbCCStop.Location = new Point(3, 410);
             tbCCStop.Margin = new Padding(4);
             tbCCStop.MaxLength = 3;
             tbCCStop.Name = "tbCCStop";
@@ -3547,7 +3590,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCPlay
             // 
-            tbCCPlay.Location = new Point(135, 321);
+            tbCCPlay.Location = new Point(131, 441);
             tbCCPlay.Margin = new Padding(4);
             tbCCPlay.MaxLength = 3;
             tbCCPlay.Name = "tbCCPlay";
@@ -3557,7 +3600,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCCopyLog
             // 
-            tbCCCopyLog.Location = new Point(7, 259);
+            tbCCCopyLog.Location = new Point(3, 379);
             tbCCCopyLog.Margin = new Padding(4);
             tbCCCopyLog.MaxLength = 3;
             tbCCCopyLog.Name = "tbCCCopyLog";
@@ -3568,7 +3611,7 @@ namespace mml2vgmIDEx64
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(49, 262);
+            label17.Location = new Point(45, 382);
             label17.Margin = new Padding(4, 0, 4, 0);
             label17.Name = "label17";
             label17.Size = new Size(233, 15);
@@ -3578,7 +3621,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCDelLog
             // 
-            tbCCDelLog.Location = new Point(7, 228);
+            tbCCDelLog.Location = new Point(3, 348);
             tbCCDelLog.Margin = new Padding(4);
             tbCCDelLog.MaxLength = 3;
             tbCCDelLog.Name = "tbCCDelLog";
@@ -3589,7 +3632,7 @@ namespace mml2vgmIDEx64
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(49, 231);
+            label15.Location = new Point(45, 351);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(120, 15);
@@ -3599,7 +3642,7 @@ namespace mml2vgmIDEx64
             // 
             // tbCCChCopy
             // 
-            tbCCChCopy.Location = new Point(7, 196);
+            tbCCChCopy.Location = new Point(3, 316);
             tbCCChCopy.Margin = new Padding(4);
             tbCCChCopy.MaxLength = 3;
             tbCCChCopy.Name = "tbCCChCopy";
@@ -3610,7 +3653,7 @@ namespace mml2vgmIDEx64
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(7, 178);
+            label8.Location = new Point(3, 298);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(162, 15);
@@ -3621,7 +3664,7 @@ namespace mml2vgmIDEx64
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(49, 200);
+            label9.Location = new Point(45, 320);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
             label9.Size = new Size(261, 15);
@@ -3635,11 +3678,11 @@ namespace mml2vgmIDEx64
             gbUseChannel.Controls.Add(rbPOLY);
             gbUseChannel.Controls.Add(groupBox7);
             gbUseChannel.Controls.Add(groupBox2);
-            gbUseChannel.Location = new Point(7, 55);
+            gbUseChannel.Location = new Point(355, 320);
             gbUseChannel.Margin = new Padding(4);
             gbUseChannel.Name = "gbUseChannel";
             gbUseChannel.Padding = new Padding(4);
-            gbUseChannel.Size = new Size(496, 108);
+            gbUseChannel.Size = new Size(114, 52);
             gbUseChannel.TabIndex = 2;
             gbUseChannel.TabStop = false;
             gbUseChannel.Text = "use channel";
@@ -4283,6 +4326,16 @@ namespace mml2vgmIDEx64
             tpOther2.TabIndex = 18;
             tpOther2.Text = "Other";
             tpOther2.UseVisualStyleBackColor = true;
+            // 
+            // cbHilightOn
+            // 
+            cbHilightOn.AutoSize = true;
+            cbHilightOn.Location = new Point(8, 305);
+            cbHilightOn.Name = "cbHilightOn";
+            cbHilightOn.Size = new Size(121, 19);
+            cbHilightOn.TabIndex = 32;
+            cbHilightOn.Text = "ハイライトを使用する";
+            cbHilightOn.UseVisualStyleBackColor = true;
             // 
             // tbTABWidth
             // 
@@ -5292,15 +5345,255 @@ namespace mml2vgmIDEx64
             cbHiyorimiMode.UseVisualStyleBackColor = true;
             cbHiyorimiMode.Visible = false;
             // 
-            // cbHilightOn
+            // rbSK_Prev_Note
             // 
-            cbHilightOn.AutoSize = true;
-            cbHilightOn.Location = new Point(8, 305);
-            cbHilightOn.Name = "cbHilightOn";
-            cbHilightOn.Size = new Size(121, 19);
-            cbHilightOn.TabIndex = 32;
-            cbHilightOn.Text = "ハイライトを使用する";
-            cbHilightOn.UseVisualStyleBackColor = true;
+            rbSK_Prev_Note.AutoSize = true;
+            rbSK_Prev_Note.Location = new Point(6, 13);
+            rbSK_Prev_Note.Name = "rbSK_Prev_Note";
+            rbSK_Prev_Note.Size = new Size(51, 19);
+            rbSK_Prev_Note.TabIndex = 19;
+            rbSK_Prev_Note.TabStop = true;
+            rbSK_Prev_Note.Text = "Note";
+            rbSK_Prev_Note.UseVisualStyleBackColor = true;
+            // 
+            // rbSK_Prev_Cc
+            // 
+            rbSK_Prev_Cc.AutoSize = true;
+            rbSK_Prev_Cc.Location = new Point(63, 13);
+            rbSK_Prev_Cc.Name = "rbSK_Prev_Cc";
+            rbSK_Prev_Cc.Size = new Size(39, 19);
+            rbSK_Prev_Cc.TabIndex = 19;
+            rbSK_Prev_Cc.TabStop = true;
+            rbSK_Prev_Cc.Text = "CC";
+            rbSK_Prev_Cc.UseVisualStyleBackColor = true;
+            // 
+            // groupBox35
+            // 
+            groupBox35.Controls.Add(rbSK_Prev_Note);
+            groupBox35.Controls.Add(rbSK_Prev_Unuse);
+            groupBox35.Controls.Add(rbSK_Prev_Cc);
+            groupBox35.Location = new Point(129, 52);
+            groupBox35.Name = "groupBox35";
+            groupBox35.Size = new Size(190, 38);
+            groupBox35.TabIndex = 20;
+            groupBox35.TabStop = false;
+            // 
+            // tbSK_Prev
+            // 
+            tbSK_Prev.Location = new Point(335, 61);
+            tbSK_Prev.Name = "tbSK_Prev";
+            tbSK_Prev.Size = new Size(53, 23);
+            tbSK_Prev.TabIndex = 21;
+            // 
+            // groupBox36
+            // 
+            groupBox36.Controls.Add(rbSK_Undo_Note);
+            groupBox36.Controls.Add(rbSK_Undo_Unuse);
+            groupBox36.Controls.Add(rbSK_Undo_Cc);
+            groupBox36.Location = new Point(129, 92);
+            groupBox36.Name = "groupBox36";
+            groupBox36.Size = new Size(190, 38);
+            groupBox36.TabIndex = 20;
+            groupBox36.TabStop = false;
+            // 
+            // rbSK_Undo_Note
+            // 
+            rbSK_Undo_Note.AutoSize = true;
+            rbSK_Undo_Note.Location = new Point(6, 13);
+            rbSK_Undo_Note.Name = "rbSK_Undo_Note";
+            rbSK_Undo_Note.Size = new Size(51, 19);
+            rbSK_Undo_Note.TabIndex = 19;
+            rbSK_Undo_Note.TabStop = true;
+            rbSK_Undo_Note.Text = "Note";
+            rbSK_Undo_Note.UseVisualStyleBackColor = true;
+            // 
+            // rbSK_Undo_Cc
+            // 
+            rbSK_Undo_Cc.AutoSize = true;
+            rbSK_Undo_Cc.Location = new Point(63, 13);
+            rbSK_Undo_Cc.Name = "rbSK_Undo_Cc";
+            rbSK_Undo_Cc.Size = new Size(39, 19);
+            rbSK_Undo_Cc.TabIndex = 19;
+            rbSK_Undo_Cc.TabStop = true;
+            rbSK_Undo_Cc.Text = "CC";
+            rbSK_Undo_Cc.UseVisualStyleBackColor = true;
+            // 
+            // tbSK_Undo
+            // 
+            tbSK_Undo.Location = new Point(335, 104);
+            tbSK_Undo.Name = "tbSK_Undo";
+            tbSK_Undo.Size = new Size(53, 23);
+            tbSK_Undo.TabIndex = 21;
+            // 
+            // label58
+            // 
+            label58.AutoSize = true;
+            label58.Location = new Point(7, 67);
+            label58.Name = "label58";
+            label58.Size = new Size(97, 15);
+            label58.TabIndex = 22;
+            label58.Text = "プレビューモード切替";
+            // 
+            // rbSK_Prev_Unuse
+            // 
+            rbSK_Prev_Unuse.AutoSize = true;
+            rbSK_Prev_Unuse.Location = new Point(108, 13);
+            rbSK_Prev_Unuse.Name = "rbSK_Prev_Unuse";
+            rbSK_Prev_Unuse.Size = new Size(57, 19);
+            rbSK_Prev_Unuse.TabIndex = 19;
+            rbSK_Prev_Unuse.TabStop = true;
+            rbSK_Prev_Unuse.Text = "unuse";
+            rbSK_Prev_Unuse.UseVisualStyleBackColor = true;
+            // 
+            // label59
+            // 
+            label59.AutoSize = true;
+            label59.Location = new Point(9, 107);
+            label59.Name = "label59";
+            label59.Size = new Size(36, 15);
+            label59.TabIndex = 22;
+            label59.Text = "Undo";
+            // 
+            // rbSK_Undo_Unuse
+            // 
+            rbSK_Undo_Unuse.AutoSize = true;
+            rbSK_Undo_Unuse.Location = new Point(108, 13);
+            rbSK_Undo_Unuse.Name = "rbSK_Undo_Unuse";
+            rbSK_Undo_Unuse.Size = new Size(57, 19);
+            rbSK_Undo_Unuse.TabIndex = 19;
+            rbSK_Undo_Unuse.TabStop = true;
+            rbSK_Undo_Unuse.Text = "unuse";
+            rbSK_Undo_Unuse.UseVisualStyleBackColor = true;
+            // 
+            // groupBox37
+            // 
+            groupBox37.Controls.Add(rbSK_Spc_Note);
+            groupBox37.Controls.Add(rbSK_Spc_Unuse);
+            groupBox37.Controls.Add(rbSK_Spc_Cc);
+            groupBox37.Location = new Point(129, 134);
+            groupBox37.Name = "groupBox37";
+            groupBox37.Size = new Size(190, 38);
+            groupBox37.TabIndex = 20;
+            groupBox37.TabStop = false;
+            // 
+            // rbSK_Spc_Note
+            // 
+            rbSK_Spc_Note.AutoSize = true;
+            rbSK_Spc_Note.Location = new Point(6, 13);
+            rbSK_Spc_Note.Name = "rbSK_Spc_Note";
+            rbSK_Spc_Note.Size = new Size(51, 19);
+            rbSK_Spc_Note.TabIndex = 19;
+            rbSK_Spc_Note.TabStop = true;
+            rbSK_Spc_Note.Text = "Note";
+            rbSK_Spc_Note.UseVisualStyleBackColor = true;
+            // 
+            // rbSK_Spc_Unuse
+            // 
+            rbSK_Spc_Unuse.AutoSize = true;
+            rbSK_Spc_Unuse.Location = new Point(108, 13);
+            rbSK_Spc_Unuse.Name = "rbSK_Spc_Unuse";
+            rbSK_Spc_Unuse.Size = new Size(57, 19);
+            rbSK_Spc_Unuse.TabIndex = 19;
+            rbSK_Spc_Unuse.TabStop = true;
+            rbSK_Spc_Unuse.Text = "unuse";
+            rbSK_Spc_Unuse.UseVisualStyleBackColor = true;
+            // 
+            // rbSK_Spc_Cc
+            // 
+            rbSK_Spc_Cc.AutoSize = true;
+            rbSK_Spc_Cc.Location = new Point(63, 13);
+            rbSK_Spc_Cc.Name = "rbSK_Spc_Cc";
+            rbSK_Spc_Cc.Size = new Size(39, 19);
+            rbSK_Spc_Cc.TabIndex = 19;
+            rbSK_Spc_Cc.TabStop = true;
+            rbSK_Spc_Cc.Text = "CC";
+            rbSK_Spc_Cc.UseVisualStyleBackColor = true;
+            // 
+            // tbSK_Spc
+            // 
+            tbSK_Spc.Location = new Point(335, 146);
+            tbSK_Spc.Name = "tbSK_Spc";
+            tbSK_Spc.Size = new Size(53, 23);
+            tbSK_Spc.TabIndex = 21;
+            // 
+            // label60
+            // 
+            label60.AutoSize = true;
+            label60.Location = new Point(9, 149);
+            label60.Name = "label60";
+            label60.Size = new Size(31, 15);
+            label60.TabIndex = 22;
+            label60.Text = "空白";
+            // 
+            // groupBox38
+            // 
+            groupBox38.Controls.Add(rbSK_Ent_Note);
+            groupBox38.Controls.Add(rbSK_Ent_Unuse);
+            groupBox38.Controls.Add(rbSK_Ent_Cc);
+            groupBox38.Location = new Point(129, 178);
+            groupBox38.Name = "groupBox38";
+            groupBox38.Size = new Size(190, 38);
+            groupBox38.TabIndex = 20;
+            groupBox38.TabStop = false;
+            // 
+            // rbSK_Ent_Note
+            // 
+            rbSK_Ent_Note.AutoSize = true;
+            rbSK_Ent_Note.Location = new Point(6, 13);
+            rbSK_Ent_Note.Name = "rbSK_Ent_Note";
+            rbSK_Ent_Note.Size = new Size(51, 19);
+            rbSK_Ent_Note.TabIndex = 19;
+            rbSK_Ent_Note.TabStop = true;
+            rbSK_Ent_Note.Text = "Note";
+            rbSK_Ent_Note.UseVisualStyleBackColor = true;
+            // 
+            // rbSK_Ent_Unuse
+            // 
+            rbSK_Ent_Unuse.AutoSize = true;
+            rbSK_Ent_Unuse.Location = new Point(108, 13);
+            rbSK_Ent_Unuse.Name = "rbSK_Ent_Unuse";
+            rbSK_Ent_Unuse.Size = new Size(57, 19);
+            rbSK_Ent_Unuse.TabIndex = 19;
+            rbSK_Ent_Unuse.TabStop = true;
+            rbSK_Ent_Unuse.Text = "unuse";
+            rbSK_Ent_Unuse.UseVisualStyleBackColor = true;
+            // 
+            // rbSK_Ent_Cc
+            // 
+            rbSK_Ent_Cc.AutoSize = true;
+            rbSK_Ent_Cc.Location = new Point(63, 13);
+            rbSK_Ent_Cc.Name = "rbSK_Ent_Cc";
+            rbSK_Ent_Cc.Size = new Size(39, 19);
+            rbSK_Ent_Cc.TabIndex = 19;
+            rbSK_Ent_Cc.TabStop = true;
+            rbSK_Ent_Cc.Text = "CC";
+            rbSK_Ent_Cc.UseVisualStyleBackColor = true;
+            // 
+            // tbSK_Ent
+            // 
+            tbSK_Ent.Location = new Point(335, 190);
+            tbSK_Ent.Name = "tbSK_Ent";
+            tbSK_Ent.Size = new Size(53, 23);
+            tbSK_Ent.TabIndex = 21;
+            // 
+            // label61
+            // 
+            label61.AutoSize = true;
+            label61.Location = new Point(9, 193);
+            label61.Name = "label61";
+            label61.Size = new Size(31, 15);
+            label61.TabIndex = 22;
+            label61.Text = "改行";
+            // 
+            // cbSK_octRev
+            // 
+            cbSK_octRev.AutoSize = true;
+            cbSK_octRev.Location = new Point(9, 229);
+            cbSK_octRev.Name = "cbSK_octRev";
+            cbSK_octRev.Size = new Size(201, 19);
+            cbSK_octRev.TabIndex = 23;
+            cbSK_octRev.Text = "相対オクターブコマンドをX68k系にする";
+            cbSK_octRev.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5473,6 +5766,14 @@ namespace mml2vgmIDEx64
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)logoPictureBox).EndInit();
+            groupBox35.ResumeLayout(false);
+            groupBox35.PerformLayout();
+            groupBox36.ResumeLayout(false);
+            groupBox36.PerformLayout();
+            groupBox37.ResumeLayout(false);
+            groupBox37.PerformLayout();
+            groupBox38.ResumeLayout(false);
+            groupBox38.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -5880,5 +6181,30 @@ namespace mml2vgmIDEx64
         private TextBox tbTABWidth;
         private Label label56;
         private CheckBox cbHilightOn;
+        private RadioButton rbSK_Prev_Note;
+        private TextBox tbSK_Prev;
+        private GroupBox groupBox35;
+        private RadioButton rbSK_Prev_Cc;
+        private Label label59;
+        private Label label58;
+        private TextBox tbSK_Undo;
+        private GroupBox groupBox36;
+        private RadioButton rbSK_Undo_Note;
+        private RadioButton rbSK_Undo_Cc;
+        private RadioButton rbSK_Prev_Unuse;
+        private CheckBox cbSK_octRev;
+        private Label label61;
+        private Label label60;
+        private TextBox tbSK_Ent;
+        private TextBox tbSK_Spc;
+        private GroupBox groupBox38;
+        private RadioButton rbSK_Ent_Note;
+        private RadioButton rbSK_Ent_Unuse;
+        private RadioButton rbSK_Ent_Cc;
+        private GroupBox groupBox37;
+        private RadioButton rbSK_Spc_Note;
+        private RadioButton rbSK_Spc_Unuse;
+        private RadioButton rbSK_Spc_Cc;
+        private RadioButton rbSK_Undo_Unuse;
     }
 }

@@ -532,6 +532,10 @@ namespace mml2vgmIDEx64
                 if (c.Name == "ClmPartNumber") continue;
                 if (c.Name == "ClmchipNumber") continue;
                 if (c.Name == "ClmMuteMngKey") continue;
+                if (!setting.midiKbd.useOldFunction)
+                {
+                    if (c.Name == "ClmKBDAssign") continue;
+                }
 
                 cmsMenu.Items.Add(c.HeaderText);
                 cmsMenu.Items[cmsMenu.Items.Count - 1].Tag = c.Tag;
@@ -766,6 +770,8 @@ namespace mml2vgmIDEx64
 
                 for (int i = 0; i < colName.Length; i++)
                 {
+
+
                     if (!dgvPartCounter.Columns.Contains(colName[i].Item2))
                     {
                         DataGridViewColumn col;
@@ -780,6 +786,10 @@ namespace mml2vgmIDEx64
                         col.Name = colName[i].Item2;
                         col.HeaderText = colName[i].Item3;
                         col.Visible = colName[i].Item4;
+                        if (!setting.midiKbd.useOldFunction)
+                        {
+                            if (colName[i].Item2 == "ClmKBDAssign") col.Visible=false;
+                        }
                         col.DefaultCellStyle.Alignment = colName[i].Item5;
                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
                         if (colName[i].Item2 == "ClmSpacer")

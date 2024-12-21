@@ -3598,6 +3598,31 @@ namespace mml2vgmIDEx64
             public LfoParam[] LfoParams { get => _LfoParams; set => _LfoParams = value; }
             public bool UseQuantize { get => _UseQuantize; set => _UseQuantize = value; }
 
+            private bool _useOldFunction = false;
+
+            private int _simpleChangePreviewMode_Type = 1;
+            private int _simpleChangePreviewMode_Adr = 48;//o3c
+            private int _simpleUndo_Type = 1;
+            private int _simpleUndo_Adr = 50;//o3d
+            private int _simpleWriteSpace_Type = 1;
+            private int _simpleWriteSpace_Adr = 52;//o3e
+            private int _simpleWriteEnter_Type = 1;
+            private int _simpleWriteEnter_Adr = 53;//o3f
+
+            private bool _simpleOctaveChange = false;
+
+            public bool useOldFunction { get => _useOldFunction; set => _useOldFunction = value; }
+
+            public int simpleChangePreviewMode_Type { get => _simpleChangePreviewMode_Type; set => _simpleChangePreviewMode_Type = value; }
+            public int simpleChangePreviewMode_Adr { get => _simpleChangePreviewMode_Adr; set => _simpleChangePreviewMode_Adr = value; }
+            public int simpleUndo_Type { get => _simpleUndo_Type; set => _simpleUndo_Type = value; }
+            public int simpleUndo_Adr { get => _simpleUndo_Adr; set => _simpleUndo_Adr = value; }
+            public int simpleWriteSpace_Type { get => _simpleWriteSpace_Type; set => _simpleWriteSpace_Type = value; }
+            public int simpleWriteSpace_Adr { get => _simpleWriteSpace_Adr; set => _simpleWriteSpace_Adr = value; }
+            public int simpleWriteEnter_Type { get => _simpleWriteEnter_Type; set => _simpleWriteEnter_Type = value; }
+            public int simpleWriteEnter_Adr { get => _simpleWriteEnter_Adr; set => _simpleWriteEnter_Adr = value; }
+            public bool simpleOctaveChange { get => _simpleOctaveChange; set => _simpleOctaveChange = value; }
+
             public MidiKbd Copy()
             {
                 MidiKbd midiKbd = new MidiKbd();
@@ -3640,6 +3665,16 @@ namespace mml2vgmIDEx64
                         midiKbd.LfoParams[i] = this.LfoParams[i].Copy();
                     }
                 }
+                midiKbd.useOldFunction = this.useOldFunction;
+                midiKbd.simpleChangePreviewMode_Type = this.simpleChangePreviewMode_Type;
+                midiKbd.simpleChangePreviewMode_Adr = this.simpleChangePreviewMode_Adr;
+                midiKbd.simpleUndo_Type = this.simpleUndo_Type;
+                midiKbd.simpleUndo_Adr = this.simpleUndo_Adr;
+                midiKbd.simpleWriteSpace_Type = this.simpleWriteSpace_Type;
+                midiKbd.simpleWriteSpace_Adr = this.simpleWriteSpace_Adr;
+                midiKbd.simpleWriteEnter_Type = this.simpleWriteEnter_Type;
+                midiKbd.simpleWriteEnter_Adr = this.simpleWriteEnter_Adr;
+                midiKbd.simpleOctaveChange=this.simpleOctaveChange;
                 return midiKbd;
             }
         }

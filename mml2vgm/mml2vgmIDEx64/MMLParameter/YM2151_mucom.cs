@@ -54,7 +54,7 @@ namespace mml2vgmIDEx64.MMLParameter
             chip.silentVoice[ch] = flg;
             chip.silentVoicePG[ch] = pt * 10 + pg;
 
-            midiKbd.SetAssignChipCh(EnmChip.YM2151, ch);
+            midiKbd?.SetAssignChipCh(EnmChip.YM2151, ch);
         }
 
         protected override void SetInstrument(outDatum od, int ch, int cc)
