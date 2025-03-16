@@ -331,10 +331,15 @@
     n : 0 ～ 255  
 - Support chips  
     - RF5C164  
+    - YM2151  
+    - YM2203(FM)  
+    - YM2610B(FM)  
     - YM2610B(ADPCM-A)  
     - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
     - YM2609(RHYTHM)  
     - YM2609(ADPCM)  
     - SEGAPCM  

@@ -2537,10 +2537,8 @@ namespace Corex64
 
             if (page.envelopeMode)
             {
-                if (page.envIndex != -1)
-                {
-                    vol -= (127 - page.envVolume);
-                }
+                if (page.envIndex != -1) vol -= (127 - page.envVolume);
+                else vol -= 127;
             }
 
             //if (page.spg.beforeVolume != vol)
