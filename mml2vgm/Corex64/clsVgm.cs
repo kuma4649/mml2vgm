@@ -5691,6 +5691,10 @@ namespace Corex64
                             break;
                         }
                         page.envCounter = page.envelope[(int)eENV.AR];
+                        if (page.envCounter == 0)
+                        {
+                            page.envIndex++;
+                        }
                         break;
                     case 1: //DR phase
                         //System.Diagnostics.Debug.Write("eDR");
@@ -5704,6 +5708,10 @@ namespace Corex64
                             break;
                         }
                         page.envCounter = page.envelope[(int)eENV.DR]; // DR
+                        if (page.envCounter == 0)
+                        {
+                            page.envIndex++;
+                        }
                         break;
                     case 2: //SR phase
                         //System.Diagnostics.Debug.Write("eSR");
@@ -5717,6 +5725,12 @@ namespace Corex64
                             break;
                         }
                         page.envCounter = page.envelope[(int)eENV.SR]; // SR
+                        if (page.envCounter == 0)
+                        {
+                            page.envVolume = 0;
+                            page.envCounter = 0;
+                            page.envIndex = -1;
+                        }
                         break;
                     case 3: //RR phase
                         //System.Diagnostics.Debug.Write("eRR");
@@ -5732,6 +5746,12 @@ namespace Corex64
                             break;
                         }
                         page.envCounter = page.envelope[(int)eENV.RR]; // RR
+                        if (page.envCounter == 0)
+                        {
+                            page.envVolume = 0;
+                            page.envCounter = 0;
+                            page.envIndex = -1;
+                        }
                         break;
                 }
             }

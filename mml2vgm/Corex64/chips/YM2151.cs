@@ -138,14 +138,7 @@ namespace Corex64
                 }
                 //ope[i] = ope[i] - minV + (127 - vol);
                 ope[i] = ope[i] + (127 - vol);
-                if (ope[i] < 0)
-                {
-                    ope[i] = 0;
-                }
-                if (ope[i] > 127)
-                {
-                    ope[i] = 127;
-                }
+                ope[i] = Common.CheckRange(ope[i], 0, 127);
             }
 
             if (!page.vguard)
@@ -578,6 +571,14 @@ namespace Corex64
             if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
+            }
+
+            if (page.envelopeMode)
+            {
+                if (page.envIndex != -1)
+                {
+                    vol -= (127 - page.envVolume);
+                }
             }
 
             if (page.beforeVolume != vol)

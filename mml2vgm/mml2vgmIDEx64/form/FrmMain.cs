@@ -3017,6 +3017,19 @@ namespace mml2vgmIDEx64
 
         private void JumpDocument(string fn, long ln, bool wantFocus)
         {
+            if(string.IsNullOrEmpty(fn) && ln < 0)
+            {
+                foreach (DockContent dc in dpMain.Documents)
+                {
+                    Sgry.Azuki.Document d = ((Document)dc.Tag).editor.azukiControl.Document;
+                    int begin, end;
+                    d.GetSelection(out begin, out end);
+                    end = begin;
+                    d.SetSelection(begin, end);
+                }
+                return;
+            }
+
             try
             {
                 foreach (DockContent dc in dpMain.Documents)

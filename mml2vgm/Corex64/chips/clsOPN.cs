@@ -2535,6 +2535,14 @@ namespace Corex64
                 vol += page.varpDelta;
             }
 
+            if (page.envelopeMode)
+            {
+                if (page.envIndex != -1)
+                {
+                    vol -= (127 - page.envVolume);
+                }
+            }
+
             //if (page.spg.beforeVolume != vol)
             {
                 //if (parent.instFM.ContainsKey(page.instrument))
@@ -2919,6 +2927,17 @@ namespace Corex64
 
             if (type == 'E')
             {
+                //if(page.Type== enmChannelType.FMOPN
+                //    || page.Type == enmChannelType.FMOPNex
+                //    || page.Type == enmChannelType.RHYTHM
+                //    || page.Type == enmChannelType.FMPCM
+                //    || page.Type == enmChannelType.FMPCMex
+                //    )
+                //{
+                //    msgBox.setErrMsg(msg.get("E11015"), mml.line.Lp);
+                //    return;
+                //}
+
                 SetEnvelopParamFromInstrument(page, n, re, mml);
                 return;
             }

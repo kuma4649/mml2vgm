@@ -63,6 +63,10 @@ namespace mml2vgmIDEx64
             {
                 parentJumpDocument?.Invoke(f, n, wantFocus);
             }
+            else
+            {
+                parentJumpDocument?.Invoke("", -1, wantFocus);
+            }
         }
 
         private void FrmErrorList_DragOver(object sender, DragEventArgs e)
