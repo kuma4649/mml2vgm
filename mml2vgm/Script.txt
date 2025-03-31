@@ -43,6 +43,13 @@
   今のところ、mml2vgmIDEはごく一部のパラメーターしか参照しません。
 
 
+!!注意!!
+  from mml2vgmIDEx64 import ScriptInfo
+  from mml2vgmIDEx64 import Mml2vgmInfo
+
+をソースの始めに宣言することでScriptInfoとMml2vgmInfoのクラスが使用できるようになります。
+(x64になってmml2vgmIDEからmml2vgmIDEx64に名称が変わっています。)
+
 
 ScriptInfoについて
   ScriptInfoは、スクリプトからmml2vgmIDEに情報を渡す為のクラスになります。

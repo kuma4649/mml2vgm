@@ -1,5 +1,5 @@
-﻿from mml2vgmIDE import ScriptInfo
-from mml2vgmIDE import Mml2vgmInfo
+﻿from mml2vgmIDEx64 import ScriptInfo
+from mml2vgmIDEx64 import Mml2vgmInfo
 
 class Mml2vgmScript:
 

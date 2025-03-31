@@ -42,6 +42,9 @@ namespace mml2vgmIDEx64
 
                     Assembly assembly = typeof(Program).Assembly;
                     runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
+                    //var paths=engine.GetSearchPaths();
+                    //paths.Add("D:\\bootcamp\\Source\\Repos\\mml2vgm\\mml2vgm\\mml2vgmIDEx64\\bin\\x64\\Debug\\net8.0-windows7.0");
+                    //engine.SetSearchPaths(paths);
                     source.Execute(scope);
 
                     dynamic pyClass = scope.GetVariable("Mml2vgmScript");
