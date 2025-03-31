@@ -864,32 +864,33 @@ namespace mml2vgmIDEx64
 
         public void ClickMUTE(int rowIndex)
         {
+            if (rowIndex >= dgvPartCounter.Rows.Count) return;
+
             if (rowIndex < 0)
             {
                 muteManager.ClickAllMute();
-            }
-            else
-            {
-                DataGridViewRow r = dgvPartCounter.Rows[rowIndex];
-                muteManager.ClickMute((int)r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value);
+                refreshMuteSolo();
+                return;
             }
 
+            DataGridViewRow r = dgvPartCounter.Rows[rowIndex];
+            muteManager.ClickMute((int)r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value);
             refreshMuteSolo();
         }
 
         public void ClickSOLO(int rowIndex)
         {
+            if (rowIndex >= dgvPartCounter.Rows.Count) return;
 
             if (rowIndex < 0)
             {
                 muteManager.ClickAllSolo();
-            }
-            else
-            {
-                DataGridViewRow r = dgvPartCounter.Rows[rowIndex];
-                muteManager.ClickSolo((int)r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value);
+                refreshMuteSolo();
+                return;
             }
 
+            DataGridViewRow r = dgvPartCounter.Rows[rowIndex];
+            muteManager.ClickSolo((int)r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value);
             refreshMuteSolo();
         }
 
@@ -926,7 +927,6 @@ namespace mml2vgmIDEx64
 
         public void ClickKBDAssign(int rowIndex)
         {
-
             //アサインを全解除
             foreach (DataGridViewRow r in dgvPartCounter.Rows)
             {
