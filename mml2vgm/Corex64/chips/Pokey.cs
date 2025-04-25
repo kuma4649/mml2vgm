@@ -229,6 +229,36 @@ namespace Corex64.chips
 
         private void SetSsgVolume(partPage page, MML mml)
         {
+            int vol = page.volume;
+
+            if (page.envelopeMode)
+            {
+                vol = 0;
+                if (page.envIndex != -1)
+                {
+                    vol = page.envVolume - (15 - page.volume);
+                }
+                else
+                {
+                    page.keyOn = false;
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw) continue;
+                if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
+
+                vol += page.lfo[lfo].value + page.lfo[lfo].phase;
+            }
+
+            if (page.varpeggioMode)
+            {
+                vol += page.varpDelta;
+            }
+
+            page.beforeVolume = Common.CheckRange(vol, 0, 15);
+
         }
 
         public override void SetToneDoubler(partPage page, MML mml)
@@ -279,6 +309,61 @@ namespace Corex64.chips
             page.spg.freq = -1;
         }
 
+        public override void CmdInstrument(partPage page, MML mml)
+        {
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
+            {
+                type = (char)mml.args[1];
+                re = true;
+                n = (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (int)mml.args[1];
+            }
+
+            if (type == 'I')
+            {
+                msgBox.setErrMsg(msg.get("E15001"), mml.line.Lp);
+                return;
+            }
+
+            if (type == 'T')
+            {
+                msgBox.setErrMsg(msg.get("E15002"), mml.line.Lp);
+                return;
+            }
+
+            if (!page.pcm)
+            {
+                SetEnvelopParamFromInstrument(page, n, re, mml);
+                SetDummyData(page, mml);
+                return;
+            }
+
+            if (re) n = page.instrument + n;
+            n = Common.CheckRange(n, 0, 255);
+
+            if (page.instrument == n) return;
+
+            if (!parent.instPCM.ContainsKey(n))
+            {
+                msgBox.setErrMsg(string.Format(msg.get("E12005"), n), mml.line.Lp);
+                return;
+            }
+
+            if (parent.instPCM[n].Item2.chip != enmChipType.SN76489)
+            {
+                msgBox.setErrMsg(string.Format(msg.get("E12006"), n), mml.line.Lp);
+            }
+
+            page.instrument = n;
+            SetDummyData(page, mml);
+        }
 
         public override void MultiChannelCommand(MML mml)
         {
@@ -292,7 +377,7 @@ namespace Corex64.chips
                 partPage page = pw.cpg;
                 if (page.keyOn)
                 {
-                    c |= (byte)page.volume;
+                    c |= (byte)page.beforeVolume;//.volume;
                 }
                 else
                 {

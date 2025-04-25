@@ -221,6 +221,12 @@
     <None Include="sample\NES\testNES_DPCM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\POKEY\testPOKEY.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\POKEY\testPOKEYENV.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\SN76489\testDCSGPCM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

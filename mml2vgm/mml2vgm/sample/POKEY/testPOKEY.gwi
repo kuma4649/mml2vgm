@@ -46,14 +46,15 @@ Cn1 L
        Ch1の場合はCh3
      / Ch2の場合はCh4
    の周波数をセットする。
-'Pa1-4 v10q12l8w0o4D0
-'Pa34  v0
-'Pa1           EHOF gr>cr< EHON EHT10 gr>cr< EHT60 gr>cr< EHT120 gr>cr< [rrrr]4 
-'Pa2   [rrrr]4 EHOF gr br  EHON EHT10 gr br  EHT60 gr br  EHT120 gr br 
-'Pa3   [rrrr]8
+ 'Pa1-4 v10q12l8w0o4D0
+ 'Pa34  v0
+ 'Pa1           EHOF gr>cr< EHON EHT10 gr>cr< EHT60 gr>cr< EHT120 gr>cr< [rrrr]4 
+ 'Pa2   [rrrr]4 EHOF gr br  EHON EHT10 gr br  EHT60 gr br  EHT120 gr br 
+ 'Pa3   [rrrr]8
    
    周波数の微妙なずれのあるユニゾンや音量の違いでも色々な効果が得られる。
-'Pa1   v10   EHT0 EHON [gr>cr<] EHOF [gr>cr<] EHON [gr br ] EHOF [gr br ]
-'Pa3   v15 D1          [gr>cr<]      [gr>cr<] v0   [gr br ] v15  [gr br ]
+ 'Pa1   v10   EHT0 EHON [gr>cr<] EHOF [gr>cr<] EHON [gr br ] EHOF [gr br ]
+ 'Pa3   v15 D1          [gr>cr<]      [gr>cr<] v0   [gr br ] v15  [gr br ]
 
+'Pa1 v10cde
 

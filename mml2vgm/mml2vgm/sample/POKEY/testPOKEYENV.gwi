@@ -1,0 +1,26 @@
+﻿'{
+
+	TitleName   =POKEY Envelope test
+	TitleNameJ  =POKEYエンベロープテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+	Format      =VGM
+}
+
+
+'Cn1 T60
+Cn1 L
+
+     No,SV ,AR ,DR ,SL ,SR ,RR ,ST ,Chip
+'@ E  0, 15,  0,  1, 10,  9,  2,  1,POKEY
+
+'Pa1 D0v11o5l4q40
+'Pa1 @0 EON cdefgab>c
+

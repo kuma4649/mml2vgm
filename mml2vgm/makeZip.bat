@@ -13,7 +13,7 @@ xcopy .\mml2vgmx64\bin\Release\net8.0-windows\*.* .\output\mml2vgmx64 /E /R /Y /
 rem rem mvc(コマンドライン版)のコピー
 rem xcopy .\mvc\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 rem mvcx64(コマンドライン版)のコピー
-xcopy .\mvc\bin\Release\net8.0\*.* .\output\mml2vgmx64 /E /R /Y /I /K
+xcopy .\mvcx64\bin\Release\net8.0\*.* .\output\mml2vgmx64 /E /R /Y /I /K
 rem サンプルファイルのコピー
 xcopy .\mml2vgm\sample\*.* .\output\mml2vgmx64\sample /E /R /Y /I /K
 rem rem mml2vgmIDEのコピー
