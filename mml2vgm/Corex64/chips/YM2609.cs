@@ -2283,7 +2283,8 @@ namespace Corex64
                     , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
 
                 for (int i = 0; i < Const.INSTRUMENT_M_OPERATOR_SIZE; i++)
-                    vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                        = vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
                         = parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + i];
             }
 
@@ -2412,7 +2413,8 @@ namespace Corex64
                     );
 
                 for (int i = 0; i < opeLength; i++)
-                    vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                    page.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
+                        = vpg.voice[partPage.voiceWidth + ope * partPage.voiceWidth + i]
                         = parent.instFM[n].Item2[ope * opeLength + 1 + i];
             }
 
