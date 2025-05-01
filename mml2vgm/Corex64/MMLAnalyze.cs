@@ -766,7 +766,20 @@ namespace Corex64
                     if (a == ',')
                     {
                         pw.incPos(page);
-                        if (!pw.getNum(page, out n))
+                        a = pw.getChar(page);
+                        if (a == 'A' || a == 'F' || a == 'C') {
+                            n = 0;
+                            for (int i = 0; i < 2; i++)//最大2文字読み込む
+                            {
+                                a = pw.getChar(page);
+                                if (a == 'A') n |= 1;
+                                else if (a == 'C') n |= 1;
+                                else if (a == 'F') n |= 2;
+                                else break;
+                                pw.incPos(page);
+                            }
+                        }
+                        else if (!pw.getNum(page, out n))
                         {
                             if (mml.type == enmMMLType.Instrument) msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
                             else msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
