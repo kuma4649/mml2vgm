@@ -6189,7 +6189,7 @@ namespace mml2vgmIDEx64
             for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.MIDI.Count; i++) if (chipRegister.MIDI[i].Use) data.AddRange(chipRegister.MIDIMakeSoftReset(i));
+            for (int i = 0; i < chipRegister.MIDI.Count; i++) if (chipRegister.MIDI[i].Use) data.AddRange(chipRegister.MIDIMakeSoftReset(i,setting.midiOut));
 
             return [.. data];
         }

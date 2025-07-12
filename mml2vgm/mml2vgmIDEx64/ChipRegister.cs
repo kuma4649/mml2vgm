@@ -9675,12 +9675,13 @@ namespace mml2vgmIDEx64
 
                     midiOuts[num].SendBuffer((byte[])exData);
                     if (num < midiParams.Length) midiParams[num].SendBuffer((byte[])exData);
+                    //foreach (byte b in (byte[])exData) Debug.WriteLine("{0:x02} ",b);
                     return;
                 }
             }
             else if (type == EnmDataType.Block)
             {
-                if (midiOuts.Count < 1) return;
+                if (midiOuts==null || midiOuts.Count < 1) return;
 
                 Audio.sm.SetInterrupt();
 
@@ -9699,6 +9700,7 @@ namespace mml2vgmIDEx64
                             if (Chip.Model == EnmVRModel.RealModel)
                             {
                                 if (midiOuts.Count > address && midiOuts[address] != null) midiOuts[address].SendBuffer((byte[])exData);
+                                //foreach (byte b in (byte[])exData) Debug.WriteLine("{0:x02} ", b);
                             }
                         }
                         else if (exData is PackData[])
@@ -9713,6 +9715,7 @@ namespace mml2vgmIDEx64
                                 {
                                     if (midiOuts.Count <= dat.Chip.Number || midiOuts[dat.Chip.Number] == null) continue;
                                     midiOuts[dat.Chip.Number].SendBuffer((byte[])dat.ExData);
+                                    //foreach (byte b in (byte[])dat.ExData) Debug.WriteLine("{0:x02} ", b);
                                 }
                             }
                         }
@@ -9794,7 +9797,7 @@ namespace mml2vgmIDEx64
             MIDISetRegister(null, Counter, MIDI[chipID], data.ToArray());
         }
 
-        public List<PackData> MIDIMakeSoftReset(int chipID)
+        public List<PackData> MIDIMakeSoftReset(int chipID,Setting.MidiOut midiout=null)
         {
             List<PackData> data = new List<PackData>();
 
@@ -9803,9 +9806,16 @@ namespace mml2vgmIDEx64
                 0xb0, 0x78, 0x00,  0xb1, 0x78, 0x0,  0xb2, 0x78, 0x0,  0xb3, 0x78, 0x0,
                 0xb4, 0x78, 0x00,  0xb5, 0x78, 0x0,  0xb6, 0x78, 0x0,  0xb7, 0x78, 0x0,
                 0xb8, 0x78, 0x00,  0xb9, 0x78, 0x0,  0xba, 0x78, 0x0,  0xbb, 0x78, 0x0,
-                0xbc, 0x78, 0x00,  0xbd, 0x78, 0x0,  0xbe, 0x78, 0x0,  0xbf, 0x78, 0x0
+                0xbc, 0x78, 0x00,  0xbd, 0x78, 0x0,  0xbe, 0x78, 0x0,  0xbf, 0x78, 0x0,
+
+                0xb0, 0x07, 0x00,  0xb1, 0x07, 0x0,  0xb2, 0x07, 0x0,  0xb3, 0x07, 0x0,
+                0xb4, 0x07, 0x00,  0xb5, 0x07, 0x0,  0xb6, 0x07, 0x0,  0xb7, 0x07, 0x0,
+                0xb8, 0x07, 0x00,  0xb9, 0x07, 0x0,  0xba, 0x07, 0x0,  0xbb, 0x07, 0x0,
+                0xbc, 0x07, 0x00,  0xbd, 0x07, 0x0,  0xbe, 0x07, 0x0,  0xbf, 0x07, 0x0
+
             }));
 
+            
             return data;
         }
 
