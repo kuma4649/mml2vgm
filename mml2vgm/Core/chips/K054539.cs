@@ -352,7 +352,7 @@ namespace Core
                 , data
                 );
 
-            Debug.WriteLine("{0:x04} {1:x02}", (ushort)adr, data);
+            //Debug.WriteLine("{0:x04} {1:x02}", (ushort)adr, data);
         }
 
         private void OutK054539KeyOn(partPage page, MML mml)

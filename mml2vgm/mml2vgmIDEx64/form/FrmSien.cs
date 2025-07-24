@@ -361,6 +361,7 @@ namespace mml2vgmIDEx64
                     ssi.parentID = si.ID;
                     ssi.haveChild = true;
                     ssi.content = si.content;
+                    ssi.content2 = si.content2 != null ? si.content2 : si.content;
                     ssi.description = line.Item2;
                     ssi.foundCnt = si.foundCnt;
                     ssi.nextAnchor = si.nextAnchor;
@@ -502,8 +503,11 @@ namespace mml2vgmIDEx64
             {
                 d = (Document)dc.Tag;
                 int ci = d.editor.azukiControl.CaretIndex;
+                string text = d.srcFileFormat == EnmMmlFileFormat.MUC
+                    ? (si.content2 != null ? si.content2 : si.content)
+                    : si.content;
                 d.editor.azukiControl.Document.Replace(
-                    d.srcFileFormat == EnmMmlFileFormat.MUC ? si.content2 : si.content,
+                    text,
                     ci,// - si.foundCnt,
                     ci);
 

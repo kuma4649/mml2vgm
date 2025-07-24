@@ -93,7 +93,7 @@ namespace mml2vgmIDEx64
             foreach (SienItem si in sien.list)
             {
                 //if (si.parentID != reqParentID) continue;
-                if (si.supportMMLFormat.IndexOf(reqMMLFileFormat) < 0) continue;
+                //if (si.supportMMLFormat.IndexOf(reqMMLFileFormat) < 0) continue;
 
                 found.Add(si);
                 si.foundCnt = reqText.Length;

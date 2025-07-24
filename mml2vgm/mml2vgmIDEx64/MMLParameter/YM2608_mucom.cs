@@ -1,6 +1,7 @@
 ﻿using Corex64;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -135,6 +136,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 od.linePos.part == "SSG" ? 15 : (
                 od.linePos.part == "RHYTHM" ? 63 : 255
                 ))) * vol[ch]);
+
         }
 
         protected override void SetRest(outDatum od, int ch, int cc)

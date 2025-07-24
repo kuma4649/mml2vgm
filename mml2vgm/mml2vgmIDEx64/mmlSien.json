@@ -316,6 +316,21 @@
       "content": "yFBAL,"
     },
     {
+      "ID": 19,
+      "tree": "\\Template\\MUC\\MML",
+      "parentID": -1,
+      "haveChild": false,
+      "supportMMLFormat": ".muc",
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "y",
+      "patternType": "B",
+      "title": "(.muc)yFBAL,op,n  FB,ALレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
+      "description": "",
+      "content": "y,"
+    },
+    {
       "ID": 100,
       "tree": "\\Instrument\\OPN\\BASS",
       "parentID": 50,
