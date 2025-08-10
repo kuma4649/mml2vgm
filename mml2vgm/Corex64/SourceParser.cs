@@ -41,9 +41,9 @@ namespace Corex64
                 }
 
                 // 行頭が'以外は読み飛ばす
-                if (s.TrimStart().IndexOf("'") != 0) continue;
+                if (s.IndexOf("'") != 0) continue;
 
-                s = s.TrimStart().Substring(1).TrimStart();
+                s = s.Substring(1).TrimStart();
 
                 // 'のみの行も読み飛ばす
                 if (s.Trim() == "") continue;

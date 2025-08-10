@@ -232,7 +232,10 @@ namespace Corex64
             catch
             {
                 pi.use = false;
-                newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
+                if (newDic.ContainsKey(v.Key))
+                {
+                    newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
+                }
             }
 
             //for(int i = 0; i < pi.totalBuf.Length; i++)
