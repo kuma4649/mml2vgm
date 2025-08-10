@@ -1,4 +1,8 @@
 XV—š—ð
+TAG771 2025/08/10
+  IDE:.NET9.0‚É•ÏX
+  MDSound‚Ì·‚µ‘Ö‚¦
+
 TAG770 2025/07/24
   mucomDotNET‚Ì·‚µ‘Ö‚¦
 
