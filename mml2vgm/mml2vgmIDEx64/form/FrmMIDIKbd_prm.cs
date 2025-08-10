@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace mml2vgmIDEx64
 {
@@ -7,7 +8,9 @@ namespace mml2vgmIDEx64
     {
         private Setting setting = null;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public FrmMIDIKbd.KbdParam Target { get; internal set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int TargetTab { get; internal set; }
 
         public FrmMIDIKbd_prm(Setting setting)

@@ -17,6 +17,7 @@ namespace mml2vgmIDEx64.form
             InitializeComponent();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int count { get; internal set; }
 
         private void FrmLoopTimes_Load(object sender, EventArgs e)

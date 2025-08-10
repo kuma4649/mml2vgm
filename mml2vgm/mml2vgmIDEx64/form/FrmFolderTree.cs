@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using System.ComponentModel;
 
 namespace mml2vgmIDEx64
 {
@@ -632,6 +633,7 @@ namespace mml2vgmIDEx64
 
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ToolStripMenuItem extendItem
         {
             set

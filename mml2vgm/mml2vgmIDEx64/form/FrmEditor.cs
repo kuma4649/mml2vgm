@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using System.ComponentModel;
 
 namespace mml2vgmIDEx64
 {
@@ -29,6 +30,7 @@ namespace mml2vgmIDEx64
         private FrmMain _main;
         public Setting setting;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public FrmMain main
         {
             get

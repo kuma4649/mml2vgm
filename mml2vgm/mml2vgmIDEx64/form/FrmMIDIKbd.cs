@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using System.ComponentModel;
 
 namespace mml2vgmIDEx64
 {
@@ -51,6 +52,7 @@ namespace mml2vgmIDEx64
         private Chip eChip = null;
         private RealTimeMML rtMML = null;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SoundManager.SoundManager SoundManager { get; internal set; }
         private object lockObject = new object();
 
