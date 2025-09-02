@@ -37,6 +37,7 @@ namespace mml2vgmIDEx64
         private Setting.ChipType[] ctPPZ8 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPSDRV = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctP86 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctCS4231 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctQSound = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctRF5C164 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctSEGAPCM = new Setting.ChipType[2] { null, null };
@@ -72,6 +73,7 @@ namespace mml2vgmIDEx64
         private RSoundChip[] scPPZ8 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPSDRV = new RSoundChip[2] { null, null };
         private RSoundChip[] scP86 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scCS4231 = new RSoundChip[2] { null, null };
         private RSoundChip[] scQSound = new RSoundChip[2] { null, null };
         private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
@@ -447,6 +449,7 @@ namespace mml2vgmIDEx64
         public List<Chip> P86 = new List<Chip>();
         public List<Chip> YMF278B = new List<Chip>();
         public List<Chip> YMF271 = new List<Chip>();
+        public List<Chip> CS4231 = new List<Chip>();
 
 
 
@@ -708,6 +711,24 @@ namespace mml2vgmIDEx64
                             if (P86.Count < i + 1) P86.Add(new Chip(8));
                             P86[i].Model = ctP86[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                             P86[i].Delay = (P86[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                        }
+                    }
+                    break;
+                case EnmZGMDevice.CS4231:
+                    ctCS4231 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < CS4231.Count; i++)
+                    {
+                        CS4231[i].Model = EnmVRModel.VirtualModel;
+                        CS4231[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scCS4231[i] = null;
+                        if (scCS4231[i] != null) scCS4231[i].init();
+                        if (ctCS4231[i] != null)
+                        {
+                            if (CS4231.Count < i + 1) CS4231.Add(new Chip(8));
+                            CS4231[i].Model = ctCS4231[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                            CS4231[i].Delay = (CS4231[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                         }
                     }
                     break;
@@ -1104,6 +1125,13 @@ namespace mml2vgmIDEx64
                 P86[i].Device = EnmZGMDevice.P86;
                 P86[i].Number = i;
                 P86[i].Hosei = 0;
+
+                if (CS4231.Count < i + 1) CS4231.Add(new Chip(17));
+                CS4231[i].Use = false;
+                CS4231[i].Model = EnmVRModel.None;
+                CS4231[i].Device = EnmZGMDevice.CS4231;
+                CS4231[i].Number = i;
+                CS4231[i].Hosei = 0;
 
                 if (QSound.Count < i + 1) QSound.Add(new Chip(16));
                 QSound[i].Use = false;
@@ -4521,6 +4549,113 @@ namespace mml2vgmIDEx64
         {
             List<PackData> data = new List<PackData>();
             data.Add(new PackData(null, P86[chipID], EnmDataType.Normal, 0x09, 0, 0));
+
+            return data;
+        }
+
+        #endregion
+
+
+
+        #region CS4231
+
+        private void CS4231WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctCS4231[Chip.Number].UseScci)
+                    {
+                        if (exData is int)
+                            mds.WriteCS4231(Chip.Index, (byte)Chip.Number, 0, (byte)address, (byte)data);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                ;
+                                if (dat.Type == EnmDataType.Normal)
+                                {
+                                    mds.WriteCS4231(dat.Chip.Index, (byte)dat.Chip.Number
+                                        ,0, (byte)dat.Address, (byte)dat.Data);
+                                }
+                                else
+                                {
+                                    mds.WriteCS4231(dat.Chip.Index, (byte)dat.Chip.Number
+                                        ,0
+                                        , (byte)dat.Address
+                                        , (byte)dat.Data
+                                        );
+                                }
+                            }
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                            ;
+                        else
+                        {
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void CS4231SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctCS4231 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriCS4231 = 2;
+
+        }
+
+        public void CS4231SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
+        {
+            dummyChip.Move(CS4231[ChipID]);
+            enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+        }
+
+        public void CS4231SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
+        public void CS4231SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = CS4231MakeSoftReset(chipID);
+            CS4231SetRegister(null, Counter, CS4231[chipID], data.ToArray());
+        }
+
+        public List<PackData> CS4231MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, CS4231[chipID], EnmDataType.Normal, 0x09, 0, 0));
 
             return data;
         }
@@ -8987,6 +9122,11 @@ namespace mml2vgmIDEx64
         public void YM2612SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
             enq(od, Counter, YM2612[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void YM2612SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2612SetRegisterXGM(long Counter, int dData)

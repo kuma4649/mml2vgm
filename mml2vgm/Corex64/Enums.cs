@@ -153,6 +153,7 @@
         , PPSDRV = 0x0008_0002
         , P86 = 0x0008_0003
         , DACControl = 0x0008_0004
+        , CS4231 = 0x0008_0005
     }
 
     public enum enmPcmDefineType

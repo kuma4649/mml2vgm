@@ -42,6 +42,7 @@ namespace mml2vgmIDEx64
         public static mucomManager mucomManager = null;
         public static PMDManager PMDManager = null;
         public static MoonDriverManager MoonDriverManager = null;
+        public static MuapManager MuapManager = null;
 
         private static object lockObj = new();
         private static bool _fatalError = false;
@@ -116,6 +117,9 @@ namespace mml2vgmIDEx64
         private static musicDriverInterface.MmlDatum[] mdrBuf = null;
         private static string mdrWorkPath;
         private static string mdrFileName;
+        private static musicDriverInterface.MmlDatum[] mupBuf = null;
+        private static string mupWorkPath;
+        private static string mupFileName;
 
         public static double fadeoutCounter;
         public static double fadeoutCounterEmu;
@@ -1004,6 +1008,12 @@ namespace mml2vgmIDEx64
                 mdrWorkPath = wrkPath;
                 Audio.mdrFileName = mdFileName;
             }
+            else if (format == EnmFileFormat.MUS)
+            {
+                mupBuf = srcBuf;
+                mupWorkPath = wrkPath;
+                Audio.mupFileName = mdFileName;
+            }
         }
 
         private static void SoundManagerMount()
@@ -1296,6 +1306,15 @@ namespace mml2vgmIDEx64
                 };
 
                 ret = mdrPlay(setting);
+            }
+            else if (PlayingFileFormat == EnmFileFormat.MUS)
+            {
+                driver = new muapM
+                {
+                    setting = setting
+                };
+
+                ret = mupPlay(setting);
             }
             else
             {
@@ -5647,6 +5666,254 @@ namespace mml2vgmIDEx64
 
                 //実チップの場合にPCMデータの転送が必要な時
                 if (chipRegister.YMF278B[0].Model == EnmVRModel.RealModel)
+                {
+                    //object opnaPcmData = mdrDriver.GetOPNAPCMData();
+                    //if (opnaPcmData != null)
+                    //{
+                    //    RealChipAction(null, 0, chipRegister.YM2608[0], EnmDataType.Block, -1, -1, opnaPcmData);
+                    //    Thread.Sleep(100);
+                    //}
+                }
+
+                //Play
+
+                PackData[] stopData = MakeSoftResetData();
+                sm.SetStopData(stopData);
+
+                Paused = false;
+
+                //Thread.Sleep(100);
+
+                log.Write("初期化完了");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                return false;
+            }
+
+        }
+
+        public static bool mupPlay(Setting setting)
+        {
+
+            try
+            {
+
+                if (mupBuf == null || setting == null) return false;
+
+                muapM mupDriver = (muapM)driver;
+
+                ResetFadeOutParam();
+                useChip.Clear();
+                chipRegister.ClearChipParam();
+
+                List<MDSound.MDSound.Chip> lstChips = [];
+
+                MDSound.MDSound.Chip chip;
+
+                hiyorimiNecessary = setting.HiyorimiMode;
+
+                chipLED = new ChipLEDs();
+
+                MasterVolume = setting.balance.MasterVolume;
+
+                MDSound.ym2608 ym2608 = new();
+
+                chip = new MDSound.MDSound.Chip
+                {
+                    type = MDSound.MDSound.enmInstrumentType.YM2608,
+                    ID = (byte)0,
+                    Instrument = ym2608,
+                    Update = ym2608.Update,
+                    Start = ym2608.Start,
+                    Stop = ym2608.Stop,
+                    Reset = ym2608.Reset,
+                    SamplingRate = 55467,// (UInt32)Common.SampleRate;
+                    Volume = setting.balance.YM2608Volume,
+                    Clock = mupDriver.YM2608ClockValue
+                };
+                Func<string, Stream> fn = Common.GetOPNARyhthmStream;
+                chip.Option = [fn, OPNARhythmSample];
+                //hiyorimiDeviceFlag |= 0x2;
+
+                    chipLED.PriOPNA = 1;
+                    useChip.Add(EnmChip.YM2608);
+
+                log.Write(string.Format("Use OPNA({0}) Clk:{1}"
+                    , "Pri"
+                    , chip.Clock
+                    ));
+
+                chipRegister.YM2608[0].Use = true;
+                if (chip.Instrument != null) lstChips.Add(chip);
+
+
+                MDSound.ym2612 ym2612 = null;
+                MDSound.ym3438 ym3438 = null;
+                MDSound.ym2612mame ym2612mame = null;
+                chip = new MDSound.MDSound.Chip();
+                if (setting.YM2612Type.UseEmu)
+                {
+                    ym2612 ??= new ym2612();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
+                    chip.Instrument = ym2612;
+                    chip.Update = ym2612.Update;
+                    chip.Start = ym2612.Start;
+                    chip.Stop = ym2612.Stop;
+                    chip.Reset = ym2612.Reset;
+                    chip.Option = new object[]
+                    {
+                        3
+                        //(int)(
+                        //    (setting.nukedOPN2.GensDACHPF ? 0x01: 0x00)
+                        //    |(setting.nukedOPN2.GensSSGEG ? 0x02: 0x00)
+                        //)
+                    };
+                    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
+                    chip.Volume = setting.balance.YM2612Volume;
+                    chip.Clock = mupDriver.YM2612ClockValue;
+                }
+                //else if (setting.YM2612Type[0].UseEmu[1])
+                //{
+                //    ym3438 ??= new ym3438();
+                //    chip.type = MDSound.MDSound.enmInstrumentType.YM3438;
+                //    chip.Instrument = ym3438;
+                //    chip.Update = ym3438.Update;
+                //    chip.Start = ym3438.Start;
+                //    chip.Stop = ym3438.Stop;
+                //    chip.Reset = ym3438.Reset;
+                //    switch (setting.nukedOPN2.EmuType)
+                //    {
+                //        case 0:
+                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.discrete);
+                //            break;
+                //        case 1:
+                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic);
+                //            break;
+                //        case 2:
+                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612);
+                //            break;
+                //        case 3:
+                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612_u);
+                //            break;
+                //        case 4:
+                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic_lp);
+                //            break;
+                //    }
+                //    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
+                //    chip.Volume = setting.balance.YM2612Volume;
+                //    chip.Clock = 7987200;
+                //}
+                //else if (setting.YM2612Type[0].UseEmu[2])
+                //{
+                //    ym2612mame ??= new ym2612mame();
+                //    chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
+                //    chip.Instrument = ym2612mame;
+                //    chip.Update = ym2612mame.Update;
+                //    chip.Start = ym2612mame.Start;
+                //    chip.Stop = ym2612mame.Stop;
+                //    chip.Reset = ym2612mame.Reset;
+                //    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
+                //    chip.Volume = setting.balance.YM2612Volume;
+                //    chip.Clock = 7987200;
+                //}
+
+                if (chip.Clock != 0)
+                {
+                    log.Write(string.Format("Use OPN2({0}) Clk:{1}"
+                        , "Pri"
+                        , chip.Clock
+                        ));
+
+                    //ClockYM2612 = mupDriver.YM2612ClockValue;
+                    chipLED.PriOPN2 = 1;
+                    lstChips.Add(chip);
+                    //UseChip.Add(EnmChip.YM2612);
+                }
+
+                CS4231 cs4231 = null;
+                cs4231 = new CS4231();
+                chip = new MDSound.MDSound.Chip
+                {
+                    ID = 0,
+                    type = MDSound.MDSound.enmInstrumentType.CS4231,
+                    Instrument = cs4231,
+                    Update = cs4231.Update,
+                    Start = cs4231.Start,
+                    Stop = cs4231.Stop,
+                    Reset = cs4231.Reset,
+                    SamplingRate = 55467,// (UInt32)setting.outputDevice.SampleRate;
+                    Volume = 0,//setting.balance.CS4231Volume,
+                    Clock = 0,
+                    Option = null
+                };
+                chipLED.PriCS4231 = 1;
+                lstChips.Add(chip);
+                //UseChip.Add(EnmChip.CS4231);
+
+
+                if (hiyorimiNecessary) hiyorimiNecessary = true;
+                else hiyorimiNecessary = false;
+
+                log.Write("MDSound 初期化");
+                InitMDSound(lstChips);
+
+                string errMsg = mds.ReadErrMsgYM2608(0);
+                if (!string.IsNullOrEmpty(errMsg)) log.Write(errMsg);
+
+                log.Write("ChipRegister 初期化");
+                chipRegister.SetMDSound(mds);
+                chipRegister.initChipRegister([.. lstChips]);
+
+                if (setting.IsManualDetect)
+                {
+                    RealChipManualDetect(setting);
+                }
+                else
+                {
+                    RealChipAutoDetect(setting);
+                }
+
+                //bool isGIMICOPNA = false;
+                useEmu = true;
+                if (
+                    chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel
+                    || chipRegister.YM2612[0].Model == EnmVRModel.VirtualModel
+                    || chipRegister.CS4231[0].Model == EnmVRModel.VirtualModel
+                    ) 
+                    useEmu = true;
+
+                if (
+                    chipRegister.YM2608[0].Model == EnmVRModel.RealModel
+                    || chipRegister.YM2612[0].Model == EnmVRModel.RealModel
+                    || chipRegister.CS4231[0].Model == EnmVRModel.RealModel
+                    )
+                {
+                    useReal = true;
+                    //isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
+                }
+
+                log.Write("Volume(emu) 設定");
+                SetYM2608Volume(true, setting.balance.YM2608Volume);
+                SetYM2612Volume(true, setting.balance.YM2612Volume);
+
+                log.Write("Clock 設定");
+                chipRegister.YM2608WriteClock((byte)0, (int)mupDriver.YM2608ClockValue);
+                chipRegister.YM2612WriteClock((byte)0, (int)mupDriver.YM2612ClockValue);
+
+                if (!mupDriver.init(mupBuf, mupWorkPath, MuapManager, chipRegister, [EnmChip.YM2608]
+                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    , mupFileName
+                    )
+
+                    ) return false;
+
+                //実チップの場合にPCMデータの転送が必要な時
+                //if (chipRegister.YMF278B[0].Model == EnmVRModel.RealModel)
                 {
                     //object opnaPcmData = mdrDriver.GetOPNAPCMData();
                     //if (opnaPcmData != null)

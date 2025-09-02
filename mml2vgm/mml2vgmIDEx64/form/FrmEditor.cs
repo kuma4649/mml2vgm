@@ -57,6 +57,7 @@ namespace mml2vgmIDEx64
                 else if (fmt == EnmMmlFileFormat.MUC) ih = setHighlighterMUC();
                 else if (fmt == EnmMmlFileFormat.MML) ih = setHighlighterMML();
                 else if (fmt == EnmMmlFileFormat.MDL) ih = setHighlighterMDL();
+                else if (fmt == EnmMmlFileFormat.MUS) ih = setHighlighterMUC();
                 else ih = setHighlighterVGMZGMZGM();
             }
             setHighlighterCommon(ih);

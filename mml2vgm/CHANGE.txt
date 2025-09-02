@@ -1,4 +1,7 @@
 更新履歴
+TAG774 2025/09/02
+  muapDotNET対応作業:とりあえず1～17Ch中のFMとSSGの演奏に対応。PCM系は未対応。
+
 TAG773 2025/08/21
   mucomDotNETの差し替え
 

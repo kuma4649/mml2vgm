@@ -2059,6 +2059,8 @@ namespace mml2vgmIDEx64
             private bool _HilightOn = true;
 
             public bool UseMoonDriverDotNET { get => _UseMoonDriverDotNET; set => _UseMoonDriverDotNET = value; }
+            public bool UseMuapDotNET { get => _UseMuapDotNET; set => _UseMuapDotNET = value; }
+            private bool _UseMuapDotNET = true;
             public bool UseHistoryBackUp { get; set; } = false;
             public int HistoryBackUpKeepFileCount { get; set; } = 5;
             public bool DispWarningMessage { get; set; } = false;
@@ -2105,6 +2107,7 @@ namespace mml2vgmIDEx64
                 other.UsePMDDotNET = this.UsePMDDotNET;
                 other.HilightOn = this.HilightOn;
                 other.UseMoonDriverDotNET = this.UseMoonDriverDotNET;
+                other.UseMuapDotNET = this.UseMuapDotNET;
                 other.SearchWordHistory = this.SearchWordHistory;
                 other.SearchWordCaseSenstivity = this.SearchWordCaseSenstivity;
                 other.ReplaceToWordHistory = this.ReplaceToWordHistory;

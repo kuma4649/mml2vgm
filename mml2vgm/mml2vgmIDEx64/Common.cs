@@ -362,6 +362,7 @@ namespace mml2vgmIDEx64
             if (extension.ToUpper() == ".MUC") return EnmMmlFileFormat.MUC;
             if (extension.ToUpper() == ".MML") return EnmMmlFileFormat.MML;
             if (extension.ToUpper() == ".MDL") return EnmMmlFileFormat.MDL;
+            if (extension.ToUpper() == ".MUS") return EnmMmlFileFormat.MUS;
 
             return EnmMmlFileFormat.unknown;
         }

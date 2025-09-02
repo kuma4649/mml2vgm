@@ -749,6 +749,7 @@ namespace mml2vgmIDEx64
             cbUseMucomDotNET.Checked = setting.other.UseMucomDotNET;
             cbUsePMDDotNET.Checked = setting.other.UsePMDDotNET;
             cbUseMoonDriverDotNET.Checked = setting.other.UseMoonDriverDotNET;
+            cbUseMuapDotNET.Checked = setting.other.UseMuapDotNET;
             cbHilightOn.Checked= setting.other.HilightOn;
 
             cbDispInstrumentName.Checked = setting.MMLParameter.dispInstrumentName;
@@ -1408,6 +1409,7 @@ namespace mml2vgmIDEx64
             setting.other.UseMucomDotNET = cbUseMucomDotNET.Checked;
             setting.other.UsePMDDotNET = cbUsePMDDotNET.Checked;
             setting.other.UseMoonDriverDotNET = cbUseMoonDriverDotNET.Checked;
+            setting.other.UseMuapDotNET = cbUseMuapDotNET.Checked;
             setting.other.HilightOn = cbHilightOn.Checked;
 
             setting.other.UseHistoryBackUp = cbUseHistoryBackUp.Checked;

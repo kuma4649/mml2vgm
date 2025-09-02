@@ -127,6 +127,7 @@ namespace mml2vgmIDEx64
             toolStripSeparator5 = new ToolStripSeparator();
             TsmiAbout = new ToolStripMenuItem();
             timer = new System.Windows.Forms.Timer(components);
+            tsmiNewMus = new ToolStripMenuItem();
             statusStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -319,7 +320,7 @@ namespace mml2vgmIDEx64
             // 
             // TsmiNew
             // 
-            TsmiNew.DropDownItems.AddRange(new ToolStripItem[] { tsmiNewGwi, tsmiNewMuc, tsmiNewMml });
+            TsmiNew.DropDownItems.AddRange(new ToolStripItem[] { tsmiNewGwi, tsmiNewMuc, tsmiNewMml, tsmiNewMus });
             TsmiNew.Name = "TsmiNew";
             resources.ApplyResources(TsmiNew, "TsmiNew");
             // 
@@ -717,6 +718,12 @@ namespace mml2vgmIDEx64
             timer.Interval = 16;
             timer.Tick += Timer_Tick;
             // 
+            // tsmiNewMus
+            // 
+            tsmiNewMus.Name = "tsmiNewMus";
+            resources.ApplyResources(tsmiNewMus, "tsmiNewMus");
+            tsmiNewMus.Click += tsmiNewMus_Click;
+            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -836,6 +843,7 @@ namespace mml2vgmIDEx64
         public System.Windows.Forms.ToolStripStatusLabel tsslStatus;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripStatusLabel tsslSimpleKbdMode;
+        private ToolStripMenuItem tsmiNewMus;
     }
 }
 

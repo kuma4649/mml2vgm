@@ -161,6 +161,7 @@
         ZGM = 18,
         M = 19,
         XGM2 = 20,
+        MUS = 21,
     }
 
     public enum EnmMmlFileFormat : int
@@ -169,7 +170,8 @@
         GWI = 1,
         MUC = 2,
         MML = 3,
-        MDL = 4
+        MDL = 4,
+        MUS = 5
     }
 
     public enum SendMode : int

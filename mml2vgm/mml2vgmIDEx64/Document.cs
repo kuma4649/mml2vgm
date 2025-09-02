@@ -88,6 +88,10 @@ namespace mml2vgmIDEx64
                     srcFileFormat = EnmMmlFileFormat.MDL;
                     txt = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
                     break;
+                case ".mus":
+                    srcFileFormat = EnmMmlFileFormat.MUS;
+                    txt = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
+                    break;
                 case ".gwi":
                 default:
                     srcFileFormat = EnmMmlFileFormat.GWI;
