@@ -159,6 +159,12 @@ namespace mml2vgmIDEx64
     , Action<ChipDatum> OPNBWrite
     , Action<ChipDatum> CS4231Write
     , Func<byte,byte> CS4231Read
+    , Func<byte[]> CS4231EMS_GetCrntMapBuf
+    , iDriver.dlgEMS_Map CS4231EMS_Map
+    , Func<ushort> CS4231EMS_GetPageMap
+    , iDriver.dlgEMS_GetHandleName CS4231EMS_GetHandleName
+    , iDriver.dlgEMS_SetHandleName CS4231EMS_SetHandleName
+    , iDriver.dlgEMS_AllocMemory CS4231EMS_AllocMemory
     , Action<long, int> OPNAWaitSend
     , musicDriverInterface.MmlDatum[] mdrBuf
     , ChipRegister chipRegister
@@ -178,7 +184,13 @@ namespace mml2vgmIDEx64
             }
 
             object[] addOp = new object[]{
-                CS4231Read,//CS4231 のレジスタ読み込み
+                (Func<byte,byte>)CS4231Read,//CS4231 のレジスタ読み込み
+                (Func<byte[]>)CS4231EMS_GetCrntMapBuf,
+                (iDriver.dlgEMS_Map)CS4231EMS_Map,
+                (Func<ushort>)CS4231EMS_GetPageMap,
+                (iDriver.dlgEMS_GetHandleName)CS4231EMS_GetHandleName,
+                (iDriver.dlgEMS_SetHandleName)CS4231EMS_SetHandleName,
+                (iDriver.dlgEMS_AllocMemory)CS4231EMS_AllocMemory,
                 null,//TONES.DTA
                 0,//Sound Device Mode
                 null//@LABEL ptr
@@ -190,12 +202,9 @@ namespace mml2vgmIDEx64
             ca = new MuapDriverChipAction(OPNBWrite); lca.Add(ca);
             ca = new MuapDriverChipAction(CS4231Write); lca.Add(ca);
             driver.Init(
-                //fileName
-                //, OPL4Write
                 lca
                 , mdrBuf
                 , appendFileReaderCallback
-                //,OPL4WaitSend
                 , addOp
             );
 
@@ -203,8 +212,8 @@ namespace mml2vgmIDEx64
 
         private void writeLine(LogLevel lvl,string msg)
         {
-            if (lvl >= LogLevel.INFO) return;
-            disp(lvl.ToString() + msg);
+            if (lvl > LogLevel.INFO) return;
+            disp(string.Format("{0}:{1}",lvl,msg));
         }
 
         public class MuapDriverChipAction : ChipAction
@@ -240,6 +249,9 @@ namespace mml2vgmIDEx64
         public void MSTART(int v)
         {
             driver.MusicSTART(v);
+            object[] work = (object[])driver.GetWork();
+            chipRegister.setCS4231FIFOBuf(0, (byte[])work[0]);
+            //chipRegister.setCS4231Int0bEnt(0, (Action)work[1]);
         }
 
         public void MSTOP()

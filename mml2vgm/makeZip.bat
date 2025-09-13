@@ -19,7 +19,7 @@ xcopy .\mml2vgm\sample\*.* .\output\mml2vgmx64\sample /E /R /Y /I /K
 rem rem mml2vgmIDEのコピー
 rem xcopy .\mml2vgmIDE\bin\Release\*.* .\output\mml2vgmIDE /E /R /Y /I /K
 rem mml2vgmIDEx64のコピー
-xcopy .\mml2vgmIDEx64\bin\x64\Release\net8.0-windows7.0\*.* .\output\mml2vgmIDEx64 /E /R /Y /I /K
+xcopy .\mml2vgmIDEx64\bin\x64\Release\net9.0-windows7.0\*.* .\output\mml2vgmIDEx64 /E /R /Y /I /K
 
 copy /Y .\CHANGE.txt .\output
 copy /Y .\IDE.txt .\output

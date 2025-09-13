@@ -6,6 +6,7 @@ using SoundManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using static IronPython.Modules._ast;
 
 namespace mml2vgmIDEx64
 {
@@ -1448,6 +1449,9 @@ namespace mml2vgmIDEx64
                 case EnmZGMDevice.P86:
                     P86SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmZGMDevice.CS4231:
+                    CS4231SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -1493,6 +1497,7 @@ namespace mml2vgmIDEx64
             sendChipDataFunc.Add(EnmZGMDevice.YM2610, YM2610WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.YM2612, YM2612WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.SN76489, SN76489WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.CS4231, CS4231WriteRegisterControl);
         }
 
 
@@ -1501,6 +1506,7 @@ namespace mml2vgmIDEx64
 #if DEBUG
             //特定のデータを送るタイミングに疑いがあるとき、以下のコメントアウトを有効にしデバッグする
             //Console.WriteLine("packCounter:{0}",packCounter);
+            //if (Chip.Device == EnmZGMDevice.CS4231 && address==0x201) Debug.WriteLine("adr:{0:x} data:{1:x}", address, data);
 #endif 
             //if (!sendChipDataFunc.ContainsKey(Chip.Device)) throw new ArgumentException();
             sendChipDataFunc[Chip.Device](Chip, type, address, data, exData);
@@ -4559,6 +4565,8 @@ namespace mml2vgmIDEx64
 
         #region CS4231
 
+        private MDSound.CS4231 muapCS4231 = new MDSound.CS4231();
+
         private void CS4231WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
             if (type == EnmDataType.Normal)
@@ -4567,8 +4575,10 @@ namespace mml2vgmIDEx64
                 {
                     if (!ctCS4231[Chip.Number].UseScci)
                     {
-                        if (exData is int)
-                            mds.WriteCS4231(Chip.Index, (byte)Chip.Number, 0, (byte)address, (byte)data);
+                        //if (exData is int)
+                        {
+                            mds.WriteCS4231(Chip.Index, (byte)Chip.Number, (byte)(address>>8), (byte)address, (byte)data);
+                        }
                     }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
@@ -4594,12 +4604,12 @@ namespace mml2vgmIDEx64
                                 if (dat.Type == EnmDataType.Normal)
                                 {
                                     mds.WriteCS4231(dat.Chip.Index, (byte)dat.Chip.Number
-                                        ,0, (byte)dat.Address, (byte)dat.Data);
+                                        , (byte)(dat.Address >> 8),  (byte)dat.Address, (byte)dat.Data);
                                 }
                                 else
                                 {
                                     mds.WriteCS4231(dat.Chip.Index, (byte)dat.Chip.Number
-                                        ,0
+                                        , (byte)(dat.Address >> 8)
                                         , (byte)dat.Address
                                         , (byte)dat.Data
                                         );
@@ -4638,12 +4648,25 @@ namespace mml2vgmIDEx64
         public void CS4231SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
             dummyChip.Move(CS4231[ChipID]);
+
+            //if(dPort == 2 && dAddr == 2) Debug.WriteLine("enq {0:x}:{1:x}:{2:x}", dPort, dAddr, dData);
             enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+            muapCS4231.Write(0, dPort, dAddr, dData);
         }
 
         public void CS4231SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
         {
             enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+            foreach (PackData dat in data)
+            {
+                muapCS4231.Write(0, (byte)(dat.Address >> 8), (byte)dat.Address, dat.Data);
+            }
+        }
+
+        public byte CS4231GetRegister(byte data)
+        {
+            //muap専用です...
+            return muapCS4231.ReadReg(0, data);
         }
 
         public void CS4231SoftReset(long Counter, int chipID)
@@ -4658,6 +4681,57 @@ namespace mml2vgmIDEx64
             data.Add(new PackData(null, CS4231[chipID], EnmDataType.Normal, 0x09, 0, 0));
 
             return data;
+        }
+
+        public void setCS4231FIFOBuf(int chipID, byte[] buf)
+        {
+                mds.SetCS4231FIFOBuf((byte)chipID, buf);
+        }
+
+        //public void setCS4231Int0bEnt(int chipID, Action act)
+        //{
+        //        mds.SetCS4231Int0bEnt((byte)chipID, act);
+        //}
+
+        public byte[] getCS4231EMS_GetCrntMapBuf(int chipID)
+        {
+            return mds.getCS4231EMS_GetCrntMapBuf((byte)chipID);
+        }
+
+        public void setCS4231EMS_Map(int chipID, byte al, ref byte ah, ushort bx, ushort dx)
+        {
+            mds.setCS4231EMS_Map((byte)chipID, al, ref ah, bx, dx);
+        }
+
+        public ushort getCS4231EMS_GetPageMap(int chipID)
+        {
+            return mds.getCS4231EMS_GetPageMap((byte)chipID);
+        }
+
+        public void getCS4231EMS_GetHandleName(int chipID, ref byte ah, ushort dx, ref string sbuf)
+        {
+            mds.getCS4231EMS_GetHandleName((byte)chipID, ref ah, dx, ref sbuf);
+        }
+
+        public void setCS4231EMS_SetHandleName(int chipID, ref byte ah, ushort dx, string sbuf)
+        {
+            mds.setCS4231EMS_SetHandleName((byte)chipID, ref ah, dx, sbuf);
+        }
+
+        public void setCS4231EMS_AllocMemory(int chipID, ref byte ah, ref ushort dx, ushort bx)
+        {
+            mds.setCS4231EMS_AllocMemory((byte)chipID, ref ah, ref dx, bx);
+        }
+
+        public byte getCS4231Register(int chipID, int dAddr, long vgmFrameCounter)
+        {
+            //if (ctCS4231 == null) return;
+            if (dAddr < 0) return 0;
+
+            if (chipID == 0) chipLED.PriCS4231 = 2;
+            else chipLED.SecCS4231 = 2;
+
+            return mds.ReadCS4231((byte)chipID, (byte)dAddr);
         }
 
         #endregion

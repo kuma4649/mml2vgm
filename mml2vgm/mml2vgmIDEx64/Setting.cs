@@ -212,6 +212,20 @@ namespace mml2vgmIDEx64
             }
         }
 
+        private ChipType _CS4231Type = new ChipType();
+        public ChipType CS4231Type
+        {
+            get
+            {
+                return _CS4231Type;
+            }
+
+            set
+            {
+                _CS4231Type = value;
+            }
+        }
+
         private ChipType _QSoundType = new ChipType();
         public ChipType QSoundType
         {
@@ -3051,6 +3065,23 @@ namespace mml2vgmIDEx64
                 }
             }
 
+            private int _CS4231Volume = 0;
+            public int CS4231Volume
+            {
+                get
+                {
+                    if (_CS4231Volume > 20 || _CS4231Volume < -192) _CS4231Volume = 0;
+                    return _CS4231Volume;
+                }
+
+                set
+                {
+                    _CS4231Volume = value;
+                    if (_CS4231Volume > 20 || _CS4231Volume < -192) _CS4231Volume = 0;
+                }
+            }
+
+
             private int _GimicOPNVolume = 100;
             public int GimicOPNVolume
             {
@@ -3139,6 +3170,8 @@ namespace mml2vgmIDEx64
                 Balance.YM3526Volume = this.YM3526Volume;
                 Balance.Y8950Volume = this.Y8950Volume;
                 Balance.YM3812Volume = this.YM3812Volume;
+
+                Balance.CS4231Volume = this.CS4231Volume;
 
                 Balance.GimicOPNVolume = this.GimicOPNVolume;
                 Balance.GimicOPNAVolume = this.GimicOPNAVolume;

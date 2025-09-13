@@ -111,6 +111,12 @@ namespace mml2vgmIDEx64
                 , OPNBInitialWrite
                 , CS4231InitialWrite
                 , CS4231InitialRead
+                , CS4231EMS_GetCrntMapBuf
+                , CS4231EMS_Map
+                , CS4231EMS_GetPageMap
+                , CS4231EMS_GetHandleName
+                , CS4231EMS_SetHandleName
+                , CS4231EMS_AllocMemory
                 , OPNAWaitSend
                 , mupBuf
                 , chipRegister
@@ -197,8 +203,12 @@ namespace mml2vgmIDEx64
 
         private byte CS4231Read(byte dat)
         {
-            //TBD
-            return 0;
+            // muapが読みに来るアドレス
+            //  0 ... indexAddress writeで書き込んだ値をそのまま返せばOK
+            //  1 ... レジスタ      writeで書き込んだ値をそのまま返せばOK
+            //  2 ... status       0を返せばOK
+            //  4 ... dmaInt　　　　writeで書き込んだ値をそのまま返せばOK
+            return chipRegister.CS4231GetRegister(dat);//即時読み取り専用
         }
 
         private void OPNAInitialWrite(musicDriverInterface.ChipDatum dat)
@@ -212,7 +222,7 @@ namespace mml2vgmIDEx64
             SoundManager.PackData p = new SoundManager.PackData(
                 null,
                 chipRegister.YM2608[0], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
-            //pcmdata.Add(p);
+            pd[0].Add(p);
         }
 
         private void OPNBInitialWrite(musicDriverInterface.ChipDatum dat)
@@ -226,7 +236,7 @@ namespace mml2vgmIDEx64
             SoundManager.PackData p = new SoundManager.PackData(
                 null,
                 chipRegister.YM2612[0], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
-            //pcmdata.Add(p);
+            pd[1].Add(p);
         }
 
         private void CS4231InitialWrite(musicDriverInterface.ChipDatum dat)
@@ -237,15 +247,47 @@ namespace mml2vgmIDEx64
                 return;
             }
 
+            CS4231Write(dat);
             SoundManager.PackData p = new SoundManager.PackData(
                 null,
                 chipRegister.CS4231[0], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
-            //pcmdata.Add(p);
+            pd[2].Add(p);
         }
 
         private byte CS4231InitialRead(byte dat)
         {
             return CS4231Read(dat);
         }
+
+        private byte[] CS4231EMS_GetCrntMapBuf()
+        {
+            return chipRegister.getCS4231EMS_GetCrntMapBuf(0);
+        }
+
+        private void CS4231EMS_Map(byte al, ref byte ah, ushort bx, ushort dx)
+        {
+            chipRegister.setCS4231EMS_Map(0, al, ref ah, bx, dx);
+        }
+
+        private ushort CS4231EMS_GetPageMap()
+        {
+            return chipRegister.getCS4231EMS_GetPageMap(0);
+        }
+
+        private void CS4231EMS_GetHandleName(ref byte ah, ushort dx, ref string sbuf)
+        {
+            chipRegister.getCS4231EMS_GetHandleName(0, ref ah, dx, ref sbuf);
+        }
+
+        private void CS4231EMS_SetHandleName(ref byte ah, ushort dx, string emsname2)
+        {
+            chipRegister.setCS4231EMS_SetHandleName(0, ref ah, dx, emsname2);
+        }
+
+        private void CS4231EMS_AllocMemory(ref byte ah, ref ushort dx, ushort bx)
+        {
+            chipRegister.setCS4231EMS_AllocMemory(0, ref ah, ref dx, bx);
+        }
+
     }
 }

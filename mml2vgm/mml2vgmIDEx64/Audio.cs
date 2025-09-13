@@ -291,6 +291,7 @@ namespace mml2vgmIDEx64
             chipRegister.SetRealChipInfo(EnmZGMDevice.K053260, setting.K053260Type, setting.K053260SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.K054539, setting.K054539Type, setting.K054539SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPZ8, setting.PPZ8Type, null, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.CS4231, setting.CS4231Type, null, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPSDRV, setting.PPSDRVType, null, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.QSound, setting.QSoundType, null, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.Y8950, setting.Y8950Type, setting.Y8950SType, setting.LatencyEmulation, setting.LatencySCCI);
@@ -457,6 +458,19 @@ namespace mml2vgmIDEx64
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.P86, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            chipType = new Setting.ChipType[Math.Max(chipRegister.CS4231.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.CS4231.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.CS4231.Count <= i) continue;
+                if (!chipRegister.CS4231[i].Use) continue;
+                chipRegister.CS4231[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.CS4231, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.QSound.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.QSound.Count, 2); i++)
@@ -5766,69 +5780,69 @@ namespace mml2vgmIDEx64
                     chip.Reset = ym2612.Reset;
                     chip.Option = new object[]
                     {
-                        3
-                        //(int)(
-                        //    (setting.nukedOPN2.GensDACHPF ? 0x01: 0x00)
-                        //    |(setting.nukedOPN2.GensSSGEG ? 0x02: 0x00)
-                        //)
+                        (int)(
+                            (setting.gensOption.DACHPF ? 0x01: 0x00)
+                            |(setting.gensOption.SSGEG ? 0x02: 0x00)
+                        )
                     };
                     chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
                     chip.Volume = setting.balance.YM2612Volume;
                     chip.Clock = mupDriver.YM2612ClockValue;
                 }
-                //else if (setting.YM2612Type[0].UseEmu[1])
-                //{
-                //    ym3438 ??= new ym3438();
-                //    chip.type = MDSound.MDSound.enmInstrumentType.YM3438;
-                //    chip.Instrument = ym3438;
-                //    chip.Update = ym3438.Update;
-                //    chip.Start = ym3438.Start;
-                //    chip.Stop = ym3438.Stop;
-                //    chip.Reset = ym3438.Reset;
-                //    switch (setting.nukedOPN2.EmuType)
-                //    {
-                //        case 0:
-                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.discrete);
-                //            break;
-                //        case 1:
-                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic);
-                //            break;
-                //        case 2:
-                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612);
-                //            break;
-                //        case 3:
-                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612_u);
-                //            break;
-                //        case 4:
-                //            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic_lp);
-                //            break;
-                //    }
-                //    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
-                //    chip.Volume = setting.balance.YM2612Volume;
-                //    chip.Clock = 7987200;
-                //}
-                //else if (setting.YM2612Type[0].UseEmu[2])
-                //{
-                //    ym2612mame ??= new ym2612mame();
-                //    chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
-                //    chip.Instrument = ym2612mame;
-                //    chip.Update = ym2612mame.Update;
-                //    chip.Start = ym2612mame.Start;
-                //    chip.Stop = ym2612mame.Stop;
-                //    chip.Reset = ym2612mame.Reset;
-                //    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
-                //    chip.Volume = setting.balance.YM2612Volume;
-                //    chip.Clock = 7987200;
-                //}
+                else if (setting.YM2612Type.UseEmu2)
+                {
+                    ym3438 ??= new ym3438();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM3438;
+                    chip.Instrument = ym3438;
+                    chip.Update = ym3438.Update;
+                    chip.Start = ym3438.Start;
+                    chip.Stop = ym3438.Stop;
+                    chip.Reset = ym3438.Reset;
+                    switch (setting.nukedOPN2.EmuType)
+                    {
+                        case 0:
+                            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.discrete);
+                            break;
+                        case 1:
+                            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic);
+                            break;
+                        case 2:
+                            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612);
+                            break;
+                        case 3:
+                            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612_u);
+                            break;
+                        case 4:
+                            ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic_lp);
+                            break;
+                    }
+                    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
+                    chip.Volume = setting.balance.YM2612Volume;
+                    chip.Clock = mupDriver.YM2612ClockValue;
+                }
+                else if (setting.YM2612Type.UseEmu3)
+                {
+                    ym2612mame ??= new ym2612mame();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
+                    chip.Instrument = ym2612mame;
+                    chip.Update = ym2612mame.Update;
+                    chip.Start = ym2612mame.Start;
+                    chip.Stop = ym2612mame.Stop;
+                    chip.Reset = ym2612mame.Reset;
+                    chip.SamplingRate = (UInt32)setting.outputDevice.SampleRate;
+                    chip.Volume = setting.balance.YM2612Volume;
+                    chip.Clock = mupDriver.YM2612ClockValue;
+                }
 
                 if (chip.Clock != 0)
                 {
-                    log.Write(string.Format("Use OPN2({0}) Clk:{1}"
+                    log.Write(string.Format("Use OPN2({0}) Clk:{1} NukedOPN2Type:{2}"
                         , "Pri"
                         , chip.Clock
-                        ));
+                        , setting.nukedOPN2.EmuType));
 
                     //ClockYM2612 = mupDriver.YM2612ClockValue;
+                    chipRegister.YM2612[0].Use = true;
                     chipLED.PriOPN2 = 1;
                     lstChips.Add(chip);
                     //UseChip.Add(EnmChip.YM2612);
@@ -5846,11 +5860,16 @@ namespace mml2vgmIDEx64
                     Stop = cs4231.Stop,
                     Reset = cs4231.Reset,
                     SamplingRate = 55467,// (UInt32)setting.outputDevice.SampleRate;
-                    Volume = 0,//setting.balance.CS4231Volume,
+                    Volume = setting.balance.CS4231Volume,
                     Clock = 0,
                     Option = null
                 };
+
+                log.Write(string.Format("Use CS4231(Pri) Clk:{0}"
+                    , chip.Clock
+                    ));
                 chipLED.PriCS4231 = 1;
+                chipRegister.CS4231[0].Use = true;
                 lstChips.Add(chip);
                 //UseChip.Add(EnmChip.CS4231);
 
@@ -5898,6 +5917,11 @@ namespace mml2vgmIDEx64
 
                 log.Write("Volume(emu) 設定");
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
+                SetYM2608FMVolume(true, setting.balance.YM2608FMVolume);
+                SetYM2608PSGVolume(true, setting.balance.YM2608PSGVolume);
+                SetYM2608RhythmVolume(true, setting.balance.YM2608RhythmVolume);
+                SetYM2608AdpcmVolume(true, setting.balance.YM2608AdpcmVolume);
+
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
 
                 log.Write("Clock 設定");
@@ -6401,6 +6425,7 @@ namespace mml2vgmIDEx64
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) chipRegister.PPZ8SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) chipRegister.PPSDRVSoftReset(counter, i);
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) chipRegister.P86SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.CS4231.Count; i++) if (chipRegister.CS4231[i].Use) chipRegister.CS4231SoftReset(counter, i);
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) chipRegister.QSoundSoftReset(counter, i);
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164SoftReset(counter, i);
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMSoftReset(counter, i);
@@ -6456,6 +6481,7 @@ namespace mml2vgmIDEx64
             for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.CS4231.Count; i++) if (chipRegister.CS4231[i].Use) data.AddRange(chipRegister.CS4231MakeSoftReset(i));
             for (int i = 0; i < chipRegister.MIDI.Count; i++) if (chipRegister.MIDI[i].Use) data.AddRange(chipRegister.MIDIMakeSoftReset(i,setting.midiOut));
 
             return [.. data];
@@ -6480,6 +6506,7 @@ namespace mml2vgmIDEx64
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.CS4231.Count; i++) if (chipRegister.CS4231[i].Use) data.AddRange(chipRegister.CS4231MakeSoftReset(i));
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
@@ -6724,7 +6751,7 @@ namespace mml2vgmIDEx64
                     //ブロックデータを送っているのが誰かを調べる場合は有効にする
                     //if(Pack.ExData != null && Pack.ExData is PackData[] && ((PackData[])Pack.ExData).Length>0)
                     //{
-                    //    Console.WriteLine("{0}",Pack.Chip.Device);
+                        //Console.WriteLine("{0}",Pack.Chip.Device);
                     //}
 #endif
                     chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);

@@ -93,6 +93,7 @@
         public byte SecPPZ8 = 0;
         public byte SecPPSDRV = 0;
         public byte SecP86 = 0;
+        public byte SecCS4231 = 0;
 
     }
 }
