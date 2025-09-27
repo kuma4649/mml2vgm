@@ -94,9 +94,9 @@ namespace mml2vgmIDEx64.MMLParameter
             {
                 //0 -
                 null,                null,             SetTempo,     SetInstrument,   SetVolume,
-                SetTotalVolume,      SetOctave,        SetOctaveUp,  SetOctaveDown,   null,
+                SetTotalVolume,      SetOctave,        SetOctaveUp,  SetOctaveDown,   SetVolumeUp,
                 //10 -                                 
-                null,                SetLength,        null,         SetPan,          SetDetune,
+                SetVolumeDown,       SetLength,        null,         SetPan,          SetDetune,
                 null,                null,             null,         SetGatetime,     null,
                 //20 -               
                 SetEnvelope,         SetExtendChannel, null,         null,            null,
@@ -198,6 +198,23 @@ namespace mml2vgmIDEx64.MMLParameter
 
             if (od.linePos != null)
                 vol[ch] = (int)od.args[0];
+        }
+        protected virtual void SetVolumeUp(outDatum od, int ch, int cc)
+        {
+            if (ch >= vol.Length)
+                return;
+
+            if (od.linePos != null)
+                vol[ch] += (int)od.args[0];
+        }
+
+        protected virtual void SetVolumeDown(outDatum od, int ch, int cc)
+        {
+            if (ch >= vol.Length)
+                return;
+
+            if (od.linePos != null)
+                vol[ch] -= (int)od.args[0];
         }
 
         protected virtual void SetTotalVolume(outDatum od, int ch, int cc)

@@ -448,7 +448,7 @@ namespace mml2vgmIDEx64
                 if (r >= mmli.inst.Length) continue;
 
                 if (
-                    (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom) && !(mmli is YM2151_mucom))
+                    (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom) && !(mmli is YM2151_mucom) && !(mmli is YM2608_MUAP))
                     && (row.Cells["ClmPriority"].Value == null || (int)row.Cells["ClmPriority"].Value != mmli.partPriority[r]))
                 {
                     row.Cells["ClmPriority"].Value = mmli.partPriority[r];

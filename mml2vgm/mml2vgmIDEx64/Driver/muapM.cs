@@ -219,7 +219,8 @@ namespace mml2vgmIDEx64
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(
+            SoundManager.PackData p;
+            p = new SoundManager.PackData(
                 null,
                 chipRegister.YM2608[0], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd[0].Add(p);

@@ -1,4 +1,7 @@
 更新履歴
+TAG776 2025/09/27
+  muapDotNET対応作業:FMとSSGのパラメータ表示の一部に対応。リズム、PCM系は未対応。
+
 TAG775 2025/09/13
   muapDotNET対応作業:WSSのPCM鳴らせるように調整
 

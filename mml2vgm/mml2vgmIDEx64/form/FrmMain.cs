@@ -189,7 +189,7 @@ namespace mml2vgmIDEx64
 
             Audio.OPNARhythmSample = LoadRhythmSample(System.Windows.Forms.Application.StartupPath, Disp);
 
-            compileManager = new CompileManager(Disp, mucom, pmdmng, mdmng);
+            compileManager = new CompileManager(Disp, mucom, pmdmng, mdmng,mpmng);
 
             string[] args = Environment.GetCommandLineArgs();
             //foreach (string ag in args) MessageBox.Show(ag);
@@ -2942,18 +2942,21 @@ namespace mml2vgmIDEx64
                             for (int i = 0; i < ci.totalCount.Count; i++)
                             {
                                 //if (pw[i].clockCounter == 0) continue;
-                                int ch = ci.partNumber[i];
-                                ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
-                                ch++;
+                                int ch = i + 1;
                                 cells[0] = ch;
                                 cells[1] = 0;//ChipIndex
                                 cells[2] = 0;//ChipNumber
-                                cells[3] = ci.partName[i];
-                                cells[4] = ci.partType[i];
+                                cells[3] = (i + 1).ToString();// ci.partName[i];
+                                cells[4] = i < 11 ? "YM2608" : "YM3438";//ci.partType[i];
+                                cells[8] = i < 3 ? "FM/PCM" : (
+                                    i < 6 ? "SSG/PCM" : (
+                                    i < 9 ? "FM/PCM" : (
+                                    i == 9 ? "Rtm/PCM" : (
+                                    i == 10 ? "ADPCM/PCM" : "FM/PCM"))));
+                                //ci.partType[i];
                                 cells[5] = ci.totalCount[i];
-                                cells[6] = ci.loopCount[i];
+                                cells[6] = "-";//ci.loopCount[i];
                                 cells[7] = muteManager.UpdateTrackInfo(doc, cells);
-                                cells[8] = ci.partType[i];
                                 frmPartCounter.AddPartCounter(cells);
                             }
                         }
@@ -3158,7 +3161,7 @@ namespace mml2vgmIDEx64
                     }
 
                     string ext = Path.GetExtension(filename).ToLower();
-                    if (ext == ".gwi" || ext == ".muc" || ext == ".mml" || ext == ".mdl")
+                    if (ext == ".gwi" || ext == ".muc" || ext == ".mml" || ext == ".mdl" || ext == ".mus")
                     {
                         OpenFile(filename);
                         continue;
@@ -3792,6 +3795,9 @@ namespace mml2vgmIDEx64
                         break;
                     case EnmFileFormat.MDR:
                         mff = EnmMmlFileFormat.MDL;
+                        break;
+                    case EnmFileFormat.MUS:
+                        mff = EnmMmlFileFormat.MUS;
                         break;
                 }
                 Audio.mmlParams.Init(isTrace, mff, midikbd);

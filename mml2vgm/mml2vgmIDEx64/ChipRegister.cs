@@ -4573,7 +4573,7 @@ namespace mml2vgmIDEx64
             {
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
-                    if (!ctCS4231[Chip.Number].UseScci)
+                    if (ctCS4231[Chip.Number]==null || !ctCS4231[Chip.Number].UseScci)
                     {
                         //if (exData is int)
                         {

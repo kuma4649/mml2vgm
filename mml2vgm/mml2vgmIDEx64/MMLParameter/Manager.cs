@@ -117,7 +117,8 @@ namespace mml2vgmIDEx64.MMLParameter
                 || !dicInst[od.linePos.chip][od.linePos.chipIndex].ContainsKey(od.linePos.chipNumber))
             {
                 //int chipIndex;
-                SetupInstrument(od);
+                bool ret=SetupInstrument(od);
+                if (!ret) return false;
             }
 
             int cc = Audio.sm != null ? Audio.sm.CurrentClockCount : 0;
@@ -160,7 +161,7 @@ namespace mml2vgmIDEx64.MMLParameter
             return true;
         }
 
-        private void SetupInstrument(outDatum od)
+        private bool SetupInstrument(outDatum od)
         {
             switch (od.linePos.chip)
             {
@@ -271,8 +272,9 @@ namespace mml2vgmIDEx64.MMLParameter
                     break;
                 default:
                     Console.WriteLine("Warning Unknown Chip {0}", od.linePos.chip);
-                    break;
+                    return false;
             }
+            return true;
         }
 
 
@@ -728,6 +730,9 @@ namespace mml2vgmIDEx64.MMLParameter
                     break;
                 case EnmMmlFileFormat.MML:
                     opna = new YM2608_PMD(chip, setting, midiKbd);
+                    break;
+                case EnmMmlFileFormat.MUS:
+                    opna = new YM2608_MUAP(chip, setting, midiKbd);
                     break;
             }
             YM2608.Add(opna);

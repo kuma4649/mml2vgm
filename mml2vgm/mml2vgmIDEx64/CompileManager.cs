@@ -51,13 +51,15 @@ namespace mml2vgmIDEx64
         private mucomManager mucom = null;
         private PMDManager pmd = null;
         private MoonDriverManager moonDriver = null;
+        private MuapManager muap = null;
 
-        public CompileManager(Action<string> disp, mucomManager mucom,PMDManager pmd,MoonDriverManager moonDriver)
+        public CompileManager(Action<string> disp, mucomManager mucom,PMDManager pmd, MoonDriverManager moonDriver, MuapManager muap)
         {
             this.disp = disp;
             this.mucom = mucom;
             this.pmd = pmd;
             this.moonDriver = moonDriver;
+            this.muap = muap;
         }
 
         public void RequestCompile(Document doc, string srcText,object param=null)
@@ -135,6 +137,9 @@ namespace mml2vgmIDEx64
                     break;
                 case ".mdl":
                     Compile_MDL(qi);
+                    break;
+                case ".mus":
+                    Compile_MUS(qi);
                     break;
             }
 
@@ -376,5 +381,65 @@ namespace mml2vgmIDEx64
             }
 
         }
+
+        private void Compile_MUS(queItem qi)
+        {
+            if (muap == null)
+            {
+                qi.doc.compileStatus = Document.EnmCompileStatus.Success;
+                return;
+            }
+
+            //string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
+            //string path1 = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            //path1 = string.IsNullOrEmpty(path1) ? qi.doc.gwiFullPath : path1;
+            //string wrkPath = path1;
+            //msgBox.clear();
+            //musicDriverInterface.MmlDatum[] mubData = null;
+            //bool isSuccess = true;
+
+            //try
+            //{
+            //    mubData = muap.compileFromSrcText(qi.srcText, wrkPath, Point.Empty);
+            //}
+            //catch
+            //{
+            //    isSuccess = false;
+            //}
+            //if (mubData == null) isSuccess = false;
+
+            //qi.doc.compiledData = mubData;
+            //qi.doc.compileStatus = isSuccess ? Document.EnmCompileStatus.Success : Document.EnmCompileStatus.Failed;
+            //qi.doc.dstFileFormat = EnmFileFormat.MUB;
+
+            //musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
+
+            //List<msgInfo> lstMsgInfo = new List<msgInfo>();
+            //if (ci != null && ci.errorList != null)
+            //{
+            //    foreach (Tuple<int, int, string> mes in ci.errorList)
+            //    {
+            //        msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, 0, mes.Item3);
+            //        lstMsgInfo.Add(mi);
+            //    }
+            //}
+            //qi.doc.errBox = lstMsgInfo.ToArray();
+
+            //lstMsgInfo.Clear();
+            //if (ci != null && ci.warningList != null)
+            //{
+            //    foreach (Tuple<int, int, string> mes in ci.warningList)
+            //    {
+            //        msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, 0, mes.Item3);
+            //        lstMsgInfo.Add(mi);
+            //    }
+            //}
+            //qi.doc.wrnBox = lstMsgInfo.ToArray();
+
+            //Tuple<string, string>[] mucomTag = mucom.GetTagFromBuf(mubData, new myEncoding());
+            //qi.doc.tag = mucomTag;
+
+        }
+
     }
 }

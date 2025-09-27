@@ -1,0 +1,54 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.1/",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.1": {},
+    ".NETStandard,Version=v2.1/": {
+      "muapDotNETCompiler/1.0.0": {
+        "dependencies": {
+          "muapDotNETCommon": "1.0.0",
+          "musicDriverInterface": "1.0.0.0"
+        },
+        "runtime": {
+          "muapDotNETCompiler.dll": {}
+        }
+      },
+      "muapDotNETCommon/1.0.0": {
+        "runtime": {
+          "muapDotNETCommon.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "musicDriverInterface/1.0.0.0": {
+        "runtime": {
+          "musicDriverInterface.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "muapDotNETCompiler/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "muapDotNETCommon/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "musicDriverInterface/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
