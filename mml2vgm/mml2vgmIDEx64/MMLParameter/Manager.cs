@@ -1,4 +1,5 @@
 ﻿using Corex64;
+using MDSound.fmgen;
 using musicDriverInterface;
 using SoundManager;
 using System;
@@ -256,6 +257,7 @@ namespace mml2vgmIDEx64.MMLParameter
                     SetupYM2610B(od);
                     break;
                 case "YM2612":
+                case "YM3438":
                     SetupYM2612(od);
                     break;
                 case "YM2612X":
@@ -640,7 +642,17 @@ namespace mml2vgmIDEx64.MMLParameter
                 chip = Audio.chipRegister.YM2612[zChip.Index];
                 //chipIndex = zChip.Index;
             }
-            YM2612 opn2 = new YM2612(chip, setting, midiKbd);
+            Instrument opn2;
+            switch (mmlFileFormat)
+            {
+                default:
+                    opn2 = new YM2612(chip, setting, midiKbd);
+                    break;
+                case EnmMmlFileFormat.MUS:
+                    opn2 = new YM3438_MUAP(chip, setting, midiKbd);
+                    break;
+            }
+
             YM2612.Add(opn2);
             dicInstAdd(opn2, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(opn2, od.linePos.chipIndex, od.linePos.chipNumber);

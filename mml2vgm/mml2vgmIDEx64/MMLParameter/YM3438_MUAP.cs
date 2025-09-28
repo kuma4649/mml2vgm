@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace mml2vgmIDEx64.MMLParameter
 {
-    public class YM2608_MUAP : Instrument
+    public class YM3438_MUAP : Instrument
     {
-        public override string Name => "YM2608";
+        public override string Name => "YM3438";
         private readonly string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
-        public YM2608_MUAP(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(17, chip, setting, midiKbd)
+        public YM3438_MUAP(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(17, chip, setting, midiKbd)
         {
             for(int i = 0; i < 17; i++)
             {
@@ -93,7 +93,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 chip.silentVoice[17] = flg;
             }
 
-            midiKbd?.SetAssignChipCh(EnmChip.YM2608, ch);
+            midiKbd?.SetAssignChipCh(EnmChip.YM2612, ch);
         }
 
         protected override void SetPan(outDatum od, int ch, int cc)
@@ -127,45 +127,15 @@ namespace mml2vgmIDEx64.MMLParameter
             base.SetInstrument(od, ch, cc);
         }
 
-        private string[] Rstr = new string[]
-        {
-            "------","-----B","----S-","----SB",
-            "---C--","---C-B","---CS-","---CSB",
-            "--H---","--H--B","--H-S-","--H-SB",
-            "--HC--","--HC-B","--HCS-","--HCSB",
-            "-T----","-T---B","-T--S-","-T--SB",
-            "-T-C--","-T-C-B","-T-CS-","-T-CSB",
-            "-TH---","-TH--B","-TH-S-","-TH-SB",
-            "-THC--","-THC-B","-THCS-","-THCSB",
-            "R-----","R----B","R---S-","R---SB",
-            "R--C--","R--C-B","R--CS-","R--CSB",
-            "R-H---","R-H--B","R-H-S-","R-H-SB",
-            "R-HC--","R-HC-B","R-HCS-","R-HCSB",
-            "RT----","RT---B","RT--S-","RT--SB",
-            "RT-C--","RT-C-B","RT-CS-","RT-CSB",
-            "RTH---","RTH--B","RTH-S-","RTH-SB",
-            "RTHC--","RTHC-B","RTHCS-","RTHCSB",
-
-        };
-
         protected override void SetNote(outDatum od, int ch, int cc)
         {
-            if (ch<0 || ch >= octave.Length) return;
+            if (ch < 0 || ch >= octave.Length) return;
 
-            octave[ch] = ((int)od.args[0] / 12)+1;
+            octave[ch] = ((int)od.args[0] / 12) + 1;
 
-            if (ch != 9)
+            if (((int)od.args[0] % 12) < noteStrTbl.Length)
             {
-                if (((int)od.args[0] % 12) < noteStrTbl.Length)
-                {
-                    notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] % 12)]);
-                }
-            }
-            else
-            {
-                inst[ch] = ((int)od.args[0] % 64).ToString();
-                notecmd[ch] = Rstr[(int)od.args[0]%64];
-
+                notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] % 12)]);
             }
 
             length[ch] = (int)od.args[1] == 0 ? "-" : (string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[1], (int)od.args[1]));
@@ -173,23 +143,14 @@ namespace mml2vgmIDEx64.MMLParameter
             if (vol[ch] == null) return;
 
             keyOnMeter[ch] = (int)(256.0 / (
-                od.linePos.part == "FM" ? ((volMode[ch] == null || volMode[ch] < 2) ? 15 : 127) : (
-                od.linePos.part == "SSG" ? 15 : (
-                od.linePos.part == "RHYTHM" ? 15 : 15
-                ))) * vol[ch]);
+                (volMode[ch] == null || volMode[ch] < 2) ? 15 : 127
+                ) * vol[ch]);
 
         }
 
         protected override void SetRest(outDatum od, int ch, int cc)
         {
-            if (ch != 9)
-            {
-                notecmd[ch] = "r";
-            }
-            else
-            {
-                notecmd[ch] = Rstr[0];
-            }
+            notecmd[ch] = "r";
             length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[0], (int)od.args[0]);
         }
 
@@ -228,11 +189,7 @@ namespace mml2vgmIDEx64.MMLParameter
             if (od.linePos != null)
             {
                 vol2[ch] = (int)od.args[0];
-                vol[ch] = od.linePos.part == "FM" ? (int)vol2[ch]
-                    : od.linePos.part == "SSG" ? (((int)vol2[ch] - 80) / 3)
-                    : od.linePos.part == "RHYTHM" ? (((int)vol2[ch] - 80) / 3)
-                    : (((int)vol2[ch]) / 8)
-                    ;
+                vol[ch] = (int)vol2[ch];
                 if (od.args.Count > 1)
                 {
                     volMode[ch] = (byte)od.args[1];
@@ -248,11 +205,7 @@ namespace mml2vgmIDEx64.MMLParameter
             if (od.linePos != null)
             {
                 vol2[ch] += (int)od.args[0];
-                vol[ch] = od.linePos.part == "FM" ? (int)vol2[ch]
-                    : od.linePos.part == "SSG" ? (((int)vol2[ch] - 80) / 3)
-                    : od.linePos.part == "RHYTHM" ? (((int)vol2[ch] - 80) / 3)
-                    : (int)vol2[ch]
-                    ;
+                vol[ch] = (int)vol2[ch];
                 volMode[ch] = (byte)2;
             }
         }
@@ -265,11 +218,7 @@ namespace mml2vgmIDEx64.MMLParameter
             if (od.linePos != null)
             {
                 vol2[ch] -= (int)od.args[0];
-                vol[ch] = od.linePos.part == "FM" ? (int)vol2[ch]
-                    : od.linePos.part == "SSG" ? (((int)vol2[ch] - 80) / 3)
-                    : od.linePos.part == "RHYTHM" ? (((int)vol2[ch] - 80) / 3)
-                    : (int)vol2[ch]
-                    ;
+                vol[ch] = (int)vol2[ch];
                 volMode[ch] = (byte)2;
             }
         }

@@ -17,6 +17,7 @@ namespace mml2vgmIDEx64.MMLParameter
         public string[] notecmd;
         public string[] gatetime;
         public int?[] vol;
+        public int?[] vol2;
         public int?[] volMode;
         public int?[] expression;
         public int?[] velocity;
@@ -54,6 +55,7 @@ namespace mml2vgmIDEx64.MMLParameter
             gatetime = new string[n];
             notecmd = new string[n];
             vol = new int?[n];
+            vol2 = new int?[n];
             volMode = new int?[n];
             expression = new int?[n];
             velocity = new int?[n];

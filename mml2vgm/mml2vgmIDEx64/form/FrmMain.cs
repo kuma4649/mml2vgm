@@ -3716,6 +3716,11 @@ namespace mml2vgmIDEx64
                         if (dst != null && dst.Length > 0) dst = Path.GetFileName(dst);
 
                         if (!string.IsNullOrEmpty(src) && src != dst) continue;
+                        if (od.linePos.col < 1 || od.linePos.row < 1)
+                        {
+                            od.linePos.col = 1;
+                            od.linePos.row = 1;
+                        }
 
                         od.linePos.col = ac.GetCharIndexFromLineColumnIndex(
                             (int)(od.linePos.row - 1)
