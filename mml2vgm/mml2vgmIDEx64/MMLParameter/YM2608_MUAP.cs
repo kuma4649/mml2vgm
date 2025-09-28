@@ -21,11 +21,12 @@ namespace mml2vgmIDEx64.MMLParameter
                 vol[i] = 110;
                 vol2[i] = 110;
                 volMode[i] = 2;
-                if (i==3 || i==4 || i==5)
-                {
-                    vol[i] = 11;
-                    vol2[i] = 80 + 11 * 3;
-                }
+                //if (i == 3 || i == 4 || i == 5 || i == 9)
+                //if (i == 9)
+                //{
+                //    vol[i] = 11;
+                //    vol2[i] = 80 + 11 * 3;
+                //}
             }
         }
 
@@ -98,33 +99,46 @@ namespace mml2vgmIDEx64.MMLParameter
 
         protected override void SetPan(outDatum od, int ch, int cc)
         {
-            int n = (int)od.args[0];
-            char p = '\0';
-            if (!string.IsNullOrEmpty(od.linePos.part)) p = od.linePos.part[0];
-            if (p == 'S' || p == 'F' || p == 'A') //[S]SG [F]M [A]DPCM [R]HYTHM
+            int n = ((int)od.args[0]);
+            switch (n)
             {
-                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
-            }
-            else if (p == 'R') //[R]HYTHM
-            {
-                n = (n & 0xf0) >> 4;
-                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
-            }
-            else
-            {
-                pan[ch] = "?";
+                case 0x80:
+                    pan[ch] = "Left";
+                    break;
+                case 0xc0:
+                    pan[ch] = "Center";
+                    break;
+                case 0x40:
+                    pan[ch] = "Right";
+                    break;
+                case 0x82:
+                    pan[ch] = "LM";
+                    break;
+                case 0x6:
+                    pan[ch] = "LK";
+                    break;
+                case 0xc4:
+                    pan[ch] = "MK";
+                    break;
+                case 0xcc:
+                    pan[ch] = "MM";
+                    break;
+                case 0x41:
+                    pan[ch] = "RM";
+                    break;
+                case 0x9:
+                    pan[ch] = "RK";
+                    break;
+                default:
+                    pan[ch] = "";
+                    break;
             }
         }
 
         protected override void SetInstrument(outDatum od, int ch, int cc)
         {
-            if ((od.args[0] is char && (char)od.args[0] == 'E') || od.linePos.part == "SSG")
-            {
-                envelope[ch] = ((int)od.args[1]).ToString();
-                return;
-            }
+            inst[ch]= ((byte)od.args[1]).ToString();
 
-            base.SetInstrument(od, ch, cc);
         }
 
         private string[] Rstr = new string[]
@@ -174,8 +188,8 @@ namespace mml2vgmIDEx64.MMLParameter
 
             keyOnMeter[ch] = (int)(256.0 / (
                 od.linePos.part == "FM" ? ((volMode[ch] == null || volMode[ch] < 2) ? 15 : 127) : (
-                od.linePos.part == "SSG" ? 15 : (
-                od.linePos.part == "RHYTHM" ? 15 : 15
+                od.linePos.part == "SSG" ? 127:(//15 : (
+                od.linePos.part == "RHYTHM" ? 127:127//15//15 : 15
                 ))) * vol[ch]);
 
         }
@@ -229,9 +243,9 @@ namespace mml2vgmIDEx64.MMLParameter
             {
                 vol2[ch] = (int)od.args[0];
                 vol[ch] = od.linePos.part == "FM" ? (int)vol2[ch]
-                    : od.linePos.part == "SSG" ? (((int)vol2[ch] - 80) / 3)
-                    : od.linePos.part == "RHYTHM" ? (((int)vol2[ch] - 80) / 3)
-                    : (((int)vol2[ch]) / 8)
+                    : od.linePos.part == "SSG" ? (int)vol2[ch] //(((int)vol2[ch] - 80) / 3)
+                    : od.linePos.part == "RHYTHM" ? (int)vol2[ch] //(((int)vol2[ch] - 80) / 3)
+                    : (int)vol2[ch]//(((int)vol2[ch]) / 8)
                     ;
                 if (od.args.Count > 1)
                 {
@@ -249,10 +263,11 @@ namespace mml2vgmIDEx64.MMLParameter
             {
                 vol2[ch] += (int)od.args[0];
                 vol[ch] = od.linePos.part == "FM" ? (int)vol2[ch]
-                    : od.linePos.part == "SSG" ? (((int)vol2[ch] - 80) / 3)
-                    : od.linePos.part == "RHYTHM" ? (((int)vol2[ch] - 80) / 3)
-                    : (int)vol2[ch]
+                    : od.linePos.part == "SSG" ? (int)vol2[ch] //(((int)vol2[ch] - 80) / 3)
+                    : od.linePos.part == "RHYTHM" ? (int)vol2[ch] //(((int)vol2[ch] - 80) / 3)
+                    : (int)vol2[ch]//(((int)vol2[ch]) / 8)
                     ;
+                vol[ch] = Math.Min(Math.Max((int)vol[ch], 0), 127);
                 volMode[ch] = (byte)2;
             }
         }
@@ -266,10 +281,11 @@ namespace mml2vgmIDEx64.MMLParameter
             {
                 vol2[ch] -= (int)od.args[0];
                 vol[ch] = od.linePos.part == "FM" ? (int)vol2[ch]
-                    : od.linePos.part == "SSG" ? (((int)vol2[ch] - 80) / 3)
-                    : od.linePos.part == "RHYTHM" ? (((int)vol2[ch] - 80) / 3)
-                    : (int)vol2[ch]
+                    : od.linePos.part == "SSG" ? (int)vol2[ch] //(((int)vol2[ch] - 80) / 3)
+                    : od.linePos.part == "RHYTHM" ? (int)vol2[ch] //(((int)vol2[ch] - 80) / 3)
+                    : (int)vol2[ch]//(((int)vol2[ch]) / 8)
                     ;
+                vol[ch] = Math.Min(Math.Max((int)vol[ch], 0), 127);
                 volMode[ch] = (byte)2;
             }
         }

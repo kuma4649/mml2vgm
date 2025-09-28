@@ -98,21 +98,39 @@ namespace mml2vgmIDEx64.MMLParameter
 
         protected override void SetPan(outDatum od, int ch, int cc)
         {
-            int n = (int)od.args[0];
-            char p = '\0';
-            if (!string.IsNullOrEmpty(od.linePos.part)) p = od.linePos.part[0];
-            if (p == 'S' || p == 'F' || p == 'A') //[S]SG [F]M [A]DPCM [R]HYTHM
+            int n = ((int)od.args[0]);
+            switch (n)
             {
-                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
-            }
-            else if (p == 'R') //[R]HYTHM
-            {
-                n = (n & 0xf0) >> 4;
-                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
-            }
-            else
-            {
-                pan[ch] = "?";
+                case 0x80:
+                    pan[ch] = "Left";
+                    break;
+                case 0xc0:
+                    pan[ch] = "Center";
+                    break;
+                case 0x40:
+                    pan[ch] = "Right";
+                    break;
+                case 0x82:
+                    pan[ch] = "LM";
+                    break;
+                case 0x6:
+                    pan[ch] = "LK";
+                    break;
+                case 0xc4:
+                    pan[ch] = "MK";
+                    break;
+                case 0xcc:
+                    pan[ch] = "MM";
+                    break;
+                case 0x41:
+                    pan[ch] = "RM";
+                    break;
+                case 0x9:
+                    pan[ch] = "RK";
+                    break;
+                default:
+                    pan[ch] = "";
+                    break;
             }
         }
 
