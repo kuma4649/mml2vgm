@@ -57,7 +57,7 @@ namespace mml2vgmIDEx64
                 else if (fmt == EnmMmlFileFormat.MUC) ih = setHighlighterMUC();
                 else if (fmt == EnmMmlFileFormat.MML) ih = setHighlighterMML();
                 else if (fmt == EnmMmlFileFormat.MDL) ih = setHighlighterMDL();
-                else if (fmt == EnmMmlFileFormat.MUS) ih = setHighlighterMUC();
+                else if (fmt == EnmMmlFileFormat.MUS) ih = setHighlighterMUS();
                 else ih = setHighlighterVGMZGMZGM();
             }
             setHighlighterCommon(ih);
@@ -174,6 +174,15 @@ namespace mml2vgmIDEx64
             keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
             return keywordHighlighter;
         }
+
+        private IHighlighter setHighlighterMUS()
+        {
+            MUSHighlighter musHighlighter = new();
+            return musHighlighter;
+        }
+
+
+
 
         private void AzukiControl_DragDrop(object sender, DragEventArgs e)
         {
