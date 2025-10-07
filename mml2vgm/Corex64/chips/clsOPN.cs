@@ -2479,7 +2479,9 @@ namespace Corex64
         {
             if (page.Type == enmChannelType.FMOPN 
                 || page.Type == enmChannelType.FMOPNex
-                || (page.Type == enmChannelType.FMPCMex && !page.pcm))
+                || (page.Type == enmChannelType.FMPCM && !page.pcm)
+                || (page.Type == enmChannelType.FMPCMex && !page.pcm)
+                )
             {
                 return GetFmFNum(FNumTbl[0], octave, cmd, shift, pitchShift);
             }
