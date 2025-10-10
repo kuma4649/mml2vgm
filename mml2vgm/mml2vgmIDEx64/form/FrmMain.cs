@@ -189,7 +189,7 @@ namespace mml2vgmIDEx64
 
             Audio.OPNARhythmSample = LoadRhythmSample(System.Windows.Forms.Application.StartupPath, Disp);
 
-            compileManager = new CompileManager(Disp, mucom, pmdmng, mdmng,mpmng);
+            compileManager = new CompileManager(Disp, mucom, pmdmng, mdmng, mpmng);
 
             string[] args = Environment.GetCommandLineArgs();
             //foreach (string ag in args) MessageBox.Show(ag);
@@ -3722,6 +3722,12 @@ namespace mml2vgmIDEx64
                             od.linePos.row = 1;
                         }
 
+                        //if (format == EnmFileFormat.MUS)
+                        //{
+                        //    //od.linePos.row++;
+                        //    //od.linePos.col++;
+                        //}
+
                         od.linePos.col = ac.GetCharIndexFromLineColumnIndex(
                             (int)(od.linePos.row - 1)
                             , (int)(od.linePos.col - 1)
@@ -4235,18 +4241,28 @@ namespace mml2vgmIDEx64
             //log.Write(string.Format("{0} {1}", i, c));
             lock (traceInfoLockObj)
             {
+                int end;
                 if (odo != null)
                 {
                     try
                     {
-                        ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
+                        end = odo.linePos.col + Math.Max(odo.linePos.length, 1);
+                        if (end < ac.Document.Length)
+                        {
+                            ac.Document.Unmark(odo.linePos.col, end, 1);
+                        }
                     }
                     catch
                     {
                         ;//何もしない
                     }
                 }
-                ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length, 1), 1);
+
+                end = od.linePos.col + Math.Max(od.linePos.length, 1);
+                if (end < ac.Document.Length)
+                {
+                    ac.Document.Mark(od.linePos.col, end, 1);
+                }
                 odos[ch] = od;
             }
             flg = true;
@@ -4258,6 +4274,8 @@ namespace mml2vgmIDEx64
             while (lstOldAliesPos.Count < ch + 1)
                 lstOldAliesPos.Add(new List<LinePos>());
 
+            int end;
+
             lock (traceInfoLockObj)
             {
                 for (int i = 0; i < lstOldAliesPos[ch].Count; i++)
@@ -4265,10 +4283,14 @@ namespace mml2vgmIDEx64
                     if (lstOldAliesPos[ch][i].col == -1) continue;
                     try
                     {
-                        ac.Document.Unmark(
+                        end = lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].length, 1);
+                        if (end < ac.Document.Length)
+                        {
+                            ac.Document.Unmark(
                             lstOldAliesPos[ch][i].col
-                            , lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].length, 1)
+                            , end
                             , 2);
+                        }
                     }
                     catch
                     {
@@ -4303,10 +4325,13 @@ namespace mml2vgmIDEx64
 
                 //マーク
                 lock (traceInfoLockObj)
-                    ac.Document.Mark(
-                        ci
-                        , ci + Math.Max(lp[i].length, 1)
-                        , 2);
+                {
+                    end = ci + Math.Max(lp[i].length, 1);
+                    if (end < ac.Document.Length)
+                    {
+                        ac.Document.Mark(ci, end, 2);
+                    }
+                }
                 flg = true;
             }
 
@@ -4319,25 +4344,34 @@ namespace mml2vgmIDEx64
             int sw = (int)od.args[1];
             if (sw != 1) return flg;
 
+            int end;
             int ci;
             if (oldTraceLoc != null)
             {
                 ci = oldTraceLoc.col;
                 //アンマーク
-                lock (traceInfoLockObj) ac.Document.Unmark(
-                    ci
-                    , ci + Math.Max(oldTraceLoc.length, 1)
-                    , 2);
+                lock (traceInfoLockObj)
+                {
+                    end = ci + Math.Max(oldTraceLoc.length, 1);
+                    if (end < ac.Document.Length)
+                    {
+                        ac.Document.Unmark(ci, end, 2);
+                    }
+                }
                 oldTraceLoc = null;
             }
 
             LinePos lp = ((MmlDatum)od.args[2]).linePos;
             ci = lp.col;
             //マーク
-            lock (traceInfoLockObj) ac.Document.Mark(
-                ci
-                , ci + Math.Max(lp.length, 1)
-                , 2);
+            lock (traceInfoLockObj)
+            {
+                end = ci + Math.Max(lp.length, 1);
+                if (end < ac.Document.Length)
+                {
+                    ac.Document.Mark(ci, end, 2);
+                }
+            }
             oldTraceLoc = lp;
             flg = true;
 

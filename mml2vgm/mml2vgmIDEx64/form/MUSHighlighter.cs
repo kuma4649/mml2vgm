@@ -26,7 +26,7 @@ namespace mml2vgmIDEx64
 
         List<RegexPattern> recRegexPatterns = new List<RegexPattern>(8);
         List<RegexPattern> regexPatterns = new List<RegexPattern>(8);
-        RegexPattern partPtn = new RegexPattern(new Regex("[ \\t0-9,\\-]+[ \\t]*\\["), false, new CharClass[] { CharClass.Keyword });//パート
+        RegexPattern partPtn = new RegexPattern(new Regex("[ \\t0-9\\,\\-]+[ \\t]*\\["), false, new CharClass[] { CharClass.Keyword });//パート
         RegexPattern macroPtn = new RegexPattern(new Regex("\\$.+[ \\t]*\\["), false, new CharClass[] { CharClass.Keyword });//マクロ
 
         public MUSHighlighter()
@@ -77,7 +77,7 @@ namespace mml2vgmIDEx64
                 {
                     //コメントチェック
                     matchIndex = lineContent.IndexOf(';', offset);
-                    if (matchIndex >= 0)
+                    if (matchIndex == offset)
                     {
                         for (int i = begin + matchIndex; i < end; i++)
                             doc.SetCharClass(i, CharClass.Comment);
@@ -140,7 +140,7 @@ namespace mml2vgmIDEx64
                     }
 
                     //何も該当しない場合は、その行のチェックを終える
-                    break;
+                    offset++;
                 }
 
             }
