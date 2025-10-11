@@ -1,4 +1,11 @@
 更新履歴
+TAG782 2025/10/11 2nd
+  muapDotNET対応作業:トレース機能:@PORも追従するように機能追加
+                     PartCounter:@DT,Qコマンドに対応
+                     PartCounter:(おまけ)MUAP風のVolume色になるようにVolumeBarColorScheme.txtを修正
+                       C:\Users\(ユーザー名)\AppData\Roaming\KumaApp\mml2vgmIDEx64
+                       に定義ファイルがあるので同梱の同名ファイルと差し替えてください。(必須ではありません)
+
 TAG781 2025/10/11
   muapDotNET対応作業:トレース機能の追加。
   ハイライターのバグ修正

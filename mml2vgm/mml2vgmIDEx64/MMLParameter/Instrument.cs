@@ -99,7 +99,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 SetTotalVolume,      SetOctave,        SetOctaveUp,  SetOctaveDown,   SetVolumeUp,
                 //10 -                                 
                 SetVolumeDown,       SetLength,        null,         SetPan,          SetDetune,
-                null,                null,             null,         SetGatetime,     null,
+                null,                null,             null,         SetGatetime,     SetGatetimeDiv,
                 //20 -               
                 SetEnvelope,         SetExtendChannel, null,         null,            null,
                 null,                null,             null,         null,            SetLfo,
@@ -161,6 +161,18 @@ namespace mml2vgmIDEx64.MMLParameter
                         ;
                     }
                 }
+            }
+
+            //実体のないmmlコマンド(コンパイラ側で昇華されるコマンド)がある場合はここですべて吐き出す
+            //今のところmuapのみ
+            if (od.args != null && od.args.Count > 0 && od.args[0] is List<MmlDatum>)
+            {
+                foreach (MmlDatum md in (List<MmlDatum>)od.args[0])
+                {
+                    outDatum ood = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+                    SetParam[(int)md.type]?.Invoke(ood, ch, cc);
+                }
+                od.args.RemoveAt(0);
             }
 
             SetParam[(int)od.type]?.Invoke(od, ch, cc);
@@ -292,6 +304,10 @@ namespace mml2vgmIDEx64.MMLParameter
         }
 
         protected virtual void SetGatetime(outDatum od, int ch, int cc)
+        {
+        }
+
+        protected virtual void SetGatetimeDiv(outDatum od, int ch, int cc)
         {
         }
 

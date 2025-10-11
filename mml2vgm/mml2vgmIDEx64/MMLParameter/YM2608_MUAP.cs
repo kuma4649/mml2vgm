@@ -27,6 +27,7 @@ namespace mml2vgmIDEx64.MMLParameter
                 //    vol[i] = 11;
                 //    vol2[i] = 80 + 11 * 3;
                 //}
+                partColor[i] = 8;
             }
         }
 
@@ -222,10 +223,9 @@ namespace mml2vgmIDEx64.MMLParameter
             lfoSw[ch] = s;
         }
 
-        protected override void SetGatetime(outDatum od, int ch, int cc)
+        protected override void SetGatetimeDiv(outDatum od, int ch, int cc)
         {
             gatetime[ch] = string.Format("{0}",(int)od.args[0]);
-            //base.SetGatetime(od, ch, cc);
         }
 
         protected override void SetHardLFO(outDatum od, int ch, int cc)
