@@ -1,6 +1,7 @@
 ﻿using musicDriverInterface;
 using System;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Corex64
 {
@@ -586,6 +587,10 @@ namespace Corex64
             page.chip.lstPartWork[11].spg.rhythmMode = (n != 0);
             page.chip.lstPartWork[12].spg.rhythmMode = (n != 0);
             page.chip.lstPartWork[13].spg.rhythmMode = (n != 0);
+            if (n == 0)
+            {
+                SOutData(lstPartWork[9].cpg, mml, port[0], 0x0e, 0x00);
+            }
 
         }
 
