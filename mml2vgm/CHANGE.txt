@@ -1,4 +1,11 @@
 更新履歴
+TAG784 2025/10/12 2nd
+  muapDotNET対応作業:エクスポート(.oの出力機能)、PlayOnMDPの機能実装
+                    muapのマニュアル参照機能実装(初回はマニュアルのファイルの位置を聞いてきます)
+                    TONE.DTA/TONEX.DTAを読みこめるように機能追加。
+                    InstrumentsフォルダにTONES.DTA/TONES.HLP/TONESX.DTA/TONESX.HLPを置いて起動すると
+                    Sienウィンドウの音色リストに追加されます。ダブルクリックで、エディタ上に音色データを挿入します。
+
 TAG783 2025/10/12
   Core:gwi:OPLL:リズムモードから通常モードに戻すことができなかったバグを修正
 

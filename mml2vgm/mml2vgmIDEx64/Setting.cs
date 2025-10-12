@@ -2041,6 +2041,7 @@ namespace mml2vgmIDEx64
             private string _CommandManualMucom = "";
             private string _CommandManualPMD="";
             private string _CommandManualM98 = "m98コマンド・リファレンス.pdf";
+            private string _CommandManualMuap = "";
             private bool _sinWaveGen=false;
             public bool sinWaveGen { get => _sinWaveGen; set => _sinWaveGen = value; }
 
@@ -2049,6 +2050,7 @@ namespace mml2vgmIDEx64
             public string CommandManualMucom { get => _CommandManualMucom; set => _CommandManualMucom = value; }
             public string CommandManualPMD { get => _CommandManualPMD; set => _CommandManualPMD = value; }
             public string CommandManualM98 { get => _CommandManualM98; set => _CommandManualM98 = value; }
+            public string CommandManualMuap { get => _CommandManualMuap; set => _CommandManualMuap = value; }
 
             public string[] GwiFileHistory { get => _GwiFileHistory; set => _GwiFileHistory = value; }
 
@@ -2114,6 +2116,7 @@ namespace mml2vgmIDEx64
                 other.CommandManualMucom = this.CommandManualMucom;
                 other.CommandManualPMD = this.CommandManualPMD;
                 other.CommandManualM98 = this.CommandManualM98;
+                other.CommandManualMuap = this.CommandManualMuap;
                 other.sinWaveGen = this.sinWaveGen;
                 other.ClearHistory = this.ClearHistory;
                 other.UseScript = this.UseScript;

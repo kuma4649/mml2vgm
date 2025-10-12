@@ -18,7 +18,7 @@ namespace mml2vgmIDEx64
         private SienSearch ss;
         public int selRow = -1;
         private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
-        private Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string, string>[]> instCacheFolder = new Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string, string>[]>();
+        private Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string[]>[]> instCacheFolder = new Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string[]>[]>();
 
         public FrmSien(FrmMain parent,Setting setting)
         {
@@ -35,6 +35,7 @@ namespace mml2vgmIDEx64
             treeView1.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
             this.Opacity = setting.other.Opacity / 100.0;
         }
+
         protected override string GetPersistString()
         {
             return this.Name;
@@ -324,7 +325,7 @@ namespace mml2vgmIDEx64
                 parent, si, path, "", GetInstrumentFromFolderComp);
         }
 
-        private void GetInstrumentFromFolderComp(object sender,TreeNode tn, List<Tuple<InstrumentAtLocal.enmInstType, string, string, string>> obj)
+        private void GetInstrumentFromFolderComp(object sender,TreeNode tn, List<Tuple<InstrumentAtLocal.enmInstType, string, string[]>> obj)
         {
             if (!(sender is SienItem)) return;
             if (obj == null || obj.Count < 1) return;
@@ -341,7 +342,7 @@ namespace mml2vgmIDEx64
                 }
 
                 int depth = -1;
-                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string,string> line in obj)
+                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string[]> line in obj)
                 {
                     if (line.Item1 != InstrumentAtLocal.enmInstType.Dir) continue;
 
@@ -350,8 +351,9 @@ namespace mml2vgmIDEx64
                     string name = Path.GetFileName(line.Item2);
                     string filePath = Path.GetDirectoryName(line.Item2);
                     string[] paths = filePath.Split(Path.DirectorySeparatorChar);
-                    string lin = line.Item3;
-                    string linMUC = line.Item4;
+                    string lin = line.Item3[0];
+                    string linMUC = line.Item3[1];
+                    string linMuap = line.Item3.Length > 2 ? line.Item3[2] : null;
                     string treename = line.Item2.Replace(Path.Combine(Common.GetApplicationFolder(), "Instruments") + "\\", "");
 
                     ssi = new SienItem();
@@ -362,6 +364,7 @@ namespace mml2vgmIDEx64
                     ssi.haveChild = true;
                     ssi.content = si.content;
                     ssi.content2 = si.content2 != null ? si.content2 : si.content;
+                    ssi.content3 = si.content3 != null ? si.content3 : si.content;
                     ssi.description = line.Item2;
                     ssi.foundCnt = si.foundCnt;
                     ssi.nextAnchor = si.nextAnchor;
@@ -394,7 +397,7 @@ namespace mml2vgmIDEx64
 
                 }
 
-                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string, string> line in obj)
+                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string[]> line in obj)
                 {
                     if (line.Item1 == InstrumentAtLocal.enmInstType.Dir) continue;
 
@@ -403,8 +406,9 @@ namespace mml2vgmIDEx64
                     string name = Path.GetFileName(line.Item2);
                     string filePath = Path.GetDirectoryName(line.Item2);
                     string[] paths = filePath.Split(Path.DirectorySeparatorChar);
-                    string lin = line.Item3;
-                    string linMUC = line.Item4;
+                    string lin = line.Item3[0];
+                    string linMUC = line.Item3[1];
+                    string linMuap = line.Item3.Length > 2 ? line.Item3[2] : null;
                     string treename = line.Item2.Replace(Path.Combine(Common.GetApplicationFolder(), "Instruments") + "\\", "");
 
                     ssi = new SienItem();
@@ -415,6 +419,7 @@ namespace mml2vgmIDEx64
                     ssi.haveChild = true;
                     ssi.content = lin;// si.content;
                     ssi.content2 = linMUC;
+                    ssi.content3 = linMuap;
                     ssi.description = line.Item2;
                     ssi.foundCnt = si.foundCnt;
                     ssi.nextAnchor = si.nextAnchor;
@@ -505,7 +510,9 @@ namespace mml2vgmIDEx64
                 int ci = d.editor.azukiControl.CaretIndex;
                 string text = d.srcFileFormat == EnmMmlFileFormat.MUC
                     ? (si.content2 != null ? si.content2 : si.content)
-                    : si.content;
+                    : (d.srcFileFormat == EnmMmlFileFormat.MUS
+                    ? (si.content3 != null ? si.content3 : si.content)
+                    : si.content);
                 d.editor.azukiControl.Document.Replace(
                     text,
                     ci,// - si.foundCnt,

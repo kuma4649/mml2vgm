@@ -1051,6 +1051,39 @@ namespace mml2vgmIDEx64
             }
         }
 
+        private void TsmiReferenceMuap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                while (!File.Exists(setting.other.CommandManualMuap) || (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "テキストファイル(*.txt;*.doc;*.man;*.pdf)|*.txt;*.doc;*.man;*.pdf|すべてのファイル(*.*)|*.*";
+                    ofd.Title = "MML(Muap向け)のリファレンスマニュアルを選択";
+                    ofd.RestoreDirectory = true;
+
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    setting.other.CommandManualMuap = ofd.FileName;
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = setting.other.CommandManualMuap
+                }).Dispose();
+            }
+            catch
+            {
+                setting.other.CommandManualMuap = "";
+                TsmiReference_Click(sender, e);
+                //MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void TsmiAbout_Click(object sender, EventArgs e)
         {
             FrmAbout frm = new FrmAbout();
@@ -5147,7 +5180,7 @@ namespace mml2vgmIDEx64
 
                 string ext = Path.GetExtension(d.gwiFullPath).ToLower();
 
-                if (ext != ".muc" && ext != ".mml" && ext != ".gwi")
+                if (ext != ".muc" && ext != ".mus" && ext != ".mml" && ext != ".gwi")
                 {
                     MessageBox.Show("この形式のエクスポートに対応していません。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -5161,6 +5194,11 @@ namespace mml2vgmIDEx64
                 {
                     foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
                     outFn = Path.ChangeExtension(d.gwiFullPath, ".mub");
+                }
+                else if (ext == ".mus")
+                {
+                    foreach (MmlDatum md in mData) buf.Add(md != null ? (byte)md.dat : (byte)0);
+                    outFn = Path.ChangeExtension(d.gwiFullPath, ".o");
                 }
                 else if (ext == ".mml")
                 {

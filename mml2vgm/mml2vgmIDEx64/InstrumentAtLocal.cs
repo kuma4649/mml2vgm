@@ -30,7 +30,7 @@ namespace mml2vgmIDEx64
             SSG_WF,//OPNA2(SSG)
         }
 
-        public void Start(FrmMain parent, object sender, string baseDir,string add, Action<object,TreeNode , List<Tuple<enmInstType, string, string, string>>> CompleteMethod)
+        public void Start(FrmMain parent, object sender, string baseDir,string add, Action<object,TreeNode , List<Tuple<enmInstType, string, string[]>>> CompleteMethod)
         {
             this.parent = parent;
             this.sender = sender;
@@ -41,17 +41,18 @@ namespace mml2vgmIDEx64
             List<FileSystemInfo> lstFile = new List<FileSystemInfo>();
             GetFileList(baseDir,ref lstFile);
             //音色データを解析する
-            List<Tuple<enmInstType, string, string, string>> lstInst = new List<Tuple<enmInstType, string, string, string>>();
+            List<Tuple<enmInstType, string, string[]>> lstInst = new List<Tuple<enmInstType, string, string[]>>();
             foreach (FileSystemInfo fi in lstFile)
             {
                 if (fi.Attributes == FileAttributes.Directory)
                 {
-                    Tuple<enmInstType, string, string, string> ins = new Tuple<enmInstType, string, string, string>(enmInstType.Dir, fi.FullName, "", "");
+                    Tuple<enmInstType, string, string[]> ins = new Tuple<enmInstType, string, string[]>(
+                        enmInstType.Dir, fi.FullName, ["", ""]);
                     lstInst.Add(ins);
                 }
                 else
                 {
-                    List<Tuple<enmInstType, string, string, string>> ins = GetInsts(fi.FullName);
+                    List<Tuple<enmInstType, string, string[]>> ins = GetInsts(fi.FullName);
                     if (ins != null)
                     {
                         lstInst.AddRange(ins);
@@ -83,6 +84,7 @@ namespace mml2vgmIDEx64
                             || ext == ".mml"
                             || ext == ".rym2612"
                             || ext == ".btb"
+                            || ext == ".dta"
                             )
                         {
                             lstFile.Add(f);
@@ -98,10 +100,10 @@ namespace mml2vgmIDEx64
 
         }
 
-        private List<Tuple<enmInstType, string, string, string>> GetInsts(string file)
+        private List<Tuple<enmInstType, string, string[]>> GetInsts(string file)
         {
-            List<Tuple<enmInstType, string, string, string>> lstInst =
-                    new List<Tuple<enmInstType, string, string, string>>();
+            List<Tuple<enmInstType, string, string[]>> lstInst =
+                    new List<Tuple<enmInstType, string, string[]>>();
             string ext = Path.GetExtension(file).ToLower();
             switch (ext)
             {
@@ -117,14 +119,17 @@ namespace mml2vgmIDEx64
                 case ".btb":
                     lstInst = GetInstsAtBambooTracker(file);
                     break;
+                case ".dta":
+                    lstInst = GetInstsAtMuapDTA(file);
+                    break;
             }
 
             return lstInst;
         }
 
-        private List<Tuple<enmInstType, string, string, string>> GetInstsAtGwi(string srcFn)
+        private List<Tuple<enmInstType, string, string[]>> GetInstsAtGwi(string srcFn)
         {
-            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
+            List<Tuple<enmInstType, string, string[]>> ret = new List<Tuple<enmInstType, string, string[]>>();
             try
             {
                 string stPath = System.Windows.Forms.Application.StartupPath;
@@ -159,7 +164,11 @@ namespace mml2vgmIDEx64
                         string sdatV, sdatM;
                         sdatV = MakeVoiceDefineForGWI_OPN(name + add, num, prms, alg, fb);
                         sdatM = MakeVoiceDefineForMUC_OPN(name + add, num, prms, alg, fb);
-                        ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdatV, sdatM));
+                        ret.Add(new Tuple<enmInstType, string, string[]>(
+                            enmInstType.FM_N,
+                            Path.Combine(srcFn, name).Replace(baseDir, ""),
+                            [sdatV, sdatM]
+                            ));
                     }
                     else
                     {
@@ -181,7 +190,11 @@ namespace mml2vgmIDEx64
                         string str = GetInstrumentGwiFmOPMString(num, name, instOPM[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
+                            ret.Add(new Tuple<enmInstType, string, string[]>(
+                                enmInstType.FM_N,
+                                Path.Combine(srcFn, name).Replace(baseDir, ""),
+                                [str,""]
+                                ));
                         }
                     }
                     else
@@ -204,7 +217,11 @@ namespace mml2vgmIDEx64
                         string str = GetInstrumentGwiFmOPLLString(num, name, instOPL[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str, ""));
+                            ret.Add(new Tuple<enmInstType, string, string[]>(
+                                enmInstType.FM_L,
+                                Path.Combine(srcFn, name).Replace(baseDir, ""),
+                                [str, ""]
+                                ));
                         }
                     }
                     else if (instOPL[num].Item2.Length == Corex64.Const.OPL3_INSTRUMENT_SIZE)
@@ -217,7 +234,11 @@ namespace mml2vgmIDEx64
                         string str = GetInstrumentGwiFmOPLString(num, name, instOPL[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
+                            ret.Add(new Tuple<enmInstType, string, string[]>(
+                                enmInstType.FM_L,
+                                Path.Combine(srcFn, name).Replace(baseDir, ""),
+                                [str,""]
+                                ));
                         }
                     }
                     else if (instOPL[num].Item2.Length == Corex64.Const.OPL_OP4_INSTRUMENT_SIZE)
@@ -230,7 +251,10 @@ namespace mml2vgmIDEx64
                         string str = GetInstrumentGwiFmOPL4String(num, name, instOPL[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
+                            ret.Add(new Tuple<enmInstType, string, string[]>(
+                                enmInstType.FM_L,
+                                Path.Combine(srcFn, name).Replace(baseDir, ""),
+                                [str,""]));
                         }
                     }
                     else
@@ -253,7 +277,11 @@ namespace mml2vgmIDEx64
                         string str = GetInstrumentGwiWFString(num, name, instWF[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_M, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
+                            ret.Add(new Tuple<enmInstType, string, string[]>(
+                                enmInstType.FM_M,
+                                Path.Combine(srcFn, name).Replace(baseDir, ""),
+                                [str,""]
+                                ));
                         }
                     }
                     else
@@ -275,7 +303,11 @@ namespace mml2vgmIDEx64
 
                     if (!string.IsNullOrEmpty(str))
                     {
-                        ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.SSG_WF, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
+                        ret.Add(new Tuple<enmInstType, string, string[]>(
+                            enmInstType.SSG_WF,
+                            Path.Combine(srcFn, name).Replace(baseDir, ""),
+                            [str,""]
+                            ));
                     }
                 }
             }
@@ -287,9 +319,9 @@ namespace mml2vgmIDEx64
             return ret;
         }
 
-        private List<Tuple<enmInstType, string, string, string>> GetInstsAtMuc(string srcFn)
+        private List<Tuple<enmInstType, string, string[]>> GetInstsAtMuc(string srcFn)
         {
-            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
+            List<Tuple<enmInstType, string, string[]>> ret = new List<Tuple<enmInstType, string, string[]>>();
             int renban = 0;
             try
             {
@@ -403,7 +435,10 @@ namespace mml2vgmIDEx64
                     sdatV = MakeVoiceDefineForGWI_OPN(name + add, voiceNum, dat, alg, fb);
                     sdatM = MakeVoiceDefineForMUC_OPN(name + add, voiceNum, dat, alg, fb);
 
-                    ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdatV, sdatM));
+                    ret.Add(new Tuple<enmInstType, string, string[]>(
+                        enmInstType.FM_N,
+                        Path.Combine(srcFn, name).Replace(baseDir, ""),
+                        [sdatV, sdatM]));
                 }
             }
             catch
@@ -414,9 +449,9 @@ namespace mml2vgmIDEx64
             return ret;
         }
 
-        private List<Tuple<enmInstType, string, string, string>> GetInstsAtRym2612(string srcFn)
+        private List<Tuple<enmInstType, string, string[]>> GetInstsAtRym2612(string srcFn)
         {
-            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
+            List<Tuple<enmInstType, string, string[]>> ret = new List<Tuple<enmInstType, string, string[]>>();
             try
             {
                 XElement xml = XElement.Load(srcFn);
@@ -515,7 +550,10 @@ namespace mml2vgmIDEx64
                     sdatV = MakeVoiceDefineForGWI_OPN(patchName == "" ? (vname + add) : patchName, voiceNum, iop, alg, fb);
                     sdatM = MakeVoiceDefineForMUC_OPN(patchName == "" ? (vname + add) : patchName, voiceNum, iop, alg, fb);
 
-                ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, srcFn.Replace(baseDir, ""), sdatV,sdatM));
+                ret.Add(new Tuple<enmInstType, string, string[]>(
+                    enmInstType.FM_N,
+                    srcFn.Replace(baseDir, ""),
+                    [sdatV,sdatM]));
             }
             catch
             {
@@ -525,9 +563,9 @@ namespace mml2vgmIDEx64
             return ret;
         }
 
-        private List<Tuple<enmInstType,string,string,string>> GetInstsAtBambooTracker(string srcFn)
+        private List<Tuple<enmInstType, string, string[]>> GetInstsAtBambooTracker(string srcFn)
         {
-            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
+            List<Tuple<enmInstType, string, string[]>> ret = new List<Tuple<enmInstType, string, string[]>>();
 
             try
             {
@@ -635,10 +673,78 @@ namespace mml2vgmIDEx64
                     sdatV = MakeVoiceDefineForGWI_OPN(name + add, envIndex, prms, alg, fb);
                     sdatM = MakeVoiceDefineForMUC_OPN(name + add, envIndex, prms, alg, fb);
 
-                    ret.Add(new Tuple<enmInstType, string, string, string>(
-                        enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdatV, sdatM));
+                    ret.Add(new Tuple<enmInstType, string, string[]>(
+                        enmInstType.FM_N,
+                        Path.Combine(srcFn, name).Replace(baseDir, ""),
+                        [sdatV, sdatM]
+                        ));
                 }
 
+            }
+            catch
+            {
+                return null;
+            }
+
+            return ret;
+        }
+
+        private List<Tuple<enmInstType, string, string[]>> GetInstsAtMuapDTA(string srcFn)
+        {
+            List<Tuple<enmInstType, string, string[]>> ret = new List<Tuple<enmInstType, string, string[]>>();
+
+            try
+            {
+                byte[] bin = File.ReadAllBytes(srcFn);//, Encoding.GetEncoding(932)).Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                if (bin == null || bin.Length < 24) return null;
+                string hlp=Path.ChangeExtension(srcFn, ".hlp");
+                byte[] bhlp = File.ReadAllBytes(hlp);
+                if (bhlp == null) return null;
+                myEncoding enc = new myEncoding();
+                string[] hlps = enc.GetStringFromSjisArray(bhlp).Split("\r\n");
+
+                int num = 0;
+                int ptr = 0;
+                while (ptr < bin.Length)
+                {
+                    if(ptr + 24 >= bin.Length) break;
+                    int[][] prms = new int[][] { new int[11], new int[11], new int[11], new int[11] };
+
+                    for (int op = 0; op < 4; op++)
+                    {
+                        prms[op][0] = bin[ptr + 8 + op] & 0x1f;//AR
+                        prms[op][1] = bin[ptr + 12 + op] & 0x1f;//DR
+                        prms[op][2] = bin[ptr + 16 + op] & 0x1f;//SR
+                        prms[op][3] = bin[ptr + 20 + op] & 0x0f;//RR
+                        prms[op][4] = bin[ptr + 20 + op] >> 4;//SL
+                        prms[op][5] = bin[ptr + 4 + op] & 0x7f;//TL
+                        prms[op][6] = (bin[ptr + 8 + op] >> 5) & 0x3;//KS
+                        prms[op][7] = bin[ptr + 0 + op] & 0x0f;//ML
+                        prms[op][8] = (bin[ptr + 0 + op] >> 5) & 0x7;//DT
+                        prms[op][9] = 0;
+                        prms[op][10] = 0;//SSGEG;
+                    }
+                    int alg = bin[ptr + 24] & 7;
+                    int fb = bin[ptr + 24] >> 3;
+                    string name = hlps[num].Trim();
+                    int voiceNum = 0;
+
+                    ////音色定義文を作成
+                    string sdatV, sdatM,sdatMP;
+                    sdatV = MakeVoiceDefineForGWI_OPN(name , voiceNum, prms, alg, fb);
+                    sdatM = MakeVoiceDefineForMUC_OPN(name, voiceNum, prms, alg, fb);
+                    sdatMP = MakeVoiceDefineForMUAP_OPN(name, voiceNum, prms, alg, fb);
+
+                    ret.Add(
+                        new Tuple<enmInstType, string, string[]>(
+                            enmInstType.FM_N,
+                            Path.Combine(srcFn, name).Replace(baseDir, ""),
+                            [sdatV, sdatM, sdatMP]
+                        ));
+
+                    num++;
+                    ptr = num * 25;
+                }
             }
             catch
             {
@@ -988,6 +1094,30 @@ namespace mml2vgmIDEx64
   {4}
   }}
 ", patchName, line[0], line[1], line[2], line[3], line[4], voiceNo);
+
+            return sdat;
+        }
+
+        private string MakeVoiceDefineForMUAP_OPN(string patchName, int voiceNo, int[][] prms, int alg, int fb)
+        {
+            string[] line = new string[5];
+            for (int j = 0; j < 4; j++)
+            {
+                line[j] = "";
+                for (int k = 0; k < 9; k++)
+                {
+                    line[j] += string.Format("{0:D3}, ", (int)prms[j][k]);
+                }
+            }
+            line[4] = string.Format("Z@100,@{0:D3},E,{1:D3},{2:D3},", voiceNo, fb, alg);
+
+            string sdat = string.Format(
+@"{0}
+  {1}
+  {2}
+  {3}
+  {4}   ; {5}
+", line[4], line[0], line[1], line[2], line[3], patchName);
 
             return sdat;
         }
