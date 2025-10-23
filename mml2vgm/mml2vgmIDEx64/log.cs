@@ -117,7 +117,13 @@ namespace mml2vgmIDEx64
                 string timefmt = DateTime.Now.ToString(Resources.cntTimeFormat);
 
 #if DEBUG
-                dispMsg?.Invoke(timefmt + msg);
+                //dispMsg?.Invoke(timefmt + msg);
+                //using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
+                //{
+                //    //writer.WriteLine(timefmt + msg);
+                //    writer.WriteLine(msg);
+                //    //if (consoleEchoBack) Console.WriteLine(timefmt + msg);
+                //}
 #else
                 using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
                 {
