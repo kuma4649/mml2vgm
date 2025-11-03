@@ -27,6 +27,9 @@ namespace mml2vgmIDEx64
         private SoundManager.Chip chipYM2612;
         private SoundManager.Chip chipCS4231;
         private string filename = "";
+        private string oldLyrics;
+        private int oldComLength;
+        public List<Tuple<long, int, string>> lyrics = null;
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)
         {
@@ -56,6 +59,17 @@ namespace mml2vgmIDEx64
             muapManager.Rendering();
             Audio.DriverSeqCounter = count;
             //vgmCurLoop = (uint)GetNowLoopCounter();
+
+            //歌詞取得
+            string ly = muapManager.lyrics;
+            int llen = muapManager.comlength;
+            if (ly != oldLyrics || llen != oldComLength)
+            {
+                oldLyrics = ly;
+                oldComLength = llen;
+                lyrics ??= new List<Tuple<long, int, string>>();
+                lyrics.Add(new Tuple<long, int, string>(count, llen, ly));//カウンタ込みの歌詞情報をため込む
+            }
 
             if (muapManager.Stopped)
             {
@@ -97,6 +111,8 @@ namespace mml2vgmIDEx64
             vgmFrameCounter = -latency - waitTime;
             vgmSpeed = 1;
             vgmSpeedCounter = 0;
+            oldLyrics = "";
+            oldComLength = 0;
 
             initPhase = true;
             pd[0] = new List<SoundManager.PackData>();
@@ -290,5 +306,10 @@ namespace mml2vgmIDEx64
             chipRegister.setCS4231EMS_AllocMemory(0, ref ah, ref dx, bx);
         }
 
+        public List<Tuple<string, string>> GetTags()
+        {
+            if (chipRegister == null) return null;
+            return muapManager.GetTags();
+        }
     }
 }

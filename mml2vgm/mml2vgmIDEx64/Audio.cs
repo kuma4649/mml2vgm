@@ -6230,7 +6230,7 @@ namespace mml2vgmIDEx64
             if (driver == null) return -1;
 
 
-            if (driver is vgm || driver is Driver.ZGM.zgm)
+            if (driver is vgm || driver is Driver.ZGM.zgm || driver is muapM)
             {
                 return sm.GetDataSenderBufferCounter();
             }
@@ -7010,6 +7010,17 @@ namespace mml2vgmIDEx64
             return null;
         }
 
+        public static List<Tuple<string, string>> GetTagsDriver()
+        {
+            if (driver == null) return null;
+
+            if (driver is muapM)
+            {
+                return ((muapM)driver).GetTags();
+            }
+
+            return null;
+        }
 
         #region MDSoundインターフェース
 
@@ -8584,7 +8595,12 @@ namespace mml2vgmIDEx64
             return false;
         }
 
+        public static List<Tuple<long, int, string>> GetMuapLyrics()
+        {
+            if (driver == null || !(driver is muapM)) return null;
 
+            return ((muapM)driver).lyrics;
+        }
     }
 
 

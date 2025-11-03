@@ -1,6 +1,7 @@
 ﻿using musicDriverInterface;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace mml2vgmIDEx64
     {
         public static string wrkMMLFullPath;
         public bool Stopped = false;
+        public string lyrics = "";
+        public int comlength = 0;
 
         private string compilerPath;
         private string driverPath;
@@ -252,6 +255,10 @@ namespace mml2vgmIDEx64
             object[] work = (object[])driver.GetWork();
             chipRegister.setCS4231FIFOBuf(0, (byte[])work[0]);
             //chipRegister.setCS4231Int0bEnt(0, (Action)work[1]);
+            if (work.Length > 2 && work[2] is List<Tuple<int, string>>)
+            {
+                List<Tuple<int, string>> Lyrics = (List<Tuple<int, string>>)work[2];
+            }
         }
 
         public void MSTOP()
@@ -265,10 +272,31 @@ namespace mml2vgmIDEx64
                 , new Tuple<string, int>[] { new Tuple<string, int>("YMF278B", YMF278BClockValue) });
         }
 
+
+
         public void Rendering()
         {
             driver.Rendering();
             this.Stopped = (driver.GetStatus() < 1);
+
+            //歌詞取得
+            List<Tuple<string, string>> work = driver.GetTags();
+            if (work != null && work.Count == 2)
+            {
+                string ly = work[0].Item2;
+                string len = work[1].Item2;
+                int ilen = -1;
+                if (int.TryParse(len, out ilen))
+                {
+                    lyrics = ly;
+                    comlength = ilen;
+                }
+            }
+        }
+
+        public List<Tuple<string, string>> GetTags()
+        {
+            return driver.GetTags();
         }
 
     }

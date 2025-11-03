@@ -125,11 +125,11 @@ namespace mml2vgmIDEx64
                 //    //if (consoleEchoBack) Console.WriteLine(timefmt + msg);
                 //}
 #else
-                using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
-                {
-                    writer.WriteLine(timefmt + msg);
-                    if (consoleEchoBack) Console.WriteLine(timefmt + msg);
-                }
+                //using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
+                //{
+                //    writer.WriteLine(timefmt + msg);
+                //    if (consoleEchoBack) Console.WriteLine(timefmt + msg);
+                //}
 #endif
             }
             catch

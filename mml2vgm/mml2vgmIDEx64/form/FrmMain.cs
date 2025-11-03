@@ -3044,6 +3044,14 @@ namespace mml2vgmIDEx64
 
             }
 
+            if(ci.addtionalInfo is GD3Tag)
+            {
+                if (frmLyrics != null)
+                {
+                    frmLyrics.update((GD3Tag)ci.addtionalInfo);
+                }
+            }
+
             Compiling = 0;
             UpdateControl();
         }
