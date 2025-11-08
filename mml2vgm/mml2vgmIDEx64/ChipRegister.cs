@@ -8433,7 +8433,7 @@ namespace mml2vgmIDEx64
                     if (!ctYM2609[Chip.Number].UseScci && ctYM2609[Chip.Number].UseEmu)
                     {
                         mds.WriteYM2609(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
-                        //if(address==0x44) 
+                        //if((address>>8)==0x00 && ((byte)address>=7 && (byte)address<=10)) 
                         //    log.ForcedWrite(string.Format("{0:x02} : {1:x02} : {2:x02} : {3:x02}", (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data));
                     }
                 }
