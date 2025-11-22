@@ -1341,6 +1341,10 @@ namespace mml2vgmIDEx64
                         doc = GetActiveDocument();
                         if (doc != null) doc.editor.ActionHome(null);
                         return true;
+                    case (int)Setting.ShortCutKey.enmContent.HomeS:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionHomeS(null);
+                        return true;
 
                     case (int)Setting.ShortCutKey.enmContent.ExportDriverFormat:
                         tsmiExport_toDriverFormat_Click(null, null);

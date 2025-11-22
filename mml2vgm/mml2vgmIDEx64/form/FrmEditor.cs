@@ -496,6 +496,14 @@ namespace mml2vgmIDEx64
             azukiControl.SetSelection(st + a, st + a);
         }
 
+        public void ActionHomeS(IUserInterface ui)
+        {
+            azukiControl.GetSelection(out int st1, out int ed1);
+            ActionHome(ui);
+            azukiControl.GetSelection(out int st2, out int ed2);
+            azukiControl.SetSelection(ed1, st2);
+        }
+
         private bool IsPartHeader(string line)
         {
             if (fmt == EnmMmlFileFormat.GWI)

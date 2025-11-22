@@ -4506,6 +4506,7 @@ namespace mml2vgmIDEx64
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff+1,"コメント化する/しない",false,true,false,"Oem2")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.PartEnter,"改行時にパート情報自動挿入",true,false,false,"Enter")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Home,"キャレットをホームポジション/パート情報後に移動",false,false,false,"Home")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.HomeS,"キャレットをホームポジション/パート情報後に移動(選択有り)",true,false,false,"Home")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportDriverFormat,"エクスポートtoDriverFormat",false,false,false,"F7")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportWav,"エクスポートtoWav",false,false,false,"")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportWavAllChSolo,"エクスポートtoWav All Ch Solo",true,false,false,"F7")
@@ -4696,6 +4697,7 @@ namespace mml2vgmIDEx64
                 CommentOnOff = 1220,
                 PartEnter = 1230,
                 Home = 1240,
+                HomeS = 1250,
                 MDPlay = 1300,
                 ExportDriverFormat = 1400,
                 ExportWav = 1410,

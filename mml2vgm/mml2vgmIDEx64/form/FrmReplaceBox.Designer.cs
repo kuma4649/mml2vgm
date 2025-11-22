@@ -29,125 +29,125 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReplaceBox));
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnPrevious = new System.Windows.Forms.Button();
-            this.btnNext = new System.Windows.Forms.Button();
-            this.cmbFrom = new System.Windows.Forms.ComboBox();
-            this.cmbTo = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnReplace = new System.Windows.Forms.Button();
-            this.btnAllReplace = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.rbTargetParts = new System.Windows.Forms.RadioButton();
-            this.rbTargetMMLs = new System.Windows.Forms.RadioButton();
-            this.rbTargetAll = new System.Windows.Forms.RadioButton();
-            this.groupBox2.SuspendLayout();
-            this.SuspendLayout();
+            label1 = new Label();
+            btnPrevious = new Button();
+            btnNext = new Button();
+            cmbFrom = new ComboBox();
+            cmbTo = new ComboBox();
+            label2 = new Label();
+            btnReplace = new Button();
+            btnAllReplace = new Button();
+            groupBox2 = new GroupBox();
+            rbTargetParts = new RadioButton();
+            rbTargetMMLs = new RadioButton();
+            rbTargetAll = new RadioButton();
+            groupBox2.SuspendLayout();
+            SuspendLayout();
             // 
             // label1
             // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
+            resources.ApplyResources(label1, "label1");
+            label1.Name = "label1";
             // 
             // btnPrevious
             // 
-            resources.ApplyResources(this.btnPrevious, "btnPrevious");
-            this.btnPrevious.Name = "btnPrevious";
-            this.btnPrevious.UseVisualStyleBackColor = true;
-            this.btnPrevious.Click += new System.EventHandler(this.BtnPrevious_Click);
+            resources.ApplyResources(btnPrevious, "btnPrevious");
+            btnPrevious.Name = "btnPrevious";
+            btnPrevious.UseVisualStyleBackColor = true;
+            btnPrevious.Click += BtnPrevious_Click;
             // 
             // btnNext
             // 
-            resources.ApplyResources(this.btnNext, "btnNext");
-            this.btnNext.Name = "btnNext";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
+            resources.ApplyResources(btnNext, "btnNext");
+            btnNext.Name = "btnNext";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += BtnNext_Click;
             // 
             // cmbFrom
             // 
-            resources.ApplyResources(this.cmbFrom, "cmbFrom");
-            this.cmbFrom.FormattingEnabled = true;
-            this.cmbFrom.Name = "cmbFrom";
-            this.cmbFrom.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbFrom_KeyDown);
+            resources.ApplyResources(cmbFrom, "cmbFrom");
+            cmbFrom.FormattingEnabled = true;
+            cmbFrom.Name = "cmbFrom";
+            cmbFrom.KeyDown += cmbFrom_KeyDown;
             // 
             // cmbTo
             // 
-            resources.ApplyResources(this.cmbTo, "cmbTo");
-            this.cmbTo.FormattingEnabled = true;
-            this.cmbTo.Name = "cmbTo";
-            this.cmbTo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbTo_KeyDown);
+            resources.ApplyResources(cmbTo, "cmbTo");
+            cmbTo.FormattingEnabled = true;
+            cmbTo.Name = "cmbTo";
+            cmbTo.KeyDown += cmbTo_KeyDown;
             // 
             // label2
             // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
+            resources.ApplyResources(label2, "label2");
+            label2.Name = "label2";
             // 
             // btnReplace
             // 
-            resources.ApplyResources(this.btnReplace, "btnReplace");
-            this.btnReplace.Name = "btnReplace";
-            this.btnReplace.UseVisualStyleBackColor = true;
-            this.btnReplace.Click += new System.EventHandler(this.btnReplace_Click);
+            resources.ApplyResources(btnReplace, "btnReplace");
+            btnReplace.Name = "btnReplace";
+            btnReplace.UseVisualStyleBackColor = true;
+            btnReplace.Click += btnReplace_Click;
             // 
             // btnAllReplace
             // 
-            resources.ApplyResources(this.btnAllReplace, "btnAllReplace");
-            this.btnAllReplace.Name = "btnAllReplace";
-            this.btnAllReplace.UseVisualStyleBackColor = true;
-            this.btnAllReplace.Click += new System.EventHandler(this.btnAllReplace_Click);
+            resources.ApplyResources(btnAllReplace, "btnAllReplace");
+            btnAllReplace.Name = "btnAllReplace";
+            btnAllReplace.UseVisualStyleBackColor = true;
+            btnAllReplace.Click += btnAllReplace_Click;
             // 
             // groupBox2
             // 
-            resources.ApplyResources(this.groupBox2, "groupBox2");
-            this.groupBox2.Controls.Add(this.rbTargetParts);
-            this.groupBox2.Controls.Add(this.rbTargetMMLs);
-            this.groupBox2.Controls.Add(this.rbTargetAll);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.TabStop = false;
+            groupBox2.Controls.Add(rbTargetParts);
+            groupBox2.Controls.Add(rbTargetMMLs);
+            groupBox2.Controls.Add(rbTargetAll);
+            resources.ApplyResources(groupBox2, "groupBox2");
+            groupBox2.Name = "groupBox2";
+            groupBox2.TabStop = false;
             // 
             // rbTargetParts
             // 
-            resources.ApplyResources(this.rbTargetParts, "rbTargetParts");
-            this.rbTargetParts.Name = "rbTargetParts";
-            this.rbTargetParts.UseVisualStyleBackColor = true;
+            resources.ApplyResources(rbTargetParts, "rbTargetParts");
+            rbTargetParts.Name = "rbTargetParts";
+            rbTargetParts.UseVisualStyleBackColor = true;
             // 
             // rbTargetMMLs
             // 
-            resources.ApplyResources(this.rbTargetMMLs, "rbTargetMMLs");
-            this.rbTargetMMLs.Name = "rbTargetMMLs";
-            this.rbTargetMMLs.UseVisualStyleBackColor = true;
+            resources.ApplyResources(rbTargetMMLs, "rbTargetMMLs");
+            rbTargetMMLs.Name = "rbTargetMMLs";
+            rbTargetMMLs.UseVisualStyleBackColor = true;
             // 
             // rbTargetAll
             // 
-            resources.ApplyResources(this.rbTargetAll, "rbTargetAll");
-            this.rbTargetAll.Checked = true;
-            this.rbTargetAll.Name = "rbTargetAll";
-            this.rbTargetAll.TabStop = true;
-            this.rbTargetAll.UseVisualStyleBackColor = true;
+            resources.ApplyResources(rbTargetAll, "rbTargetAll");
+            rbTargetAll.Checked = true;
+            rbTargetAll.Name = "rbTargetAll";
+            rbTargetAll.TabStop = true;
+            rbTargetAll.UseVisualStyleBackColor = true;
             // 
             // FrmReplaceBox
             // 
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.cmbTo);
-            this.Controls.Add(this.cmbFrom);
-            this.Controls.Add(this.btnAllReplace);
-            this.Controls.Add(this.btnReplace);
-            this.Controls.Add(this.btnNext);
-            this.Controls.Add(this.btnPrevious);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.KeyPreview = true;
-            this.Name = "FrmReplaceBox";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmReplaceBox_FormClosed);
-            this.Shown += new System.EventHandler(this.FrmReplaceBox_Shown);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmReplaceBox_KeyDown);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(groupBox2);
+            Controls.Add(cmbTo);
+            Controls.Add(cmbFrom);
+            Controls.Add(btnAllReplace);
+            Controls.Add(btnReplace);
+            Controls.Add(btnNext);
+            Controls.Add(btnPrevious);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.SizableToolWindow;
+            KeyPreview = true;
+            Name = "FrmReplaceBox";
+            FormClosed += FrmReplaceBox_FormClosed;
+            Shown += FrmReplaceBox_Shown;
+            KeyDown += FrmReplaceBox_KeyDown;
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

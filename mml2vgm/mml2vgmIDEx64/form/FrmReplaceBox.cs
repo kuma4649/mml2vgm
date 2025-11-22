@@ -15,6 +15,7 @@ namespace mml2vgmIDEx64.form
         private bool searchMatchCase = true;//大文字小文字区別する
         private int searchAnchorIndex = -1;
         private TextSegment select = new TextSegment();
+        private TextSegment selectBegin = new TextSegment();
         private TextSegment result = null;
         private Setting setting = null;
 
@@ -69,7 +70,10 @@ namespace mml2vgmIDEx64.form
 
             bool res = Replace();
             ac.Refresh();
-            if (!res) MessageBox.Show("not found");
+            if (!res)
+            {
+                MessageBox.Show("not found");
+            }
         }
 
         private void btnAllReplace_Click(object sender, EventArgs e)
@@ -79,9 +83,19 @@ namespace mml2vgmIDEx64.form
             AddSearchWordHistory(cmbFrom.Text);
             AddReplaceToWordHistory(cmbTo.Text);
 
+            int cnt = 0;
             ac.Document.BeginUndo();
-            while (Replace()) ;
+            while (Replace())
+            {
+                cnt++;
+            }
+            if (cnt < 1)
+            {
+                MessageBox.Show("not found");
+            }
             ac.Document.EndUndo();
+            ac.Document.GetSelection(out int b, out int en);
+            ac.Document.SetSelection(b, b);
             ac.Refresh();
         }
 
@@ -108,18 +122,30 @@ namespace mml2vgmIDEx64.form
         {
             ac.Document.Unmark(0, ac.Document.Length - 1, 3);
             ac.Refresh();
+            ac.Document.SetSelection(selectBegin.Begin, selectBegin.End);
         }
 
         private void FrmReplaceBox_Shown(object sender, EventArgs e)
         {
             ac.Document.GetSelection(out int st, out int ed);
+            selectBegin.Begin = st;
+            if (st==ed)
+            {
+                selectBegin.End = st;
+                st = 0;
+                ed = ac.Document.Length;
+            }
+            else
+            {
+                selectBegin.End = ed;
+            }
             searchAnchorIndex = st;
             select.Begin = st;
             select.End = ed;
 
             if (ed != st)
                 ac.Document.Mark(st, ed, 3);
-            ac.SetSelection(st, st);
+            ac.SetSelection(st, ed);
         }
 
 
@@ -137,7 +163,7 @@ namespace mml2vgmIDEx64.form
             else
             {
                 ac.GetSelection(out int st, out int ed);
-                searchAnchorIndex = ed;
+                searchAnchorIndex = st;
             }
 
             // determine where to start text search
@@ -248,30 +274,36 @@ namespace mml2vgmIDEx64.form
 
         private bool Replace()
         {
-            ac.Document.GetSelection(out int st, out int ed);
-
+            //ac.Document.GetSelection(out int st, out int ed);
+            ac.Document.SetSelection(select.Begin, select.End);
             bool res = true;
-            if (st == ed)
-            {
-                if (rbTargetAll.Checked)
-                    res = SearchFindNext(cmbFrom.Text, false);
-                else
-                    res = SearchFindNextEx(cmbFrom.Text, false, rbTargetParts.Checked);
-            }
+            //if (st == ed)
+            //{
+            //if (rbTargetAll.Checked)
+            res = SearchFindNext(cmbFrom.Text, false);
+            //else
+            //res = SearchFindNextEx(cmbFrom.Text, false, rbTargetParts.Checked);
+            //}
 
             if (!res) return false;
 
-            ac.Document.GetSelection(out st, out ed);
+            ac.Document.GetSelection(out int st, out int ed);
             ac.Document.Replace(cmbTo.Text, st, ed);
+            ac.Document.Mark(st, st + cmbTo.Text.Length, 3);
 
             int delta = cmbFrom.Text.Length - cmbTo.Text.Length;
             select.End -= delta;
+            select.Begin = st + cmbTo.Text.Length;
+            selectBegin.End -= delta;
 
-
-            if (rbTargetAll.Checked)
-                SearchFindNext(cmbFrom.Text, false);
-            else
-                SearchFindNextEx(cmbFrom.Text, false, rbTargetMMLs.Checked);
+            //次の候補を選択させる
+            ac.Document.SetSelection(select.Begin, select.End);
+            //if (rbTargetAll.Checked)
+            res = SearchFindNext(cmbFrom.Text, false);
+            //else
+            //res=SearchFindNextEx(cmbFrom.Text, false, rbTargetMMLs.Checked);
+            if (!res)
+                ac.Document.SetSelection(select.End, select.End);
 
             return true;
         }
