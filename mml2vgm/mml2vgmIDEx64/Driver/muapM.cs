@@ -136,6 +136,7 @@ namespace mml2vgmIDEx64
                 , OPNAWaitSend
                 , mupBuf
                 , chipRegister
+                , mupWorkPath
                 );
 
             muapManager.StartRendering(Common.DataSequenceSampleRate, (int)YM2608ClockValue);

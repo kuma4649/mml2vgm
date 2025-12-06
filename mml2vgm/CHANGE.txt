@@ -1,4 +1,7 @@
 更新履歴
+TAG793 2025/12/06
+  muapDotNET差し替え
+
 TAG792 2025/11/22
   IDE:Editor:置換機能がバグってたので修正。
   IDE:Editor:Shift+Homeで選択しながらホームポジション(行頭/mml行頭)に移れるように修正。

@@ -171,6 +171,7 @@ namespace mml2vgmIDEx64
     , Action<long, int> OPNAWaitSend
     , musicDriverInterface.MmlDatum[] mdrBuf
     , ChipRegister chipRegister
+    , string mupWorkPath
     )
         {
 
@@ -196,7 +197,8 @@ namespace mml2vgmIDEx64
                 (iDriver.dlgEMS_AllocMemory)CS4231EMS_AllocMemory,
                 null,//TONES.DTA
                 0,//Sound Device Mode
-                null//@LABEL ptr
+                null,//@LABEL ptr
+                mupWorkPath
             };
 
             List<ChipAction> lca = new List<ChipAction>();
