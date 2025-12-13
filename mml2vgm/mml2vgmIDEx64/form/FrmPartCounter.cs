@@ -1155,6 +1155,18 @@ namespace mml2vgmIDEx64
             int pn = (int)r.Cells["ClmPartNumber"].Value - 1;
             bool mute = (string)r.Cells["ClmMute"].Value == "M";
 
+            //MUAP向け
+            if (mmli is YM2608_MUAP)
+            {
+                ((YM2608_MUAP)mmli).SetMute(pn, 0, 0, mute);
+                return;
+            }
+            if (mmli is YM3438_MUAP)
+            {
+                ((YM3438_MUAP)mmli).SetMute(pn, 0, 0, mute);
+                return;
+            }
+
             if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom) && !(mmli is YM2151_mucom))
             {
                 mmli.SetMute(pn, mute);

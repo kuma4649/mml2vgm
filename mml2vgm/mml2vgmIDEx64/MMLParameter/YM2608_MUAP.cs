@@ -50,23 +50,46 @@ namespace mml2vgmIDEx64.MMLParameter
             if (chip.ChMasks == null) return;
             if (ch < 0 || ch >= chip.ChMasks.Count) return;
 
-            //FM ch<9
-            //SSG ch<12
-            //リズム ch<18
+            
+            
+            //リズム ch 10 -> 12
             //ADPCM1 ch=18
-            if (ch < 12 || ch == 18)
+            if (ch < 3)//FM ch 0,1,2 -> 0,1,2
             {
+                while (chip.ChMasks.Count <= ch) chip.ChMasks.Add(false);
                 chip.ChMasks[ch] = flg;
-                chip.ChMasksPG[ch] = pt * 10 + pg;
+                if (ch == 2)
+                {
+                    chip.ChMasks[6] = flg;
+                    chip.ChMasks[7] = flg;
+                    chip.ChMasks[8] = flg;
+                }
             }
-            else
+            else if (ch < 6)//SSG ch 3,4,5 -> 9,10,11
             {
-                chip.ChMasks[12] = flg;
-                chip.ChMasks[13] = flg;
-                chip.ChMasks[14] = flg;
-                chip.ChMasks[15] = flg;
-                chip.ChMasks[16] = flg;
-                chip.ChMasks[17] = flg;
+                while (chip.ChMasks.Count <= ch + 6) chip.ChMasks.Add(false);
+                chip.ChMasks[ch + 6] = flg;
+            }
+            else if (ch < 9)//FM ch 6,7,8 -> 3,4,5
+            {
+                while (chip.ChMasks.Count <= ch - 3) chip.ChMasks.Add(false);
+                chip.ChMasks[ch - 3] = flg;
+            }
+            else if (ch < 10)//Rtm ch 9 -> 12,13,14,15,16,17
+            {
+                while (chip.ChMasks.Count <= ch + 3) chip.ChMasks.Add(false);
+                chip.ChMasks[ch + 3] = flg;
+                chip.ChMasks[ch + 4] = flg;
+                chip.ChMasks[ch + 5] = flg;
+                chip.ChMasks[ch + 6] = flg;
+                chip.ChMasks[ch + 7] = flg;
+                chip.ChMasks[ch + 8] = flg;
+            }
+            else if (ch < 11)//ADPCM ch 10 -> 18
+            {
+                while (chip.ChMasks.Count <= ch + 8) chip.ChMasks.Add(false);
+                chip.ChMasks[ch + 8] = flg;
+                Audio.chipRegister.CS4231Mute(0, 0, flg);
             }
         }
 

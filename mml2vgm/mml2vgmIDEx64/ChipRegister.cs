@@ -4734,6 +4734,12 @@ namespace mml2vgmIDEx64
             return mds.ReadCS4231((byte)chipID, (byte)dAddr);
         }
 
+        public void CS4231Mute(int chipID,int ch, bool sw)
+        {
+            ch %= 17;
+            mds.MuteCS4231((byte)chipID, (byte)ch, sw);
+        }
+
         #endregion
 
 
@@ -7442,9 +7448,9 @@ namespace mml2vgmIDEx64
                     if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch])
                         dData = 0;
 
+                    if (Chip.silentVoice[adl - 0x08 + 6]) Type = EnmDataType.None;
                 }
 
-                if (Chip.silentVoice[adl - 0x08 + 6]) Type = EnmDataType.None;
             }
 
             //リズム ch<18
@@ -7468,7 +7474,6 @@ namespace mml2vgmIDEx64
 
                 if (Chip.silentVoice[12]) Type = EnmDataType.None;
             }
-
         }
 
         public void YM2608SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
