@@ -105,6 +105,12 @@ namespace CustomControl
         {
             try
             {
+                if (this.DesignMode)
+                {
+                    base.OnDrawNode(e);
+                    return;
+                }
+
                 if (DrawMode != TreeViewDrawMode.OwnerDrawAll)
                 {
                     base.OnDrawNode(e);
@@ -162,10 +168,19 @@ namespace CustomControl
 
                 if (e.Node.Nodes.Count > 0)
                 {
-                    Bitmap bmp;
-                    bmp = (e.Node.IsExpanded) ? Properties.Resources.Expand : Properties.Resources.Collapse;
-                    bmp.MakeTransparent(Color.Black);
-                    g.DrawImage(bmp, bnd.X + shift, bnd.Y, bnd.Height, bnd.Height);
+                    //Bitmap bmp;
+                    //bmp = (e.Node.IsExpanded) ? Properties.Resources.Expand : Properties.Resources.Collapse;
+                    //bmp.MakeTransparent(Color.Black);
+                    //g.DrawImage(bmp, bnd.X + shift, bnd.Y, bnd.Height, bnd.Height);
+
+                    if(e.Node.IsExpanded)
+                    {
+                        DrawExpandIcon(g, new Rectangle(bnd.X + shift, bnd.Y, bnd.Height, bnd.Height));
+                    }
+                    else
+                    {
+                        DrawCollapseIcon(g, new Rectangle(bnd.X + shift, bnd.Y, bnd.Height, bnd.Height));
+                    }
                 }
 
 
@@ -185,7 +200,33 @@ namespace CustomControl
 
                 e.Graphics.DrawImage(backBmp, e.Bounds.X, e.Bounds.Y);
             }
-            catch { }
+            catch(System.PlatformNotSupportedException ex )
+            {
+                ;
+            }
+        }
+
+        private void DrawExpandIcon(Graphics g, Rectangle rect)
+        {
+            using (Pen pen = new Pen(Color.White, 2))
+            {
+                int cx = rect.X + rect.Width / 2;
+                int cy = rect.Y + rect.Height / 2;
+                //g.DrawRectangle(pen, rect);
+                g.DrawLine(pen, cx - 4, cy, cx + 4, cy); // 横棒（−）
+            }
+        }
+
+        private void DrawCollapseIcon(Graphics g, Rectangle rect)
+        {
+            using (Pen pen = new Pen(Color.White, 2))
+            {
+                int cx = rect.X + rect.Width / 2;
+                int cy = rect.Y + rect.Height / 2;
+                //g.DrawRectangle(pen, rect);
+                g.DrawLine(pen, cx - 4, cy, cx + 4, cy); // 横棒
+                g.DrawLine(pen, cx, cy - 4, cx, cy + 4); // 縦棒（＋）
+            }
         }
 
         protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)

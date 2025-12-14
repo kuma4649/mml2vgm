@@ -442,6 +442,7 @@ namespace mml2vgmIDEx64
                 refreshFilter(tvFolderTree.Nodes[0].Nodes);
             }
             tvFolderTree.Sort();
+            tvFolderTree.ExpandAll();
         }
 
         private void refreshRemoveCheck(TreeNodeCollection nodes)

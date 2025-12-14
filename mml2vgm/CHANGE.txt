@@ -1,4 +1,7 @@
 更新履歴
+TAG795 2025/12/14
+  FolderTree:フォルダが表示できなくなっていたのを修正
+
 TAG794 2025/12/13
   MDSound差し替え
   muapDotNET:FM/SSG/リズム/ADPCM(Ch.11のみ)のミュートに対応。

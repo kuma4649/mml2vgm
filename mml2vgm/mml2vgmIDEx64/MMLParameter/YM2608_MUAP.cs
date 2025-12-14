@@ -56,7 +56,7 @@ namespace mml2vgmIDEx64.MMLParameter
             //ADPCM1 ch=18
             if (ch < 3)//FM ch 0,1,2 -> 0,1,2
             {
-                while (chip.ChMasks.Count <= ch) chip.ChMasks.Add(false);
+                while (chip.ChMasks.Count <= 9) chip.ChMasks.Add(false);
                 chip.ChMasks[ch] = flg;
                 if (ch == 2)
                 {
@@ -77,7 +77,7 @@ namespace mml2vgmIDEx64.MMLParameter
             }
             else if (ch < 10)//Rtm ch 9 -> 12,13,14,15,16,17
             {
-                while (chip.ChMasks.Count <= ch + 3) chip.ChMasks.Add(false);
+                while (chip.ChMasks.Count <= ch + 8) chip.ChMasks.Add(false);
                 chip.ChMasks[ch + 3] = flg;
                 chip.ChMasks[ch + 4] = flg;
                 chip.ChMasks[ch + 5] = flg;

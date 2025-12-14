@@ -30,247 +30,245 @@ namespace mml2vgmIDEx64
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFolderTree));
-            this.imgList = new System.Windows.Forms.ImageList(this.components);
-            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.TsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.TsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tvFolderTree = new CustomControl.MultiSelectTreeView();
-            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.tsbReload = new System.Windows.Forms.ToolStripButton();
-            this.tsddbFilter = new System.Windows.Forms.ToolStripDropDownButton();
-            this.tsmiFilterAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiFilterFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiFilterFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiFilterGwi = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiFilterWav = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiFilterMuc = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiFilterMml = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsMenu.SuspendLayout();
-            this.toolStripContainer1.ContentPanel.SuspendLayout();
-            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
-            this.toolStripContainer1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
-            this.SuspendLayout();
+            TreeNode treeNode1 = new TreeNode("ノード2");
+            TreeNode treeNode2 = new TreeNode("ノード0", new TreeNode[] { treeNode1 });
+            TreeNode treeNode3 = new TreeNode("ノード1");
+            imgList = new ImageList(components);
+            cmsMenu = new ContextMenuStrip(components);
+            TsmiOpen = new ToolStripMenuItem();
+            TsmiDelete = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            tvFolderTree = new CustomControl.MultiSelectTreeView();
+            toolStripContainer1 = new ToolStripContainer();
+            toolStrip1 = new ToolStrip();
+            tsbReload = new ToolStripButton();
+            tsddbFilter = new ToolStripDropDownButton();
+            tsmiFilterAll = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            tsmiFilterFolder = new ToolStripMenuItem();
+            tsmiFilterFile = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
+            tsmiFilterGwi = new ToolStripMenuItem();
+            tsmiFilterMuc = new ToolStripMenuItem();
+            tsmiFilterMml = new ToolStripMenuItem();
+            tsmiFilterWav = new ToolStripMenuItem();
+            cmsMenu.SuspendLayout();
+            toolStripContainer1.ContentPanel.SuspendLayout();
+            toolStripContainer1.TopToolStripPanel.SuspendLayout();
+            toolStripContainer1.SuspendLayout();
+            toolStrip1.SuspendLayout();
+            SuspendLayout();
             // 
             // imgList
             // 
-            this.imgList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgList.ImageStream")));
-            this.imgList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgList.Images.SetKeyName(0, "File.png");
-            this.imgList.Images.SetKeyName(1, "Folder.png");
+            imgList.ColorDepth = ColorDepth.Depth32Bit;
+            imgList.ImageStream = (ImageListStreamer)resources.GetObject("imgList.ImageStream");
+            imgList.TransparentColor = Color.Transparent;
+            imgList.Images.SetKeyName(0, "File.png");
+            imgList.Images.SetKeyName(1, "Folder.png");
             // 
             // cmsMenu
             // 
-            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TsmiOpen,
-            this.TsmiDelete,
-            this.toolStripSeparator1});
-            this.cmsMenu.Name = "cmsMenu";
-            this.cmsMenu.ShowImageMargin = false;
-            this.cmsMenu.Size = new System.Drawing.Size(74, 54);
+            cmsMenu.Items.AddRange(new ToolStripItem[] { TsmiOpen, TsmiDelete, toolStripSeparator1 });
+            cmsMenu.Name = "cmsMenu";
+            cmsMenu.ShowImageMargin = false;
+            cmsMenu.Size = new Size(74, 54);
             // 
             // TsmiOpen
             // 
-            this.TsmiOpen.Name = "TsmiOpen";
-            this.TsmiOpen.Size = new System.Drawing.Size(73, 22);
-            this.TsmiOpen.Text = "開く";
-            this.TsmiOpen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TsmiOpen_MouseUp);
+            TsmiOpen.Name = "TsmiOpen";
+            TsmiOpen.Size = new Size(73, 22);
+            TsmiOpen.Text = "開く";
+            TsmiOpen.MouseUp += TsmiOpen_MouseUp;
             // 
             // TsmiDelete
             // 
-            this.TsmiDelete.Name = "TsmiDelete";
-            this.TsmiDelete.Size = new System.Drawing.Size(73, 22);
-            this.TsmiDelete.Text = "削除";
-            this.TsmiDelete.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TsmiDelete_MouseUp);
+            TsmiDelete.Name = "TsmiDelete";
+            TsmiDelete.Size = new Size(73, 22);
+            TsmiDelete.Text = "削除";
+            TsmiDelete.MouseUp += TsmiDelete_MouseUp;
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(70, 6);
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(70, 6);
             // 
             // tvFolderTree
             // 
-            this.tvFolderTree.AllowDrop = true;
-            this.tvFolderTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.tvFolderTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tvFolderTree.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(160)))));
-            this.tvFolderTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tvFolderTree.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-            this.tvFolderTree.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tvFolderTree.HotColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(90)))));
-            this.tvFolderTree.ImageIndex = 0;
-            this.tvFolderTree.ImageList = this.imgList;
-            this.tvFolderTree.Location = new System.Drawing.Point(0, 0);
-            this.tvFolderTree.Name = "tvFolderTree";
-            this.tvFolderTree.SelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
-            this.tvFolderTree.SelectedImageIndex = 0;
-            this.tvFolderTree.Size = new System.Drawing.Size(289, 355);
-            this.tvFolderTree.TabIndex = 0;
-            this.tvFolderTree.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TvFolderTree_BeforeExpand);
-            this.tvFolderTree.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.TvFolderTree_AfterExpand);
-            this.tvFolderTree.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.tvFolderTree_DrawNode);
-            this.tvFolderTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.TvFolderTree_ItemDrag);
-            this.tvFolderTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvFolderTree_AfterSelect);
-            this.tvFolderTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvFolderTree_NodeMouseClick);
-            this.tvFolderTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvFolderTree_NodeMouseDoubleClick);
-            this.tvFolderTree.DragDrop += new System.Windows.Forms.DragEventHandler(this.TvFolderTree_DragDrop);
-            this.tvFolderTree.DragOver += new System.Windows.Forms.DragEventHandler(this.TvFolderTree_DragOver);
-            this.tvFolderTree.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TvFolderTree_KeyPress);
+            tvFolderTree.AllowDrop = true;
+            tvFolderTree.BackColor = Color.Gray;
+            tvFolderTree.BorderStyle = BorderStyle.None;
+            tvFolderTree.CheckedColor = Color.FromArgb(80, 80, 160);
+            tvFolderTree.Dock = DockStyle.Fill;
+            tvFolderTree.DrawMode = TreeViewDrawMode.OwnerDrawAll;
+            tvFolderTree.ForeColor = Color.FromArgb(224, 224, 224);
+            tvFolderTree.HotColor = Color.FromArgb(64, 64, 90);
+            tvFolderTree.ImageIndex = 0;
+            tvFolderTree.ImageList = imgList;
+            tvFolderTree.LineColor = Color.IndianRed;
+            tvFolderTree.Location = new Point(0, 0);
+            tvFolderTree.Name = "tvFolderTree";
+            treeNode1.ImageKey = "File.png";
+            treeNode1.Name = "ノード2";
+            treeNode1.SelectedImageKey = "File.png";
+            treeNode1.Text = "ノード2";
+            treeNode2.ImageIndex = 1;
+            treeNode2.Name = "ノード0";
+            treeNode2.Text = "ノード0";
+            treeNode3.Name = "ノード1";
+            treeNode3.Text = "ノード1";
+            tvFolderTree.Nodes.AddRange(new TreeNode[] { treeNode2, treeNode3 });
+            tvFolderTree.SelectedColor = Color.FromArgb(100, 100, 180);
+            tvFolderTree.SelectedImageIndex = 0;
+            tvFolderTree.Size = new Size(289, 355);
+            tvFolderTree.TabIndex = 0;
+            tvFolderTree.BeforeExpand += TvFolderTree_BeforeExpand;
+            tvFolderTree.AfterExpand += TvFolderTree_AfterExpand;
+            tvFolderTree.DrawNode += tvFolderTree_DrawNode;
+            tvFolderTree.ItemDrag += TvFolderTree_ItemDrag;
+            tvFolderTree.AfterSelect += TvFolderTree_AfterSelect;
+            tvFolderTree.NodeMouseClick += TvFolderTree_NodeMouseClick;
+            tvFolderTree.NodeMouseDoubleClick += TvFolderTree_NodeMouseDoubleClick;
+            tvFolderTree.DragDrop += TvFolderTree_DragDrop;
+            tvFolderTree.DragOver += TvFolderTree_DragOver;
+            tvFolderTree.KeyPress += TvFolderTree_KeyPress;
             // 
             // toolStripContainer1
             // 
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.tvFolderTree);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(289, 355);
-            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
-            this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(289, 380);
-            this.toolStripContainer1.TabIndex = 1;
-            this.toolStripContainer1.Text = "toolStripContainer1";
+            toolStripContainer1.ContentPanel.Controls.Add(tvFolderTree);
+            toolStripContainer1.ContentPanel.Size = new Size(289, 355);
+            toolStripContainer1.Dock = DockStyle.Fill;
+            toolStripContainer1.Location = new Point(0, 0);
+            toolStripContainer1.Name = "toolStripContainer1";
+            toolStripContainer1.Size = new Size(289, 380);
+            toolStripContainer1.TabIndex = 1;
+            toolStripContainer1.Text = "toolStripContainer1";
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            toolStripContainer1.TopToolStripPanel.Controls.Add(toolStrip1);
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbReload,
-            this.tsddbFilter});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(289, 25);
-            this.toolStrip1.Stretch = true;
-            this.toolStrip1.TabIndex = 0;
+            toolStrip1.Dock = DockStyle.None;
+            toolStrip1.Items.AddRange(new ToolStripItem[] { tsbReload, tsddbFilter });
+            toolStrip1.Location = new Point(0, 0);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(289, 25);
+            toolStrip1.Stretch = true;
+            toolStrip1.TabIndex = 0;
             // 
             // tsbReload
             // 
-            this.tsbReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbReload.Image = Resources.Reload;
-            this.tsbReload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbReload.Name = "tsbReload";
-            this.tsbReload.Size = new System.Drawing.Size(23, 22);
-            this.tsbReload.Text = "Reload";
-            this.tsbReload.Click += new System.EventHandler(this.TsbReload_Click);
+            tsbReload.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbReload.Image = Resources.Reload;
+            tsbReload.ImageTransparentColor = Color.Magenta;
+            tsbReload.Name = "tsbReload";
+            tsbReload.Size = new Size(23, 22);
+            tsbReload.Text = "Reload";
+            tsbReload.Click += TsbReload_Click;
             // 
             // tsddbFilter
             // 
-            this.tsddbFilter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsddbFilter.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiFilterAll,
-            this.toolStripSeparator2,
-            this.tsmiFilterFolder,
-            this.tsmiFilterFile,
-            this.toolStripSeparator3,
-            this.tsmiFilterGwi,
-            this.tsmiFilterMuc,
-            this.tsmiFilterMml,
-            this.tsmiFilterWav});
-            this.tsddbFilter.Image = Resources.Filter;
-            this.tsddbFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsddbFilter.Name = "tsddbFilter";
-            this.tsddbFilter.Size = new System.Drawing.Size(29, 22);
-            this.tsddbFilter.Text = "Filter";
+            tsddbFilter.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsddbFilter.DropDownItems.AddRange(new ToolStripItem[] { tsmiFilterAll, toolStripSeparator2, tsmiFilterFolder, tsmiFilterFile, toolStripSeparator3, tsmiFilterGwi, tsmiFilterMuc, tsmiFilterMml, tsmiFilterWav });
+            tsddbFilter.Image = Resources.Filter;
+            tsddbFilter.ImageTransparentColor = Color.Magenta;
+            tsddbFilter.Name = "tsddbFilter";
+            tsddbFilter.Size = new Size(29, 22);
+            tsddbFilter.Text = "Filter";
             // 
             // tsmiFilterAll
             // 
-            this.tsmiFilterAll.Checked = true;
-            this.tsmiFilterAll.CheckOnClick = true;
-            this.tsmiFilterAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tsmiFilterAll.Name = "tsmiFilterAll";
-            this.tsmiFilterAll.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterAll.Text = "*.* (All)";
-            this.tsmiFilterAll.Click += new System.EventHandler(this.TsmiFilterAll_Click);
+            tsmiFilterAll.Checked = true;
+            tsmiFilterAll.CheckOnClick = true;
+            tsmiFilterAll.CheckState = CheckState.Checked;
+            tsmiFilterAll.Name = "tsmiFilterAll";
+            tsmiFilterAll.Size = new Size(123, 22);
+            tsmiFilterAll.Text = "*.* (All)";
+            tsmiFilterAll.Click += TsmiFilterAll_Click;
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(120, 6);
             // 
             // tsmiFilterFolder
             // 
-            this.tsmiFilterFolder.CheckOnClick = true;
-            this.tsmiFilterFolder.Name = "tsmiFilterFolder";
-            this.tsmiFilterFolder.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterFolder.Text = "* (Folder)";
-            this.tsmiFilterFolder.Click += new System.EventHandler(this.TsmiFilterFolder_Click);
+            tsmiFilterFolder.CheckOnClick = true;
+            tsmiFilterFolder.Name = "tsmiFilterFolder";
+            tsmiFilterFolder.Size = new Size(123, 22);
+            tsmiFilterFolder.Text = "* (Folder)";
+            tsmiFilterFolder.Click += TsmiFilterFolder_Click;
             // 
             // tsmiFilterFile
             // 
-            this.tsmiFilterFile.CheckOnClick = true;
-            this.tsmiFilterFile.Name = "tsmiFilterFile";
-            this.tsmiFilterFile.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterFile.Text = "* (File)";
-            this.tsmiFilterFile.Click += new System.EventHandler(this.TsmiFilterFile_Click);
+            tsmiFilterFile.CheckOnClick = true;
+            tsmiFilterFile.Name = "tsmiFilterFile";
+            tsmiFilterFile.Size = new Size(123, 22);
+            tsmiFilterFile.Text = "* (File)";
+            tsmiFilterFile.Click += TsmiFilterFile_Click;
             // 
             // toolStripSeparator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(120, 6);
             // 
             // tsmiFilterGwi
             // 
-            this.tsmiFilterGwi.CheckOnClick = true;
-            this.tsmiFilterGwi.Name = "tsmiFilterGwi";
-            this.tsmiFilterGwi.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterGwi.Text = ".gwi";
-            this.tsmiFilterGwi.Click += new System.EventHandler(this.TsmiFilterGwi_Click);
-            // 
-            // tsmiFilterWav
-            // 
-            this.tsmiFilterWav.CheckOnClick = true;
-            this.tsmiFilterWav.Name = "tsmiFilterWav";
-            this.tsmiFilterWav.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterWav.Text = ".wav";
-            this.tsmiFilterWav.Click += new System.EventHandler(this.TsmiFilterWav_Click);
+            tsmiFilterGwi.CheckOnClick = true;
+            tsmiFilterGwi.Name = "tsmiFilterGwi";
+            tsmiFilterGwi.Size = new Size(123, 22);
+            tsmiFilterGwi.Text = ".gwi";
+            tsmiFilterGwi.Click += TsmiFilterGwi_Click;
             // 
             // tsmiFilterMuc
             // 
-            this.tsmiFilterMuc.CheckOnClick = true;
-            this.tsmiFilterMuc.Name = "tsmiFilterMuc";
-            this.tsmiFilterMuc.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterMuc.Text = ".muc";
-            this.tsmiFilterMuc.Click += new System.EventHandler(this.tsmiFilterMuc_Click);
+            tsmiFilterMuc.CheckOnClick = true;
+            tsmiFilterMuc.Name = "tsmiFilterMuc";
+            tsmiFilterMuc.Size = new Size(123, 22);
+            tsmiFilterMuc.Text = ".muc";
+            tsmiFilterMuc.Click += tsmiFilterMuc_Click;
             // 
             // tsmiFilterMml
             // 
-            this.tsmiFilterMml.CheckOnClick = true;
-            this.tsmiFilterMml.Name = "tsmiFilterMml";
-            this.tsmiFilterMml.Size = new System.Drawing.Size(180, 22);
-            this.tsmiFilterMml.Text = ".mml";
-            this.tsmiFilterMml.Click += new System.EventHandler(this.tsmiFilterMml_Click);
+            tsmiFilterMml.CheckOnClick = true;
+            tsmiFilterMml.Name = "tsmiFilterMml";
+            tsmiFilterMml.Size = new Size(123, 22);
+            tsmiFilterMml.Text = ".mml";
+            tsmiFilterMml.Click += tsmiFilterMml_Click;
+            // 
+            // tsmiFilterWav
+            // 
+            tsmiFilterWav.CheckOnClick = true;
+            tsmiFilterWav.Name = "tsmiFilterWav";
+            tsmiFilterWav.Size = new Size(123, 22);
+            tsmiFilterWav.Text = ".wav";
+            tsmiFilterWav.Click += TsmiFilterWav_Click;
             // 
             // FrmFolderTree
             // 
-            this.ClientSize = new System.Drawing.Size(289, 380);
-            this.Controls.Add(this.toolStripContainer1);
-            this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
-            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
-            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
-            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FrmFolderTree";
-            this.Text = "Folder";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmFolderTree_FormClosing);
-            this.cmsMenu.ResumeLayout(false);
-            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-            this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
-            this.toolStripContainer1.TopToolStripPanel.PerformLayout();
-            this.toolStripContainer1.ResumeLayout(false);
-            this.toolStripContainer1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.ResumeLayout(false);
+            ClientSize = new Size(289, 380);
+            Controls.Add(toolStripContainer1);
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "FrmFolderTree";
+            Text = "Folder";
+            FormClosing += FrmFolderTree_FormClosing;
+            cmsMenu.ResumeLayout(false);
+            toolStripContainer1.ContentPanel.ResumeLayout(false);
+            toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
+            toolStripContainer1.TopToolStripPanel.PerformLayout();
+            toolStripContainer1.ResumeLayout(false);
+            toolStripContainer1.PerformLayout();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
+            ResumeLayout(false);
 
         }
 

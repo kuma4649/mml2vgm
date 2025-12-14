@@ -63,8 +63,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resource\Collapse.png" />
-    <Content Include="Resource\Expand.png" />
+    <EmbeddedResource Include="Resource\Collapse.png" />
+    <EmbeddedResource Include="Resource\Expand.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
