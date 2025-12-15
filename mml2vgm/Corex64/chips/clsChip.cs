@@ -2188,6 +2188,8 @@ namespace Corex64
                 || page.Type == enmChannelType.FMOPNex
                 || page.Type == enmChannelType.FMOPM
                 || page.Type == enmChannelType.FMOPX
+                || (page.Type == enmChannelType.FMPCM && !page.pcm) //OPN2PCMチャンネル
+                || (page.Type == enmChannelType.FMPCMex && !page.pcm) //OPN2XPCMチャンネル
                 )
             {
                 SetFNum(page, mml);

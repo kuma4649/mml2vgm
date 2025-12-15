@@ -1,5 +1,10 @@
+ï»¿using Core;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Corex64;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace mml2vgm
 {
@@ -16,13 +21,13 @@ namespace mml2vgm
         {
             InitializeComponent();
 #if DEBUG
-            Corex64.log.debug = true;
+            Core.log.debug = true;
 #endif
         }
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            Corex64.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
+            Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             string[] args = Environment.GetCommandLineArgs();
             if (args != null && args.Length > 1)
             {
@@ -206,8 +211,8 @@ namespace mml2vgm
 
         private void startCompile()
         {
-            Corex64.log.Open();
-            Corex64.log.Write("start compile thread");
+            Core.log.Open();
+            Core.log.Write("start compile thread");
 
             Action dmy = updateTitle;
             string stPath = System.Windows.Forms.Application.StartupPath;
@@ -224,8 +229,8 @@ namespace mml2vgm
                 title = Path.GetFileName(arg);
                 this.Invoke(dmy);
 
-                Corex64.log.Write(string.Format("  compile at [{0}]", args[i]));
-                    
+                Core.log.Write(string.Format("  compile at [{0}]", args[i]));
+
                 msgBox.clear();
 
                 string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
@@ -234,12 +239,12 @@ namespace mml2vgm
                     desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
                 }
 
-                Corex64.log.Write("Call mml2vgm core");
+                Core.log.Write("Call mml2vgm core");
 
                 mv = new Mml2vgm(null, arg, desfn, stPath, Disp);
                 mv.isIDE = false;
                 mv.doSkip = true;
-                if (tsbUseCache.Checked)
+                if(tsbUseCache.Checked)
                 {
                     mv.usePCMCacheFromGUI = true;
                 }
@@ -250,23 +255,23 @@ namespace mml2vgm
                     break;
                 }
 
-                Corex64.log.Write("Return mml2vgm core");
+                Core.log.Write("Return mml2vgm core");
             }
 
-            Corex64.log.Write("Disp Result");
+            Core.log.Write("Disp Result");
 
             dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Core.log.Write("end compile thread");
+            Core.log.Close();
         }
 
         private void Disp(string msg)
         {
             Action<string> msgDisp = MsgDisp;
             this.Invoke(msgDisp, msg);
-            Corex64.log.Write(msg);
+            Core.log.Write(msg);
         }
 
         private void MsgDisp(string msg)
@@ -320,7 +325,7 @@ namespace mml2vgm
 
         private void tsbWatcher_CheckedChanged(object sender, EventArgs e)
         {
-
+            
             if (args == null || args.Length < 2)
             {
                 tsbWatcher.Checked = false;
@@ -396,8 +401,8 @@ namespace mml2vgm
                     tsbCompile_Click(null, null);
                     break;
                 default:
-                    //«KeyDataŠm”F—p
-                    //log.Write(string.Format("“®ì–¢’è‹`‚ÌƒL[F{0}",e.KeyData));
+                    //â†“KeyDataç¢ºèªç”¨
+                    //log.Write(string.Format("å‹•ä½œæœªå®šç¾©ã®ã‚­ãƒ¼ï¼š{0}",e.KeyData));
                     break;
             }
         }
