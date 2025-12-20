@@ -3,6 +3,7 @@ using Corex64;
 using MDSound;
 using mml2vgmIDEx64.MMLParameter;
 using musicDriverInterface;
+using NAudio.Wave.Compression;
 using SoundManager;
 using System;
 using System.Collections.Generic;
@@ -1229,8 +1230,9 @@ namespace mml2vgmIDEx64
 
         private static bool playSet()
         {
+            
             bool ret;
-
+            
             if (PlayingFileFormat == EnmFileFormat.XGM)
             {
                 driver = new xgm
@@ -5317,13 +5319,16 @@ namespace mml2vgmIDEx64
                     || chipRegister.YM2151[0].Model == EnmVRModel.VirtualModel
                     )
                     useEmu = true;
+                bool isGIMICOPNA = false;
+                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel) isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
+                if (chipRegister.YM2608[1].Model == EnmVRModel.RealModel) isGIMICOPNA = chipRegister.YM2608GetGIMICType(1) == Nc86ctl.ChipType.CHIP_OPNA;
                 if (
                     chipRegister.YM2608[0].Model == EnmVRModel.RealModel
                     || chipRegister.YM2608[1].Model == EnmVRModel.RealModel
                     || chipRegister.YM2610[0].Model == EnmVRModel.RealModel
                     || chipRegister.YM2610[1].Model == EnmVRModel.RealModel
                     || chipRegister.YM2151[0].Model == EnmVRModel.RealModel
-                    )
+                    ) 
                     useReal = true;
 
                 if (!mubDriver.init(
@@ -5352,7 +5357,22 @@ namespace mml2vgmIDEx64
                 log.Write("Volume 設定");
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
+                SetYM2608FMVolume(true, setting.balance.YM2608FMVolume);
+                SetYM2608PSGVolume(true, setting.balance.YM2608PSGVolume);
+                SetYM2608RhythmVolume(true, setting.balance.YM2608RhythmVolume);
+                SetYM2608AdpcmVolume(true, setting.balance.YM2608AdpcmVolume);
+                if (isGIMICOPNA)
+                {
+                    SetGimicOPNAVolume(true, setting.balance.GimicOPNAVolume);
+                    chipRegister.setYM2608SSGVolume(0, setting.balance.GimicOPNAVolume, EnmVRModel.RealModel);
+                }
+
                 SetYM2610Volume(true, setting.balance.YM2610Volume);
+                SetYM2610FMVolume(true, setting.balance.YM2610FMVolume);
+                SetYM2610PSGVolume(true, setting.balance.YM2610PSGVolume);
+                SetYM2610AdpcmAVolume(true, setting.balance.YM2610AdpcmAVolume);
+                SetYM2610AdpcmBVolume(true, setting.balance.YM2610AdpcmBVolume);
+
                 SetYM2151Volume(true, setting.balance.YM2151Volume);
 
                 log.Write("Clock 設定");
@@ -5547,6 +5567,7 @@ namespace mml2vgmIDEx64
                 SetYM2608PSGVolume(true, mDriver.YM2608_SSGVolume);
                 SetYM2608RhythmVolume(true, mDriver.YM2608_RhythmVolume);
                 SetYM2608AdpcmVolume(true, mDriver.YM2608_AdpcmVolume);
+
                 if (isGIMICOPNA)
                 {
                     SetGimicOPNAVolume(true, mDriver.GIMIC_SSGVolume);
@@ -5896,7 +5917,7 @@ namespace mml2vgmIDEx64
                     RealChipAutoDetect(setting);
                 }
 
-                //bool isGIMICOPNA = false;
+                bool isGIMICOPNA = false;
                 useEmu = true;
                 if (
                     chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel
@@ -5912,7 +5933,7 @@ namespace mml2vgmIDEx64
                     )
                 {
                     useReal = true;
-                    //isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
+                    isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
                 }
 
                 log.Write("Volume(emu) 設定");
@@ -5921,6 +5942,11 @@ namespace mml2vgmIDEx64
                 SetYM2608PSGVolume(true, setting.balance.YM2608PSGVolume);
                 SetYM2608RhythmVolume(true, setting.balance.YM2608RhythmVolume);
                 SetYM2608AdpcmVolume(true, setting.balance.YM2608AdpcmVolume);
+                if (isGIMICOPNA)
+                {
+                    SetGimicOPNAVolume(true, setting.balance.GimicOPNAVolume);
+                    chipRegister.setYM2608SSGVolume(0, setting.balance.GimicOPNAVolume, EnmVRModel.RealModel);
+                }
 
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
 
