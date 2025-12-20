@@ -1,4 +1,7 @@
 更新履歴
+TAG799 2025/12/20 3rd
+  IDE:PartCounter:PMD:envelopeの表示を追加
+
 TAG798 2025/12/20 2nd
   IDE:PartCounter:PMD:lfo/lfo switchの表示を追加
 
