@@ -1,4 +1,7 @@
 更新履歴
+TAG798 2025/12/20 2nd
+  IDE:PartCounter:PMD:lfo/lfo switchの表示を追加
+
 TAG797 2025/12/20
   IDE:mucom:OPNA/OPNB:各音源のボリューム設定が反映できていなかったのを修正
   IDE:mucom/muap:OPNA:GIMICのSSG音源のボリューム設定が反映できていなかったのを修正

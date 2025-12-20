@@ -7239,7 +7239,8 @@ namespace mml2vgmIDEx64
         public void YM2608SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2608 == null) return;
-            if (Address == -1 && dData == -1) return;
+            if (Address == -1 && dData == -1) 
+                return;
 
             if (Chip.Number == 0) chipLED.PriOPNA = 2;
             else chipLED.SecOPNA = 2;

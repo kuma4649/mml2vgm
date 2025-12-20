@@ -37,7 +37,7 @@
       <HintPath>Azuki8.dll</HintPath>
     </Reference>
     <Reference Include="MDSound">
-      <HintPath>..\Core\MDSound.dll</HintPath>
+      <HintPath>MDSound.dll</HintPath>
     </Reference>
     <Reference Include="musicDriverInterface">
       <HintPath>musicDriverInterface.dll</HintPath>

@@ -90,7 +90,7 @@
 
   <ItemGroup>
     <Reference Include="MDSound">
-      <HintPath>lib\MDSound.dll</HintPath>
+      <HintPath>..\mml2vgmIDEx64\MDSound.dll</HintPath>
     </Reference>
     <Reference Include="musicDriverInterface">
       <HintPath>lib\musicDriverInterface.dll</HintPath>

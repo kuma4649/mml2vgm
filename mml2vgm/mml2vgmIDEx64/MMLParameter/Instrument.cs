@@ -27,6 +27,8 @@ namespace mml2vgmIDEx64.MMLParameter
         public string[] envSw;
         public string[] lfoSw;
         public string[] lfo;
+        public string[] lfoType;
+        public string[] lfoPrm;
         public string[] hlfo;
         public string[] memo;
         public int?[] detune;
@@ -65,6 +67,8 @@ namespace mml2vgmIDEx64.MMLParameter
             envSw = new string[n];
             lfoSw = new string[n];
             lfo = new string[n];
+            lfoType = new string[n];
+            lfoPrm = new string[n];
             hlfo = new string[n];
             memo = new string[n];
             detune = new int?[n];
