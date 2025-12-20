@@ -82,6 +82,57 @@ namespace mml2vgmIDEx64.MMLParameter
             }
         }
 
+        protected override void SetLfo(outDatum od, int ch, int cc)
+        {
+            if (od != null && od.args != null)
+            {
+                switch ((int)od.args[0])
+                {
+                    case 0: // M / MA / MB
+                        lfoPrm[ch] = string.Format("MA{0},{1},{2},{3} MB{4},{5},{6},{7} ",
+                            (byte)od.args[1], (byte)od.args[2], (sbyte)od.args[3], (byte)od.args[4],
+                            (byte)od.args[5], (byte)od.args[6], (sbyte)od.args[7], (byte)od.args[8]
+                            );
+                        break;
+                    case 1: // MW / MWA / MWB
+                        lfoType[ch] = string.Format("MWA{0} MWB{1} ",
+                            (byte)od.args[1], (byte)od.args[2]
+                            );
+                        break;
+                }
+                lfo[ch] = lfoType[ch] + lfoPrm[ch];
+            }
+        }
+
+        //30 -
+
+        protected override void SetLfoSwitch(outDatum od, int ch, int cc)
+        {
+            lfoSw[ch] = string.Format("*A{0} *B{1}", ((int)od.args[0]) & 7, ((int)od.args[0] & 0x70) >> 4);
+        }
+
+        protected override void SetEnvelope(outDatum od, int ch, int cc)
+        {
+            if (od != null && od.args != null)
+            {
+                switch ((int)od.args[0])
+                {
+                    case 0: // M / MA / MB
+                        envelope[ch] = string.Format("E{0},{1},{2},{3} ",
+                            (byte)od.args[1], (sbyte)od.args[2], (byte)od.args[3], (byte)od.args[4]
+                            );
+                        break;
+                    case 1: // MW / MWA / MWB
+                        envelope[ch] = string.Format("E{0},{1},{2},{3},{4},{5} ",
+                            (byte)od.args[1], (byte)od.args[2], (byte)od.args[3], (byte)od.args[4], 15 - (byte)od.args[5], (byte)od.args[6]
+                            );
+                        break;
+                }
+                lfo[ch] = lfoType[ch] + lfoPrm[ch];
+            }
+
+        }
+
 
 
     }
