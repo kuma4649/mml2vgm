@@ -3556,6 +3556,8 @@ namespace mml2vgmIDEx64
 
                 if (frmSien != null) frmSien.Close();
 
+                ScriptInterface.Cleanup();
+
                 setting.Save();
             }
             catch (Exception ex)
@@ -4533,6 +4535,7 @@ namespace mml2vgmIDEx64
             if (setting.other.UseScript)
             {
                 Disp("スクリプト読み込み中");
+                ScriptInterface.Init();
                 GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
             }
 

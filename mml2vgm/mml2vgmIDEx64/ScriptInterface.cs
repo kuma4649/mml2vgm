@@ -16,11 +16,41 @@ namespace mml2vgmIDEx64
     public static class ScriptInterface
     {
 
+        // キャッシュ用のメンバ変数を追加
+        private static ScriptEngine cachedEngine = null;
+        private static ScriptRuntime cachedRuntime = null;
+        private static Dictionary<string, ScriptScope> cachedScopes = new Dictionary<string, ScriptScope>();
+        private static object lockobj = new object();
+        private static bool isInitialized = false;
+
         public static void Init()
         {
-        }
+            // スクリプトエンジンの事前初期化
+            lock (lockobj)
+            {
+                if (!isInitialized)
+                {
+                    try
+                    {
+                        cachedEngine = Python.CreateEngine();
+                        cachedRuntime = cachedEngine.Runtime;
 
-        private static object lockobj = new object();
+                        var pc = HostingHelpers.GetLanguageContext(cachedEngine) as PythonContext;
+                        var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
+                        if (hooks != null) hooks.Clear();
+
+                        Assembly assembly = typeof(Program).Assembly;
+                        cachedRuntime.LoadAssembly(Assembly.LoadFile(assembly.Location));
+
+                        isInitialized = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ForcedWrite(ex);
+                    }
+                }
+            }
+        }
 
         private static string[] GetScriptInfo(string path, int t)
         {
@@ -31,24 +61,40 @@ namespace mml2vgmIDEx64
 
                 try
                 {
-                    engine = Python.CreateEngine();
-                    var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
-                    var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
-                    if (hooks != null) hooks.Clear();
-                    ScriptSource source = engine.CreateScriptSourceFromFile(path);
-                    CompiledCode code = source.Compile();
-                    ScriptScope scope = engine.CreateScope();
-                    runtime = engine.Runtime;
+                    // キャッシュされたスコープを確認
+                    if (!cachedScopes.ContainsKey(path))
+                    {
+                        if (cachedEngine == null) Init();
 
-                    Assembly assembly = typeof(Program).Assembly;
-                    runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
-                    //var paths=engine.GetSearchPaths();
-                    //paths.Add("D:\\bootcamp\\Source\\Repos\\mml2vgm\\mml2vgm\\mml2vgmIDEx64\\bin\\x64\\Debug\\net8.0-windows7.0");
-                    //engine.SetSearchPaths(paths);
-                    source.Execute(scope);
+                        ScriptSource source = cachedEngine.CreateScriptSourceFromFile(path);
+                        CompiledCode code = source.Compile();
+                        ScriptScope scope = cachedEngine.CreateScope();
 
-                    dynamic pyClass = scope.GetVariable("Mml2vgmScript");
+                        source.Execute(scope);
+                        cachedScopes[path] = scope;
+                    }
+
+                    ScriptScope currentScope = cachedScopes[path];
+                    dynamic pyClass = currentScope.GetVariable("Mml2vgmScript");
                     dynamic mml2vgmScript = pyClass();
+                    //engine = Python.CreateEngine();
+                    //var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
+                    //var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
+                    //if (hooks != null) hooks.Clear();
+                    //ScriptSource source = engine.CreateScriptSourceFromFile(path);
+                    //CompiledCode code = source.Compile();
+                    //ScriptScope scope = engine.CreateScope();
+                    //runtime = engine.Runtime;
+
+                    //Assembly assembly = typeof(Program).Assembly;
+                    //runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
+                    ////var paths=engine.GetSearchPaths();
+                    ////paths.Add("D:\\bootcamp\\Source\\Repos\\mml2vgm\\mml2vgm\\mml2vgmIDEx64\\bin\\x64\\Debug\\net8.0-windows7.0");
+                    ////engine.SetSearchPaths(paths);
+                    //source.Execute(scope);
+
+                    //dynamic pyClass = scope.GetVariable("Mml2vgmScript");
+                    //dynamic mml2vgmScript = pyClass();
                     switch (t)
                     {
                         case 0:
@@ -71,12 +117,15 @@ namespace mml2vgmIDEx64
                 catch (Exception ex)
                 {
                     log.ForcedWrite(ex);
+                    // キャッシュクリア
+                    if (cachedScopes.ContainsKey(path))
+                        cachedScopes.Remove(path);
                 }
-                finally
-                {
-                    if (runtime != null) runtime.Shutdown();
-                    GC.Collect();
-                }
+                //finally
+                //{
+                //    if (runtime != null) runtime.Shutdown();
+                //    GC.Collect();
+                //}
                 return new string[] { "" };// Path.GetFileName(path);
             }
         }
@@ -112,10 +161,12 @@ namespace mml2vgmIDEx64
                 var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
                 var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List<object>;
                 if (hooks != null) hooks.Clear();
+
                 ScriptSource source = engine.CreateScriptSourceFromFile(path);
                 CompiledCode code = source.Compile();
                 ScriptScope scope = engine.CreateScope();
                 runtime = engine.Runtime;
+
                 Assembly assembly = typeof(Program).Assembly;
                 runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
                 source.Execute(scope);
@@ -134,7 +185,7 @@ namespace mml2vgmIDEx64
             }
             finally
             {
-                runtime.Shutdown();
+                if (runtime != null) runtime.Shutdown();
 
             }
         }
@@ -143,6 +194,23 @@ namespace mml2vgmIDEx64
         {
             if (si == null) return;
         }
+
+        // クリーンアップ用メソッド
+        public static void Cleanup()
+        {
+            lock (lockobj)
+            {
+                cachedScopes.Clear();
+                if (cachedRuntime != null)
+                {
+                    cachedRuntime.Shutdown();
+                    cachedRuntime = null;
+                }
+                cachedEngine = null;
+                isInitialized = false;
+            }
+        }
+
     }
 
     public class ScriptInfo

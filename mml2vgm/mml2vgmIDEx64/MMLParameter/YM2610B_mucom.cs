@@ -164,5 +164,15 @@ namespace mml2vgmIDEx64.MMLParameter
             }
         }
 
+        protected override void SetPartColor(outDatum od, int ch, int cc)
+        {
+            if (ch >= partColor.Length) return;
+            if (od == null || od.args == null || od.args.Count == 0) return;
+
+            List<object> a = (List<object>)od.args;
+            byte[] b = (byte[])a[0];
+            partColor[ch] = (byte)b[1];
+        }
+
     }
 }

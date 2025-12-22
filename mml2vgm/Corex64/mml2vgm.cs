@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 
 namespace Corex64
 {
@@ -402,7 +403,7 @@ namespace Corex64
                     {
                         nrmSkipCount = 11;
                     }
-                    else if ((od.val >= 0x30 && od.val <= 0x3f) || od.val == 0x4f || od.val == 0x50)
+                    else if ((od.val >= 0x30 && od.val <= 0x3f) || od.val == 0x4F || od.val == 0x50)
                     {
                         nrmSkipCount = 1;
                     }
@@ -590,13 +591,14 @@ namespace Corex64
 
         private void OutTraceInfoFile(outDatum[] desBuf)
         {
-            List<string> buf = new List<string>();
+            StringBuilder buf = new StringBuilder();
+            
             foreach (outDatum od in desBuf)
             {
                 if (od.linePos != null)
                 {
-                    buf.Add(string.Format(
-                        "File:[{0}] Row:[{1}] Col:[{2}] Len:[{3}] Chip:[{4}] Secondary:[{5}] Part:[{6}] Ch:[{7}] MMLType:[{8}] Val:[{9:X2}]"
+                    buf.AppendFormat(
+                        "File:[{0}] Row:[{1}] Col:[{2}] Len:[{3}] Chip:[{4}] Secondary:[{5}] Part:[{6}] Ch:[{7}] MMLType:[{8}] Val:[{9:X2}]\r\n"
                         , od.linePos.srcMMLID
                         , od.linePos.row
                         , od.linePos.col
@@ -606,22 +608,14 @@ namespace Corex64
                         , od.linePos.part
                         , od.linePos.ch
                         , od.type
-                        , od.val));
+                        , od.val);
                 }
                 else
                 {
-                    buf.Add(string.Format(
-                        "File:[{0}] Row:[{1}] Col:[{2}] Len:[{3}] Chip:[{4}] Secondary:[{5}] Part:[{6}] Ch:[{7}] MMLType:[{8}] Val:[{9:X2}]"
-                        , ""
-                        , ""
-                        , ""
-                        , ""
-                        , ""
-                        , ""
-                        , ""
-                        , ""
+                    buf.AppendFormat(
+                        "File:[] Row:[] Col:[] Len:[] Chip:[] Secondary:[] Part:[] Ch:[] MMLType:[{0}] Val:[{1:X2}]\r\n"
                         , od.type
-                        , od.val));
+                        , od.val);
                 }
             }
 
@@ -629,7 +623,7 @@ namespace Corex64
 #if DEBUG
             desTiFn = "DEBUG_vgmData.txt";
 #endif
-            File.WriteAllLines(desTiFn, buf, System.Text.Encoding.UTF8);
+            File.WriteAllText(desTiFn, buf.ToString(), System.Text.Encoding.UTF8);
         }
 
         private List<Line> GetSrc(string[] srcBuf, string path)
@@ -1073,7 +1067,6 @@ namespace Corex64
                 Disp(msg.get("I04017"));
                 Disp(res);
             }
-
 
 
             res = "";
