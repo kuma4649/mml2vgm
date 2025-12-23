@@ -12,6 +12,7 @@ namespace mml2vgmIDEx64.MMLParameter
     {
         public override string Name => "YM2608";
         private readonly string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
+        private myEncoding enc = new myEncoding();
 
         public YM2608_mucom(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(190, chip, setting, midiKbd)
         {
@@ -195,6 +196,22 @@ namespace mml2vgmIDEx64.MMLParameter
             List<object> a = (List<object>)od.args;
             byte[] b = (byte[])a[0];
             partColor[ch] = (byte)b[1];
+        }
+
+        protected override void SetLyric(outDatum od, int ch, int cc)
+        {
+            if (od.args.Count > 1)
+            {
+                //通常の歌詞
+                return;
+            }
+
+            List<object> a = (List<object>)od.args;
+            byte[] b = (byte[])a[0];
+            string mem=enc.GetStringFromSjisArray(b, 1, b.Length - 1);
+
+            //メモ
+            memo[ch] = mem;
         }
 
     }
