@@ -1,4 +1,7 @@
 更新履歴
+TAG803 2026/01/17
+  mucomDotNET差し替え
+
 TAG802 2025/12/23
   IDE:PartCounter:mucomDotNET:メモコマンド対応
 
