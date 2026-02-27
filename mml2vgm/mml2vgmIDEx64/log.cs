@@ -5,7 +5,7 @@ using System.Text;
 
 namespace mml2vgmIDEx64
 {
-    public static class log
+    public static class Log
     {
 #if DEBUG
         public static bool debug = true;

@@ -28,7 +28,7 @@ namespace mvcx64
             if (args == null || args.Length < 1)
             {
                 //disp usage
-                Console.WriteLine(msg.get("I07000"));
+                Console.WriteLine(Msg.get("I07000"));
                 Environment.Exit(0);
             }
 
@@ -59,7 +59,7 @@ namespace mvcx64
             }
             catch
             {
-                Console.WriteLine(msg.get("E0000"));
+                Console.WriteLine(Msg.get("E0000"));
                 Environment.Exit(0);
             }
 
@@ -67,7 +67,7 @@ namespace mvcx64
             if (args == null || args.Length < cnt)
             {
                 //disp usage
-                Console.WriteLine(msg.get("I07000"));
+                Console.WriteLine(Msg.get("I07000"));
                 Environment.Exit(0);
             }
 
@@ -77,7 +77,7 @@ namespace mvcx64
                 srcFn += ".gwi";
             }
 
-            string path1 = System.IO.Path.GetDirectoryName(Path.Combine(System.Environment.CurrentDirectory, srcFn));
+            string? path1 = System.IO.Path.GetDirectoryName(Path.Combine(System.Environment.CurrentDirectory, srcFn));
             path1 = string.IsNullOrEmpty(path1) ? srcFn : path1;
 
             if (args.Length > cnt)
@@ -91,12 +91,17 @@ namespace mvcx64
 
             desTiFn = Path.Combine(path1, Path.GetFileNameWithoutExtension(srcFn) + ".ti");
 
-            Corex64.log.debug = false;
-            Corex64.log.Open();
-            Corex64.log.Write("start compile thread");
+            Corex64.Log.debug = false;
+            Corex64.Log.Open();
+            Corex64.Log.Write("start compile thread");
 
-            Assembly myAssembly = Assembly.GetEntryAssembly();
-            string path = System.IO.Path.GetDirectoryName(myAssembly.Location);
+            Assembly? myAssembly = Assembly.GetEntryAssembly();
+            if(myAssembly == null)
+            {
+                Console.WriteLine("The assembly could not be retrieved.");
+                Environment.Exit(0);
+            }
+            string? path = System.IO.Path.GetDirectoryName(myAssembly.Location);
             path = string.IsNullOrEmpty(path1) ? myAssembly.Location : path;
 
             Mml2vgm mv = new Mml2vgm(null, srcFn, desFn, path, Disp);
@@ -109,8 +114,8 @@ namespace mvcx64
 
             if (ret == 0)
             {
-                Console.WriteLine(msg.get("I0000"));
-                Console.WriteLine(msg.get("I0001"));
+                Console.WriteLine(Msg.get("I0000"));
+                Console.WriteLine(Msg.get("I0001"));
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                 {
                     foreach (ClsChip chip in kvp.Value)
@@ -121,7 +126,7 @@ namespace mvcx64
                         {
                             if (pw[i].clockCounter == 0) continue;
 
-                            Console.WriteLine(string.Format(msg.get("I0002")
+                            Console.WriteLine(string.Format(Msg.get("I0002")
                                 , pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString()
                                 , pw[i].pg[0].chip.Name.ToUpper()
                                 , pw[i].clockCounter
@@ -131,90 +136,90 @@ namespace mvcx64
                 }
             }
 
-            Console.WriteLine(msg.get("I0003"));
+            Console.WriteLine(Msg.get("I0003"));
 
             foreach (msgInfo mes in msgBox.getWrn())
             {
-                Console.Error.WriteLine(string.Format(msg.get("I0004"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
+                Console.Error.WriteLine(string.Format(Msg.get("I0004"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
             }
 
             foreach (msgInfo mes in msgBox.getErr())
             {
-                Console.Error.WriteLine(string.Format(msg.get("I0005"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
+                Console.Error.WriteLine(string.Format(Msg.get("I0005"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
             }
 
 
             Console.WriteLine("");
-            Console.WriteLine(string.Format(msg.get("I0006"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            Console.WriteLine(string.Format(Msg.get("I0006"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (mv.desVGM != null)
             {
                 if (mv.desVGM.loopSamples != -1)
                 {
-                    Console.WriteLine(string.Format(msg.get("I0007"), mv.desVGM.loopClock));
+                    Console.WriteLine(string.Format(Msg.get("I0007"), mv.desVGM.loopClock));
                     if (mv.desVGM.info.format == enmFormat.VGM)
-                        Console.WriteLine(string.Format(msg.get("I0008")
+                        Console.WriteLine(string.Format(Msg.get("I0008")
                             , mv.desVGM.loopSamples
                             , mv.desVGM.loopSamples / 44100L));
                     else
-                        Console.WriteLine(string.Format(msg.get("I0008")
+                        Console.WriteLine(string.Format(Msg.get("I0008")
                             , mv.desVGM.loopSamples
                             , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
                 }
 
-                Console.WriteLine(string.Format(msg.get("I0009"), mv.desVGM.lClock));
+                Console.WriteLine(string.Format(Msg.get("I0009"), mv.desVGM.lClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    Console.WriteLine(string.Format(msg.get("I0010")
+                    Console.WriteLine(string.Format(Msg.get("I0010")
                         , mv.desVGM.dSample
                         , mv.desVGM.dSample / 44100L));
                 else
-                    Console.WriteLine(string.Format(msg.get("I0010")
+                    Console.WriteLine(string.Format(Msg.get("I0010")
                         , mv.desVGM.dSample
                         , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
                 if (mv.desVGM.ym2608 != null)
                 {
-                    if (mv.desVGM.ym2608.Length > 0 && mv.desVGM.ym2608[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0020"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
-                    if (mv.desVGM.ym2608.Length > 1 && mv.desVGM.ym2608[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0021"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
+                    if (mv.desVGM.ym2608.Length > 0 && mv.desVGM.ym2608[0].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0020"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
+                    if (mv.desVGM.ym2608.Length > 1 && mv.desVGM.ym2608[1].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0021"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
                 }
                 if (mv.desVGM.ym2609 != null)
                 {
-                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0031"), mv.desVGM.ym2609[0].pcmDataEasyA.Length - 15));
-                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0032"), mv.desVGM.ym2609[0].pcmDataEasyB.Length - 15));
-                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyC != null) Console.WriteLine(string.Format(msg.get("I0033"), mv.desVGM.ym2609[0].pcmDataEasyC.Length - 15));
-                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0034"), mv.desVGM.ym2609[1].pcmDataEasyA.Length - 15));
-                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0035"), mv.desVGM.ym2609[1].pcmDataEasyB.Length - 15));
-                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyC != null) Console.WriteLine(string.Format(msg.get("I0036"), mv.desVGM.ym2609[1].pcmDataEasyC.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyA != null) Console.WriteLine(string.Format(Msg.get("I0031"), mv.desVGM.ym2609[0].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyB != null) Console.WriteLine(string.Format(Msg.get("I0032"), mv.desVGM.ym2609[0].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyC != null) Console.WriteLine(string.Format(Msg.get("I0033"), mv.desVGM.ym2609[0].pcmDataEasyC.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyA != null) Console.WriteLine(string.Format(Msg.get("I0034"), mv.desVGM.ym2609[1].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyB != null) Console.WriteLine(string.Format(Msg.get("I0035"), mv.desVGM.ym2609[1].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyC != null) Console.WriteLine(string.Format(Msg.get("I0036"), mv.desVGM.ym2609[1].pcmDataEasyC.Length - 15));
                 }
                 if (mv.desVGM.ym2610b != null)
                 {
-                    if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0022"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length - 15));
-                    if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0023"), mv.desVGM.ym2610b[0].pcmDataEasyB.Length - 15));
-                    if (mv.desVGM.ym2610b.Length > 1 && mv.desVGM.ym2610b[1].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0024"), mv.desVGM.ym2610b[1].pcmDataEasyA.Length - 15));
-                    if (mv.desVGM.ym2610b.Length > 1 && mv.desVGM.ym2610b[1].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0025"), mv.desVGM.ym2610b[1].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyA != null) Console.WriteLine(string.Format(Msg.get("I0022"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyB != null) Console.WriteLine(string.Format(Msg.get("I0023"), mv.desVGM.ym2610b[0].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 1 && mv.desVGM.ym2610b[1].pcmDataEasyA != null) Console.WriteLine(string.Format(Msg.get("I0024"), mv.desVGM.ym2610b[1].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 1 && mv.desVGM.ym2610b[1].pcmDataEasyB != null) Console.WriteLine(string.Format(Msg.get("I0025"), mv.desVGM.ym2610b[1].pcmDataEasyB.Length - 15));
                 }
                 //if (mv.desVGM.segapcm[0].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCM)  : {0} byte", mv.desVGM.segapcm[0].pcmData.Length - 15));
                 //if (mv.desVGM.segapcm[1].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte", mv.desVGM.segapcm[1].pcmData.Length - 15));
                 if (mv.desVGM.ym2612 != null)
                 {
-                    if (mv.desVGM.ym2612.Length > 0 && mv.desVGM.ym2612[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0026"), mv.desVGM.ym2612[0].pcmDataEasy.Length));
+                    if (mv.desVGM.ym2612.Length > 0 && mv.desVGM.ym2612[0].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0026"), mv.desVGM.ym2612[0].pcmDataEasy.Length));
                 }
                 if (mv.desVGM.rf5c164 != null)
                 {
-                    if (mv.desVGM.rf5c164.Length > 0 && mv.desVGM.rf5c164[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0027"), mv.desVGM.rf5c164[0].pcmDataEasy.Length - 12));
-                    if (mv.desVGM.rf5c164.Length > 1 && mv.desVGM.rf5c164[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0028"), mv.desVGM.rf5c164[1].pcmDataEasy.Length - 12));
+                    if (mv.desVGM.rf5c164.Length > 0 && mv.desVGM.rf5c164[0].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0027"), mv.desVGM.rf5c164[0].pcmDataEasy.Length - 12));
+                    if (mv.desVGM.rf5c164.Length > 1 && mv.desVGM.rf5c164[1].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0028"), mv.desVGM.rf5c164[1].pcmDataEasy.Length - 12));
                 }
                 if (mv.desVGM.huc6280 != null)
                 {
-                    if (mv.desVGM.huc6280.Length > 0 && mv.desVGM.huc6280[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0029"), mv.desVGM.huc6280[0].pcmDataEasy.Length));
-                    if (mv.desVGM.huc6280.Length > 1 && mv.desVGM.huc6280[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0030"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
+                    if (mv.desVGM.huc6280.Length > 0 && mv.desVGM.huc6280[0].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0029"), mv.desVGM.huc6280[0].pcmDataEasy.Length));
+                    if (mv.desVGM.huc6280.Length > 1 && mv.desVGM.huc6280[1].pcmDataEasy != null) Console.WriteLine(string.Format(Msg.get("I0030"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
                 }
             }
 
-            Console.WriteLine(msg.get("I0050"));
+            Console.WriteLine(Msg.get("I0050"));
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
 
 
             if (msgBox.getErr().Length > 0)
@@ -228,7 +233,7 @@ namespace mvcx64
         private void Disp(string msg)
         {
             Console.WriteLine(msg);
-            Corex64.log.Write(msg);
+            Corex64.Log.Write(msg);
         }
 
     }

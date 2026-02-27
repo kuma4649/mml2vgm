@@ -835,7 +835,7 @@ namespace Corex64
         {
             if (page.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg(msg.get("E19000"), mml.line.Lp);
+                msgBox.setWrnMsg(Msg.get("E19000"), mml.line.Lp);
                 return;
             }
 
@@ -854,7 +854,7 @@ namespace Corex64
         {
             if (page.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg(msg.get("E19001"), mml.line.Lp);
+                msgBox.setWrnMsg(Msg.get("E19001"), mml.line.Lp);
                 return;
             }
 
@@ -885,12 +885,12 @@ namespace Corex64
                 {
                     if (page.lfo[c].param.Count < 4)
                     {
-                        msgBox.setErrMsg(msg.get("E19002"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E19002"), mml.line.Lp);
                         return;
                     }
                     if (page.lfo[c].param.Count > 5)
                     {
-                        msgBox.setErrMsg(msg.get("E19003"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E19003"), mml.line.Lp);
                         return;
                     }
 
@@ -1020,7 +1020,7 @@ namespace Corex64
                         page.pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E10024"), n), mml.line.Lp);
                         }
                         return;
                     }
@@ -1029,14 +1029,14 @@ namespace Corex64
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E19004"), n), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E19004"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].Item2.chip != enmChipType.YM2610B
                             || parent.instPCM[n].Item2.loopAdr != 0)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E19005"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E19005"), n), mml.line.Lp);
                         }
                         page.instrument = n;
                         SetADPCMAAddress(
@@ -1055,14 +1055,14 @@ namespace Corex64
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E19004"), n), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E19004"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].Item2.chip != enmChipType.YM2610B
                             || parent.instPCM[n].Item2.loopAdr != 1)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E19005"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E19005"), n), mml.line.Lp);
                         }
                         page.instrument = n;
                         SetADPCMBAddress(
@@ -1086,7 +1086,7 @@ namespace Corex64
 
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E11008"), n), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E11008"), n), mml.line.Lp);
                         return;
                     }
 
@@ -1095,7 +1095,7 @@ namespace Corex64
                         && parent.instPCM[n].Item2.chip != enmChipType.YM2610B
                         && parent.instPCM[n].Item2.chip != enmChipType.YM2609)
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E11009"), n, _Name), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E11009"), n, _Name), mml.line.Lp);
                     }
 
                     if (re) page.instrument += n;
@@ -1236,13 +1236,13 @@ namespace Corex64
                                 }
                                 else
                                 {
-                                    msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
+                                    msgBox.setErrMsg(string.Format(Msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                                     return;
                                 }
                             }
                             else
                             {
-                                msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
+                                msgBox.setErrMsg(string.Format(Msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
                                 return;
                             }
 

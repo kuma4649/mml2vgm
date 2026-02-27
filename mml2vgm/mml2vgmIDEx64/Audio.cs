@@ -170,26 +170,26 @@ namespace mml2vgmIDEx64
 
         public static void Init(Setting setting)
         {
-            log.ForcedWrite("Audio:Init:Begin");
+            Log.ForcedWrite("Audio:Init:Begin");
 
-            log.ForcedWrite("Audio:Init:STEP 01");
+            Log.ForcedWrite("Audio:Init:STEP 01");
 
             Common.SampleRate = setting.outputDevice.SampleRate;
             NAudioWrap.Init((int)Common.SampleRate, trdVgmVirtualFunction);
             NAudioWrap.PlaybackStopped += NaudioWrap_PlaybackStopped;
 
 
-            log.ForcedWrite("Audio:Init:STEP 02");
+            Log.ForcedWrite("Audio:Init:STEP 02");
             Audio.setting = setting;
             mmlParams.setting = setting;
 
-            log.ForcedWrite("Audio:Init:STEP 03");
+            Log.ForcedWrite("Audio:Init:STEP 03");
             {
             }
 
 
 
-            log.ForcedWrite("Audio:Init:STEP 04");
+            Log.ForcedWrite("Audio:Init:STEP 04");
             {
                 if (realChip == null) realChip = new RealChip(!setting.unuseRealChip);
 
@@ -200,23 +200,23 @@ namespace mml2vgmIDEx64
 
 
 
-            log.ForcedWrite("Audio:Init:STEP 05");
+            Log.ForcedWrite("Audio:Init:STEP 05");
             Paused = false;
             Stopped = true;
             fatalError = false;
 
 
-            log.ForcedWrite("Audio:Init:STEP 09");
+            Log.ForcedWrite("Audio:Init:STEP 09");
             NAudioWrap.Start(Audio.setting);
 
 
 
-            log.ForcedWrite("Audio:Init:STEP 10");
+            Log.ForcedWrite("Audio:Init:STEP 10");
             SoundManagerMount();
 
 
 
-            log.ForcedWrite("Audio:Init:Complete");
+            Log.ForcedWrite("Audio:Init:Complete");
 
 
 
@@ -261,7 +261,7 @@ namespace mml2vgmIDEx64
             }
             catch(Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
             return null;
         }
@@ -1056,7 +1056,7 @@ namespace mml2vgmIDEx64
 
         private static void WaitSync()
         {
-            log.Write("Reset Audio Device Sync.");
+            Log.Write("Reset Audio Device Sync.");
             Thread.Sleep(50);
             //ResetAudioDeviceSync();
             //while (!GetAudioDeviceSync()) { Thread.Sleep(1); }
@@ -1064,7 +1064,7 @@ namespace mml2vgmIDEx64
             while (!GetAudioDeviceSync()) { Thread.Sleep(0); }
             if (sm.GetSeqCounter() > 0)
             {
-                log.Write(string.Format("Warn:{0}", sm.GetSeqCounter()));
+                Log.Write(string.Format("Warn:{0}", sm.GetSeqCounter()));
             }
         }
 
@@ -1235,7 +1235,7 @@ namespace mml2vgmIDEx64
             
             if (PlayingFileFormat == EnmFileFormat.XGM)
             {
-                driver = new xgm
+                driver = new Xgm
                 {
                     setting = setting
                 };
@@ -1256,12 +1256,12 @@ namespace mml2vgmIDEx64
                 //zgmはchipの再定義が必須の為、初期化を行うとmask情報も初期化されてしまう。
                 //その為いったん退避しておく
                 List<Chip> maskChips = null;
-                if (driver != null && (driver is Driver.ZGM.zgm) && ((Driver.ZGM.zgm)driver).chips != null)
+                if (driver != null && (driver is Driver.ZGM.Zgm) && ((Driver.ZGM.Zgm)driver).chips != null)
                 {
-                    maskChips = ((Driver.ZGM.zgm)driver).chips;
+                    maskChips = ((Driver.ZGM.Zgm)driver).chips;
                 }
 
-                driver = new Driver.ZGM.zgm
+                driver = new Driver.ZGM.Zgm
                 {
                     setting = setting
                 };
@@ -1274,7 +1274,7 @@ namespace mml2vgmIDEx64
                 //mask情報の復帰
                 if (ret && maskChips != null)
                 {
-                    foreach (Chip chip in ((Driver.ZGM.zgm)driver).chips)
+                    foreach (Chip chip in ((Driver.ZGM.Zgm)driver).chips)
                     {
                         foreach (Chip mchip in maskChips)
                         {
@@ -1289,7 +1289,7 @@ namespace mml2vgmIDEx64
             }
             else if (PlayingFileFormat == EnmFileFormat.VGM)
             {
-                driver = new vgm
+                driver = new Vgm
                 {
                     setting = setting
                 };
@@ -1373,7 +1373,7 @@ namespace mml2vgmIDEx64
 
                 if (vgmBuf == null || setting == null) return false;
 
-                xgm xgmDriver = (xgm)driver;
+                Xgm xgmDriver = (Xgm)driver;
 
                 ResetFadeOutParam();
                 useChip.Clear();
@@ -1405,9 +1405,9 @@ namespace mml2vgmIDEx64
                 ym2612mameX ym2612mame = null;
 
                 List<byte> pcmBuf = [];
-                for(int i = 0; i < ((xgm)driver).sampleDataBlockSize * 256; i++)
+                for(int i = 0; i < ((Xgm)driver).sampleDataBlockSize * 256; i++)
                 {
-                    pcmBuf.Add(vgmBuf[((xgm)driver).sampleDataBlockAddr + i].val);
+                    pcmBuf.Add(vgmBuf[((Xgm)driver).sampleDataBlockAddr + i].val);
                 }
 
                 if (setting.YM2612Type.UseEmu)
@@ -1513,29 +1513,29 @@ namespace mml2vgmIDEx64
                 lstChips.Add(chip);
                 useChip.Add(EnmChip.SN76489);
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
                 if (setting.YM2612Type.UseEmu)
                 {
-                    ym2612.XGMfunction.sampleID[0] = ((xgm)driver).sampleID;
-                    ym2612.XGMfunction.xgmpcm[0] = ((xgm)driver).xgmpcm;
+                    ym2612.XGMfunction.sampleID[0] = ((Xgm)driver).sampleID;
+                    ym2612.XGMfunction.xgmpcm[0] = ((Xgm)driver).xgmpcm;
                     ym2612.XGMfunction.pcmBuf[0] = [.. pcmBuf];
                 }
                 else if (setting.YM2612Type.UseEmu2)
                 {
-                    ym3438.XGMfunction.sampleID[0] = ((xgm)driver).sampleID;
-                    ym3438.XGMfunction.xgmpcm[0] = ((xgm)driver).xgmpcm;
+                    ym3438.XGMfunction.sampleID[0] = ((Xgm)driver).sampleID;
+                    ym3438.XGMfunction.xgmpcm[0] = ((Xgm)driver).xgmpcm;
                     ym3438.XGMfunction.pcmBuf[0] = [.. pcmBuf];
                 }
                 else if (setting.YM2612Type.UseEmu3)
                 {
-                    ym2612mame.XGMfunction.sampleID[0] = ((xgm)driver).sampleID;
-                    ym2612mame.XGMfunction.xgmpcm[0] = ((xgm)driver).xgmpcm;
+                    ym2612mame.XGMfunction.sampleID[0] = ((Xgm)driver).sampleID;
+                    ym2612mame.XGMfunction.xgmpcm[0] = ((Xgm)driver).xgmpcm;
                     ym2612mame.XGMfunction.pcmBuf[0] = [.. pcmBuf];
                 }
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -1558,12 +1558,12 @@ namespace mml2vgmIDEx64
                     useReal = true;
                 }
 
-                log.Write("Volume 設定");
+                Log.Write("Volume 設定");
 
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
                 SetSN76489Volume(true, setting.balance.SN76489Volume);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 chipRegister.SN76489WriteClock((byte)0, (int)xgmDriver.SN76489ClockValue);
                 chipRegister.YM2612WriteClock((byte)0, (int)xgmDriver.YM2612ClockValue);
@@ -1577,13 +1577,13 @@ namespace mml2vgmIDEx64
 
                 Thread.Sleep(100);
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -1740,7 +1740,7 @@ namespace mml2vgmIDEx64
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
                 if (setting.YM2612Type.UseEmu)
@@ -1762,7 +1762,7 @@ namespace mml2vgmIDEx64
                     ym2612mame.XGMfunction.pcmBuf[0] = [.. pcmBuf];
                 }
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -1785,12 +1785,12 @@ namespace mml2vgmIDEx64
                     useReal = true;
                 }
 
-                log.Write("Volume 設定");
+                Log.Write("Volume 設定");
 
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
                 SetSN76489Volume(true, setting.balance.SN76489Volume);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 chipRegister.SN76489WriteClock((byte)0, (int)xgm2Driver.SN76489ClockValue);
                 chipRegister.YM2612WriteClock((byte)0, (int)xgm2Driver.YM2612ClockValue);
@@ -1804,13 +1804,13 @@ namespace mml2vgmIDEx64
 
                 Thread.Sleep(100);
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -1823,7 +1823,7 @@ namespace mml2vgmIDEx64
             try
             {
 
-                Driver.ZGM.zgm zgmDriver = (Driver.ZGM.zgm)driver;
+                Driver.ZGM.Zgm zgmDriver = (Driver.ZGM.Zgm)driver;
                 ResetFadeOutParam();
                 useChip.Clear();
                 List<MDSound.MDSound.Chip> lstChips = [];
@@ -1831,8 +1831,8 @@ namespace mml2vgmIDEx64
                 chipLED = new ChipLEDs();
 
 
-                log.Write("-----------------------");
-                log.Write("ドライバ(ZGM)初期化");
+                Log.Write("-----------------------");
+                Log.Write("ドライバ(ZGM)初期化");
 
                 if (!driver.init(vgmBuf
                     , chipRegister
@@ -1848,7 +1848,7 @@ namespace mml2vgmIDEx64
                 MasterVolume = setting.balance.MasterVolume;
 
 
-                log.Write("使用チップの調査");
+                Log.Write("使用チップの調査");
                 {
 
                     int zCnt;
@@ -1862,7 +1862,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write("Use Conductor");
+                        Log.Write("Use Conductor");
 
                         chipRegister.CONDUCTOR[zCnt].Use = true;
                         chipRegister.CONDUCTOR[zCnt].Model = EnmVRModel.VirtualModel;
@@ -1912,7 +1912,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.SN76489Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use DCSG(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use DCSG(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -1947,7 +1947,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPLL(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPLL(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2050,7 +2050,7 @@ namespace mml2vgmIDEx64
                         hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci) ? 0x1 : 0x2;
                         hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci && setting.YM2612Type.OnlyPCMEmulation) ? 0x2 : 0x0;
 
-                        log.Write(string.Format("Use OPN2(#{0}) Clk:{1} NukedOPN2Type:{2}"
+                        Log.Write(string.Format("Use OPN2(#{0}) Clk:{1} NukedOPN2Type:{2}"
                             , zCnt
                             , chip.Clock
                             , setting.nukedOPN2.EmuType));
@@ -2088,7 +2088,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPM(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPM(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2123,7 +2123,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.QSoundType.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use SEGAPCM(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use SEGAPCM(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2158,7 +2158,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPN(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPN(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2193,7 +2193,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPNA(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPNA(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2228,7 +2228,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPNB(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPNB(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2263,7 +2263,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPL(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPL(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2298,7 +2298,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPL(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPL(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2333,7 +2333,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use Y8950(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use Y8950(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2368,7 +2368,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPL4(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPL4(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2401,7 +2401,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPX(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPX(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2434,7 +2434,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.RF5C164Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use RF5C164(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use RF5C164(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2469,7 +2469,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.AY8910Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use AY8910(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use AY8910(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2502,7 +2502,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.POKEYType.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use POKEY(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use POKEY(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2535,7 +2535,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.DMGType.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use DMG(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use DMG(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2568,7 +2568,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.NESType.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use NES(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use NES(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2603,7 +2603,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.VRC6Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use VRC6(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use VRC6(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2634,7 +2634,7 @@ namespace mml2vgmIDEx64
                         chip.Option = null;
                         lstChips.Add(chip);
 
-                        log.Write(string.Format("Use Gigatron(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use Gigatron(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2669,7 +2669,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.K051649Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use K051649(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use K051649(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2702,7 +2702,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.HuC6280Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use HuC6280(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use HuC6280(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2739,7 +2739,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.C140Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use C140(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use C140(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2776,7 +2776,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.K053260Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use K053260(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use K053260(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2813,7 +2813,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.K054539Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use K054539(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use K054539(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2848,7 +2848,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.QSoundType.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use QSound(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use QSound(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2881,7 +2881,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= (setting.C352Type.UseScci) ? 0x1 : 0x2;
 
-                        log.Write(string.Format("Use C352(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use C352(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2916,7 +2916,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use OPNA2(#{0}) Clk:{1}"
+                        Log.Write(string.Format("Use OPNA2(#{0}) Clk:{1}"
                             , zCnt
                             , chip.Clock
                             ));
@@ -2949,7 +2949,7 @@ namespace mml2vgmIDEx64
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write(string.Format("Use GeneralMIDI(#{0})"
+                        Log.Write(string.Format("Use GeneralMIDI(#{0})"
                             , zCnt
                             ));
 
@@ -2990,16 +2990,16 @@ namespace mml2vgmIDEx64
                 else hiyorimiNecessary = false;
 
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
-                log.Write("MDSound DAC control 初期化");
-                mds.dacControl.init((uint)Common.SampleRate, mds, ((Driver.ZGM.zgm)driver).PCMBank);
+                Log.Write("MDSound DAC control 初期化");
+                mds.dacControl.init((uint)Common.SampleRate, mds, ((Driver.ZGM.Zgm)driver).PCMBank);
                 chipRegister.DACControl[0].Use = true;
                 chipRegister.DACControl[0].Model = EnmVRModel.VirtualModel;
 
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -3012,7 +3012,7 @@ namespace mml2vgmIDEx64
                     RealChipAutoDetect(setting);
                 }
 
-                log.Write("使用音源のタイプ調査 ＆ Volume設定");
+                Log.Write("使用音源のタイプ調査 ＆ Volume設定");
 
                 foreach (Chip c in chipRegister.CONDUCTOR)
                 {
@@ -3227,7 +3227,7 @@ namespace mml2vgmIDEx64
                 }
 
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 for (int i = 0; i < chipRegister.AY8910.Count; i++)
                     if (chipRegister.AY8910[i].Use) chipRegister.AY8910WriteClock((byte)i, (int)zgmDriver.AY8910ClockValue);
@@ -3262,7 +3262,7 @@ namespace mml2vgmIDEx64
                 for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) chipRegister.YM2612WriteClock((byte)i, (int)zgmDriver.YM2612ClockValue);
 
 
-                log.Write("SSGVolumeセット(GIMIC)");
+                Log.Write("SSGVolumeセット(GIMIC)");
 
                 int SSGVolumeFromTAG = -1;
                 SSGVolumeFromTAG = GetGIMICSSGVolumeFromTAG(zgmDriver.GD3.SystemNameJ);
@@ -3275,12 +3275,12 @@ namespace mml2vgmIDEx64
                 for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) chipRegister.YM2608SetSSGVolume((byte)i, SSGVolumeFromTAG);
 
 
-                log.Write("参照用使用音源の登録(ZGM)");
+                Log.Write("参照用使用音源の登録(ZGM)");
 
                 chipRegister.SetupDicChipCmdNo();
 
 
-                log.Write("演奏停止用音源送信データ作成");
+                Log.Write("演奏停止用音源送信データ作成");
 
                 PackData[] stopData = MakeSoftResetData();
                 sm.SetStopData(stopData);
@@ -3290,13 +3290,13 @@ namespace mml2vgmIDEx64
                 Thread.Sleep(100);
 
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -3310,7 +3310,7 @@ namespace mml2vgmIDEx64
 
                 if (vgmBuf == null || setting == null) return false;
 
-                vgm vgmDriver = (vgm)driver;
+                Vgm vgmDriver = (Vgm)driver;
 
                 ResetFadeOutParam();
                 useChip.Clear();
@@ -3325,7 +3325,7 @@ namespace mml2vgmIDEx64
 
                 MasterVolume = setting.balance.MasterVolume;
 
-                log.Write("ドライバ(VGM)初期化");
+                Log.Write("ドライバ(VGM)初期化");
 
                 if (!driver.init(vgmBuf
                     , chipRegister
@@ -3345,7 +3345,7 @@ namespace mml2vgmIDEx64
                 MasterVolume = setting.balance.MasterVolume;
 
 
-                log.Write("使用チップの調査");
+                Log.Write("使用チップの調査");
                 {
 
                     chipRegister.ClearChipParam();
@@ -3353,7 +3353,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.AY8910ClockValue != 0)
                     {
                         ay8910 ay8910 = new();
-                        for (int i = 0; i < (((vgm)driver).AY8910DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).AY8910DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3366,7 +3366,7 @@ namespace mml2vgmIDEx64
                                 Reset = ay8910.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.AY8910Volume,
-                                Clock = (((vgm)driver).AY8910ClockValue & 0x7fffffff) / 2
+                                Clock = (((Vgm)driver).AY8910ClockValue & 0x7fffffff) / 2
                             };
                             clockAY8910 = (int)chip.Clock;
                             chip.Option = null;
@@ -3383,7 +3383,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_AY8910);
                             }
 
-                            log.Write(string.Format("Use AY8910({0}) Clk:{1}"
+                            Log.Write(string.Format("Use AY8910({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3397,7 +3397,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.POKEYClockValue != 0)
                     {
                         MDSound.pokey pokey = new();
-                        for (int i = 0; i < (((vgm)driver).POKEYDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).POKEYDualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3410,7 +3410,7 @@ namespace mml2vgmIDEx64
                                 Reset = pokey.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.PokeyVolume,
-                                Clock = (((vgm)driver).POKEYClockValue & 0x7fffffff)
+                                Clock = (((Vgm)driver).POKEYClockValue & 0x7fffffff)
                             };
                             clockPOKEY = (int)chip.Clock;
                             chip.Option = null;
@@ -3427,7 +3427,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_POKEY);
                             }
 
-                            log.Write(string.Format("Use POKEY({0}) Clk:{1}"
+                            Log.Write(string.Format("Use POKEY({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3441,7 +3441,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.C140ClockValue != 0)
                     {
                         MDSound.c140 c140 = new();
-                        for (int i = 0; i < (((vgm)driver).C140DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).C140DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3454,8 +3454,8 @@ namespace mml2vgmIDEx64
                                 Reset = c140.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.C140Volume,
-                                Clock = ((vgm)driver).C140ClockValue,
-                                Option = [((vgm)driver).C140Type]
+                                Clock = ((Vgm)driver).C140ClockValue,
+                                Option = [((Vgm)driver).C140Type]
                             };
 
                             hiyorimiDeviceFlag |= 0x2;
@@ -3471,7 +3471,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_C140);
                             }
 
-                            log.Write(string.Format("Use C140({0}) Clk:{1} Type:{2}"
+                            Log.Write(string.Format("Use C140({0}) Clk:{1} Type:{2}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 , chip.Option[0]
@@ -3486,7 +3486,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.SEGAPCMClockValue != 0)
                     {
                         segapcm segapcm = new();
-                        for (int i = 0; i < (((vgm)driver).SEGAPCMDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).SEGAPCMDualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3499,8 +3499,8 @@ namespace mml2vgmIDEx64
                                 Reset = segapcm.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.SEGAPCMVolume,
-                                Clock = ((vgm)driver).SEGAPCMClockValue,
-                                Option = [((vgm)driver).SEGAPCMInterface]
+                                Clock = ((Vgm)driver).SEGAPCMClockValue,
+                                Option = [((Vgm)driver).SEGAPCMInterface]
                             };
 
                             hiyorimiDeviceFlag |= 0x2;
@@ -3516,7 +3516,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_SEGAPCM);
                             }
 
-                            log.Write(string.Format("Use SEGAPCM({0}) Clk:{1} Model:{2} Type:{3}"
+                            Log.Write(string.Format("Use SEGAPCM({0}) Clk:{1} Model:{2} Type:{3}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 , chipRegister.SEGAPCM[i].Model
@@ -3534,7 +3534,7 @@ namespace mml2vgmIDEx64
                         MDSound.sn76489 sn76489 = null;
                         MDSound.SN76496 sn76496 = null;
 
-                        for (int i = 0; i < (((vgm)driver).SN76489DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).SN76489DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip();
                             chip.ID = (byte)i;
@@ -3562,7 +3562,7 @@ namespace mml2vgmIDEx64
 
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.SN76489Volume;
-                            chip.Clock = ((vgm)driver).SN76489ClockValue;
+                            chip.Clock = ((Vgm)driver).SN76489ClockValue;
                             chip.Option = null;
 
                             hiyorimiDeviceFlag |= (setting.SN76489Type.UseScci) ? 0x1 : 0x2;
@@ -3578,7 +3578,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_SN76489);
                             }
 
-                            log.Write(string.Format("Use DCSG({0}) Clk:{1}"
+                            Log.Write(string.Format("Use DCSG({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3596,7 +3596,7 @@ namespace mml2vgmIDEx64
                         MDSound.ym2151_mame ym2151_mame = null;
                         MDSound.ym2151_x68sound ym2151_x68sound = null;
 
-                        for (int i = 0; i < (((vgm)driver).YM2151DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM2151DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip();
                             chip.ID = (byte)i;
@@ -3634,7 +3634,7 @@ namespace mml2vgmIDEx64
 
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.YM2151Volume;
-                            chip.Clock = ((vgm)driver).YM2151ClockValue;
+                            chip.Clock = ((Vgm)driver).YM2151ClockValue;
                             chip.Option = null;
 
                             hiyorimiDeviceFlag |= 0x2;
@@ -3650,7 +3650,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.YM2151);
                             }
 
-                            log.Write(string.Format("Use OPM({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPM({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3664,7 +3664,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YM2203ClockValue != 0)
                     {
                         ym2203 ym2203 = new();
-                        for (int i = 0; i < (((vgm)driver).YM2203DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM2203DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3677,7 +3677,7 @@ namespace mml2vgmIDEx64
                                 Reset = ym2203.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YM2203Volume,
-                                Clock = ((vgm)driver).YM2203ClockValue,
+                                Clock = ((Vgm)driver).YM2203ClockValue,
                                 Option = null
                             };
 
@@ -3694,7 +3694,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.YM2203);
                             }
 
-                            log.Write(string.Format("Use OPN({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPN({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3708,7 +3708,7 @@ namespace mml2vgmIDEx64
                     {
                         emu2413 ym2413 = new();
 
-                        for (int i = 0; i < (((vgm)driver).YM2413DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM2413DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3721,7 +3721,7 @@ namespace mml2vgmIDEx64
                                 Reset = ym2413.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YM2413Volume,
-                                Clock = (((vgm)driver).YM2413ClockValue & 0x7fffffff),
+                                Clock = (((Vgm)driver).YM2413ClockValue & 0x7fffffff),
                                 Option = null
                             };
 
@@ -3738,7 +3738,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YM2413);
                             }
 
-                            log.Write(string.Format("Use OPLL({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPLL({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3780,7 +3780,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YM2608);
                             }
 
-                            log.Write(string.Format("Use OPNA({0}) Clk:{1}"
+                            Log.Write(string.Format("Use OPNA({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3793,7 +3793,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YM2610ClockValue != 0)
                     {
                         ym2610 ym2610 = new();
-                        for (int i = 0; i < (((vgm)driver).YM2610DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM2610DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3806,7 +3806,7 @@ namespace mml2vgmIDEx64
                                 Reset = ym2610.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YM2610Volume,
-                                Clock = ((vgm)driver).YM2610ClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YM2610ClockValue & 0x7fffffff,
                                 Option = null
                             };
 
@@ -3823,7 +3823,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YM2610);
                             }
 
-                            log.Write(string.Format("Use OPNB({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPNB({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -3839,7 +3839,7 @@ namespace mml2vgmIDEx64
                         MDSound.ym3438 ym3438 = null;
                         MDSound.ym2612mame ym2612mame = null;
 
-                        for (int i = 0; i < (((vgm)driver).YM2612DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM2612DualChipFlag ? 2 : 1); i++)
                         {
                             //MDSound.ym2612 ym2612 = new MDSound.ym2612();
                             chip = new MDSound.MDSound.Chip();
@@ -3906,7 +3906,7 @@ namespace mml2vgmIDEx64
 
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.YM2612Volume;
-                            chip.Clock = ((vgm)driver).YM2612ClockValue;
+                            chip.Clock = ((Vgm)driver).YM2612ClockValue;
 
                             hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci) ? 0x1 : 0x2;
                             hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci && setting.YM2612Type.OnlyPCMEmulation) ? 0x2 : 0x0;
@@ -3922,7 +3922,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YM2612);
                             }
 
-                            log.Write(string.Format("Use OPN2({0}) Clk:{1} NukedOPN2Type:{2}"
+                            Log.Write(string.Format("Use OPN2({0}) Clk:{1} NukedOPN2Type:{2}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 , setting.nukedOPN2.EmuType));
@@ -3938,7 +3938,7 @@ namespace mml2vgmIDEx64
                     {
                         rf5c68 rf5c68 = new();
 
-                        for (int i = 0; i < (((vgm)driver).RF5C68DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).RF5C68DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3951,7 +3951,7 @@ namespace mml2vgmIDEx64
                                 Reset = rf5c68.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.RF5C68Volume,
-                                Clock = ((vgm)driver).RF5C68ClockValue,
+                                Clock = ((Vgm)driver).RF5C68ClockValue,
                                 Option = null
                             };
 
@@ -3966,7 +3966,7 @@ namespace mml2vgmIDEx64
                     {
                         MDSound.scd_pcm rf5c164 = new();
 
-                        for (int i = 0; i < (((vgm)driver).RF5C164DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).RF5C164DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -3979,7 +3979,7 @@ namespace mml2vgmIDEx64
                                 Reset = rf5c164.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.RF5C164Volume,
-                                Clock = ((vgm)driver).RF5C164ClockValue,
+                                Clock = ((Vgm)driver).RF5C164ClockValue,
                                 Option = null
                             };
 
@@ -3996,7 +3996,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_RF5C164);
                             }
 
-                            log.Write(string.Format("Use RF5C164({0}) Clk:{1}"
+                            Log.Write(string.Format("Use RF5C164({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4020,7 +4020,7 @@ namespace mml2vgmIDEx64
                             Reset = pwm.Reset,
                             SamplingRate = (UInt32)Common.SampleRate,
                             Volume = setting.balance.PWMVolume,
-                            Clock = ((vgm)driver).PWMClockValue,
+                            Clock = ((Vgm)driver).PWMClockValue,
                             Option = null
                         };
 
@@ -4035,7 +4035,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.MultiPCMClockValue != 0)
                     {
                         MDSound.multipcm multipcm = new();
-                        for (int i = 0; i < (((vgm)driver).MultiPCMDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).MultiPCMDualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4048,7 +4048,7 @@ namespace mml2vgmIDEx64
                                 Reset = multipcm.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.MultiPCMVolume,
-                                Clock = ((vgm)driver).MultiPCMClockValue,
+                                Clock = ((Vgm)driver).MultiPCMClockValue,
                                 Option = null
                             };
 
@@ -4076,8 +4076,8 @@ namespace mml2vgmIDEx64
                             Reset = okim6258.Reset,
                             SamplingRate = (UInt32)Common.SampleRate,
                             Volume = setting.balance.OKIM6258Volume,
-                            Clock = ((vgm)driver).OKIM6258ClockValue,
-                            Option = [(int)((vgm)driver).OKIM6258Type]
+                            Clock = ((Vgm)driver).OKIM6258ClockValue,
+                            Option = [(int)((Vgm)driver).OKIM6258Type]
                         };
                         //chip.Option = new object[1] { 6 };
                         okim6258.okim6258_set_srchg_cb(0, ChangeChipSampleRate, chip);
@@ -4093,7 +4093,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.OKIM6295ClockValue != 0)
                     {
                         okim6295 okim6295 = new();
-                        for (byte i = 0; i < (((vgm)driver).OKIM6295DualChipFlag ? 2 : 1); i++)
+                        for (byte i = 0; i < (((Vgm)driver).OKIM6295DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4106,7 +4106,7 @@ namespace mml2vgmIDEx64
                                 Reset = okim6295.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.OKIM6295Volume,
-                                Clock = ((vgm)driver).OKIM6295ClockValue,
+                                Clock = ((Vgm)driver).OKIM6295ClockValue,
                                 Option = null
                             };
                             okim6295.okim6295_set_srchg_cb(i, ChangeChipSampleRate, chip);
@@ -4124,7 +4124,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YM3526ClockValue != 0)
                     {
                         MDSound.ym3526 ym3526 = new();
-                        for (int i = 0; i < (((vgm)driver).YM3526DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM3526DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4137,7 +4137,7 @@ namespace mml2vgmIDEx64
                                 Reset = ym3526.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YM3526Volume,
-                                Clock = ((vgm)driver).YM3526ClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YM3526ClockValue & 0x7fffffff,
                                 Option = null
                             };
 
@@ -4154,7 +4154,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YM3526);
                             }
 
-                            log.Write(string.Format("Use OPL({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPL({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4167,7 +4167,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YM3812ClockValue != 0)
                     {
                         MDSound.ym3812 ym3812 = new();
-                        for (int i = 0; i < (((vgm)driver).YM3812DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YM3812DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4180,7 +4180,7 @@ namespace mml2vgmIDEx64
                                 Reset = ym3812.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YM3812Volume,
-                                Clock = ((vgm)driver).YM3812ClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YM3812ClockValue & 0x7fffffff,
                                 Option = null
                             };
 
@@ -4197,7 +4197,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YM3812);
                             }
 
-                            log.Write(string.Format("Use OPL2({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPL2({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4210,7 +4210,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YMF262ClockValue != 0)
                     {
                         MDSound.ymf262 ymf262 = new();
-                        for (int i = 0; i < (((vgm)driver).YMF262DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YMF262DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4223,7 +4223,7 @@ namespace mml2vgmIDEx64
                                 Reset = ymf262.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YMF262Volume,
-                                Clock = ((vgm)driver).YMF262ClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YMF262ClockValue & 0x7fffffff,
                                 Option = null
                             };
 
@@ -4240,7 +4240,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YMF262);
                             }
 
-                            log.Write(string.Format("Use OPL3({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPL3({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4253,7 +4253,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YMF271ClockValue != 0)
                     {
                         MDSound.ymf271 ymf271 = new();
-                        for (int i = 0; i < (((vgm)driver).YMF271DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YMF271DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4266,7 +4266,7 @@ namespace mml2vgmIDEx64
                                 Reset = ymf271.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YMF271Volume,
-                                Clock = ((vgm)driver).YMF271ClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YMF271ClockValue & 0x7fffffff,
                                 Option = null
                             };
 
@@ -4283,7 +4283,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_YMF271);
                             }
 
-                            log.Write(string.Format("Use OPX({0}) Clk:{1} "
+                            Log.Write(string.Format("Use OPX({0}) Clk:{1} "
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4296,7 +4296,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YMF278BClockValue != 0)
                     {
                         MDSound.ymf278b ymf278b = new();
-                        for (int i = 0; i < (((vgm)driver).YMF278BDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YMF278BDualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4309,7 +4309,7 @@ namespace mml2vgmIDEx64
                                 Reset = ymf278b.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YMF278BVolume,
-                                Clock = ((vgm)driver).YMF278BClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YMF278BClockValue & 0x7fffffff,
                                 Option = [Common.GetApplicationFolder()]
                             };
 
@@ -4326,7 +4326,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.YMZ280BClockValue != 0)
                     {
                         MDSound.ymz280b ymz280b = new();
-                        for (int i = 0; i < (((vgm)driver).YMZ280BDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).YMZ280BDualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4339,7 +4339,7 @@ namespace mml2vgmIDEx64
                                 Reset = ymz280b.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.YMZ280BVolume,
-                                Clock = ((vgm)driver).YMZ280BClockValue & 0x7fffffff,
+                                Clock = ((Vgm)driver).YMZ280BClockValue & 0x7fffffff,
                                 Option = null
                             };
 
@@ -4356,7 +4356,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.HuC6280ClockValue != 0)
                     {
                         MDSound.Ootake_PSG huc6280 = new();
-                        for (int i = 0; i < (((vgm)driver).HuC6280DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).HuC6280DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4369,7 +4369,7 @@ namespace mml2vgmIDEx64
                                 Reset = huc6280.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.HuC6280Volume,
-                                Clock = (((vgm)driver).HuC6280ClockValue & 0x7fffffff),
+                                Clock = (((Vgm)driver).HuC6280ClockValue & 0x7fffffff),
                                 Option = null
                             };
 
@@ -4386,7 +4386,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_HuC6280);
                             }
 
-                            log.Write(string.Format("Use HuC6280({0}) Clk:{1}"
+                            Log.Write(string.Format("Use HuC6280({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4399,7 +4399,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.C352ClockValue != 0)
                     {
                         c352 c352 = new();
-                        for (int i = 0; i < (((vgm)driver).C352DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).C352DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4412,12 +4412,12 @@ namespace mml2vgmIDEx64
                                 Reset = c352.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.C352Volume,
-                                Clock = (((vgm)driver).C352ClockValue & 0x7fffffff),
-                                Option = [(((vgm)driver).C352ClockDivider)]
+                                Clock = (((Vgm)driver).C352ClockValue & 0x7fffffff),
+                                Option = [(((Vgm)driver).C352ClockDivider)]
                             };
-                            int divider = (ushort)((((vgm)driver).C352ClockDivider) != 0 ? (((vgm)driver).C352ClockDivider) : 288);
+                            int divider = (ushort)((((Vgm)driver).C352ClockDivider) != 0 ? (((Vgm)driver).C352ClockDivider) : 288);
                             clockC352 = (int)(chip.Clock / divider);
-                            c352.c352_set_options((byte)(((vgm)driver).C352ClockValue >> 31));
+                            c352.c352_set_options((byte)(((Vgm)driver).C352ClockValue >> 31));
                             hiyorimiDeviceFlag |= 0x2;
 
                             if (i == 0)
@@ -4431,7 +4431,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_C352);
                             }
 
-                            log.Write(string.Format("Use C352({0}) Clk:{1} Type:{2}"
+                            Log.Write(string.Format("Use C352({0}) Clk:{1} Type:{2}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 , chip.Option[0]
@@ -4446,7 +4446,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.GA20ClockValue != 0)
                     {
                         MDSound.iremga20 ga20 = new();
-                        for (int i = 0; i < (((vgm)driver).GA20DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).GA20DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4459,7 +4459,7 @@ namespace mml2vgmIDEx64
                                 Reset = ga20.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.GA20Volume,
-                                Clock = (((vgm)driver).GA20ClockValue & 0x7fffffff),
+                                Clock = (((Vgm)driver).GA20ClockValue & 0x7fffffff),
                                 Option = null
                             };
                             hiyorimiDeviceFlag |= 0x2;
@@ -4476,7 +4476,7 @@ namespace mml2vgmIDEx64
                     {
                         MDSound.K051649 k051649 = new();
 
-                        for (int i = 0; i < (((vgm)driver).K051649DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).K051649DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4489,7 +4489,7 @@ namespace mml2vgmIDEx64
                                 Reset = k051649.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.K051649Volume,
-                                Clock = ((vgm)driver).K051649ClockValue
+                                Clock = ((Vgm)driver).K051649ClockValue
                             };
                             clockK051649 = (int)chip.Clock;
                             chip.Option = null;
@@ -4507,7 +4507,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_K051649);
                             }
 
-                            log.Write(string.Format("Use K051649({0}) Clk:{1}"
+                            Log.Write(string.Format("Use K051649({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4521,7 +4521,7 @@ namespace mml2vgmIDEx64
                     {
                         MDSound.K053260 k053260 = new();
 
-                        for (int i = 0; i < (((vgm)driver).K053260DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).K053260DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4534,7 +4534,7 @@ namespace mml2vgmIDEx64
                                 Reset = k053260.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.K053260Volume,
-                                Clock = ((vgm)driver).K053260ClockValue,
+                                Clock = ((Vgm)driver).K053260ClockValue,
                                 Option = null
                             };
 
@@ -4551,7 +4551,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_K053260);
                             }
 
-                            log.Write(string.Format("Use K053260({0}) Clk:{1}"
+                            Log.Write(string.Format("Use K053260({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4565,7 +4565,7 @@ namespace mml2vgmIDEx64
                     {
                         MDSound.K054539 k054539 = new();
 
-                        for (int i = 0; i < (((vgm)driver).K054539DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).K054539DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4578,7 +4578,7 @@ namespace mml2vgmIDEx64
                                 Reset = k054539.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.K054539Volume,
-                                Clock = ((vgm)driver).K054539ClockValue,
+                                Clock = ((Vgm)driver).K054539ClockValue,
                                 Option = null
                             };
 
@@ -4593,7 +4593,7 @@ namespace mml2vgmIDEx64
                                 useChip.Add(EnmChip.S_K054539);
                             }
 
-                            log.Write(string.Format("Use K054539({0}) Clk:{1}"
+                            Log.Write(string.Format("Use K054539({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4619,7 +4619,7 @@ namespace mml2vgmIDEx64
                             Reset = qsound.Reset,
                             SamplingRate = (UInt32)Common.SampleRate,
                             Volume = setting.balance.QSoundVolume,
-                            Clock = (((vgm)driver).QSoundClockValue),// & 0x7fffffff);
+                            Clock = (((Vgm)driver).QSoundClockValue),// & 0x7fffffff);
                             Option = null
                         };
 
@@ -4630,7 +4630,7 @@ namespace mml2vgmIDEx64
                         chipLED.PriQsnd = 1;
                         useChip.Add(EnmChip.QSound);
 
-                        log.Write(string.Format("Use QSound({0}) Clk:{1}"
+                        Log.Write(string.Format("Use QSound({0}) Clk:{1}"
                             , "Pri"
                             , chip.Clock
                             ));
@@ -4643,7 +4643,7 @@ namespace mml2vgmIDEx64
                     {
                         MDSound.y8950 y8950 = new();
 
-                        for (int i = 0; i < (((vgm)driver).Y8950DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).Y8950DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4656,7 +4656,7 @@ namespace mml2vgmIDEx64
                                 Reset = y8950.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.Y8950Volume,
-                                Clock = ((vgm)driver).Y8950ClockValue,
+                                Clock = ((Vgm)driver).Y8950ClockValue,
                                 Option = null
                             };
                             if (i == 0)
@@ -4672,7 +4672,7 @@ namespace mml2vgmIDEx64
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            log.Write(string.Format("Use Y8950({0}) Clk:{1}"
+                            Log.Write(string.Format("Use Y8950({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4686,7 +4686,7 @@ namespace mml2vgmIDEx64
                     {
                         MDSound.gb dmg = new();
 
-                        for (int i = 0; i < (((vgm)driver).DMGDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).DMGDualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip
                             {
@@ -4699,7 +4699,7 @@ namespace mml2vgmIDEx64
                                 Reset = dmg.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.DMGVolume,
-                                Clock = ((vgm)driver).DMGClockValue,
+                                Clock = ((Vgm)driver).DMGClockValue,
                                 Option = null
                             };
                             if (i == 0) chipLED.PriDMG = 1;
@@ -4707,7 +4707,7 @@ namespace mml2vgmIDEx64
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            log.Write(string.Format("Use DMG({0}) Clk:{1}"
+                            Log.Write(string.Format("Use DMG({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4721,7 +4721,7 @@ namespace mml2vgmIDEx64
                     if (vgmDriver.NESClockValue != 0)
                     {
 
-                        for (int i = 0; i < (((vgm)driver).NESDualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < (((Vgm)driver).NESDualChipFlag ? 2 : 1); i++)
                         {
                             MDSound.nes_intf nes = new();
                             chip = new MDSound.MDSound.Chip
@@ -4735,13 +4735,13 @@ namespace mml2vgmIDEx64
                                 Reset = nes.Reset,
                                 SamplingRate = (UInt32)Common.SampleRate,
                                 Volume = setting.balance.APUVolume,
-                                Clock = ((vgm)driver).NESClockValue,
+                                Clock = ((Vgm)driver).NESClockValue,
                                 Option = null
                             };
                             if (i == 0) chipLED.PriNES = 1;
                             else chipLED.SecNES = 1;
 
-                            log.Write(string.Format("Use NES({0}) Clk:{1}"
+                            Log.Write(string.Format("Use NES({0}) Clk:{1}"
                                 , (i == 0) ? "Pri" : "Sec"
                                 , chip.Clock
                                 ));
@@ -4760,7 +4760,7 @@ namespace mml2vgmIDEx64
                             chip.Reset = nes.Reset;
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.DMCVolume;
-                            chip.Clock = ((vgm)driver).NESClockValue;
+                            chip.Clock = ((Vgm)driver).NESClockValue;
                             chip.Option = null;
                             if (i == 0) chipLED.PriDMC = 1;
                             else chipLED.SecDMC = 1;
@@ -4779,7 +4779,7 @@ namespace mml2vgmIDEx64
                             chip.Reset = nes.Reset;
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.FDSVolume;
-                            chip.Clock = ((vgm)driver).NESClockValue;
+                            chip.Clock = ((Vgm)driver).NESClockValue;
                             chip.Option = null;
                             if (i == 0) chipLED.PriFDS = 1;
                             else chipLED.SecFDS = 1;
@@ -4817,16 +4817,16 @@ namespace mml2vgmIDEx64
                 if (hiyorimiDeviceFlag == 0x3 && hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
 
                 InitMDSound(lstChips);
 
-                log.Write("MDSound DAC control 初期化");
-                mds.dacControl.init((uint)Common.SampleRate, mds, ((vgm)driver).PCMBank);
+                Log.Write("MDSound DAC control 初期化");
+                mds.dacControl.init((uint)Common.SampleRate, mds, ((Vgm)driver).PCMBank);
                 chipRegister.DACControl[0].Use = true;
                 chipRegister.DACControl[0].Model = EnmVRModel.VirtualModel;
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -5017,7 +5017,7 @@ namespace mml2vgmIDEx64
                     }
                 }
 
-                log.Write("Volume 設定");
+                Log.Write("Volume 設定");
 
                 if (chipRegister.YM2203[0].Use || chipRegister.YM2203[1].Use)
                 {
@@ -5041,7 +5041,7 @@ namespace mml2vgmIDEx64
                     SetYM2610AdpcmBVolume(true, setting.balance.YM2610AdpcmBVolume);
                 }
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 for (int i = 0; i < 2; i++)
                 {
@@ -5074,7 +5074,7 @@ namespace mml2vgmIDEx64
 
 
                 //
-                log.Write("GIMIC向け SSGVolumeセット");
+                Log.Write("GIMIC向け SSGVolumeセット");
                 //
 
                 int SSGVolumeFromTAG = -1;
@@ -5101,13 +5101,13 @@ namespace mml2vgmIDEx64
 
                 //Stopped = false;
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -5182,7 +5182,7 @@ namespace mml2vgmIDEx64
                         useChip.Add(EnmChip.S_YM2608);
                     }
 
-                    log.Write(string.Format("Use OPNA({0}) Clk:{1}"
+                    Log.Write(string.Format("Use OPNA({0}) Clk:{1}"
                         , (i == 0) ? "Pri" : "Sec"
                         , chip.Clock
                         ));
@@ -5222,7 +5222,7 @@ namespace mml2vgmIDEx64
                         useChip.Add(EnmChip.S_YM2610);
                     }
 
-                    log.Write(string.Format("Use OPNB({0}) Clk:{1}"
+                    Log.Write(string.Format("Use OPNB({0}) Clk:{1}"
                         , (i == 0) ? "Pri" : "Sec"
                         , chip.Clock
                         ));
@@ -5262,7 +5262,7 @@ namespace mml2vgmIDEx64
                         useChip.Add(EnmChip.S_YM2151);
                     }
 
-                    log.Write(string.Format("Use OPM({0}) Clk:{1}"
+                    Log.Write(string.Format("Use OPM({0}) Clk:{1}"
                         , (i == 0) ? "Pri" : "Sec"
                         , chip.Clock
                         ));
@@ -5292,13 +5292,13 @@ namespace mml2vgmIDEx64
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
                 string errMsg = mds.ReadErrMsgYM2608(0) + mds.ReadErrMsgYM2608(1);
-                if(!string.IsNullOrEmpty(errMsg))log.Write(errMsg);
+                if(!string.IsNullOrEmpty(errMsg))Log.Write(errMsg);
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -5354,7 +5354,7 @@ namespace mml2vgmIDEx64
                     mds.ChangeYM2610_PSGMode(1, 1);
                 }
 
-                log.Write("Volume 設定");
+                Log.Write("Volume 設定");
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
                 SetYM2608FMVolume(true, setting.balance.YM2608FMVolume);
@@ -5375,7 +5375,7 @@ namespace mml2vgmIDEx64
 
                 SetYM2151Volume(true, setting.balance.YM2151Volume);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 chipRegister.YM2608WriteClock((byte)0, (int)mubDriver.YM2608ClockValue);
                 chipRegister.YM2608WriteClock((byte)1, (int)mubDriver.YM2608ClockValue);
@@ -5393,7 +5393,7 @@ namespace mml2vgmIDEx64
 
                 //Thread.Sleep(100);
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
 
 
@@ -5401,7 +5401,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -5518,10 +5518,10 @@ namespace mml2vgmIDEx64
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -5543,15 +5543,15 @@ namespace mml2vgmIDEx64
                     isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
                 }
 
-                log.Write("Volume(emu) 設定");
+                Log.Write("Volume(emu) 設定");
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 chipRegister.YM2608WriteClock((byte)0, (int)mDriver.YM2608ClockValue);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
 
                 if (!mDriver.init(mBuf, mWorkPath, PMDManager, chipRegister, [EnmChip.YM2608]
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
@@ -5594,7 +5594,7 @@ namespace mml2vgmIDEx64
 
                 //Thread.Sleep(100);
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
 
 
@@ -5602,7 +5602,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -5658,10 +5658,10 @@ namespace mml2vgmIDEx64
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -5683,13 +5683,13 @@ namespace mml2vgmIDEx64
                     //isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
                 }
 
-                log.Write("Volume(emu) 設定");
+                Log.Write("Volume(emu) 設定");
                 SetYMF278BVolume(true, setting.balance.YMF278BVolume);
 
                 //log.Write("Clock 設定");
                 //chipRegister.YMF278BWriteClock((byte)0, (int)mdrDriver.YMF278BClockValue);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
                 if (!mdrDriver.init(mdrBuf, mdrWorkPath, MoonDriverManager, chipRegister, [EnmChip.YMF278B]
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
                     , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
@@ -5719,13 +5719,13 @@ namespace mml2vgmIDEx64
 
                 //Thread.Sleep(100);
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -5777,7 +5777,7 @@ namespace mml2vgmIDEx64
                     chipLED.PriOPNA = 1;
                     useChip.Add(EnmChip.YM2608);
 
-                log.Write(string.Format("Use OPNA({0}) Clk:{1}"
+                Log.Write(string.Format("Use OPNA({0}) Clk:{1}"
                     , "Pri"
                     , chip.Clock
                     ));
@@ -5857,7 +5857,7 @@ namespace mml2vgmIDEx64
 
                 if (chip.Clock != 0)
                 {
-                    log.Write(string.Format("Use OPN2({0}) Clk:{1} NukedOPN2Type:{2}"
+                    Log.Write(string.Format("Use OPN2({0}) Clk:{1} NukedOPN2Type:{2}"
                         , "Pri"
                         , chip.Clock
                         , setting.nukedOPN2.EmuType));
@@ -5886,7 +5886,7 @@ namespace mml2vgmIDEx64
                     Option = null
                 };
 
-                log.Write(string.Format("Use CS4231(Pri) Clk:{0}"
+                Log.Write(string.Format("Use CS4231(Pri) Clk:{0}"
                     , chip.Clock
                     ));
                 chipLED.PriCS4231 = 1;
@@ -5898,13 +5898,13 @@ namespace mml2vgmIDEx64
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
-                log.Write("MDSound 初期化");
+                Log.Write("MDSound 初期化");
                 InitMDSound(lstChips);
 
                 string errMsg = mds.ReadErrMsgYM2608(0);
-                if (!string.IsNullOrEmpty(errMsg)) log.Write(errMsg);
+                if (!string.IsNullOrEmpty(errMsg)) Log.Write(errMsg);
 
-                log.Write("ChipRegister 初期化");
+                Log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister([.. lstChips]);
 
@@ -5936,7 +5936,7 @@ namespace mml2vgmIDEx64
                     isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
                 }
 
-                log.Write("Volume(emu) 設定");
+                Log.Write("Volume(emu) 設定");
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
                 SetYM2608FMVolume(true, setting.balance.YM2608FMVolume);
                 SetYM2608PSGVolume(true, setting.balance.YM2608PSGVolume);
@@ -5950,7 +5950,7 @@ namespace mml2vgmIDEx64
 
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
 
-                log.Write("Clock 設定");
+                Log.Write("Clock 設定");
                 chipRegister.YM2608WriteClock((byte)0, (int)mupDriver.YM2608ClockValue);
                 chipRegister.YM2612WriteClock((byte)0, (int)mupDriver.YM2612ClockValue);
 
@@ -5982,13 +5982,13 @@ namespace mml2vgmIDEx64
 
                 //Thread.Sleep(100);
 
-                log.Write("初期化完了");
+                Log.Write("初期化完了");
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 return false;
             }
 
@@ -6142,7 +6142,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
 
         }
@@ -6233,7 +6233,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 
@@ -6256,7 +6256,7 @@ namespace mml2vgmIDEx64
             if (driver == null) return -1;
 
 
-            if (driver is vgm || driver is Driver.ZGM.zgm || driver is muapM)
+            if (driver is Vgm || driver is Driver.ZGM.Zgm || driver is muapM)
             {
                 return sm.GetDataSenderBufferCounter();
             }
@@ -6400,7 +6400,7 @@ namespace mml2vgmIDEx64
                 }
                 else
                 {
-                    log.ForcedWrite(e.Exception);
+                    Log.ForcedWrite(e.Exception);
                     System.Windows.Forms.MessageBox.Show(
                         string.Format("外部アプリからデバイスが初期化されました。本アプリを再起動してください。\r\nメッセージ:\r\n{0}", e.Exception.Message)
                         , "エラー"
@@ -6420,7 +6420,7 @@ namespace mml2vgmIDEx64
                 }
                 catch (Exception ex)
                 {
-                    log.ForcedWrite(ex);
+                    Log.ForcedWrite(ex);
                 }
 
             }
@@ -6716,7 +6716,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 fatalError = true;
                 Stopped = true;
             }

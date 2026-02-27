@@ -236,7 +236,7 @@ namespace Corex64
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E08004"), new LinePos(null, "-"));
+            msgBox.setWrnMsg(Msg.get("E08004"), new LinePos(null, "-"));
         }
 
 
@@ -657,14 +657,14 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E08000")
+                msgBox.setErrMsg(Msg.get("E08000")
                     , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E08001")
+                msgBox.setErrMsg(Msg.get("E08001")
                     , mml.line.Lp);
                 return;
             }
@@ -685,13 +685,13 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E08002"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E08002"), n), mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.AY8910)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E08003"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E08003"), n), mml.line.Lp);
             }
 
             if (re) page.instrument += n;

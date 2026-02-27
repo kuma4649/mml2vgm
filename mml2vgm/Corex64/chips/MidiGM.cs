@@ -125,7 +125,7 @@ namespace Corex64
             int vt = 0;
             if (mml.args.Count != 2 || ((char)mml.args[1] != 'V' && (char)mml.args[1] != 'T'))
             {
-                msgBox.setWrnMsg(msg.get("W25000"), mml.line.Lp);
+                msgBox.setWrnMsg(Msg.get("W25000"), mml.line.Lp);
                 return;
             }
             vt = ((char)mml.args[1] == 'V') ? 0 : 1;
@@ -664,7 +664,7 @@ namespace Corex64
                     //    }
                     //}
 
-                    log.Write("KeyOn情報をかき出し");
+                    Log.Write("KeyOn情報をかき出し");
                     foreach (MIDINote n in page.noteOns)
                     {
                         if (n == null) continue;

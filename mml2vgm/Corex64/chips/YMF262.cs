@@ -180,7 +180,7 @@ namespace Corex64
 
             if (page.isOp4Mode)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E26001"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E26001"), n), mml.line.Lp);
                 return;
             }
 
@@ -263,7 +263,7 @@ namespace Corex64
         {
             if (!parent.instOPL.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E11000"), n), mml.line.Lp);
                 return;
             }
 

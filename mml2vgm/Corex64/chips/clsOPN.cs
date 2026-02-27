@@ -155,7 +155,7 @@ namespace Corex64
             }
             if (page.instrument < 0)
             {
-                msgBox.setErrMsg(msg.get("E11014")
+                msgBox.setErrMsg(Msg.get("E11014")
                         , mml?.line.Lp);
                 return;
             }
@@ -491,7 +491,7 @@ namespace Corex64
 
             if (page.instrument < 0)
             {
-                msgBox.setErrMsg(msg.get("E11014")
+                msgBox.setErrMsg(Msg.get("E11014")
                         , mml?.line.Lp);
                 return;
             }
@@ -882,7 +882,7 @@ namespace Corex64
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E11005"), opV), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E11005"), opV), mml.line.Lp);
                         break;
                     }
                     opV /= 10;
@@ -1095,7 +1095,7 @@ namespace Corex64
 
             if (!parent.instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11001"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E11001"), n), mml.line.Lp);
                 return;
             }
 
@@ -2186,13 +2186,13 @@ namespace Corex64
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
@@ -2917,7 +2917,7 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E11003"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E11003"), mml.line.Lp);
                 return;
             }
 
@@ -2957,7 +2957,7 @@ namespace Corex64
 
                 if (!parent.instPCM.ContainsKey(n))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E11008"), n), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E11008"), n), mml.line.Lp);
                     return;
                 }
 
@@ -2966,7 +2966,7 @@ namespace Corex64
                     && parent.instPCM[n].Item2.chip != enmChipType.YM2610B
                     && parent.instPCM[n].Item2.chip != enmChipType.YM2609)
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E11009"), n, _Name), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E11009"), n, _Name), mml.line.Lp);
                 }
 
                 if (re) page.instrument += n;
@@ -2990,7 +2990,7 @@ namespace Corex64
 
             if (!(mml.args[0] is string))
             {
-                msgBox.setErrMsg(msg.get("E11004")
+                msgBox.setErrMsg(Msg.get("E11004")
                     , mml.line.Lp);
 
                 return;
@@ -3136,7 +3136,7 @@ namespace Corex64
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E11013"), n), mml == null ? null : mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E11013"), n), mml == null ? null : mml.line.Lp);
                     break;
                 }
                 n /= 10;
@@ -3461,7 +3461,7 @@ namespace Corex64
         {
             if (mml.args == null || (mml.args.Count != 4 && mml.args.Count != 1))
             {
-                msgBox.setErrMsg(msg.get("E11006")
+                msgBox.setErrMsg(Msg.get("E11006")
                     , mml.line.Lp);
 
                 return;
@@ -3472,7 +3472,7 @@ namespace Corex64
             {
                 if (!(mml.args[0] is int))
                 {
-                    msgBox.setErrMsg(msg.get("E11007")
+                    msgBox.setErrMsg(Msg.get("E11007")
                         , mml.line.Lp);
                     return;
                 }
@@ -3487,7 +3487,7 @@ namespace Corex64
             {
                 if (!(mml.args[i] is int))
                 {
-                    msgBox.setErrMsg(msg.get("E11007")
+                    msgBox.setErrMsg(Msg.get("E11007")
                         , mml.line.Lp);
                     return;
                 }
@@ -3527,14 +3527,14 @@ namespace Corex64
         {
             if (mml.args == null || (mml.args.Count != 1&& mml.args.Count != 2))
             {
-                msgBox.setErrMsg(msg.get("E11010")
+                msgBox.setErrMsg(Msg.get("E11010")
                     , mml.line.Lp);
                 return;
             }
 
             if(!(mml.args[0] is bool))
             {
-                msgBox.setErrMsg(msg.get("E11010")
+                msgBox.setErrMsg(Msg.get("E11010")
                     , mml.line.Lp);
                 return;
             }
@@ -3562,14 +3562,14 @@ namespace Corex64
                 && page.Type != enmChannelType.FMOPNex
                 && (page.Type != enmChannelType.FMPCMex || page.pcm))
             {
-                msgBox.setErrMsg(msg.get("E11012")
+                msgBox.setErrMsg(Msg.get("E11012")
                         , mml.line.Lp);
                 return;
             }
 
             if (mml.args == null || mml.args.Count < 2)
             {
-                msgBox.setErrMsg(msg.get("E11012")
+                msgBox.setErrMsg(Msg.get("E11012")
                     , mml.line.Lp);
                 return;
             }

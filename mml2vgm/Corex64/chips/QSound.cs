@@ -205,7 +205,7 @@ namespace Corex64
                 if (newDic[v.Key].Item2.loopAdr != -1 
                     && (newDic[v.Key].Item2.loopAdr < freeAdr || v.Value.loopAdr >= size))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E22000")
+                    msgBox.setErrMsg(string.Format(Msg.get("E22000")
                         , newDic[v.Key].Item2.loopAdr
                         , size - 1), new LinePos(null,"-"));
                     newDic[v.Key].Item2.loopAdr = -1;
@@ -345,7 +345,7 @@ namespace Corex64
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos(null,"-");
-                msgBox.setErrMsg(msg.get("E22005"), lp);
+                msgBox.setErrMsg(Msg.get("E22005"), lp);
                 return;
             }
 
@@ -648,14 +648,14 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E22001")
+                msgBox.setErrMsg(Msg.get("E22001")
                     , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E22002")
+                msgBox.setErrMsg(Msg.get("E22002")
                     , mml.line.Lp);
                 return;
             }
@@ -671,14 +671,14 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E22003"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E22003"), n)
                     , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.QSound)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E22004"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E22004"), n)
                     , mml.line.Lp);
                 return;
             }

@@ -2,13 +2,13 @@
 
 namespace Corex64
 {
-    public interface dv
+    public interface IDv
     {
         bool eq();
         void rst();
     }
 
-    public class dbool : dv
+    public class Dbool : IDv
     {
         public bool eq()
         {
@@ -24,9 +24,9 @@ namespace Corex64
         private bool? s;
     }
 
-    public class dint : dv
+    public class Dint : IDv
     {
-        public dint(int val)
+        public Dint(int val)
         {
             this.val = val;
             s = null;
@@ -45,14 +45,14 @@ namespace Corex64
         public int? val;
         private int? s;
 
-        public static implicit operator dint(int v)
+        public static implicit operator Dint(int v)
         {
             throw new NotImplementedException();
         }
 
     }
 
-    public class dlong : dv
+    public class Dlong : IDv
     {
         public bool eq()
         {
@@ -68,7 +68,7 @@ namespace Corex64
         private long? s;
     }
 
-    public class dfloat : dv
+    public class Dfloat : IDv
     {
         public bool eq()
         {
@@ -84,7 +84,7 @@ namespace Corex64
         private float? s;
     }
 
-    public class dbyte : dv
+    public class Dbyte : IDv
     {
         public bool eq()
         {
@@ -100,7 +100,7 @@ namespace Corex64
         private byte? s;
     }
 
-    public class dchar : dv
+    public class Dchar : IDv
     {
         public bool eq()
         {
@@ -116,7 +116,7 @@ namespace Corex64
         private char? s;
     }
 
-    public class ddouble : dv
+    public class Ddouble : IDv
     {
         public bool eq()
         {

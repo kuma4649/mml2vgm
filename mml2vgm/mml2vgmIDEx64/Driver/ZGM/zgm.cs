@@ -6,7 +6,7 @@ using static MDSound.dacControl;
 
 namespace mml2vgmIDEx64.Driver.ZGM
 {
-    public class zgm : baseDriver
+    public class Zgm : baseDriver
     {
 
         public const int FCC_ZGM = 0x204D475A;	// "ZGM "
@@ -142,7 +142,7 @@ namespace mml2vgmIDEx64.Driver.ZGM
             }
             catch (Exception e)
             {
-                log.Write(e.StackTrace);
+                Log.Write(e.StackTrace);
                 return false;
             }
 
@@ -182,7 +182,7 @@ namespace mml2vgmIDEx64.Driver.ZGM
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
 
             }
         }

@@ -17,7 +17,7 @@ namespace Corex64
 
         public int Parse(List<Line> src)
         {
-            log.Write("テキスト解析開始");
+            Log.Write("テキスト解析開始");
 
             bool multiLine = false;
 
@@ -89,7 +89,7 @@ namespace Corex64
             DivChipParts();
             dicChipPartName = GetChipPartNames();
 
-            log.Write("テキスト解析完了");
+            Log.Write("テキスト解析完了");
             return 0;
 
         }
@@ -146,7 +146,7 @@ namespace Corex64
                 catch
                 {
                     //パート解析に失敗 
-                    msgBox.setErrMsg(string.Format(msg.get("E02010"), parts), ln.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E02010"), parts), ln.Lp);
                 }
             }
 
@@ -478,7 +478,7 @@ namespace Corex64
                     if (cpn[e].Item4[f] != 0)
                     {
                         msgBox.setErrMsg(string.Format(
-                            msg.get("E24000")
+                            Msg.get("E24000")
                             , info.format.ToString()
                             , cpn[e].Item4[f]
                             , c
@@ -487,7 +487,7 @@ namespace Corex64
                     else
                     {
                         msgBox.setErrMsg(string.Format(
-                            msg.get("E24001")
+                            Msg.get("E24001")
                             , info.format
                             , cpn[e].Item1
                             , c

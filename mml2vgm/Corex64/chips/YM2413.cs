@@ -116,7 +116,7 @@ namespace Corex64
 
             if (!parent.instOPL.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E17000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E17000"), n), mml.line.Lp);
                 return;
             }
 
@@ -334,7 +334,7 @@ namespace Corex64
         {
             if (!parent.instOPL.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E11000"), n), mml.line.Lp);
                 return;
             }
 
@@ -530,7 +530,7 @@ namespace Corex64
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E17001"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E17001"), mml.line.Lp);
                 return;
             }
 

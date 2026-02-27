@@ -46,7 +46,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception ex)
                     {
-                        log.ForcedWrite(ex);
+                        Log.ForcedWrite(ex);
                     }
                 }
             }
@@ -56,8 +56,8 @@ namespace mml2vgmIDEx64
         {
             lock (lockobj)
             {
-                ScriptEngine engine;
-                ScriptRuntime runtime = null;
+                //ScriptEngine engine;
+                //ScriptRuntime runtime = null;
 
                 try
                 {
@@ -116,7 +116,7 @@ namespace mml2vgmIDEx64
                 }
                 catch (Exception ex)
                 {
-                    log.ForcedWrite(ex);
+                    Log.ForcedWrite(ex);
                     // キャッシュクリア
                     if (cachedScopes.ContainsKey(path))
                         cachedScopes.Remove(path);
@@ -181,7 +181,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
             finally
             {
@@ -319,7 +319,7 @@ namespace mml2vgmIDEx64
         /// <param name="msg"></param>
         public void msgDebugWindow(string msg)
         {
-            log.Write(msg);
+            Log.Write(msg);
         }
 
         public byte[] ReadFileAllBytes(string fullPath)

@@ -362,7 +362,7 @@ namespace SoundManager
             }
             catch (Exception ex)
             {
-                mml2vgmIDEx64.log.ForcedWrite(ex);
+                mml2vgmIDEx64.Log.ForcedWrite(ex);
                 lock (lockObj)
                 {
                     isRunning = false;

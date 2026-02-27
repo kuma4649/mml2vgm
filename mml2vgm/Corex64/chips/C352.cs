@@ -194,7 +194,7 @@ namespace Corex64
 
                 if (newDic[v.Key].Item2.loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E09000")
+                    msgBox.setErrMsg(string.Format(Msg.get("E09000")
                         , newDic[v.Key].Item2.loopAdr
                         , size - 1), new LinePos(null, "-"));
                     newDic[v.Key].Item2.loopAdr = -1;
@@ -718,14 +718,14 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E27001")
+                msgBox.setErrMsg(Msg.get("E27001")
                     , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E27002")
+                msgBox.setErrMsg(Msg.get("E27002")
                     , mml.line.Lp);
                 return;
             }
@@ -741,14 +741,14 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E27003"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E27003"), n)
                     , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.C352)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E27004"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E27004"), n)
                     , mml.line.Lp);
                 return;
             }

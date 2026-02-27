@@ -125,7 +125,7 @@ namespace Corex64
                 }
                 catch
                 {
-                    msgBox.setWrnMsg(string.Format(msg.get("E03000"), ln.Txt), ln.Lp);
+                    msgBox.setWrnMsg(string.Format(Msg.get("E03000"), ln.Txt), ln.Lp);
                 }
             }
 

@@ -335,21 +335,21 @@ namespace mml2vgmIDEx64
             qi.doc.wrnBox = msgBox.getWrn();
 
             disp("\r\n");
-            disp(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            disp(string.Format(Msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
             if (mv.desVGM.loopSamples != -1)
             {
-                disp(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                disp(string.Format(Msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    disp(string.Format(msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / 44100L));
+                    disp(string.Format(Msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / 44100L));
                 else
-                    disp(string.Format(msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+                    disp(string.Format(Msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
-            disp(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            disp(string.Format(Msg.get("I0113"), mv.desVGM.lClock));
             if (mv.desVGM.info.format == enmFormat.VGM)
-                disp(string.Format(msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
+                disp(string.Format(Msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
             else
-                disp(string.Format(msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
-            disp(msg.get("I0126"));
+                disp(string.Format(Msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
+            disp(Msg.get("I0126"));
 
             if (result == 0)
             {

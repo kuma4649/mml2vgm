@@ -77,7 +77,7 @@ namespace mml2vgmIDEx64
             try { base.WndProc(ref m); }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 

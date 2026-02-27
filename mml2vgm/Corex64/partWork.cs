@@ -366,7 +366,7 @@ namespace Corex64
                     }
                     else
                     {
-                        msgBox.setWrnMsg(msg.get("E06000")
+                        msgBox.setWrnMsg(Msg.get("E06000")
                             , (aliesName == "") ? page.pData[row].Lp : aData[aliesName].Lp
                             );
                         col++;

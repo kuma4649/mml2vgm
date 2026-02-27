@@ -36,16 +36,16 @@ namespace mml2vgmIDEx64
 
         public RealChip(bool sw)
         {
-            log.ForcedWrite("RealChip:Ctr:STEP 00(Start)");
+            Log.ForcedWrite("RealChip:Ctr:STEP 00(Start)");
             if (!sw)
             {
-                log.ForcedWrite("RealChip:Not Initialize(user)");
+                Log.ForcedWrite("RealChip:Not Initialize(user)");
                 return;
             }
 
             //SCCIの存在確認
             int n;
-            log.ForcedWrite("RealChip:Ctr:STEP 01 Check SCCI2");
+            Log.ForcedWrite("RealChip:Ctr:STEP 01 Check SCCI2");
             try
             {
                 nScci = new NScci.NScci();
@@ -54,11 +54,11 @@ namespace mml2vgmIDEx64
                 {
                     if (nScci != null) nScci.Dispose();
                     nScci = null;
-                    log.ForcedWrite("RealChip:Ctr:Not found SCCI2.");
+                    Log.ForcedWrite("RealChip:Ctr:Not found SCCI2.");
                 }
                 else
                 {
-                    log.ForcedWrite(string.Format("RealChip:Ctr:Found SCCI2.(Interface count={0})", n));
+                    Log.ForcedWrite(string.Format("RealChip:Ctr:Found SCCI2.(Interface count={0})", n));
                     getScciInstances();
                     nScci.NSoundInterfaceManager_.setLevelDisp(false);
                 }
@@ -68,7 +68,7 @@ namespace mml2vgmIDEx64
                 nScci = null;
             }
 
-            log.ForcedWrite("RealChip:Ctr:STEP 02 Check G.I.M.I.C.");
+            Log.ForcedWrite("RealChip:Ctr:STEP 02 Check G.I.M.I.C.");
             try
             {
                 nc86ctl = new Nc86ctl.Nc86ctl();
@@ -78,11 +78,11 @@ namespace mml2vgmIDEx64
                 {
                     nc86ctl.deinitialize();
                     nc86ctl = null;
-                    log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.");
+                    Log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.");
                 }
                 else
                 {
-                    log.ForcedWrite("RealChip:Ctr:Found G.I.M.I.C.(Interface count={0})", n);
+                    Log.ForcedWrite("RealChip:Ctr:Found G.I.M.I.C.(Interface count={0})", n);
                     Nc86ctl.NIRealChip nirc = nc86ctl.getChipInterface(0);
                     nirc.reset();
                 }
@@ -95,7 +95,7 @@ namespace mml2vgmIDEx64
             if (nc86ctl != null) return;
 
             //NiseC86ctlを使用してGIMICの存在確認
-            log.ForcedWrite("RealChip:Ctr:STEP 03 Check G.I.M.I.C.(NiseC86ctl)");
+            Log.ForcedWrite("RealChip:Ctr:STEP 03 Check G.I.M.I.C.(NiseC86ctl)");
             try
             {
                 niseC86ctl = new NiseC86ctl.NiseC86ctl(null);
@@ -107,17 +107,17 @@ namespace mml2vgmIDEx64
                 {
                     niseC86ctl.Deinitialize();
                     niseC86ctl = null;
-                    log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.(NiseC86ctl)");
+                    Log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.(NiseC86ctl)");
                 }
                 else
                 {
-                    log.ForcedWrite("RealChip:Ctr:Found G.I.M.I.C.(NiseC86ctl)(Interface count={0})", n);
+                    Log.ForcedWrite("RealChip:Ctr:Found G.I.M.I.C.(NiseC86ctl)(Interface count={0})", n);
                     niseC86ctl.Reset();
                 }
             }
             catch
             {
-                log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.(NiseC86ctl) or NiseC86ctl");
+                Log.ForcedWrite("RealChip:Ctr:Not found G.I.M.I.C.(NiseC86ctl) or NiseC86ctl");
                 niseC86ctl = null;
             }
         }
@@ -985,10 +985,10 @@ namespace mml2vgmIDEx64
             gm.Reset();
             realChip = gm;
             gm.GetPLLClock(ref dClock);
-            log.ForcedWrite("C86ctl:PLL Clock={0}", dClock);
+            Log.ForcedWrite("C86ctl:PLL Clock={0}", dClock);
             NiseC86ctl.Devinfo di; gm.GetModuleInfo(out di);
             chipType = getChipType(gm.moduleInfo.Devname);
-            log.ForcedWrite("C86ctl:Found ChipType={0}", gm.moduleInfo.Devname);
+            Log.ForcedWrite("C86ctl:Found ChipType={0}", gm.moduleInfo.Devname);
 
             //if (ChipType == ChipType.CHIP_YM2608)
             //{
@@ -1021,11 +1021,11 @@ namespace mml2vgmIDEx64
             if (nowClock != mClock)
             {
                 gm.SetPLLClock(mClock);
-                log.ForcedWrite("Set PLLClock(clock:{0:d}", mClock);
+                Log.ForcedWrite("Set PLLClock(clock:{0:d}", mClock);
             }
             gm.GetPLLClock(ref nowClock);
             realChip.Reset();
-            log.ForcedWrite("reset NiseC86Ctl");
+            Log.ForcedWrite("reset NiseC86Ctl");
 
             //if (ChipType == ChipType.CHIP_OPM)
             //{

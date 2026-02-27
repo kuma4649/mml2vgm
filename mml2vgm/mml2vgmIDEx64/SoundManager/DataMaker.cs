@@ -85,7 +85,7 @@ namespace SoundManager
                     Start = false;
                 }
 
-                log.ForcedWrite(e);
+                Log.ForcedWrite(e);
             }
             finally
             {

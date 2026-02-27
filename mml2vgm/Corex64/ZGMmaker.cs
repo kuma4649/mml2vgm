@@ -124,7 +124,7 @@ namespace Corex64
 
         public void OutFile(outDatum[] desBuf, string fn)
         {
-            log.Write("ZGMファイル出力");
+            Log.Write("ZGMファイル出力");
 
             List<byte> buf = new List<byte>();
             foreach (outDatum dt in desBuf)
@@ -159,7 +159,7 @@ namespace Corex64
         /// </summary>
         private void makeDefineDiv()
         {
-            log.Write("Define division");
+            Log.Write("Define division");
 
             int cmdNo = 0x80;
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
@@ -170,7 +170,7 @@ namespace Corex64
                     if (!chip.use) continue;
                     if (!dicChipIdentifyNumber.ContainsKey(chip.Name)) continue;
 
-                    log.Write(string.Format("Chip [{0}]", chip.Name));
+                    Log.Write(string.Format("Chip [{0}]", chip.Name));
                     DefineInfo di = new DefineInfo();
                     di.chip = chip;
                     di.chipIdentNo = (uint)(int)dicChipIdentifyNumber[chip.Name][1];
@@ -252,7 +252,7 @@ namespace Corex64
 
         private void makeTrackDiv()
         {
-            log.Write("Track division");
+            Log.Write("Track division");
 
             long waitCounter = 0;
             int endChannel = 0;
@@ -306,21 +306,21 @@ namespace Corex64
 
             do
             {
-                log.Write("全パートコマンド解析");
+                Log.Write("全パートコマンド解析");
                 mmlInfo.AnalyzeAllPartCommand();
 
-                log.Write("全パートのうち次のコマンドまで一番近い値を求める");
+                Log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = mmlInfo.ComputeAllPartDistance();
 
                 //log.Write("全パートのwaitcounterを減らす");
                 //mmlInfo.DecAllPartWaitCounter(waitCounter);
 
-                log.Write("終了パートのカウント");
+                Log.Write("終了パートのカウント");
                 endChannel = mmlInfo.CountUpEndPart();
 
                 if (endChannel < totalChannel)
                 {
-                    log.Write("全パートのwaitcounterを減らす");
+                    Log.Write("全パートのwaitcounterを減らす");
                     mmlInfo.DecAllPartWaitCounter(waitCounter);
                 }
 

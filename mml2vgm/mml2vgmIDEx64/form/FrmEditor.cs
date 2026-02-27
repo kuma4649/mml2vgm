@@ -221,7 +221,7 @@ namespace mml2vgmIDEx64
                 && ext != ".tfi"
                 )
             {
-                log.dispMsg(string.Format("Can't include '{0}'.", source));
+                Log.dispMsg(string.Format("Can't include '{0}'.", source));
                 return;
             }
 

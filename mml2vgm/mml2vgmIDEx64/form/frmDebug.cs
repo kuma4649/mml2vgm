@@ -17,7 +17,7 @@ namespace mml2vgmIDEx64
             if (!append)
             {
                 Action<string> act = dispMessage;
-                log.dispMsg = act;
+                Log.dispMsg = act;
                 append = true;
             }
 

@@ -554,14 +554,14 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E14001")
+                msgBox.setErrMsg(Msg.get("E14001")
                     , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E14002")
+                msgBox.setErrMsg(Msg.get("E14002")
                     , mml.line.Lp);
                 return;
             }
@@ -577,14 +577,14 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E14003"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E14003"), n)
                     , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.SEGAPCM)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E14004"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E14004"), n)
                     , mml.line.Lp);
                 return;
             }

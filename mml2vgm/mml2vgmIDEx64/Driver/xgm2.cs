@@ -149,7 +149,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 
@@ -252,7 +252,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception e)
             {
-                log.Write(string.Format("XGM2の情報取得中に例外発生 Message=[{0}] StackTrace=[{1}]", e.Message, e.StackTrace));
+                Log.Write(string.Format("XGM2の情報取得中に例外発生 Message=[{0}] StackTrace=[{1}]", e.Message, e.StackTrace));
                 return false;
             }
 
@@ -293,7 +293,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 Stopped = true;
             }
         }

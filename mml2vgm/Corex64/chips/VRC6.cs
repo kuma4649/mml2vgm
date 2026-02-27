@@ -349,7 +349,7 @@ namespace Corex64
                     return;
                 }
 
-                msgBox.setErrMsg(msg.get("E32000"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E32000"), mml.line.Lp);
                 return;
             }
 

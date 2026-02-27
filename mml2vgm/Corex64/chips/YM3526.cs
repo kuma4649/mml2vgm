@@ -41,7 +41,7 @@ namespace Corex64
 
         protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
-            msgBox.setErrMsg(string.Format(msg.get("E29006"), n), mml.line.Lp);
+            msgBox.setErrMsg(string.Format(Msg.get("E29006"), n), mml.line.Lp);
         }
 
         protected override void SetInstAtOneOpeWithoutKslTl(partPage page, MML mml, int opeNum,

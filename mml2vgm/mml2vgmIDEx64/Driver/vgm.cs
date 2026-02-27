@@ -7,7 +7,7 @@ using System.Text;
 
 namespace mml2vgmIDEx64
 {
-    public class vgm : baseDriver
+    public class Vgm : baseDriver
     {
 
         public const int FCC_VGM = 0x206D6756;	// "Vgm "
@@ -200,7 +200,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
 
             }
         }
@@ -1135,7 +1135,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception e)
                     {
-                        log.ForcedWrite(e);
+                        Log.ForcedWrite(e);
                     }
 
                     vgmAdr += bLen + 7;

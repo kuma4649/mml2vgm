@@ -172,7 +172,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
 
             return GD3;

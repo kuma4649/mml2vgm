@@ -4,12 +4,12 @@ using System.Reflection;
 
 namespace Corex64
 {
-    public static class msg
+    public static class Msg
     {
 
         private static Dictionary<string, string> dicMsg = new Dictionary<string, string>();
 
-        static msg()
+        static Msg()
         {
             Assembly myAssembly = Assembly.GetEntryAssembly();
             string path = Path.GetDirectoryName(myAssembly.Location);

@@ -3,7 +3,7 @@ using System;
 
 namespace mml2vgmIDEx64
 {
-    public class xgm : baseDriver
+    public class Xgm : baseDriver
     {
         public const int FCC_XGM = 0x204d4758;	// "XGM "
         public const int FCC_GD3 = 0x20336447;  // "Gd3 "
@@ -78,7 +78,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 
@@ -132,7 +132,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception e)
             {
-                log.Write(string.Format("XGMの情報取得中に例外発生 Message=[{0}] StackTrace=[{1}]", e.Message, e.StackTrace));
+                Log.Write(string.Format("XGMの情報取得中に例外発生 Message=[{0}] StackTrace=[{1}]", e.Message, e.StackTrace));
                 return false;
             }
 
@@ -166,7 +166,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 

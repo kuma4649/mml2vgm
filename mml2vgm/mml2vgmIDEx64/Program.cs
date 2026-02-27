@@ -61,7 +61,7 @@ namespace mml2vgmIDEx64
                 {
                     try
                     {
-                        log.ForcedWrite(ex);
+                        Log.ForcedWrite(ex);
                         MessageBox.Show(ex.Message, "致命的なエラー");
                     }
                     finally
@@ -81,7 +81,7 @@ namespace mml2vgmIDEx64
         {
             try
             {
-                log.ForcedWrite(e.Exception);
+                Log.ForcedWrite(e.Exception);
                 MessageBox.Show(e.Exception.Message, "致命的なエラー");
             }
             finally

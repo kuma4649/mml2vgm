@@ -28,7 +28,7 @@ namespace Core
             //}
         };
 
-        public byte[] pcmDataEasyA = null;
+        public new byte[] pcmDataEasyA = null;
         public byte[] pcmDataEasyB = null;
         public byte[] pcmDataEasyC = null;
         public List<byte[]> pcmDataDirectA = new List<byte[]>();

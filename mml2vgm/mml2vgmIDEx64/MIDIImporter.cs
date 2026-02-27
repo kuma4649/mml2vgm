@@ -17,7 +17,7 @@ namespace mml2vgmIDEx64
         private StringBuilder line = new StringBuilder();
         private List<Track> tracks = new List<Track>();
         private int tickCounter = 0;
-        private int lastNoteOffTickCounter=0;
+        //private int lastNoteOffTickCounter=0;
         private byte bcmd = 0;
         private double mul = 0;
         private double length = 0;
@@ -408,7 +408,7 @@ namespace mml2vgmIDEx64
             {
 
                 tickCounter = 0;
-                lastNoteOffTickCounter = 0;
+                //lastNoteOffTickCounter = 0;
                 cOct = 4;
                 length = 0;
                 cVelo = 110;

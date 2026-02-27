@@ -331,9 +331,9 @@ namespace Corex64
             if (!parent.instPCM.ContainsKey(page.instrument))
             {
                 if (page.instrument == -1)
-                    msgBox.setErrMsg(msg.get("E10030"), mml.line.Lp);
+                    msgBox.setErrMsg(Msg.get("E10030"), mml.line.Lp);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E10021"), page.instrument), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E10021"), page.instrument), mml.line.Lp);
                 return;
             }
             if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
@@ -686,13 +686,13 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E13001"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E13001"), mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E13002"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E13002"), mml.line.Lp);
                 return;
             }
 
@@ -707,13 +707,13 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E13003"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E13003"), n), mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.RF5C164)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E13004"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E13004"), n), mml.line.Lp);
                 return;
             }
 

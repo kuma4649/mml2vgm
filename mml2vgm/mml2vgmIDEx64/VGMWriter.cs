@@ -56,7 +56,7 @@ namespace mml2vgmIDEx64
         private int[] useChips;
         public long totalSample { get; private set; }
         public List<Tuple<string, string>> tags;
-        private static readonly int SamplingRate = 44100;//vgm format freq
+        //private static readonly int SamplingRate = 44100;//vgm format freq
         private static uint opmMasterClock = 3579545;
         private static readonly uint opnaMasterClock = 7987200;
         private static readonly uint opnbMasterClock = 8000000;

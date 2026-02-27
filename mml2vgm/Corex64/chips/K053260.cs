@@ -263,7 +263,7 @@ namespace Corex64
 
                 if (newDic[v.Key].Item2.loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E23000")
+                    msgBox.setErrMsg(string.Format(Msg.get("E23000")
                         , newDic[v.Key].Item2.loopAdr
                         , size - 1), new LinePos(null,"-"));
                     newDic[v.Key].Item2.loopAdr = -1;
@@ -362,7 +362,7 @@ namespace Corex64
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos(null,"-");
-                msgBox.setErrMsg(msg.get("E23005"), lp);
+                msgBox.setErrMsg(Msg.get("E23005"), lp);
                 return;
             }
 
@@ -670,14 +670,14 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E23001")
+                msgBox.setErrMsg(Msg.get("E23001")
                     , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E23002")
+                msgBox.setErrMsg(Msg.get("E23002")
                     , mml.line.Lp);
                 return;
             }
@@ -693,14 +693,14 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E23003"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E23003"), n)
                     , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.K053260)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E23004"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E23004"), n)
                     , mml.line.Lp);
                 return;
             }

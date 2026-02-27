@@ -278,7 +278,7 @@ namespace Corex64
         {
             if (!parent.instENV.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E10000"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E10000"), n)
                     , mml.line.Lp);
             }
             else
@@ -371,7 +371,7 @@ namespace Corex64
             {
                 page.bendNote = 'r';
                 page.bendWaitCounter = -1;
-                msgBox.setErrMsg(msg.get("E10047"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E10047"), mml.line.Lp);
             }
             else if ((delta == 0 && note.pitchShift == note.bendPitchShift) || bendDelayCounter == ml)
             {
@@ -469,7 +469,7 @@ namespace Corex64
         {
             if (page.lfo[c].param == null)
             {
-                msgBox.setErrMsg(msg.get("E10001")
+                msgBox.setErrMsg(Msg.get("E10001")
                     , mml.line.Lp);
                 return false;
             }
@@ -903,61 +903,61 @@ namespace Corex64
 
         public virtual void CmdMIDICh(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10028")
+            msgBox.setErrMsg(Msg.get("E10028")
                     , mml.line.Lp);
         }
 
         public virtual void CmdMIDIControlChange(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10031")
+            msgBox.setErrMsg(Msg.get("E10031")
                     , mml.line.Lp);
         }
 
         public virtual void CmdVelocity(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10029")
+            msgBox.setErrMsg(Msg.get("E10029")
                     , mml.line.Lp);
         }
 
         public virtual void CmdNoise(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10002")
+            msgBox.setErrMsg(Msg.get("E10002")
                     , mml.line.Lp);
         }
 
         public virtual void CmdDCSGCh3Freq(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10032")
+            msgBox.setErrMsg(Msg.get("E10032")
                     , mml.line.Lp);
         }
 
         public virtual void CmdSusOnOff(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10022")
+            msgBox.setErrMsg(Msg.get("E10022")
                     , mml.line.Lp);
         }
 
         public virtual void CmdEffect(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10033")
+            msgBox.setErrMsg(Msg.get("E10033")
                     , mml.line.Lp);
         }
 
         public virtual void CmdForcedFnum(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10035")
+            msgBox.setErrMsg(Msg.get("E10035")
                     , mml.line.Lp);
         }
 
         public virtual void CmdMPMS(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10003")
+            msgBox.setErrMsg(Msg.get("E10003")
                     , mml.line.Lp);
         }
 
         public virtual void CmdMAMS(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10004")
+            msgBox.setErrMsg(Msg.get("E10004")
                     , mml.line.Lp);
         }
 
@@ -1011,13 +1011,13 @@ namespace Corex64
             {
                 if (page.lfo[c].param.Count < 4 + (page.lfo[c].type == eLfoType.Wah ? 1 : 0))
                 {
-                    msgBox.setErrMsg(msg.get("E10005")
+                    msgBox.setErrMsg(Msg.get("E10005")
                     , mml.line.Lp);
                     return;
                 }
                 if (page.lfo[c].param.Count > 9 + (page.lfo[c].type == eLfoType.Wah ? 1 : 0))
                 {
-                    msgBox.setErrMsg(msg.get("E10006")
+                    msgBox.setErrMsg(Msg.get("E10006")
                     , mml.line.Lp);
                     return;
                 }
@@ -1136,7 +1136,7 @@ namespace Corex64
         {
             if (!(mml.args[0] is string))
             {
-                msgBox.setErrMsg(msg.get("E10010")
+                msgBox.setErrMsg(Msg.get("E10010")
                     , mml.line.Lp);
 
                 return;
@@ -1166,7 +1166,7 @@ namespace Corex64
         {
             if (!(mml.args[0] is string))
             {
-                msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E10034"), mml.line.Lp);
                 return;
             }
 
@@ -1184,7 +1184,7 @@ namespace Corex64
                     else
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10039"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10039"), mml.line.Lp);
                         page.arpeggioMode = false;
                     }
                     return;
@@ -1193,7 +1193,7 @@ namespace Corex64
                     if (!parent.instArp.ContainsKey(page.arpInstrument))
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10040"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10040"), mml.line.Lp);
                         page.arpeggioMode = false;
                     }
                     return;
@@ -1215,7 +1215,7 @@ namespace Corex64
                     else
                     {
                         //VARの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10037"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10037"), mml.line.Lp);
                         page.varpeggioMode = false;
                     }
                     return;
@@ -1224,7 +1224,7 @@ namespace Corex64
                     if (!parent.instVArp.ContainsKey(page.varpInstrument))
                     {
                         //VARの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10038"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10038"), mml.line.Lp);
                         page.varpeggioMode = false;
                     }
                     return;
@@ -1240,7 +1240,7 @@ namespace Corex64
             if (!(mml.args[1] is int))
             {
                 //数値指定ではない場合はエラー
-                msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E10036"), mml.line.Lp);
                 return;
             }
 
@@ -1255,13 +1255,13 @@ namespace Corex64
                     if (!parent.instCommandArp.ContainsKey(page.commandArpeggio[n1].Num))
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10042"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10042"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                     }
                     if (parent.instCommandArp[page.commandArpeggio[n1].Num].Length < 3)
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10042"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10042"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
@@ -1283,7 +1283,7 @@ namespace Corex64
                     if (!(mml.args[2] is int))
                     {
                         //数値指定ではない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10041"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10041"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
@@ -1293,14 +1293,14 @@ namespace Corex64
                     if (!parent.instCommandArp.ContainsKey(n2))
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10041"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10041"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
                     if (parent.instCommandArp[n2].Length < 3)
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10041"), mml.line.Lp);
+                        msgBox.setErrMsg(Msg.get("E10041"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
@@ -1359,14 +1359,14 @@ namespace Corex64
 
         public virtual void CmdHardEnvelope(partPage page, MML mml)
         {
-            msgBox.setWrnMsg(msg.get("E10011")
+            msgBox.setWrnMsg(Msg.get("E10011")
                     , mml.line.Lp);
         }
 
 
         public virtual void CmdTotalVolume(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10026")
+            msgBox.setErrMsg(Msg.get("E10026")
                     , mml.line.Lp);
         }
 
@@ -1508,7 +1508,7 @@ namespace Corex64
 
         public virtual void CmdPan(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10008")
+            msgBox.setErrMsg(Msg.get("E10008")
                     , mml.line.Lp);
         }
 
@@ -1536,7 +1536,7 @@ namespace Corex64
 
         public virtual void CmdDirectMode(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10027")
+            msgBox.setErrMsg(Msg.get("E10027")
                     , mml.line.Lp);
         }
 
@@ -1565,19 +1565,19 @@ namespace Corex64
 
         public virtual void CmdMode(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10009")
+            msgBox.setErrMsg(Msg.get("E10009")
                     , mml.line.Lp);
         }
 
         public virtual void CmdPcmMapSw(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10023")
+            msgBox.setErrMsg(Msg.get("E10023")
                     , mml.line.Lp);
         }
 
         public virtual void CmdNoiseToneMixer(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10014")
+            msgBox.setErrMsg(Msg.get("E10014")
                     , mml.line.Lp);
         }
 
@@ -1641,19 +1641,19 @@ namespace Corex64
 
         public virtual void CmdExtendChannel(partPage page, MML mml)
         {
-            msgBox.setWrnMsg(msg.get("E10012")
+            msgBox.setWrnMsg(Msg.get("E10012")
                     , mml.line.Lp);
         }
 
         public virtual void CmdVOperator(partPage page, MML mml)
         {
-            msgBox.setWrnMsg(msg.get("E10049")
+            msgBox.setWrnMsg(Msg.get("E10049")
                     , mml.line.Lp);
         }
 
         public virtual void CmdVGuard(partPage page, MML mml)
         {
-            msgBox.setWrnMsg(msg.get("E10050")
+            msgBox.setWrnMsg(Msg.get("E10050")
                     , mml.line.Lp);
         }
 
@@ -1955,7 +1955,7 @@ namespace Corex64
 
             if (note.length < 1)
             {
-                msgBox.setErrMsg(msg.get("E10013")
+                msgBox.setErrMsg(Msg.get("E10013")
                     , mml.line.Lp);
                 ml = (int)page.length;
             }
@@ -2159,7 +2159,7 @@ namespace Corex64
         { 
             if (ml < 1)
             {
-                msgBox.setErrMsg(msg.get("E10013")
+                msgBox.setErrMsg(Msg.get("E10013")
                     , mml.line.Lp);
                 ml = (int)page.length;
             }
@@ -2227,7 +2227,7 @@ namespace Corex64
 
                 if (ml < 1)
                 {
-                    msgBox.setErrMsg(msg.get("E10013")
+                    msgBox.setErrMsg(Msg.get("E10013")
                         , mml.line.Lp);
                     ml = (int)page.length;
                 }
@@ -2256,19 +2256,19 @@ namespace Corex64
 
         public virtual void CmdKeyOnDelay(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10043")
+            msgBox.setErrMsg(Msg.get("E10043")
                     , mml.line.Lp);
         }
 
         public virtual void CmdHardEnvelopeSync(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10044")
+            msgBox.setErrMsg(Msg.get("E10044")
                     , mml.line.Lp);
         }
 
         public virtual void CmdModulation(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10046")
+            msgBox.setErrMsg(Msg.get("E10046")
                     , mml.line.Lp);
         }
 
@@ -2511,7 +2511,7 @@ namespace Corex64
 
         public virtual void CmdReversePhase(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10045")
+            msgBox.setErrMsg(Msg.get("E10045")
                     , mml.line.Lp);
         }
 
@@ -2576,19 +2576,19 @@ namespace Corex64
 
         public virtual void CmdRR15(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10048")
+            msgBox.setErrMsg(Msg.get("E10048")
                     , mml.line.Lp);
         }
 
         public virtual void SetRR15(partPage page)
         {
-            msgBox.setErrMsg(msg.get("E10048")
+            msgBox.setErrMsg(Msg.get("E10048")
                     , null);
         }
 
         public virtual void CmdTLOFS(partPage page, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10048")
+            msgBox.setErrMsg(Msg.get("E10048")
                     , mml.line.Lp);
         }
     }

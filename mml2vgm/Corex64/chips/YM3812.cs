@@ -103,7 +103,7 @@ int ws
 
         protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
-            msgBox.setErrMsg(string.Format(msg.get("E30006"), n), mml.line.Lp);
+            msgBox.setErrMsg(string.Format(Msg.get("E30006"), n), mml.line.Lp);
         }
 
     }

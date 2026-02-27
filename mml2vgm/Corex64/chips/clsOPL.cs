@@ -91,7 +91,7 @@ namespace Corex64
 
             if (!parent.instOPL.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E17000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E17000"), n), mml.line.Lp);
                 return;
             }
 
@@ -113,7 +113,7 @@ namespace Corex64
                 return;
             }
 
-            msgBox.setErrMsg(string.Format(msg.get("E17002"), n), mml.line.Lp);
+            msgBox.setErrMsg(string.Format(Msg.get("E17002"), n), mml.line.Lp);
             page.instrument = -1;
         }
 
@@ -263,7 +263,7 @@ namespace Corex64
         {
             if (!page.isOp4Mode)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E26000"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E26000"), n), mml.line.Lp);
                 return;
             }
 
@@ -546,7 +546,7 @@ namespace Corex64
         {
             if (!parent.instOPL.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E11000"), n), mml.line.Lp);
                 return;
             }
 
@@ -713,7 +713,7 @@ namespace Corex64
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E17001"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E17001"), mml.line.Lp);
                 return;
             }
 
@@ -875,7 +875,7 @@ namespace Corex64
                                     }
                                     else
                                     {
-                                        msgBox.setErrMsg(string.Format(msg.get("E11005"), opV), mml.line.Lp);
+                                        msgBox.setErrMsg(string.Format(Msg.get("E11005"), opV), mml.line.Lp);
                                         break;
                                     }
                                     opV /= 10;

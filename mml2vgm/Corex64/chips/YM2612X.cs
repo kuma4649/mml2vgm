@@ -103,21 +103,21 @@ namespace Corex64
                     else
                     {
                         msgBox.setErrMsg(
-                            string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote),
+                            string.Format(Msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote),
                             mmlDmy != null ? mmlDmy.line.Lp : null);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mmlDmy != null ? mmlDmy.line.Lp : null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E10024"), page.pcmMapNo), mmlDmy != null ? mmlDmy.line.Lp : null);
                     return;
                 }
             }
 
             if (!parent.instPCM.ContainsKey(page.instrument))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument), mmlDmy != null ? mmlDmy.line.Lp : null);
+                msgBox.setErrMsg(string.Format(Msg.get("E21000"), page.instrument), mmlDmy != null ? mmlDmy.line.Lp : null);
                 return;
             }
 
@@ -338,7 +338,7 @@ namespace Corex64
                         page.pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E10024"), n), mml.line.Lp);
                         }
                         return;
                     }
@@ -349,13 +349,13 @@ namespace Corex64
                     SetDummyData(page, mml);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E21000"), n), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E21000"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].Item2.chip != enmChipType.YM2612X)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E21001"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E21001"), n), mml.line.Lp);
                         }
                     }
                     return;

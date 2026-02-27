@@ -16,7 +16,7 @@ namespace mml2vgm
         {
             InitializeComponent();
 #if DEBUG
-            Corex64.log.debug = true;
+            Corex64.Log.debug = true;
 #endif
         }
 
@@ -39,11 +39,11 @@ namespace mml2vgm
             }
 
             this.toolStrip1.Enabled = false;
-            this.tsslMessage.Text = msg.get("I0100");
+            this.tsslMessage.Text = Msg.get("I0100");
             dgvResult.Rows.Clear();
 
-            textBox1.AppendText(msg.get("I0101"));
-            textBox1.AppendText(msg.get("I0102"));
+            textBox1.AppendText(Msg.get("I0101"));
+            textBox1.AppendText(Msg.get("I0102"));
 
             isSuccess = true;
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
@@ -55,8 +55,8 @@ namespace mml2vgm
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Multiselect = true;
-            ofd.Filter = msg.get("I0103");
-            ofd.Title = msg.get("I0104");
+            ofd.Filter = Msg.get("I0103");
+            ofd.Title = Msg.get("I0104");
             if (ofd.ShowDialog() != DialogResult.OK)
             {
                 return;
@@ -98,9 +98,9 @@ namespace mml2vgm
         {
             if (mv == null)
             {
-                textBox1.AppendText(msg.get("I0105"));
+                textBox1.AppendText(Msg.get("I0105"));
                 this.toolStrip1.Enabled = true;
-                this.tsslMessage.Text = msg.get("I0106");
+                this.tsslMessage.Text = Msg.get("I0106");
                 return;
             }
 
@@ -129,41 +129,41 @@ namespace mml2vgm
                 }
             }
 
-            textBox1.AppendText(msg.get("I0107"));
+            textBox1.AppendText(Msg.get("I0107"));
 
             foreach (msgInfo mes in msgBox.getWrn())
             {
-                textBox1.AppendText(string.Format(msg.get("I0108"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
+                textBox1.AppendText(string.Format(Msg.get("I0108"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
             }
 
             foreach (msgInfo mes in msgBox.getErr())
             {
-                textBox1.AppendText(string.Format(msg.get("I0109"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
+                textBox1.AppendText(string.Format(Msg.get("I0109"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
             }
 
             textBox1.AppendText("\r\n");
-            textBox1.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            textBox1.AppendText(string.Format(Msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (mv.desVGM.loopSamples != -1)
             {
-                textBox1.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                textBox1.AppendText(string.Format(Msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    textBox1.AppendText(string.Format(msg.get("I0112")
+                    textBox1.AppendText(string.Format(Msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / 44100L));
                 else
-                    textBox1.AppendText(string.Format(msg.get("I0112")
+                    textBox1.AppendText(string.Format(Msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
 
-            textBox1.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            textBox1.AppendText(string.Format(Msg.get("I0113"), mv.desVGM.lClock));
             if (mv.desVGM.info.format == enmFormat.VGM)
-                textBox1.AppendText(string.Format(msg.get("I0114")
+                textBox1.AppendText(string.Format(Msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / 44100L));
             else
-                textBox1.AppendText(string.Format(msg.get("I0114")
+                textBox1.AppendText(string.Format(Msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
@@ -182,9 +182,9 @@ namespace mml2vgm
             //if (mv.desVGM.huc6280[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0125"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
 
 
-            textBox1.AppendText(msg.get("I0126"));
+            textBox1.AppendText(Msg.get("I0126"));
             this.toolStrip1.Enabled = true;
-            this.tsslMessage.Text = msg.get("I0106");
+            this.tsslMessage.Text = Msg.get("I0106");
 
             if (isSuccess)
             {
@@ -196,7 +196,7 @@ namespace mml2vgm
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -206,8 +206,8 @@ namespace mml2vgm
 
         private void startCompile()
         {
-            Corex64.log.Open();
-            Corex64.log.Write("start compile thread");
+            Corex64.Log.Open();
+            Corex64.Log.Write("start compile thread");
 
             Action dmy = updateTitle;
             string stPath = System.Windows.Forms.Application.StartupPath;
@@ -224,7 +224,7 @@ namespace mml2vgm
                 title = Path.GetFileName(arg);
                 this.Invoke(dmy);
 
-                Corex64.log.Write(string.Format("  compile at [{0}]", args[i]));
+                Corex64.Log.Write(string.Format("  compile at [{0}]", args[i]));
                     
                 msgBox.clear();
 
@@ -234,7 +234,7 @@ namespace mml2vgm
                     desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
                 }
 
-                Corex64.log.Write("Call mml2vgm core");
+                Corex64.Log.Write("Call mml2vgm core");
 
                 mv = new Mml2vgm(null, arg, desfn, stPath, Disp);
                 mv.isIDE = false;
@@ -250,23 +250,23 @@ namespace mml2vgm
                     break;
                 }
 
-                Corex64.log.Write("Return mml2vgm core");
+                Corex64.Log.Write("Return mml2vgm core");
             }
 
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Disp Result");
 
             dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
         }
 
         private void Disp(string msg)
         {
             Action<string> msgDisp = MsgDisp;
             this.Invoke(msgDisp, msg);
-            Corex64.log.Write(msg);
+            Corex64.Log.Write(msg);
         }
 
         private void MsgDisp(string msg)
@@ -366,9 +366,9 @@ namespace mml2vgm
                 if (ext == ".gwi") continue;
 
                 if (fileNames.Length < 1)
-                    MessageBox.Show(msg.get("E0101"));
+                    MessageBox.Show(Msg.get("E0101"));
                 else
-                    MessageBox.Show(msg.get("E0102"));
+                    MessageBox.Show(Msg.get("E0102"));
 
                 return;
             }

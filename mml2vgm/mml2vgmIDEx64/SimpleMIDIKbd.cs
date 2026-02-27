@@ -104,7 +104,7 @@ namespace mml2vgmIDEx64
 
         private void midiIn_ErrorReceived(object sender, MidiInMessageEventArgs e)
         {
-            log.ForcedWrite(String.Format("Error Time {0} Message 0x{1:X8} Event {2}",
+            Log.ForcedWrite(String.Format("Error Time {0} Message 0x{1:X8} Event {2}",
                 e.Timestamp, e.RawMessage, e.MidiEvent));
         }
 
@@ -137,7 +137,7 @@ namespace mml2vgmIDEx64
                 case MidiCommandCode.ControlChange:
                     // ---- 押したCCがショートカットに割り当てられているかチェック
                     int n = ((int)((ControlChangeEvent)e.MidiEvent).Controller);
-                    log.Write(string.Format("CC:{0} {1}", n, ((ControlChangeEvent)e.MidiEvent).Controller));
+                    Log.Write(string.Format("CC:{0} {1}", n, ((ControlChangeEvent)e.MidiEvent).Controller));
                     if (shortCut[(int)enmTyp.ControlChange].ContainsKey(n))
                     {
                         shortCut[(int)enmTyp.ControlChange][n](
@@ -151,7 +151,7 @@ namespace mml2vgmIDEx64
                 case MidiCommandCode.AutoSensing:
                     break;
                 default:
-                    log.Write(string.Format("MIDIevent:{0}", e.MidiEvent.CommandCode));
+                    Log.Write(string.Format("MIDIevent:{0}", e.MidiEvent.CommandCode));
                     break;
             }
         }
@@ -189,7 +189,7 @@ namespace mml2vgmIDEx64
             }
 
             nt += notes.Substring((n % 12) * 2, 2).Trim();
-            log.Write(string.Format("MIDIKbd:Note On {0}", nt));
+            Log.Write(string.Format("MIDIKbd:Note On {0}", nt));
 
             // プレビューモード(試し弾き)の場合は入力せずに終了
             if (previewMode) return;
@@ -198,7 +198,7 @@ namespace mml2vgmIDEx64
 
         private void NoteOff(int n)
         {
-            log.Write(string.Format("MIDIKbd:Note Off{0}", n));
+            Log.Write(string.Format("MIDIKbd:Note Off{0}", n));
         }
 
         private void ChangePreviewMode(int _)

@@ -19,7 +19,7 @@ namespace mml2vgmIDEx64.Driver.ZGM.ZgmChip
             Hosei = 0;
         }
 
-        public override void Setup(int chipIndex, ref uint dataPos, ref Dictionary<int, Driver.ZGM.zgm.RefAction<outDatum, uint>> cmdTable)
+        public override void Setup(int chipIndex, ref uint dataPos, ref Dictionary<int, Driver.ZGM.Zgm.RefAction<outDatum, uint>> cmdTable)
         {
             base.Setup(chipIndex, ref dataPos, ref cmdTable);
 

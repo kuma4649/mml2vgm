@@ -250,7 +250,7 @@ namespace Corex64
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E20004"), new LinePos(null,"-"));
+            msgBox.setWrnMsg(Msg.get("E20004"), new LinePos(null,"-"));
         }
 
 
@@ -307,12 +307,12 @@ namespace Corex64
             {
                 if (page.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg(msg.get("E20000"), mml.line.Lp);
+                    msgBox.setErrMsg(Msg.get("E20000"), mml.line.Lp);
                     return;
                 }
                 if (page.lfo[c].param.Count > 5)
                 {
-                    msgBox.setErrMsg(msg.get("E20001"), mml.line.Lp);
+                    msgBox.setErrMsg(Msg.get("E20001"), mml.line.Lp);
                     return;
                 }
 
@@ -442,7 +442,7 @@ namespace Corex64
                         page.pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E10024"), n), mml.line.Lp);
                         }
                         return;
                     }
@@ -452,13 +452,13 @@ namespace Corex64
                     page.instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E20002"), n), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E20002"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].Item2.chip != enmChipType.YM2612)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E20003"), n), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(Msg.get("E20003"), n), mml.line.Lp);
                         }
                     }
                     return;

@@ -119,7 +119,7 @@ namespace Corex64
 
             if (!parent.instWF.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E10021"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E10021"), n), mml.line.Lp);
                 return;
             }
 
@@ -341,13 +341,13 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E10019"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E10019"), mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E10020"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E10020"), mml.line.Lp);
                 return;
             }
 

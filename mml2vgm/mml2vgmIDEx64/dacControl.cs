@@ -18,7 +18,7 @@ namespace mml2vgmIDEx64
         public ChipRegister chipRegister = null;
         public EnmVRModel model = EnmVRModel.VirtualModel;
 
-        public zgm driver { get; internal set; }
+        public Zgm driver { get; internal set; }
 
         public void sendCommand(long Counter, dac_control chip)
         {

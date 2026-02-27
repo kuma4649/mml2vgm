@@ -932,7 +932,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 MessageBox.Show(ex.Message);
             }
         }

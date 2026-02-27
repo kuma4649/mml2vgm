@@ -169,7 +169,7 @@ int ws
 
         protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
-            msgBox.setErrMsg(string.Format(msg.get("E28006"), n), mml.line.Lp);
+            msgBox.setErrMsg(string.Format(Msg.get("E28006"), n), mml.line.Lp);
         }
 
 
@@ -429,12 +429,12 @@ int ws
                 n = Common.CheckRange(n, 0, 255);
                 if (!parent.instPCM.ContainsKey(n))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E28004"), n), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E28004"), n), mml.line.Lp);
                     return;
                 }
                 if (parent.instPCM[n].Item2.chip != enmChipType.Y8950)
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E28005"), n), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E28005"), n), mml.line.Lp);
                     return;
                 }
 

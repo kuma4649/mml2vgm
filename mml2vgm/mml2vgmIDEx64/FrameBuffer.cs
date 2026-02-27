@@ -302,7 +302,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
             pbScreen = null;
 
@@ -377,7 +377,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception ex)
                     {
-                        log.ForcedWrite(ex);
+                        Log.ForcedWrite(ex);
                         Remove(p);
                     }
                     if (bgPlane != null) bgPlane.Render();
@@ -473,7 +473,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 

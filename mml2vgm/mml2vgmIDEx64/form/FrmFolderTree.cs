@@ -367,12 +367,12 @@ namespace mml2vgmIDEx64
                 }
                 catch (FileNotFoundException fe)
                 {
-                    log.ForcedWrite(fe);
+                    Log.ForcedWrite(fe);
                     lstFail.Add(string.Format("'{0}'", fileOrFolder));
                 }
                 catch (DirectoryNotFoundException de)
                 {
-                    log.ForcedWrite(de);
+                    Log.ForcedWrite(de);
                     lstFail.Add(string.Format("'{0}'", fileOrFolder));
                 }
             }

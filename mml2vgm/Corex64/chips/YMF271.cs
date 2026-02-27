@@ -255,7 +255,7 @@ namespace Corex64
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E17001"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E17001"), mml.line.Lp);
                 return;
             }
 
@@ -301,7 +301,7 @@ namespace Corex64
             //groupが0/4/8以外はsync3(pcm only)を使えないようにする
             if (n == 3 && (info.group & 3) != 0)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E31004"), page.ch + 1), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E31004"), page.ch + 1), mml.line.Lp);
                 return;
             }
 
@@ -502,7 +502,7 @@ namespace Corex64
 
             if (!parent.instOPX.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E31000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E31000"), n), mml.line.Lp);
                 return;
             }
 
@@ -519,7 +519,7 @@ namespace Corex64
                     return;
             }
 
-            msgBox.setErrMsg(string.Format(msg.get("E31002"), n), mml.line.Lp);
+            msgBox.setErrMsg(string.Format(Msg.get("E31002"), n), mml.line.Lp);
             page.instrument = -1;
         }
 
@@ -527,7 +527,7 @@ namespace Corex64
         {
             if (page.sync != 0)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E31003"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E31003"), n), mml.line.Lp);
                 return;
             }
 
@@ -613,7 +613,7 @@ namespace Corex64
             //sync チェック
             if (page.sync != 2)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E31005"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E31005"), n), mml.line.Lp);
                 return;
             }
 
@@ -623,7 +623,7 @@ namespace Corex64
             //bank チェック
             if (info.bank == 3)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E31008"), page.ch + 1, n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E31008"), page.ch + 1, n), mml.line.Lp);
                 return;
             }
 
@@ -690,7 +690,7 @@ namespace Corex64
             //sync チェック
             if (page.sync != 1)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E31006"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E31006"), n), mml.line.Lp);
                 return;
             }
 
@@ -813,7 +813,7 @@ namespace Corex64
             int n = page.instrument;
             if (!parent.instOPL.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E11000"), n), mml.line.Lp);
                 return;
             }
 
@@ -867,7 +867,7 @@ namespace Corex64
             int n = page.instrument;
             if (!parent.instOPX.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml==null?null:mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E11000"), n), mml==null?null:mml.line.Lp);
                 return;
             }
 
@@ -881,7 +881,7 @@ namespace Corex64
                     if (inst[0] != 4)//4ope音色のみ
                     {
                         msgBox.setErrMsg(
-                            string.Format(msg.get("E31009")
+                            string.Format(Msg.get("E31009")
                             , page.sync
                             , n)
                             , mml == null ? null : mml.line.Lp);
@@ -902,7 +902,7 @@ namespace Corex64
                     if (inst[0] != 2)//2ope音色のみ
                     {
                         msgBox.setErrMsg(
-                            string.Format(msg.get("E31009")
+                            string.Format(Msg.get("E31009")
                             , page.sync
                             , n)
                             , mml == null ? null : mml.line.Lp);
@@ -923,7 +923,7 @@ namespace Corex64
                     if (inst[0] != 3)//3ope音色のみ
                     {
                         msgBox.setErrMsg(
-                            string.Format(msg.get("E31009")
+                            string.Format(Msg.get("E31009")
                             , page.sync
                             , n)
                             , mml == null ? null : mml.line.Lp);

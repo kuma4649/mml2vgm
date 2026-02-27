@@ -108,7 +108,7 @@ namespace mml2vgmIDEx64
             try { base.WndProc(ref m); }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 
@@ -391,7 +391,7 @@ namespace mml2vgmIDEx64
 
         private void midiIn_ErrorReceived(object sender, MidiInMessageEventArgs e)
         {
-            log.ForcedWrite(String.Format("Error Time {0} Message 0x{1:X8} Event {2}",
+            Log.ForcedWrite(String.Format("Error Time {0} Message 0x{1:X8} Event {2}",
                 e.Timestamp, e.RawMessage, e.MidiEvent));
         }
 
@@ -514,7 +514,7 @@ namespace mml2vgmIDEx64
         private void NoteOn(int n, int velocity)
         {
             noteFlg[n & 0x7f] = (byte)(velocity & 0x7f);
-            log.Write(string.Format("MIDIKbd:Note On{0}", n));
+            Log.Write(string.Format("MIDIKbd:Note On{0}", n));
 
             if (setting.midiKbd.IsMONO) NoteOnMONO(n, velocity);
             else NoteOnPOLY(n, velocity);
@@ -548,7 +548,7 @@ namespace mml2vgmIDEx64
         private void NoteOff(int n)
         {
             noteFlg[n & 0x7f] = 0;
-            log.Write(string.Format("MIDIKbd:Note Off{0}", n));
+            Log.Write(string.Format("MIDIKbd:Note Off{0}", n));
 
             if (setting.midiKbd.IsMONO) NoteOffMONO(n);
             else NoteOffPOLY(n);
@@ -703,7 +703,7 @@ namespace mml2vgmIDEx64
 
         private void dmyDisp(string dmy)
         {
-            log.Write(dmy);
+            Log.Write(dmy);
         }
 
 

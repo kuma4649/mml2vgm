@@ -1763,7 +1763,11 @@ namespace mml2vgmIDEx64
             }
 
             private bool _exchgPAN = false;
-            public bool exchgPAN { get; set; }
+            public bool exchgPAN 
+            {
+                get { return _exchgPAN; }
+                set { _exchgPAN = value; }
+            }
 
 
             public ChipType Copy()
@@ -3204,7 +3208,7 @@ namespace mml2vgmIDEx64
                 }
                 catch (Exception ex)
                 {
-                    log.ForcedWrite(ex);
+                    Log.ForcedWrite(ex);
                     return null;
                 }
             }
@@ -4463,7 +4467,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 Setting s = new Setting();
                 s.OfflineMode = s.InfiniteOfflineMode;
                 CheckShortCutKey(s);

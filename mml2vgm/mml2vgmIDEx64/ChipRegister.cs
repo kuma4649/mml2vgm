@@ -2237,7 +2237,7 @@ namespace mml2vgmIDEx64
                     enq(od, Counter, C352[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 default:
-                    log.Write(string.Format("Chipregister.cs:writeDummyChip  unknown chipID:[{0:x02}]",chipID));
+                    Log.Write(string.Format("Chipregister.cs:writeDummyChip  unknown chipID:[{0:x02}]",chipID));
                     break;
             }
         }
@@ -3109,7 +3109,7 @@ namespace mml2vgmIDEx64
 
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        log.Write("Sending NES(Emu) PCM");
+                        Log.Write("Sending NES(Emu) PCM");
                         mds.WriteNESRam(Chip.Index, (byte)Chip.Number, (int)stAdr, (int)dataSize, pcmData, (int)vgmAdr);
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
@@ -4972,7 +4972,7 @@ namespace mml2vgmIDEx64
 
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        log.Write("Sending RF5C164(Emu) PCM");
+                        Log.Write("Sending RF5C164(Emu) PCM");
                         mds.WriteRF5C164PCMData(Chip.Index, (byte)Chip.Number, stAdr, dataSize, pcmData, vgmAdr);
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
@@ -7156,7 +7156,7 @@ namespace mml2vgmIDEx64
                     {
                         //if ((address >> 8) == 00) log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         //Debug.WriteLine(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
-                        log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
+                        Log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                     else if (ctYM2610[Chip.Number].OnlyPCMEmulation)
@@ -7207,7 +7207,7 @@ namespace mml2vgmIDEx64
                     PackData[] pdata = (PackData[])exData;
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        log.Write("Sending YM2608(Emu) Block data");
+                        Log.Write("Sending YM2608(Emu) Block data");
                         foreach (PackData dat in pdata)
                         {
                             //if ((address >> 8) == 00) log.Write(string.Format("Block FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
@@ -7219,7 +7219,7 @@ namespace mml2vgmIDEx64
                     {
                         if (scYM2608[Chip.Number] != null)
                         {
-                            log.Write("Sending YM2608 Block data");
+                            Log.Write("Sending YM2608 Block data");
                             foreach (PackData dat in pdata)
                                 scYM2608[Chip.Number].setRegister(dat.Address, dat.Data);
                             if (Chip.Number == 0)
@@ -7861,7 +7861,7 @@ namespace mml2vgmIDEx64
                     byte[] adpcmData = (byte[])exData;
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        log.Write(string.Format("Sending YM2610(Emu) ADPCM-{0}", (data == -1) ? "A" : "B"));
+                        Log.Write(string.Format("Sending YM2610(Emu) ADPCM-{0}", (data == -1) ? "A" : "B"));
                         if (data == -1)
                         {
                             mds.WriteYM2610_SetAdpcmA(Chip.Index, (byte)Chip.Number, adpcmData);
@@ -7887,7 +7887,7 @@ namespace mml2vgmIDEx64
                                 // pushReg(CMD_YM2610|0x02,0x03,0x01);
                                 scYM2610[Chip.Number].setRegister((dPort << 8) | 0x03, (data == -1) ? 0x01 : 0x00);
                                 // データ転送
-                                log.Write(string.Format("Sending YM2610 ADPCM-{0}", (data == -1) ? "A" : "B"));
+                                Log.Write(string.Format("Sending YM2610 ADPCM-{0}", (data == -1) ? "A" : "B"));
                                 for (int cnt = 0; cnt < adpcmData.Length; cnt++)
                                 {
                                     // pushReg(CMD_YM2610|0x02,0x04,*m_pDump);
@@ -7908,7 +7908,7 @@ namespace mml2vgmIDEx64
                             // pushReg(CMD_YM2610|0x02,0x03,0x01);
                             scYM2610EB[Chip.Number].setRegister((dPort << 8) | 0x10003, (data == -1) ? 0x01 : 0x00);
                             // データ転送
-                            log.Write(string.Format("Sending YM2610 ADPCM-{0}", (data == -1) ? "A" : "B"));
+                            Log.Write(string.Format("Sending YM2610 ADPCM-{0}", (data == -1) ? "A" : "B"));
                             for (int cnt = 0; cnt < adpcmData.Length; cnt++)
                             {
                                 // pushReg(CMD_YM2610|0x02,0x04,*m_pDump);
@@ -8470,7 +8470,7 @@ namespace mml2vgmIDEx64
                         return;
                     }
                     byte[] adpcmData = (byte[])exData;
-                    log.Write(string.Format("Sending YM2609(Emu) ADPCM-{0}", (data == -1) ? "A" : "B"));
+                    Log.Write(string.Format("Sending YM2609(Emu) ADPCM-{0}", (data == -1) ? "A" : "B"));
                     if (data == -1)
                     {
                         mds.WriteYM2609_SetAdpcmA(Chip.Index, (byte)Chip.Number, adpcmData);

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Corex64
 {
-    public static class log
+    public static class Log
     {
         public static string path = "";
 #if DEBUG

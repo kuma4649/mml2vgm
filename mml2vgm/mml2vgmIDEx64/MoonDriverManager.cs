@@ -139,7 +139,7 @@ namespace mml2vgmIDEx64
             }
             catch (IOException)
             {
-                Log.WriteLine(LogLevel.ERROR, string.Format("File({0}) not found.", arg));
+                musicDriverInterface.Log.WriteLine(LogLevel.ERROR, string.Format("File({0}) not found.", arg));
                 strm = null;
             }
 

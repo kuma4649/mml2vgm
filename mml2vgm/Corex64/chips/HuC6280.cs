@@ -216,7 +216,7 @@ namespace Corex64
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E12007"), new LinePos(null,"-"));
+            msgBox.setWrnMsg(Msg.get("E12007"), new LinePos(null,"-"));
         }
 
         public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
@@ -317,7 +317,7 @@ namespace Corex64
 
             if (!parent.instWF.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E12000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E12000"), n), mml.line.Lp);
                 return;
             }
 
@@ -370,13 +370,13 @@ namespace Corex64
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(Msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
@@ -724,12 +724,12 @@ namespace Corex64
             {
                 if (page.lfo[c].param.Count < 3)
                 {
-                    msgBox.setErrMsg(msg.get("E12001"), mml.line.Lp);
+                    msgBox.setErrMsg(Msg.get("E12001"), mml.line.Lp);
                     return;
                 }
                 if (page.lfo[c].param.Count > 3)
                 {
-                    msgBox.setErrMsg(msg.get("E12002"), mml.line.Lp);
+                    msgBox.setErrMsg(Msg.get("E12002"), mml.line.Lp);
                     return;
                 }
 
@@ -858,13 +858,13 @@ namespace Corex64
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E12003"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E12003"), mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E12004"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E12004"), mml.line.Lp);
                 return;
             }
 
@@ -891,7 +891,7 @@ namespace Corex64
                 page.pcmMapNo = n;
                 if (!parent.instPCMMap.ContainsKey(n))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E10024"), n), mml.line.Lp);
                 }
                 return;
             }
@@ -900,13 +900,13 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E12005"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E12005"), n), mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.HuC6280)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E12006"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(Msg.get("E12006"), n), mml.line.Lp);
             }
 
             page.instrument = n;

@@ -31,7 +31,7 @@ namespace mml2vgmIDEx64
 
         public MUSHighlighter()
         {
-            RegexPattern rp;
+            //RegexPattern rp;
             //rp= new RegexPattern(new Regex("^[ \\t0-9,\\-]+[ \\t]*\\["),false, new CharClass[] { CharClass.Keyword });//パート
             //recRegexPatterns.Add(rp);
             //rp = new RegexPattern(new Regex("^#\\s*\\* *[0-9]+"), false, new CharClass[] { CharClass.Keyword });//マクロ

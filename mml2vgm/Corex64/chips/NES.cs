@@ -341,7 +341,7 @@ namespace Corex64
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E32001"), new LinePos(null, "-"));
+            msgBox.setWrnMsg(Msg.get("E32001"), new LinePos(null, "-"));
         }
 
 
@@ -841,7 +841,7 @@ namespace Corex64
                     return;
                 }
 
-                msgBox.setErrMsg(msg.get("E32000"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E32000"), mml.line.Lp);
                 return;
             }
 
@@ -859,7 +859,7 @@ namespace Corex64
                 n = Common.CheckRange(n, 0, 255);
                 if (!parent.instWF.ContainsKey(n))
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E32004"), n)
+                    msgBox.setErrMsg(string.Format(Msg.get("E32004"), n)
                         , mml.line.Lp);
                     return;
                 }
@@ -882,14 +882,14 @@ namespace Corex64
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E09003"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E09003"), n)
                     , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].Item2.chip != enmChipType.NES)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E09004"), n)
+                msgBox.setErrMsg(string.Format(Msg.get("E09004"), n)
                     , mml.line.Lp);
                 return;
             }
@@ -938,12 +938,12 @@ namespace Corex64
 
             if (page.lfo[c].param.Count < 2)
             {
-                msgBox.setErrMsg(msg.get("E32002"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E32002"), mml.line.Lp);
                 return;
             }
             if (page.lfo[c].param.Count > 2)
             {
-                msgBox.setErrMsg(msg.get("E32003"), mml.line.Lp);
+                msgBox.setErrMsg(Msg.get("E32003"), mml.line.Lp);
                 return;
             }
 

@@ -16,7 +16,7 @@ namespace mml2vgmIDEx64.Driver.ZGM.ZgmChip
         {
         }
 
-        public virtual void Setup(int chipIndex, ref uint dataPos, ref Dictionary<int, Driver.ZGM.zgm.RefAction<outDatum, uint>> cmdTable)
+        public virtual void Setup(int chipIndex, ref uint dataPos, ref Dictionary<int, Driver.ZGM.Zgm.RefAction<outDatum, uint>> cmdTable)
         {
             this.Index = chipIndex;
             defineInfo = new Corex64.DefineInfo();

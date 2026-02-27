@@ -639,7 +639,7 @@ namespace Corex64
         /// </summary>
         public int Analyze(List<Line> src)
         {
-            log.Write("テキスト解析開始");
+            Log.Write("テキスト解析開始");
 
             // Information
             info.AddInformation(sp.lnInformation, chips);
@@ -720,7 +720,7 @@ namespace Corex64
                     if (!flg)
                     {
                         msgBox.setWrnMsg(string.Format(
-                            msg.get("E01000")
+                            Msg.get("E01000")
                             , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()
                             ),
                             new LinePos(null,"-")
@@ -732,7 +732,7 @@ namespace Corex64
 
             if (info.userClockCount != 0) info.clockCount = info.userClockCount;
 
-            log.Write("テキスト解析完了");
+            Log.Write("テキスト解析完了");
             return 0;
 
         }
@@ -742,56 +742,56 @@ namespace Corex64
             if (instrumentCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "FM"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "FM"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "FM"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "FM"), line.Lp);
             }
             if (opmInstrumentCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "OPM"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "OPM"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPM"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "OPM"), line.Lp);
             }
             if (oplInstrumentCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "OPL"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "OPL"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPL"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "OPL"), line.Lp);
             }
             if (opxInstrumentCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "OPX"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "OPX"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPX"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "OPX"), line.Lp);
             }
 
             // opna2 WaveFormの音色を定義中の場合
             if (opna2wfInstrumentCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "WaveForm(OPNA2)"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "WaveForm(OPNA2)"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm(OPNA2)"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "WaveForm(OPNA2)"), line.Lp);
             }
 
             // opna2 WaveForm(SSG)の音色を定義中の場合
             if (opna2wfsInstrumentCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "WaveForm(OPNA2 SSG)"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "WaveForm(OPNA2 SSG)"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm(OPNA2 SSG)"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "WaveForm(OPNA2 SSG)"), line.Lp);
             }
 
             if (instModCounter != -1)
             {
                 if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "FDS Modulation"), null);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01022"), "FDS Modulation"), null);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "FDS Modulation"), line.Lp);
+                    msgBox.setErrMsg(string.Format(Msg.get("E01023"), "FDS Modulation"), line.Lp);
             }
         }
 
@@ -801,7 +801,7 @@ namespace Corex64
 
             if (buf.Length < 1)
             {
-                msgBox.setWrnMsg(msg.get("E01001"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01001"), line.Lp);
                 return -1;
             }
 
@@ -833,7 +833,7 @@ namespace Corex64
                 }
                 catch
                 {
-                    msgBox.setWrnMsg(msg.get("E01xxx"), line.Lp);
+                    msgBox.setWrnMsg(Msg.get("E01xxx"), line.Lp);
                 }
                 return 0;
             }
@@ -1103,7 +1103,7 @@ namespace Corex64
                         }
                         else
                         {
-                            msgBox.setWrnMsg(msg.get("E01004"), line.Lp);
+                            msgBox.setWrnMsg(Msg.get("E01004"), line.Lp);
                         }
 
                         if (instENV.ContainsKey(num))
@@ -1112,7 +1112,7 @@ namespace Corex64
                     }
                     catch
                     {
-                        msgBox.setWrnMsg(msg.get("E01005"), line.Lp);
+                        msgBox.setWrnMsg(Msg.get("E01005"), line.Lp);
                     }
                     return 0;
 
@@ -1129,7 +1129,7 @@ namespace Corex64
                     }
                     catch
                     {
-                        msgBox.setWrnMsg(msg.get("E01006"), line.Lp);
+                        msgBox.setWrnMsg(Msg.get("E01006"), line.Lp);
                     }
                     return 0;
 
@@ -1247,7 +1247,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01019"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01019"), line.Lp);
             }
         }
 
@@ -1283,7 +1283,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01018"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01018"), line.Lp);
             }
         }
 
@@ -1342,7 +1342,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01021"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01021"), line.Lp);
             }
         }
 
@@ -1401,7 +1401,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01021"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01021"), line.Lp);
             }
         }
 
@@ -1433,7 +1433,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01003"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01003"), line.Lp);
             }
         }
 
@@ -1483,7 +1483,7 @@ namespace Corex64
             {
                 if (enmChip != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
+                    msgBox.setErrMsg(Msg.get("E01017"), line.Lp);
                     return;
                 }
             }
@@ -1491,7 +1491,7 @@ namespace Corex64
             {
                 if (enmChip != enmChipType.YM2612X2)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
+                    msgBox.setErrMsg(Msg.get("E01017"), line.Lp);
                     return;
                 }
             }
@@ -1583,7 +1583,7 @@ namespace Corex64
             {
                 if (ChipName != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
+                    msgBox.setErrMsg(Msg.get("E01017"), line.Lp);
                     return;
                 }
             }
@@ -1630,7 +1630,7 @@ namespace Corex64
             {
                 if (ChipName != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
+                    msgBox.setErrMsg(Msg.get("E01017"), line.Lp);
                     return;
                 }
             }
@@ -1639,7 +1639,7 @@ namespace Corex64
             {
                 if (!chips[ChipName][0].CanUsePICommand())
                 {
-                    msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name), line.Lp);
+                    msgBox.setWrnMsg(string.Format(Msg.get("E10018"), chips[ChipName][0].Name), line.Lp);
                     return;
                 }
             }
@@ -1772,12 +1772,12 @@ namespace Corex64
                     if (env[i] > max)
                     {
                         env[i] = max;
-                        msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), line.Lp);
+                        msgBox.setWrnMsg(string.Format(Msg.get("E01007"), max), line.Lp);
                     }
                     if (env[i] < min)
                     {
                         env[i] = min;
-                        msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), line.Lp);
+                        msgBox.setWrnMsg(string.Format(Msg.get("E01008"), min), line.Lp);
                     }
                 }
             }
@@ -1790,12 +1790,12 @@ namespace Corex64
                     if (env[i] > max)
                     {
                         env[i] = max;
-                        msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), line.Lp);
+                        msgBox.setWrnMsg(string.Format(Msg.get("E01007"), max), line.Lp);
                     }
                     if (env[i] < min)
                     {
                         env[i] = min;
-                        msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), line.Lp);
+                        msgBox.setWrnMsg(string.Format(Msg.get("E01008"), min), line.Lp);
                     }
                 }
             }
@@ -1827,7 +1827,7 @@ namespace Corex64
 
             if (cp == null || !cp.CanUsePcm)
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E01002"), chipName), line.Lp);
+                msgBox.setWrnMsg(string.Format(Msg.get("E01002"), chipName), line.Lp);
                 return enmChipType.None;
             }
             enmChip = GetChipType(chipName);
@@ -1934,11 +1934,11 @@ namespace Corex64
             if (name == "")
             {
                 //エイリアス指定がない場合は警告とする
-                msgBox.setWrnMsg(msg.get("E01009"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01009"), line.Lp);
                 return -1;
             }
             if (data == "")
-                msgBox.setWrnMsg(msg.get("E01010"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01010"), line.Lp);
 
             if (aliesData.ContainsKey(name))
                 aliesData.Remove(name);
@@ -1977,7 +1977,7 @@ namespace Corex64
             if (part == null)
             {
                 //パート指定がない場合は警告とする
-                msgBox.setWrnMsg(msg.get("E01011"), line.Lp);
+                msgBox.setWrnMsg(Msg.get("E01011"), line.Lp);
                 return -1;
             }
             if (data == "") line.Txt += " ";
@@ -2051,7 +2051,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01012"), line.Lp);
             }
 
             return 0;
@@ -2081,7 +2081,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01012"), line.Lp);
             }
 
             return 0;
@@ -2115,7 +2115,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01012"), line.Lp);
             }
 
             return 0;
@@ -2147,7 +2147,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01012"), line.Lp);
             }
 
             return 0;
@@ -2169,7 +2169,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01013"), line.Lp);
             }
 
             return 0;
@@ -2229,7 +2229,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01013"), line.Lp);
             }
 
             return 0;
@@ -2255,7 +2255,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01013"), line.Lp);
             }
 
             return 0;
@@ -2315,7 +2315,7 @@ namespace Corex64
                 {
                     if (aryBuf.Length <= aryIndex)
                     {
-                        msgBox.setErrMsg(msg.get("E01024"), line == null ? null : line.Lp);
+                        msgBox.setErrMsg(Msg.get("E01024"), line == null ? null : line.Lp);
                         return aryIndex;
                     }
                     else
@@ -3273,7 +3273,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01014"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01014"), line.Lp);
             }
 
             return 0;
@@ -3479,7 +3479,7 @@ namespace Corex64
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+                msgBox.setErrMsg(Msg.get("E01013"), line.Lp);
             }
 
 
@@ -3648,7 +3648,7 @@ namespace Corex64
             jumpChannels = new List<Tuple<enmChipType, int>>();
             dat = new List<outDatum>();
 
-            log.Write("ヘッダー情報作成");
+            Log.Write("ヘッダー情報作成");
             MakeHeader();
 
             int endChannel = 0;
@@ -3664,25 +3664,25 @@ namespace Corex64
                 }
             }
 
-            log.Write("MML解析開始");
+            Log.Write("MML解析開始");
             long waitCounter = 0;
             do
             {
-                log.Write("全パートコマンド解析");
+                Log.Write("全パートコマンド解析");
                 AnalyzeAllPartCommand();
 
-                log.Write("全パートのうち次のコマンドまで一番近い値を求める");
+                Log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = ComputeAllPartDistance();
 
                 //log.Write("全パートのwaitcounterを減らす");
                 //DecAllPartWaitCounter(waitCounter);
 
-                log.Write("終了パートのカウント");
+                Log.Write("終了パートのカウント");
                 endChannel = CountUpEndPart();
 
                 if (endChannel < totalChannel)
                 {
-                    log.Write("全パートのwaitcounterを減らす");
+                    Log.Write("全パートのwaitcounterを減らす");
                     DecAllPartWaitCounter(waitCounter);
                 }
 
@@ -3700,7 +3700,7 @@ namespace Corex64
             //ページのClockCounterを比較し最大のものをパートのclockCounterとする
             CompClockCounter();
 
-            log.Write("フッター情報の作成");
+            Log.Write("フッター情報の作成");
             MakeFooter();
 
             return dat.ToArray();
@@ -4002,7 +4002,7 @@ namespace Corex64
                     //未使用のパートの場合は処理を行わない
                     if (!chip.use) continue;
 
-                    log.Write(string.Format("Chip [{0}]", chip.Name));
+                    Log.Write(string.Format("Chip [{0}]", chip.Name));
 
                     for (int i = 0; i < chip.lstPartWork.Count; i++)
                     {
@@ -4042,7 +4042,7 @@ namespace Corex64
 
                     chip.LoopPage();
 
-                    log.Write("channelを跨ぐコマンド向け処理");
+                    Log.Write("channelを跨ぐコマンド向け処理");
                     chip.MultiChannelCommand(null);
 
                     chip.LoopPage();
@@ -4063,35 +4063,35 @@ namespace Corex64
             if (!pg.chip.use) return;
             if (pg.mmlData == null && !isRealTimeMode) return;
 
-            log.Write("MD stream pcm sound off");
+            Log.Write("MD stream pcm sound off");
             if (pg.pcmWaitKeyOnCounter == 0)
                 pg.pcmWaitKeyOnCounter = -1;
 
-            log.Write("RR15");
+            Log.Write("RR15");
             ProcRR15(pg);
 
-            log.Write("KeyOff");
+            Log.Write("KeyOff");
             if (!isRealTimeMode) ProcKeyOff(pg);
 
-            log.Write("Bend");
+            Log.Write("Bend");
             ProcBend(pg);
 
-            log.Write("Lfo");
+            Log.Write("Lfo");
             ProcLfo(pg);
 
-            log.Write("Envelope");
+            Log.Write("Envelope");
             ProcEnvelope(pg);
 
-            log.Write("Arpeggio");
+            Log.Write("Arpeggio");
             ProcArpeggio(pg);
 
-            log.Write("Volume Arpeggio");
+            Log.Write("Volume Arpeggio");
             ProcVArpeggio(pg);
 
-            log.Write("Command Arpeggio");
+            Log.Write("Command Arpeggio");
             ProcCommandArpeggio(pg);
 
-            log.Write("KeyOnDelay");
+            Log.Write("KeyOnDelay");
             ProcKeyOnDelay(pg);
 
             ProcMidiNoteOff(pg);
@@ -4109,13 +4109,13 @@ namespace Corex64
 
             if (isRealTimeMode) return;
 
-            log.Write("wait消化待ち");
+            Log.Write("wait消化待ち");
             if (pg.waitCounter > 0)
             {
                 return;
             }
 
-            log.Write("データは最後まで実施されたか");
+            Log.Write("データは最後まで実施されたか");
             if (pg.dataEnd)
             {
                 return;
@@ -4126,7 +4126,7 @@ namespace Corex64
             //pw.ppg[pw.cpgNum].dataEnd = true;
             //}
 
-            log.Write("パートのデータがない場合は何もしないで次へ");
+            Log.Write("パートのデータがない場合は何もしないで次へ");
             if (pg.mmlData == null || pg.mmlData.Count < 1)
             {
                 pg.dataEnd = true;
@@ -4134,7 +4134,7 @@ namespace Corex64
                 return;
             }
 
-            log.Write("コマンド毎の処理を実施");
+            Log.Write("コマンド毎の処理を実施");
             while (pg.waitCounter == 0 && !pg.dataEnd)
             {
                 if (pg.mmlPos >= pg.mmlData.Count)
@@ -4633,7 +4633,7 @@ namespace Corex64
             dat = new List<outDatum>();
             xdat = new List<outDatum>();
 
-            log.Write("ヘッダー情報作成(XGM)");
+            Log.Write("ヘッダー情報作成(XGM)");
             Xgm_makeHeader();
 
             int endChannel = 0;
@@ -4651,7 +4651,7 @@ namespace Corex64
                 }
             }
 
-            log.Write("MML解析開始(XGM)");
+            Log.Write("MML解析開始(XGM)");
             long waitCounter;
             do
             {
@@ -4663,7 +4663,7 @@ namespace Corex64
                     foreach (ClsChip chip in kvp.Value)
                     {
                         if (chip == null) continue;
-                        log.Write(string.Format("Chip [{0}]", chip.Name));
+                        Log.Write(string.Format("Chip [{0}]", chip.Name));
 
                         //未使用のchipの場合は処理を行わない
                         if (!chip.use) continue;
@@ -4691,7 +4691,7 @@ namespace Corex64
 
                         chip.LoopPage();
 
-                        log.Write("channelを跨ぐコマンド向け処理");
+                        Log.Write("channelを跨ぐコマンド向け処理");
                         chip.MultiChannelCommand(null);
 
                         chip.LoopPage();
@@ -4699,10 +4699,10 @@ namespace Corex64
                     }
                 }
             lblexit:;
-                log.Write("全パートのうち次のコマンドまで一番近い値を求める");
+                Log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = Xgm_procCheckMinimumWaitCounter();
 
-                log.Write("KeyOn情報をかき出し");
+                Log.Write("KeyOn情報をかき出し");
                 foreach (outDatum dat in xgmKeyOnData) OutData(dat, null, 0x52, 0x28, dat.val);
 
                 //log.Write("全パートのwaitcounterを減らす");
@@ -4712,7 +4712,7 @@ namespace Corex64
                 //    Xgm_procWait(waitCounter);
                 //}
 
-                log.Write("終了パートのカウント");
+                Log.Write("終了パートのカウント");
                 endChannel = 0;
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
                 {
@@ -4739,7 +4739,7 @@ namespace Corex64
                     }
                 }
 
-                log.Write("全パートのwaitcounterを減らす");
+                Log.Write("全パートのwaitcounterを減らす");
                 if (waitCounter != long.MaxValue && endChannel < totalChannel)
                     Xgm_procWait(waitCounter);
 
@@ -4758,10 +4758,10 @@ namespace Corex64
             //ページのClockCounterを比較し最大のものをパートのclockCounterとする
             CompClockCounter();
 
-            log.Write("VGMデータをXGMへコンバート");
+            Log.Write("VGMデータをXGMへコンバート");
             dat = ConvertVGMtoXGM(dat);
 
-            log.Write("フッター情報の作成");
+            Log.Write("フッター情報の作成");
             Xgm_makeFooter();
 
             return dat.ToArray();
@@ -4940,31 +4940,31 @@ namespace Corex64
             {
                 foreach (partPage page in pw.pg)
                 {
-                    log.Write("RR15");
+                    Log.Write("RR15");
                     ProcRR15(page);
 
-                    log.Write("KeyOff");
+                    Log.Write("KeyOff");
                     ProcKeyOff(page);
 
-                    log.Write("Bend");
+                    Log.Write("Bend");
                     ProcBend(page);
 
-                    log.Write("Lfo");
+                    Log.Write("Lfo");
                     ProcLfo(page);
 
-                    log.Write("Envelope");
+                    Log.Write("Envelope");
                     ProcEnvelope(page);
 
-                    log.Write("Arpeggio");
+                    Log.Write("Arpeggio");
                     ProcArpeggio(page);
 
-                    log.Write("Volume Arpeggio");
+                    Log.Write("Volume Arpeggio");
                     ProcVArpeggio(page);
 
-                    log.Write("Command Arpeggio");
+                    Log.Write("Command Arpeggio");
                     ProcCommandArpeggio(page);
 
-                    log.Write("Key On Delay");
+                    Log.Write("Key On Delay");
                     ProcKeyOnDelay(page);
 
                     if (!page.isLayer
@@ -4978,13 +4978,13 @@ namespace Corex64
                     if (page.noteCmd != 0)
                         page.chip.SetVolume(page, null);
 
-                    log.Write("wait消化待ち");
+                    Log.Write("wait消化待ち");
                     if (page.waitCounter > 0) continue;
 
-                    log.Write("データは最後まで実施されたか");
+                    Log.Write("データは最後まで実施されたか");
                     if (page.dataEnd) continue;
 
-                    log.Write("パートのデータがない場合は何もしないで次へ");
+                    Log.Write("パートのデータがない場合は何もしないで次へ");
                     if (page.mmlData == null || page.mmlData.Count < 1)
                     {
                         page.dataEnd = true;
@@ -4992,7 +4992,7 @@ namespace Corex64
                         continue;
                     }
 
-                    log.Write("コマンド毎の処理を実施");
+                    Log.Write("コマンド毎の処理を実施");
                     while (page.waitCounter == 0 && !page.dataEnd)
                     {
                         if (page.mmlPos >= page.mmlData.Count)
@@ -5223,7 +5223,7 @@ namespace Corex64
                         }
 
                         if (des.Count - frameDummyCounter - framePtr > 256)
-                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - frameDummyCounter - framePtr), new LinePos(null, "-"));
+                            msgBox.setWrnMsg(string.Format(Msg.get("E01015"), frameCnt, des.Count - frameDummyCounter - framePtr), new LinePos(null, "-"));
                         framePtr = des.Count;
                         frameDummyCounter = 0;
 
@@ -6238,7 +6238,7 @@ namespace Corex64
             switch (mml.type)
             {
                 case enmMMLType.CompileSkip:
-                    log.Write("CompileSkip");
+                    Log.Write("CompileSkip");
                     page.dataEnd = true;
                     page.enableInterrupt = true;
                     page.waitCounter = -1;
@@ -6246,287 +6246,287 @@ namespace Corex64
                         compileEnd = true;
                     break;
                 case enmMMLType.Tempo:
-                    log.Write("Tempo");
+                    Log.Write("Tempo");
                     page.chip.CmdTempo(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Instrument:
-                    log.Write("Instrument");
+                    Log.Write("Instrument");
                     page.chip.CmdInstrument(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Octave:
-                    log.Write("Octave");
+                    Log.Write("Octave");
                     page.chip.CmdOctave(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.OctaveUp:
-                    log.Write("OctaveUp");
+                    Log.Write("OctaveUp");
                     page.chip.CmdOctaveUp(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.OctaveDown:
-                    log.Write("OctaveDown");
+                    Log.Write("OctaveDown");
                     page.chip.CmdOctaveDown(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Length:
-                    log.Write("Length");
+                    Log.Write("Length");
                     page.chip.CmdLength(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.TotalVolume:
-                    log.Write("TotalVolume");
+                    Log.Write("TotalVolume");
                     page.chip.CmdTotalVolume(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Volume:
-                    log.Write("Volume");
+                    Log.Write("Volume");
                     page.chip.CmdVolume(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.VolumeDown:
-                    log.Write("VolumeDown");
+                    Log.Write("VolumeDown");
                     page.chip.CmdVolumeDown(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.VolumeUp:
-                    log.Write("VolumeUp");
+                    Log.Write("VolumeUp");
                     page.chip.CmdVolumeUp(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Pan:
-                    log.Write("Pan");
+                    Log.Write("Pan");
                     page.chip.CmdPan(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Gatetime:
-                    log.Write("Gatetime");
+                    Log.Write("Gatetime");
                     page.chip.CmdGatetime(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.GatetimeDiv:
-                    log.Write("GatetimeDiv");
+                    Log.Write("GatetimeDiv");
                     page.chip.CmdGatetime2(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Detune:
-                    log.Write("Detune");
+                    Log.Write("Detune");
                     page.chip.CmdDetune(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.DirectMode:
-                    log.Write("DirectMode");
+                    Log.Write("DirectMode");
                     page.chip.CmdDirectMode(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Renpu:
-                    log.Write("Renpu");
+                    Log.Write("Renpu");
                     page.chip.CmdRenpuStart(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.RenpuEnd:
-                    log.Write("RenpuEnd");
+                    Log.Write("RenpuEnd");
                     page.chip.CmdRenpuEnd(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Repeat: //展開済みなので無駄
-                    log.Write("Repeat");
+                    Log.Write("Repeat");
                     page.chip.CmdRepeatStart(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.RepeatEnd: //展開済みなので無駄
-                    log.Write("RepeatEnd");
+                    Log.Write("RepeatEnd");
                     page.chip.CmdRepeatEnd(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.RepertExit: //展開済みなので無駄
-                    log.Write("RepertExit");
+                    Log.Write("RepertExit");
                     page.chip.CmdRepeatExit(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Note:
-                    log.Write("Note");
+                    Log.Write("Note");
                     MML n = mml.Copy();
                     page.chip.CmdNote(pw, page, n);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Rest:
-                    log.Write("Rest");
+                    Log.Write("Rest");
                     page.chip.CmdRest(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Lyric:
-                    log.Write("Lyric");
+                    Log.Write("Lyric");
                     page.chip.CmdLyric(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Envelope:
-                    log.Write("Envelope");
+                    Log.Write("Envelope");
                     page.chip.CmdEnvelope(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Arpeggio:
-                    log.Write("Arpeggio");
+                    Log.Write("Arpeggio");
                     page.chip.CmdArpeggio(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PhaseReset:
-                    log.Write("PhaseReset");
+                    Log.Write("PhaseReset");
                     page.chip.CmdPhaseReset(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.ReversePhase:
-                    log.Write("ReversePhase");
+                    Log.Write("ReversePhase");
                     page.chip.CmdReversePhase(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PageDirectSend:
-                    log.Write("PageDirectSend");
+                    Log.Write("PageDirectSend");
                     page.chip.CmdPageDirectSend(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.HardEnvelope:
-                    log.Write("HardEnvelope");
+                    Log.Write("HardEnvelope");
                     page.chip.CmdHardEnvelope(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.ExtendChannel:
-                    log.Write("ExtendChannel");
+                    Log.Write("ExtendChannel");
                     page.chip.CmdExtendChannel(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.VOperator:
-                    log.Write("VOperator");
+                    Log.Write("VOperator");
                     page.chip.CmdVOperator(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.VGuard:
-                    log.Write("VGuard");
+                    Log.Write("VGuard");
                     page.chip.CmdVGuard(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Lfo:
-                    log.Write("Lfo");
+                    Log.Write("Lfo");
                     page.chip.CmdLfo(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.LfoSwitch:
-                    log.Write("LfoSwitch");
+                    Log.Write("LfoSwitch");
                     page.chip.CmdLfoSwitch(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PcmMode:
-                    log.Write("PcmMode");
+                    Log.Write("PcmMode");
                     page.chip.CmdMode(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PcmMap:
-                    log.Write("PcmMapMode");
+                    Log.Write("PcmMapMode");
                     page.chip.CmdPcmMapSw(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Noise:
-                    log.Write("Noise");
+                    Log.Write("Noise");
                     page.chip.CmdNoise(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.DCSGCh3Freq:
-                    log.Write("DCSGCh3Freq");
+                    Log.Write("DCSGCh3Freq");
                     page.chip.CmdDCSGCh3Freq(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Bend:
-                    log.Write("Bend");
+                    Log.Write("Bend");
                     page.chip.CmdBend(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Y:
-                    log.Write("Y");
+                    Log.Write("Y");
                     page.chip.CmdY(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.LoopPoint:
-                    log.Write("LoopPoint");
+                    Log.Write("LoopPoint");
                     page.chip.CmdLoop(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.JumpPoint:
-                    log.Write("JumpPoint");
+                    Log.Write("JumpPoint");
                     jumpPointClock = (long)dSample;// lClock;
                     jumpChannels.Add(new Tuple<enmChipType, int>(page.chip.chipType, page.ch));
                     if (doJumping) doJumping = false;
                     page.mmlPos++;
                     break;
                 case enmMMLType.NoiseToneMixer:
-                    log.Write("NoiseToneMixer");
+                    Log.Write("NoiseToneMixer");
                     page.chip.CmdNoiseToneMixer(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Portament:
-                    log.Write("Portament");
+                    Log.Write("Portament");
                     page.chip.CmdPortament(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.KeyShift:
-                    log.Write("KeyShift");
+                    Log.Write("KeyShift");
                     page.chip.CmdKeyShift(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.AddressShift:
-                    log.Write("AddressShift");
+                    Log.Write("AddressShift");
                     page.chip.CmdAddressShift(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.MIDICh:
-                    log.Write("MIDICh");
+                    Log.Write("MIDICh");
                     page.chip.CmdMIDICh(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.MIDIControlChange:
-                    log.Write("MIDIControlChange");
+                    Log.Write("MIDIControlChange");
                     page.chip.CmdMIDIControlChange(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Velocity:
-                    log.Write("Velocity");
+                    Log.Write("Velocity");
                     page.chip.CmdVelocity(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.SusOnOff:
-                    log.Write("SusOnOff");
+                    Log.Write("SusOnOff");
                     page.chip.CmdSusOnOff(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Effect:
-                    log.Write("Effect");
+                    Log.Write("Effect");
                     page.chip.CmdEffect(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.ForcedFnum:
-                    log.Write("ForcedFnum");
+                    Log.Write("ForcedFnum");
                     page.chip.CmdForcedFnum(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.SkipPlay:
-                    log.Write("SkipPlay");
+                    Log.Write("SkipPlay");
                     jumpPointClock = (long)dSample;
                     jumpChannels.Add(new Tuple<enmChipType, int>(page.chip.chipType, page.ch));
 
                     page.mmlPos++;
                     break;
                 case enmMMLType.ToneDoubler:
-                    log.Write("ToneDoubler");
+                    Log.Write("ToneDoubler");
                     //page.ppage[page.cpageNum].chip.CmdToneDoubler(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.RelativeVolumeSetting:
-                    log.Write("RelativeVolumeSetting");
+                    Log.Write("RelativeVolumeSetting");
                     page.chip.CmdRelativeVolumeSetting(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Synchronous:
-                    log.Write("Synchronous");//同期コマンドの場合は特に処理は必要ない
+                    Log.Write("Synchronous");//同期コマンドの場合は特に処理は必要ない
                     if ((int)mml.args[0] == 3)
                     {
                         MML smml = new MML();
@@ -6538,57 +6538,57 @@ namespace Corex64
                     page.mmlPos++;
                     break;
                 case enmMMLType.TraceUpdateStack:
-                    log.Write("TraceUpdateStack");
+                    Log.Write("TraceUpdateStack");
                     page.chip.CmdTraceUpdateStack(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.KeyOnDelay:
-                    log.Write("KeyOnDelay");
+                    Log.Write("KeyOnDelay");
                     page.chip.CmdKeyOnDelay(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.HardEnvelopeSync:
-                    log.Write("HardEnvelopeSync");
+                    Log.Write("HardEnvelopeSync");
                     page.chip.CmdHardEnvelopeSync(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Modulation:
-                    log.Write("Modulation");
+                    Log.Write("Modulation");
                     page.chip.CmdModulation(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PartColor:
-                    log.Write("PartColor");
+                    Log.Write("PartColor");
                     page.chip.CmdPartColor(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PartPriority:
-                    log.Write("PartPriority");
+                    Log.Write("PartPriority");
                     page.chip.CmdPartPriority(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PartArpeggio_Start:
-                    log.Write("PartArpeggio_Start");
+                    Log.Write("PartArpeggio_Start");
                     page.chip.CmdPartArpeggio_Start(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.PartArpeggio_End:
-                    log.Write("PartArpeggio_End");
+                    Log.Write("PartArpeggio_End");
                     page.chip.CmdPartArpeggio_End(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.RR15:
-                    log.Write("RR15");
+                    Log.Write("RR15");
                     page.chip.CmdRR15(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.TLOFS:
-                    log.Write("TLOFS");
+                    Log.Write("TLOFS");
                     page.chip.CmdTLOFS(page, mml);
                     page.mmlPos++;
                     break;
                 default:
-                    msgBox.setErrMsg(string.Format(msg.get("E01016")
+                    msgBox.setErrMsg(string.Format(Msg.get("E01016")
                         , mml.type)
                         , mml.line.Lp);
                     page.mmlPos++;

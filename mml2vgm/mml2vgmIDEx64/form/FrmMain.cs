@@ -145,7 +145,7 @@ namespace mml2vgmIDEx64
                 }
                 catch (Exception ex)
                 {
-                    log.ForcedWrite(ex);
+                    Log.ForcedWrite(ex);
                     //メッセージによる読み込み失敗の場合は何も表示しない
                     //                    MessageBox.Show("ファイルの読み込みに失敗しました。");
                 }
@@ -172,7 +172,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 str = null;
             }
             return str;
@@ -1896,16 +1896,16 @@ namespace mml2vgmIDEx64
 
         private void startPreprocess()
         {
-            Corex64.log.Open();
-            Corex64.log.Write("start preprocess thread");
+            Corex64.Log.Open();
+            Corex64.Log.Write("start preprocess thread");
             Action dmy = updateTitle;
             this.Invoke(dmy);
-            Corex64.log.Write(string.Format("  preprocess at [{0}]", title));
+            Corex64.Log.Write(string.Format("  preprocess at [{0}]", title));
             msgBox.clear();
 
             Compiling |= 8;
 
-            Corex64.log.Write("Call M98DotNET preprocessor");
+            Corex64.Log.Write("Call M98DotNET preprocessor");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -1928,14 +1928,14 @@ namespace mml2vgmIDEx64
                 isSuccess = false;
             }
 
-            Corex64.log.Write("Return M98DotNET preprocessor");
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Return M98DotNET preprocessor");
+            Corex64.Log.Write("Disp Result");
 
             dmy = finishedPreprocess;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end preprocess thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end preprocess thread");
+            Corex64.Log.Close();
 
         }
 
@@ -1994,8 +1994,8 @@ namespace mml2vgmIDEx64
 
         private void startCompile()
         {
-            Corex64.log.Open();
-            Corex64.log.Write("start compile thread");
+            Corex64.Log.Open();
+            Corex64.Log.Write("start compile thread");
 
             Action dmy = updateTitle;
 
@@ -2010,7 +2010,7 @@ namespace mml2vgmIDEx64
 
             this.Invoke(dmy);
 
-            Corex64.log.Write(string.Format("  compile at [{0}]", title));
+            Corex64.Log.Write(string.Format("  compile at [{0}]", title));
 
             msgBox.clear();
 
@@ -2062,7 +2062,7 @@ namespace mml2vgmIDEx64
 
         private void startCompileGWI()
         {
-            Corex64.log.Write("Call mml2vgm core");
+            Corex64.Log.Write("Call mml2vgm core");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
             if (!doExport)
@@ -2083,21 +2083,21 @@ namespace mml2vgmIDEx64
                 //break;
             }
 
-            Corex64.log.Write("Return mml2vgm core");
+            Corex64.Log.Write("Return mml2vgm core");
             //}
 
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
         }
 
         private void startCompileMUC()
         {
-            Corex64.log.Write("Call mucomDotNET compiler");
+            Corex64.Log.Write("Call mucomDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -2115,21 +2115,21 @@ namespace mml2vgmIDEx64
                 isSuccess = false;
             }
 
-            Corex64.log.Write("Return mucomDotNET compiler");
+            Corex64.Log.Write("Return mucomDotNET compiler");
             //}
 
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
         }
 
         private void startCompileMML()
         {
-            Corex64.log.Write("Call PMDDotNET compiler");
+            Corex64.Log.Write("Call PMDDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -2147,21 +2147,21 @@ namespace mml2vgmIDEx64
                 isSuccess = false;
             }
 
-            Corex64.log.Write("Return PMDDotNET compiler");
+            Corex64.Log.Write("Return PMDDotNET compiler");
             //}
 
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
         }
 
         private void startCompileMDL()
         {
-            Corex64.log.Write("Call MoonDriverDotNET compiler");
+            Corex64.Log.Write("Call MoonDriverDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -2179,21 +2179,21 @@ namespace mml2vgmIDEx64
                 isSuccess = false;
             }
 
-            Corex64.log.Write("Return MoonDriverDotNET compiler");
+            Corex64.Log.Write("Return MoonDriverDotNET compiler");
             //}
 
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
         }
 
         private void startCompileMUS()
         {
-            Corex64.log.Write("Call muapDotNET compiler");
+            Corex64.Log.Write("Call muapDotNET compiler");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -2211,16 +2211,16 @@ namespace mml2vgmIDEx64
                 isSuccess = false;
             }
 
-            Corex64.log.Write("Return muapDotNET compiler");
+            Corex64.Log.Write("Return muapDotNET compiler");
             //}
 
-            Corex64.log.Write("Disp Result");
+            Corex64.Log.Write("Disp Result");
 
             Action dmy = finishedCompile;
             this.Invoke(dmy);
 
-            Corex64.log.Write("end compile thread");
-            Corex64.log.Close();
+            Corex64.Log.Write("end compile thread");
+            Corex64.Log.Close();
         }
 
         private void updateTitle()
@@ -2239,7 +2239,7 @@ namespace mml2vgmIDEx64
         {
             Action<string> msgDisp = MsgDisp;
             this.Invoke(msgDisp, msg);
-            Corex64.log.Write(msg);
+            Corex64.Log.Write(msg);
         }
 
         public void MsgDisp(string msg)
@@ -2307,7 +2307,7 @@ namespace mml2vgmIDEx64
 
             if (mv == null)
             {
-                if (frmLog != null && !frmLog.IsDisposed) frmLog.tbLog.AppendText(msg.get("I0105"));
+                if (frmLog != null && !frmLog.IsDisposed) frmLog.tbLog.AppendText(Msg.get("I0105"));
                 //this.toolStrip1.Enabled = true;
                 //this.tsslMessage.Text = msg.get("I0106");
                 return;
@@ -2384,7 +2384,7 @@ namespace mml2vgmIDEx64
                 return;
             }
 
-            frmLog.tbLog.AppendText(msg.get("I0107"));
+            frmLog.tbLog.AppendText(Msg.get("I0107"));
 
             //エラーリストウィンドウにエラーメッセージリストを追加
             foreach (msgInfo mes in msgBox.getErr())
@@ -2432,7 +2432,7 @@ namespace mml2vgmIDEx64
 
             //ログウィンドウに各種メッセージを表示
             frmLog.tbLog.AppendText("\r\n");
-            frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            frmLog.tbLog.AppendText(string.Format(Msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (!isSuccess)
             {
@@ -2443,28 +2443,28 @@ namespace mml2vgmIDEx64
 
             if (mv.desVGM.loopSamples != -1)
             {
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                frmLog.tbLog.AppendText(string.Format(Msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
+                    frmLog.tbLog.AppendText(string.Format(Msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / 44100L));
                 else
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
+                    frmLog.tbLog.AppendText(string.Format(Msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
 
-            frmLog.tbLog.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            frmLog.tbLog.AppendText(string.Format(Msg.get("I0113"), mv.desVGM.lClock));
             if (mv.desVGM.info.format == enmFormat.VGM)
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
+                frmLog.tbLog.AppendText(string.Format(Msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / 44100L));
             else
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
+                frmLog.tbLog.AppendText(string.Format(Msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
-            frmLog.tbLog.AppendText(msg.get("I0126"));
+            frmLog.tbLog.AppendText(Msg.get("I0126"));
 
 
 
@@ -2519,7 +2519,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception)
             {
-                MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             Compiling = 0;
@@ -2717,7 +2717,7 @@ namespace mml2vgmIDEx64
                     }
                     catch
                     {
-                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -2797,7 +2797,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception e)
                     {
-                        Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
+                        musicDriverInterface.Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                     }
                     frmPartCounter.refreshMuteSolo();
 
@@ -2841,7 +2841,7 @@ namespace mml2vgmIDEx64
                     }
                     catch
                     {
-                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -2898,7 +2898,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception e)
                     {
-                        Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
+                        musicDriverInterface.Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                     }
                     frmPartCounter.refreshMuteSolo();
                 }
@@ -2940,7 +2940,7 @@ namespace mml2vgmIDEx64
                     }
                     catch
                     {
-                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -3000,7 +3000,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception e)
                     {
-                        Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
+                        musicDriverInterface.Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                     }
                     frmPartCounter.refreshMuteSolo();
                 }
@@ -3042,7 +3042,7 @@ namespace mml2vgmIDEx64
                     }
                     catch
                     {
-                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -3318,7 +3318,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception e)
             {
-                log.ForcedWrite(e);
+                Log.ForcedWrite(e);
             }
         }
 
@@ -3346,13 +3346,13 @@ namespace mml2vgmIDEx64
                 Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
             }
 
-            log.ForcedWrite("起動時のAudio初期化処理開始");
+            Log.ForcedWrite("起動時のAudio初期化処理開始");
             //Audio.Init(setting);
 
             //Audio.SetMMLTraceInfo = SetMMLTraceInfo;
 
-            log.ForcedWrite("デバッグウィンドウ起動");
-            log.debug = setting.Debug_DispFrameCounter;
+            Log.ForcedWrite("デバッグウィンドウ起動");
+            Log.debug = setting.Debug_DispFrameCounter;
             if (frmDebug != null)
             {
                 frmDebug.force = true;
@@ -3411,7 +3411,7 @@ namespace mml2vgmIDEx64
                 }
                 catch (Exception ex)
                 {
-                    log.ForcedWrite(ex);
+                    Log.ForcedWrite(ex);
 
                     frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
                     frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
@@ -3467,12 +3467,12 @@ namespace mml2vgmIDEx64
             this.setting = setting;
             this.setting.Save();
 
-            log.ForcedWrite("設定が変更されたため、再度Audio初期化処理開始");
+            Log.ForcedWrite("設定が変更されたため、再度Audio初期化処理開始");
 
             Audio.Init(this.setting);
 
-            log.ForcedWrite("Audio初期化処理完了");
-            log.debug = setting.Debug_DispFrameCounter;
+            Log.ForcedWrite("Audio初期化処理完了");
+            Log.debug = setting.Debug_DispFrameCounter;
             if (frmDebug != null)
             {
                 frmDebug.force = true;
@@ -3511,17 +3511,17 @@ namespace mml2vgmIDEx64
             try
             {
 
-                log.ForcedWrite("終了処理開始");
+                Log.ForcedWrite("終了処理開始");
 
                 if (failFast)
                 {
-                    log.ForcedWrite("強制終了(FailFast)を実施");
+                    Log.ForcedWrite("強制終了(FailFast)を実施");
                     Environment.FailFast("致命的エラーが発生しているため強制終了を実施");
                     return;
                 }
 
                 this.Visible = false;
-                log.ForcedWrite("frmMain_FormClosing:STEP 00");
+                Log.ForcedWrite("frmMain_FormClosing:STEP 00");
 
                 timer.Enabled = false;
 
@@ -3562,7 +3562,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
             }
         }
 
@@ -3696,7 +3696,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 srcBuf = null;
                 MessageBox.Show(
                     string.Format("ファイルの読み込みに失敗しました。\r\nメッセージ={0}", ex.Message),
@@ -3874,7 +3874,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.ForcedWrite(ex);
+                Log.ForcedWrite(ex);
                 mubData = null;
                 MessageBox.Show(
                     string.Format("ファイルの読み込みに失敗しました。\r\nメッセージ={0}", ex.Message),
@@ -3916,7 +3916,7 @@ namespace mml2vgmIDEx64
                     }
                     catch (Exception ex)
                     {
-                        log.ForcedWrite(ex);
+                        Log.ForcedWrite(ex);
                     }
                     if (Audio.errMsg == "") throw new Exception();
                     else
@@ -4524,7 +4524,7 @@ namespace mml2vgmIDEx64
 
             UpdateGwiFileHistory();
 
-            log.ForcedWrite("スクリプトの検索");
+            Log.ForcedWrite("スクリプトの検索");
             tsmiScript.Enabled = false;
             if (!Directory.Exists(Path.Combine(Common.GetApplicationFolder(), "Script")))
             {
@@ -4799,7 +4799,7 @@ namespace mml2vgmIDEx64
 
         private void dmyDisp(string dmy)
         {
-            log.Write(dmy);
+            Log.Write(dmy);
         }
 
         private void DpMain_DragOver(object sender, DragEventArgs e)
@@ -4955,7 +4955,7 @@ namespace mml2vgmIDEx64
             }
             catch (Exception ex)
             {
-                log.Write(ex.Message);
+                Log.Write(ex.Message);
                 MessageBox.Show("D88内のbasファイルのオープンに失敗しました。", "インポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

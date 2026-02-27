@@ -105,17 +105,17 @@ namespace Corex64
         {
             try
             {
-                Disp(string.Format(msg.get("I04000"), "mml2vgm"));
+                Disp(string.Format(Msg.get("I04000"), "mml2vgm"));
                 Disp("");
 
                 int ret = Start_Analyze();
                 if (ret != 0) return ret;
 
-                Disp(msg.get("I04004"));
+                Disp(Msg.get("I04004"));
                 //wrkPath PCMファイル取り込み対象パス
                 if (desVGM.instPCMDatSeq.Count > 0) GetPCMData(wrkPath);
 
-                Disp(msg.get("I04005"));
+                Disp(Msg.get("I04005"));
 
                 MMLAnalyze mmlAnalyze = new MMLAnalyze(desVGM);
                 mmlAnalyze.doSkip = doSkip;
@@ -124,7 +124,7 @@ namespace Corex64
                 if (mmlAnalyze.Start() != 0)
                 {
                     msgBox.setErrMsg(string.Format(
-                        msg.get("E04003")
+                        Msg.get("E04003")
                         , mmlAnalyze.linePos.row), mmlAnalyze.linePos);
                     return -1;
                 }
@@ -142,14 +142,14 @@ namespace Corex64
                     switch (desVGM.info.format)
                     {
                         case enmFormat.VGM:
-                            Disp(msg.get("I04006"));
+                            Disp(Msg.get("I04006"));
                             desBuf = desVGM.Vgm_getByteData(mmlAnalyze.mmlData);
-                            Disp(msg.get("I04007"));
+                            Disp(Msg.get("I04007"));
                             break;
                         case enmFormat.XGM:
-                            Disp(msg.get("I04008"));
+                            Disp(Msg.get("I04008"));
                             desBuf = desVGM.Xgm_getByteData(mmlAnalyze.mmlData);
-                            Disp(msg.get("I04009"));
+                            Disp(Msg.get("I04009"));
                             break;
                         default:
                             break;
@@ -160,7 +160,7 @@ namespace Corex64
                         if (desVGM.linePos != null)
                         {
                             msgBox.setErrMsg(string.Format(
-                                msg.get("E04004")
+                                Msg.get("E04004")
                                 , desVGM.linePos.row), desVGM.linePos);
                         }
                         return -1;
@@ -168,7 +168,7 @@ namespace Corex64
 
                     if (outVgmFile && writeFileMode)
                     {
-                        Disp(msg.get("I04021"));
+                        Disp(Msg.get("I04021"));
                         if (desVGM.info.format == enmFormat.VGM)
                             OutVgmFile(desBuf);
                         else
@@ -179,25 +179,25 @@ namespace Corex64
                 else if (desVGM.info.format == enmFormat.XGM2)
                 {
 
-                    Disp(msg.get("I04026"));
+                    Disp(Msg.get("I04026"));
                     XGM2maker xmake = new XGM2maker(Disp);
                     desVGM.jumpPointClock = -1;
                     desVGM.jumpChannels = new List<Tuple<enmChipType, int>>();
                     xmake.forcePCMMode = forceXGM2PCMMode;
                     desBuf = xmake.Build(desVGM, outVgmFile, writeFileMode);
-                    Disp(msg.get("I04027"));
+                    Disp(Msg.get("I04027"));
 
                     if (desBuf == null)
                     {
                         msgBox.setErrMsg(string.Format(
-                            msg.get("E04004")
+                            Msg.get("E04004")
                             , desVGM.linePos.row), desVGM.linePos);
                         return -1;
                     }
 
                     if (outVgmFile && writeFileMode)
                     {
-                        Disp(msg.get("I04028"));
+                        Disp(Msg.get("I04028"));
                         xmake.OutFile(desBuf, desFn);
                     }
 
@@ -205,24 +205,24 @@ namespace Corex64
                 else
                 {
 
-                    Disp(msg.get("I04023"));
+                    Disp(Msg.get("I04023"));
                     ZGMmaker zmake = new ZGMmaker();
                     desVGM.jumpPointClock = -1;
                     desVGM.jumpChannels = new List<Tuple<enmChipType, int>>();
                     desBuf = zmake.Build(desVGM);
-                    Disp(msg.get("I04024"));
+                    Disp(Msg.get("I04024"));
 
                     if (desBuf == null)
                     {
                         msgBox.setErrMsg(string.Format(
-                            msg.get("E04004")
+                            Msg.get("E04004")
                             , desVGM.linePos.row), desVGM.linePos);
                         return -1;
                     }
 
                     if (outVgmFile && writeFileMode)
                     {
-                        Disp(msg.get("I04025"));
+                        Disp(Msg.get("I04025"));
                         zmake.OutFile(desBuf, desFn);
                     }
 
@@ -232,7 +232,7 @@ namespace Corex64
                 if (outTraceInfoFile && writeFileMode)
                 {
 #endif
-                    Disp(msg.get("I04022"));
+                    Disp(Msg.get("I04022"));
                     OutTraceInfoFile(desBuf);
 #if !DEBUG
                 }
@@ -249,7 +249,7 @@ namespace Corex64
             catch (Exception ex)
             {
                 Disp(ex.Message);
-                msgBox.setErrMsg(string.Format(msg.get("E04005")
+                msgBox.setErrMsg(string.Format(Msg.get("E04005")
                     , (desVGM.linePos == null ? "-" : desVGM.linePos.row.ToString())
                     , ex.Message
                     , ex.StackTrace), desVGM.linePos);
@@ -257,7 +257,7 @@ namespace Corex64
             }
             finally
             {
-                Disp(msg.get("I04011"));
+                Disp(Msg.get("I04011"));
                 Disp("");
             }
         }
@@ -269,15 +269,15 @@ namespace Corex64
             //.gwiファイルの読み込み
             if (!bufferMode)
             {
-                Disp(msg.get("I04001"));
+                Disp(Msg.get("I04001"));
                 srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(srcFn))
                 {
-                    msgBox.setErrMsg(msg.get("E04000"), new LinePos(document,srcFn));
+                    msgBox.setErrMsg(Msg.get("E04000"), new LinePos(document,srcFn));
                     return -1;
                 }
 
-                Disp(msg.get("I04002"));
+                Disp(Msg.get("I04002"));
                 //string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
                 //wrkPath インクルードファイル取り込み対象パス
                 srcTxt = File.ReadAllLines(srcFn);
@@ -288,11 +288,11 @@ namespace Corex64
 
             if (src == null)
             {
-                msgBox.setErrMsg(msg.get("E04001"), new LinePos(document, srcFn));
+                msgBox.setErrMsg(Msg.get("E04001"), new LinePos(document, srcFn));
                 return -1;
             }
 
-            Disp(msg.get("I04003"));
+            Disp(Msg.get("I04003"));
             //ざっくりくわけ
             SourceParser sp = new SourceParser();
             sp.Parse(src);
@@ -306,7 +306,7 @@ namespace Corex64
             if (desVGM.Analyze(src) != 0)
             {
                 msgBox.setErrMsg(string.Format(
-                    msg.get("E04002")
+                    Msg.get("E04002")
                     , desVGM.linePos.row), desVGM.linePos);
                 return -1;
             }
@@ -543,7 +543,7 @@ namespace Corex64
             {
                 if (desVGM.info.format == enmFormat.VGM)
                 {
-                    log.Write("VGMファイル出力");
+                    Log.Write("VGMファイル出力");
                     File.WriteAllBytes(
                         Path.Combine(
                             Path.GetDirectoryName(desFn)
@@ -553,7 +553,7 @@ namespace Corex64
                 }
                 else
                 {
-                    log.Write("XGMファイル出力");
+                    Log.Write("XGMファイル出力");
                     File.WriteAllBytes(
                         Path.Combine(
                             Path.GetDirectoryName(desFn)
@@ -564,7 +564,7 @@ namespace Corex64
                 return;
             }
 
-            log.Write(msg.get("I04021"));
+            Log.Write(Msg.get("I04021"));
 
             int num;
             byte[] buf = new byte[1024];
@@ -619,7 +619,7 @@ namespace Corex64
                 }
             }
 
-            log.Write(msg.get("I04022"));
+            Log.Write(Msg.get("I04022"));
 #if DEBUG
             desTiFn = "DEBUG_vgmData.txt";
 #endif
@@ -636,7 +636,7 @@ namespace Corex64
             catch
             {
                 msgBox.setErrMsg(string.Format(
-                                msg.get("E04008")
+                                Msg.get("E04008")
                                 , srcFn), new LinePos(document, srcFn));
                 return null;
             }
@@ -663,7 +663,7 @@ namespace Corex64
                         if (!File.Exists(includeFn))
                         {
                             msgBox.setErrMsg(string.Format(
-                                msg.get("E04006")
+                                Msg.get("E04006")
                                 , includeFn), new LinePos(null,sourceFileName, sourceLineNumber, 0, s.Length));
                             return null;
                         }
@@ -742,7 +742,7 @@ namespace Corex64
                             if (buf == null)
                             {
                                 msgBox.setErrMsg(string.Format(
-                                    msg.get("E04007")
+                                    Msg.get("E04007")
                                     , v.fileName), new LinePos(null,pds.FileName));
                                 continue;
                             }
@@ -760,7 +760,7 @@ namespace Corex64
                             if ((desVGM.info.format == enmFormat.XGM|| desVGM.info.format == enmFormat.XGM2) && v.chipNumber != 0)
                             {
                                 msgBox.setErrMsg(string.Format(
-                                    msg.get("E01017")
+                                    Msg.get("E01017")
                                     , v.fileName), new LinePos(null,pds.FileName));
                                 continue;
                             }
@@ -883,7 +883,7 @@ namespace Corex64
                         if (buf == null)
                         {
                             msgBox.setErrMsg(string.Format(
-                                msg.get("E04007")
+                                Msg.get("E04007")
                                 , v.fileName), new LinePos(null,pds.FileName));
                             continue;
                         }
@@ -891,7 +891,7 @@ namespace Corex64
                         if (desVGM.info.format == enmFormat.XGM && v.chipNumber != 0)
                         {
                             msgBox.setErrMsg(string.Format(
-                                msg.get("E01017")
+                                Msg.get("E01017")
                                 , v.fileName), new LinePos(null,pds.FileName));
                             continue;
                         }
@@ -911,7 +911,7 @@ namespace Corex64
                         if (buf == null)
                         {
                             msgBox.setErrMsg(string.Format(
-                                msg.get("E04007")
+                                Msg.get("E04007")
                                 , pds.FileName), new LinePos(null,pds.FileName));
                             continue;
                         }
@@ -1041,30 +1041,30 @@ namespace Corex64
 
             if (res != "")
             {
-                Disp(msg.get("I04012"));
+                Disp(Msg.get("I04012"));
                 //Disp(" YM2608:  None");
                 //Disp(" YM2610B: 0=A 1=B");
                 //Disp(" RF5C164: None");
                 Disp("");
-                Disp(msg.get("I04013"));
+                Disp(Msg.get("I04013"));
                 Disp("");
                 Disp("");
                 if (desVGM.c140 != null)
                 {
                     if (desVGM.c140[0] != null && desVGM.c140[0].pcmDataEasy != null)
-                        Disp(string.Format(msg.get("I04014")
+                        Disp(string.Format(Msg.get("I04014")
                             , ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
                     if (desVGM.c140.Length > 1)
                     {
                         if (desVGM.c140[1] != null && desVGM.c140[1].pcmDataEasy != null)
-                            Disp(string.Format(msg.get("I04015")
+                            Disp(string.Format(Msg.get("I04015")
                                 , ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
                     }
                 }
                 Disp("");
 
-                Disp(msg.get("I04016"));
-                Disp(msg.get("I04017"));
+                Disp(Msg.get("I04016"));
+                Disp(Msg.get("I04017"));
                 Disp(res);
             }
 
@@ -1080,8 +1080,8 @@ namespace Corex64
 
             if (res != "")
             {
-                Disp(msg.get("I04019"));
-                Disp(msg.get("I04020"));
+                Disp(Msg.get("I04019"));
+                Disp(Msg.get("I04020"));
                 Disp(res);
             }
         }
@@ -1135,7 +1135,7 @@ namespace Corex64
             {
                 tl += desVGM.instPCM[i].Item2.size;
             }
-            region += (string.Format(msg.get("I04018"), tl));
+            region += (string.Format(Msg.get("I04018"), tl));
             region += "\r\n";
 
             return region;
@@ -1306,7 +1306,7 @@ namespace Corex64
 
             if (region != "")
             {
-                region += (string.Format(msg.get("I04018"), tl));
+                region += (string.Format(Msg.get("I04018"), tl));
                 region += "\r\n";
             }
 

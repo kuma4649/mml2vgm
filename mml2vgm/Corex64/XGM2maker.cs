@@ -129,7 +129,7 @@ namespace Corex64
 
         public void OutFile(outDatum[] buf, string fn)
         {
-            log.Write(msg.get("I04028"));// XGM2ファイル出力
+            Log.Write(Msg.get("I04028"));// XGM2ファイル出力
 
             List<byte> b = new List<byte>();
             foreach (outDatum dt in buf)
@@ -294,7 +294,7 @@ namespace Corex64
 
         private void makePCMData()
         {
-            log.Write("PCMData division");
+            Log.Write("PCMData division");
 
             //PCM Data block
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
@@ -324,7 +324,7 @@ namespace Corex64
 
         private List<outDatum> makeFMtrack()
         {
-            log.Write("FM Data division");
+            Log.Write("FM Data division");
 
             List<outDatum> dat = new List<outDatum>();
 
@@ -345,7 +345,7 @@ namespace Corex64
                                 dat.Add(od);
                                 msg += string.Format("{0:x02} :", od.val);
                             }
-                            log.ForcedWrite(msg);
+                            Log.ForcedWrite(msg);
                             pg.sendData.Clear();
                         }
                     }
@@ -365,18 +365,18 @@ namespace Corex64
 
             do
             {
-                log.Write("全パートコマンド解析");
+                Log.Write("全パートコマンド解析");
                 mmlInfo.AnalyzeAllPartCommand();
 
-                log.Write("全パートのうち次のコマンドまで一番近い値を求める");
+                Log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = mmlInfo.ComputeAllPartDistance();
 
-                log.Write("終了パートのカウント");
+                Log.Write("終了パートのカウント");
                 endChannel = mmlInfo.CountUpEndPart();
 
                 if (endChannel < totalChannel)
                 {
-                    log.Write("全パートのwaitcounterを減らす");
+                    Log.Write("全パートのwaitcounterを減らす");
                     mmlInfo.DecAllPartWaitCounter(waitCounter);
                 }
 
@@ -402,7 +402,7 @@ namespace Corex64
 
         private List<outDatum> ShapingFMDat(List<outDatum> src)
         {
-            log.Write("FM shaping division");
+            Log.Write("FM shaping division");
 
             List<outDatum> ret = new List<outDatum>();
             for (int i = 0; i < src.Count; i++)
@@ -570,7 +570,7 @@ namespace Corex64
 
         private List<outDatum> makePSGtrack()
         {
-            log.Write("PSG Data division");
+            Log.Write("PSG Data division");
             List<outDatum> dat = new List<outDatum>();
 
             //Set Initialize data
@@ -590,7 +590,7 @@ namespace Corex64
                                 dat.Add(od);
                                 msg += string.Format("{0:x02} :", od.val);
                             }
-                            log.ForcedWrite(msg);
+                            Log.ForcedWrite(msg);
                             pg.sendData.Clear();
                         }
                     }
@@ -610,18 +610,18 @@ namespace Corex64
 
             do
             {
-                log.Write("全パートコマンド解析");
+                Log.Write("全パートコマンド解析");
                 mmlInfo.AnalyzeAllPartCommand();
 
-                log.Write("全パートのうち次のコマンドまで一番近い値を求める");
+                Log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = mmlInfo.ComputeAllPartDistance();
 
-                log.Write("終了パートのカウント");
+                Log.Write("終了パートのカウント");
                 endChannel = mmlInfo.CountUpEndPart();
 
                 if (endChannel < totalChannel)
                 {
-                    log.Write("全パートのwaitcounterを減らす");
+                    Log.Write("全パートのwaitcounterを減らす");
                     mmlInfo.DecAllPartWaitCounter(waitCounter);
                 }
 
@@ -647,7 +647,7 @@ namespace Corex64
 
         private List<outDatum> ShapingPSGDat(List<outDatum> src)
         {
-            log.Write("PSG shaping division");
+            Log.Write("PSG shaping division");
 
             List<outDatum> ret = new List<outDatum>();
             for (int i = 0; i < src.Count; i++)
