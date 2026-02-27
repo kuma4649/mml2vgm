@@ -211,8 +211,13 @@ namespace mml2vgmx64
                         {
                             UseShellExecute = true,
                             FileName = Path.ChangeExtension(args[1],
-                            (mv.desVGM.info.format == enmFormat.VGM) ?
-                            Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM)
+                            (mv.desVGM.info.format == enmFormat.VGM) 
+                            ? Properties.Resources.ExtensionVGM 
+                            : (mv.desVGM.info.format == enmFormat.XGM 
+                                ? Properties.Resources.ExtensionXGM
+                                : Properties.Resources.ExtensionZGM
+                              )
+                            )
                         }).Dispose();
 
                     }

@@ -126,4 +126,7 @@
   <data name="ExtensionVGZ" xml:space="preserve">
     <value>.vgz</value>
   </data>
+  <data name="ExtensionZGM" xml:space="preserve">
+    <value>.zgm</value>
+  </data>
 </root>
