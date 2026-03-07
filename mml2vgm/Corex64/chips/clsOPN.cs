@@ -1,4 +1,5 @@
 ﻿using MDSound;
+using MDSound.NX68Sound;
 using musicDriverInterface;
 using System;
 using System.Collections.Generic;
@@ -926,6 +927,16 @@ namespace Corex64
                 ope[i] += (127 - vol);
                 ope[i] += GetTLOFS(page,mml,i);
                 ope[i] = Common.CheckRange(ope[i], 0, 127);
+            }
+
+            foreach (clsLfo lfo in page.lfo)
+            {
+                if (!lfo.sw) continue;
+                if (lfo.type != eLfoType.Wah) continue;
+                ope[0] -= page.spg.beforeTlDelta1;
+                ope[1] -= page.spg.beforeTlDelta2;
+                ope[2] -= page.spg.beforeTlDelta3;
+                ope[3] -= page.spg.beforeTlDelta4;
             }
 
             MML vmml = new MML();

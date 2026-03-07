@@ -10,13 +10,10 @@
 	ComposerJ   =kuma
 	ReleaseDate =2015/11/15
 	Converted   =
-	Notes       =
+	Notes       =2026/03/07 動作確認
 
-	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
-	Part_YM2612    =F
-	Part_SN76489   =S
-	ClockCount    =192
-    F-Num         =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8,512
+	Notes       =EXONコマンドはCh3(YM2609の場合はCh9も含む)で実施するようにしてください。
+	Notes       =(スロットの割り当てをリセットするため)
 
 }
 
@@ -41,14 +38,15 @@
 
 'F1 T90
 
-'F3 EXON EX1 @0 D0 v120 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
-'F7 EXON EX2    D0 v120    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
-'F8 EXON EX3    D0 v120    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
-'F9 EXON EX4    D0 v120    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+F3 EXON EX1 @0 D0 v120 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
+F7      EX2    D0 v120    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
+F8      EX3    D0 v120    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+F9      EX4    D0 v120    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 
 F3 @110 EXON EX12 D0 v100 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
-F7      EXON EX34 D0 v100    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+F7           EX34 D0 v100    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 
-F3 EXON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
-F7 EXON EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
-F8 EXON EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+'F3 EXON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+'F7      EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+'F8      EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+

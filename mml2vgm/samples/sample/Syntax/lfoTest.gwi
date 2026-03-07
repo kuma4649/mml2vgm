@@ -1,7 +1,7 @@
 ﻿'{
 
-	TitleName   =LFO
-	TitleNameJ  =LFO
+	TitleName   =Soft LFO Test
+	TitleNameJ  =ソフトLFOテスト
 	GameName    =
 	GameNameJ   =
 	SystemName  =
@@ -10,20 +10,7 @@
 	ComposerJ   =
 	ReleaseDate =2015/12/26
 	Converted   =kuma
-	Notes       =
-
-	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
-	PartYM2612    =F
-	PartSN76489   =S
-	ClockCount    =192
-	FmF-Num       =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8
-	PsgF-Num1     =357,327,2fa,2cf,2a7,281,25d,23b,21b,1fc,1e0,1c5
-	PsgF-Num2     =1ac,194,17d,168,153,140,12e,11d,10d,0fe,0f0,0e3
-	PsgF-Num3     =0d6,0ca,0be,0b4,0aa,0a0,097,08f,087,07f,078,071
-	PsgF-Num4     =06b,065,05f,05a,055,050,04c,047,043,040,03c,039
-	PsgF-Num5     =035,032,030,02d,02a,028,026,024,022,020,01e,01c
-	PsgF-Num6     =01b,019,018,016,015,014,013,012,011,010,00f,00e
-	PsgF-Num7     =00d,00d,00c,00b,00b,00a,009,008,007,006,005,004
+	Notes       =2026/03/07 動作確認
 
 }
 
