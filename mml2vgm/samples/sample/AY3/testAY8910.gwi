@@ -1,6 +1,6 @@
 ﻿'{
 
-	TitleName            =
+	TitleName            =PSG/SSG hardware envelope test (Triangle wave?)
 	TitleNameJ           =
 	GameName             =
 	GameNameJ            =
@@ -10,7 +10,7 @@
 	ComposerJ            =
 	ReleaseDate          =
 	Converted            =
-	Notes                =
+	Notes                =2026/03/20 動作確認
 
 	ClockCount   =192
 

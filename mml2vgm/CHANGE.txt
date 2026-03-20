@@ -1,4 +1,9 @@
 更新履歴
+TAG806 2026/03/20
+  IDE:ZGM:AY8910:音が出ていなかったのを修正
+  IDE:PartCounter:mucomDotNET:オクターブ値が一つずれていたので修正
+  IDE:mucomDotNET:新規作成時のテンプレートの内容を更新
+
 TAG805 2026/03/07
   Core:OPN系:LFOワウが動作していなかったのを修正
 

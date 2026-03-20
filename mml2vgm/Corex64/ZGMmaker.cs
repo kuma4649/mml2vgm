@@ -176,6 +176,10 @@ namespace Corex64
                     di.chipIdentNo = (uint)(int)dicChipIdentifyNumber[chip.Name][1];
                     di.commandNo = cmdNo;
                     chip.ChipID = di.commandNo;
+                    if(chip is AY8910)
+                    {
+                        chip.ChipID -= 0x80;
+                    }
                     chip.port = new byte[(int)dicChipIdentifyNumber[chip.Name][2]][];
                     for (int i = 0; i < (int)dicChipIdentifyNumber[chip.Name][2]; i++)
                     {

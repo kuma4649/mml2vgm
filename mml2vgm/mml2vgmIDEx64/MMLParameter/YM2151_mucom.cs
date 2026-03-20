@@ -68,7 +68,7 @@ namespace mml2vgmIDEx64.MMLParameter
         {
             if (ch >= octave.Length) return;
 
-            octave[ch] = ((int)od.args[0] >> 4);
+            octave[ch] = (((int)od.args[0] >> 4) & 0x7) + 1;
 
             if (((int)od.args[0] & 0xf) < noteStrTbl.Length)
             {

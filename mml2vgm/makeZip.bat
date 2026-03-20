@@ -5,6 +5,7 @@ del /Q .\output\*.*
 del /Q .\output\mml2vgmx64\*.*
 del /Q .\output\mml2vgmx64\fnum\*.*
 del /Q .\output\mml2vgmx64\lang\*.*
+del /Q .\output\samples\*.*
 
 rem rem mml2vgm(簡易UI版)のコピー
 rem xcopy .\mml2vgm\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
@@ -15,7 +16,7 @@ rem xcopy .\mvc\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 rem mvcx64(コマンドライン版)のコピー
 xcopy .\mvcx64\bin\Release\net8.0\*.* .\output\mml2vgmx64 /E /R /Y /I /K
 rem サンプルファイルのコピー
-xcopy .\mml2vgm\sample\*.* .\output\mml2vgmx64\sample /E /R /Y /I /K
+xcopy .\samples\*.* .\output\samples /E /R /Y /I /K
 rem rem mml2vgmIDEのコピー
 rem xcopy .\mml2vgmIDE\bin\Release\*.* .\output\mml2vgmIDE /E /R /Y /I /K
 rem mml2vgmIDEx64のコピー

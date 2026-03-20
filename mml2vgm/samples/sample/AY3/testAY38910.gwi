@@ -1,6 +1,15 @@
 ﻿'{
-	TitleName   =AY-3-8910 TEST
-	TitleNameJ  =AY-3-8910のテスト
+	TitleName            =AY-3-8910 TEST
+	TitleNameJ           =AY-3-8910のテスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =
+	ComposerJ            =
+	ReleaseDate          =
+	Converted            =
+	Notes                =2026/03/20 動作確認
 	Octave-Rev  =TRUE
 }
 

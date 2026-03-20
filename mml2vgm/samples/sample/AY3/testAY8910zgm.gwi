@@ -1,6 +1,6 @@
 ﻿'{
 
-	TitleName            =
+	TitleName            =ZGM format test
 	TitleNameJ           =
 	GameName             =
 	GameNameJ            =
@@ -10,10 +10,10 @@
 	ComposerJ            =
 	ReleaseDate          =
 	Converted            =
-	Notes                =
+	Notes                =2026/03/20 動作確認
 
-	ClockCount   =192
-	Format      =ZGM
+	ClockCount           =192
+	Format               =ZGM
 
 }
 

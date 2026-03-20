@@ -1,20 +1,46 @@
-#title mucom88向けテンプレート
+#title    mucom88向けテンプレート
 #composer だれか-2
-#author だれか
-#date 1967/12/12
-#comment なんか
-#driver mucomDotNET
+#author   だれか
+#date     2026/03/20
+#comment  なんか
+#driver   mucomDotNET
+//
+
+// Instruments
+
+;  FB  AL
+  @2:{
+  005, 004
+  031, 001, 001, 001, 005, 026, 000, 001, 002
+  031, 004, 003, 008, 010, 000, 000, 000, 003
+  031, 001, 001, 001, 005, 020, 000, 001, 006
+  031, 004, 003, 008, 010, 004, 000, 000, 005,"lead synthっぽいなにか" }
+;  AR   DR   SR   RR   SL   TL   KS   ML   DT 
+
+// パート割一覧表
+;          | OPNA 1  OPNA 2  OPNB 1  OPNB 2  OPM     
+; ---------+-----------------------------------------
+; FM       | ABCHIJ  LMNSTU  abchij  lmnstu  WXYZwxyz
+; SSG      | DEF     OPQ     def     opq     -       
+; Rhythm   | G       R       -       -       -       
+; ADPCM-A  | -       -       g       r       -       
+; ADPCM/-B | K       V       k       v       -       
+//
+
+//
+ Setup
+ABCDEFGHIJKabcdefhijkg012345 C192 D0
+g012345 vm1 pm1 q0 o1 l8 p3 q-1
+g0      v60,0,0,0,0,0,0 
+ABCHIJ  PC2 ;FM
+DEF     PC4 ;SSG
+g012345 PC5 ;PCM
+ tempo
+A   t183
 
 
-' lead synthっぽいなにか
-  @2
-   5, 4
-  031,001,001,001,005,026,000,001,002
-  031,004,003,008,010,000,000,000,003
-  031,001,001,001,005,020,000,001,006
-  031,004,003,008,010,004,000,000,005
 
 
-A C192 t183 @2v11l4o5
-A cdefgab>c
+A   @2v11l4o5
+A   cdefgab>c
 
