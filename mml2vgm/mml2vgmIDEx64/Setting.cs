@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -1195,6 +1196,22 @@ namespace mml2vgmIDEx64
                 _PMDDotNET = value;
             }
         }
+
+        private Editor _editor = new Editor();
+        public Editor editor
+        {
+            get
+            {
+                return _editor;
+            }
+
+            set
+            {
+                _editor = value;
+            }
+        }
+
+
 
         private Setting.ShortCutKey _shortCutKey = null;
         public Setting.ShortCutKey shortCutKey { get => _shortCutKey; set => _shortCutKey = value; }
@@ -4353,6 +4370,36 @@ namespace mml2vgmIDEx64
             }
         }
 
+        [Serializable]
+        public class Editor
+        {
+            public bool drawTabMark { get; set; } = true;
+            public bool drawSpaceMark { get; set; } = false;
+            public bool drawsFullWidthSpace { get; set; } = true;
+            public bool drawEofMark { get; set; } = true;
+            public bool drawEolMark { get; set; } = true;
+            public bool showLineNumber { get; set; } = true;
+            public bool showDirtBar { get; set; } = true;
+            public bool showIconBar { get; set; } = true;
+            public bool showHRuler { get; set; } = true;
+
+
+            public Editor Copy()
+            {
+                Editor editor = new Editor();
+                editor.drawTabMark = drawTabMark;
+                editor.drawSpaceMark = drawSpaceMark;
+                editor.drawsFullWidthSpace = drawsFullWidthSpace;
+                editor.drawEofMark = drawEofMark;
+                editor.drawEolMark = drawEolMark;
+                editor.showLineNumber= showLineNumber;
+                editor.showDirtBar = showDirtBar;
+                editor.showIconBar = showIconBar;
+                editor.showHRuler = showHRuler;
+
+                return editor;
+            }
+        }
 
 
         public Setting Copy()
@@ -4405,6 +4452,7 @@ namespace mml2vgmIDEx64
             setting.gensOption = this.gensOption.Copy();
             setting.autoBalance = this.autoBalance.Copy();
             setting.pmdDotNET = this.pmdDotNET.Copy();
+            setting.editor = this.editor.Copy();
 
             setting.keyBoardHook = this.keyBoardHook.Copy();
             setting.IsManualDetect = this.IsManualDetect;

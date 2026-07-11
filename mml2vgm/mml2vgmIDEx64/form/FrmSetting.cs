@@ -759,6 +759,16 @@ namespace mml2vgmIDEx64
             gpbFixedExportPlace.Enabled = cbFixedExportPlace.Checked;
             tbFixedExportPlacePath.Text = setting.export.FixedExportPlacePath;
 
+            cbDrawTabMark.Checked = setting.editor.drawTabMark;
+            cbDrawSpaceMark.Checked = setting.editor.drawSpaceMark;
+            cbDrawsFullWidthSpace.Checked = setting.editor.drawsFullWidthSpace;
+            cbDrawEofMark.Checked = setting.editor.drawEofMark;
+            cbDrawEolMark.Checked = setting.editor.drawEolMark;
+            cbShowLineNumber.Checked = setting.editor.showLineNumber;
+            cbShowDirtBar.Checked = setting.editor.showDirtBar;
+            cbShowHRuler.Checked = setting.editor.showHRuler;
+            cbShowIconBar.Checked = setting.editor.showIconBar;
+
             //ShortCutKey
             initializeDgvShortCutKey();
         }
@@ -1613,6 +1623,16 @@ namespace mml2vgmIDEx64
 
             setting.export.FixedExportPlace = cbFixedExportPlace.Checked;
             setting.export.FixedExportPlacePath = tbFixedExportPlacePath.Text;
+
+            setting.editor.drawTabMark = cbDrawTabMark.Checked;
+            setting.editor.drawSpaceMark = cbDrawSpaceMark.Checked;
+            setting.editor.drawsFullWidthSpace= cbDrawsFullWidthSpace.Checked;
+            setting.editor.drawEofMark = cbDrawEofMark.Checked;
+            setting.editor.drawEolMark = cbDrawEolMark.Checked;
+            setting.editor.showLineNumber = cbShowLineNumber.Checked;
+            setting.editor.showDirtBar= cbShowDirtBar.Checked;
+            setting.editor.showHRuler= cbShowHRuler.Checked;
+            setting.editor.showIconBar= cbShowIconBar.Checked;
 
             this.DialogResult = DialogResult.OK;
             this.Close();

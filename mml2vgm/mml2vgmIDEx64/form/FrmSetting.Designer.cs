@@ -370,9 +370,30 @@ namespace mml2vgmIDEx64
             rbAutoBalanceLoadDriverBalance = new RadioButton();
             tpMMLParameter = new TabPage();
             cbDispInstrumentName = new CheckBox();
-            tpOther2 = new TabPage();
+            tpEditor = new TabPage();
+            cbShowHRuler = new CheckBox();
+            cbShowDirtBar = new CheckBox();
+            cbShowLineNumber = new CheckBox();
+            cbDrawEolMark = new CheckBox();
+            cbDrawEofMark = new CheckBox();
+            cbDrawsFullWidthSpace = new CheckBox();
+            cbDrawSpaceMark = new CheckBox();
+            cbDrawTabMark = new CheckBox();
+            groupBox29 = new GroupBox();
+            label36 = new Label();
+            btFont = new Button();
+            label54 = new Label();
+            lblFontName = new Label();
+            label53 = new Label();
+            lblFontSize = new Label();
+            lblFontStyle = new Label();
             cbHilightOn = new CheckBox();
+            tbOpacity = new TrackBar();
             tbTABWidth = new TextBox();
+            label56 = new Label();
+            label52 = new Label();
+            tpOther2 = new TabPage();
+            cbUseMuapDotNET = new CheckBox();
             cbDispWarningMessage = new CheckBox();
             tbUseHistoryBackUp = new TextBox();
             cbUseHistoryBackUp = new CheckBox();
@@ -382,17 +403,6 @@ namespace mml2vgmIDEx64
             cbUseScript = new CheckBox();
             cbChangeEnterCode = new CheckBox();
             cbClearHistory = new CheckBox();
-            tbOpacity = new TrackBar();
-            label56 = new Label();
-            label52 = new Label();
-            groupBox29 = new GroupBox();
-            label36 = new Label();
-            btFont = new Button();
-            label54 = new Label();
-            lblFontName = new Label();
-            label53 = new Label();
-            lblFontSize = new Label();
-            lblFontStyle = new Label();
             cbInfiniteOfflineMode = new CheckBox();
             cbUseSIen = new CheckBox();
             cbRequestCacheClear = new CheckBox();
@@ -457,7 +467,7 @@ namespace mml2vgmIDEx64
             textBoxDescription = new TextBox();
             llOpenGithub = new LinkLabel();
             cbHiyorimiMode = new CheckBox();
-            cbUseMuapDotNET = new CheckBox();
+            cbShowIconBar = new CheckBox();
             gbWaveOut.SuspendLayout();
             gbAsioOut.SuspendLayout();
             gbWasapiOut.SuspendLayout();
@@ -546,9 +556,10 @@ namespace mml2vgmIDEx64
             groupBox19.SuspendLayout();
             groupBox20.SuspendLayout();
             tpMMLParameter.SuspendLayout();
-            tpOther2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)tbOpacity).BeginInit();
+            tpEditor.SuspendLayout();
             groupBox29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)tbOpacity).BeginInit();
+            tpOther2.SuspendLayout();
             tpOther.SuspendLayout();
             groupBox17.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -783,6 +794,7 @@ namespace mml2vgmIDEx64
             tcSetting.Controls.Add(tpKeyBoard);
             tcSetting.Controls.Add(tpBalance);
             tcSetting.Controls.Add(tpMMLParameter);
+            tcSetting.Controls.Add(tpEditor);
             tcSetting.Controls.Add(tpOther2);
             tcSetting.Controls.Add(tpOther);
             tcSetting.Controls.Add(tpOmake);
@@ -1303,7 +1315,7 @@ namespace mml2vgmIDEx64
             tbcMIDIoutList.Margin = new Padding(4);
             tbcMIDIoutList.Name = "tbcMIDIoutList";
             tbcMIDIoutList.SelectedIndex = 0;
-            tbcMIDIoutList.Size = new Size(491, 221);
+            tbcMIDIoutList.Size = new Size(491, 211);
             tbcMIDIoutList.TabIndex = 4;
             // 
             // tabPage1
@@ -1315,7 +1327,7 @@ namespace mml2vgmIDEx64
             tabPage1.Margin = new Padding(4);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(4);
-            tabPage1.Size = new Size(483, 193);
+            tabPage1.Size = new Size(483, 183);
             tabPage1.TabIndex = 0;
             tabPage1.Tag = "0";
             tabPage1.Text = "GM";
@@ -1336,7 +1348,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListA.RowHeadersVisible = false;
             dgvMIDIoutListA.RowTemplate.Height = 21;
             dgvMIDIoutListA.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListA.Size = new Size(447, 179);
+            dgvMIDIoutListA.Size = new Size(447, 169);
             dgvMIDIoutListA.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -1417,7 +1429,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_A
             // 
             btnDOWN_A.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_A.Location = new Point(454, 107);
+            btnDOWN_A.Location = new Point(454, 97);
             btnDOWN_A.Margin = new Padding(4);
             btnDOWN_A.Name = "btnDOWN_A";
             btnDOWN_A.Size = new Size(26, 72);
@@ -1435,7 +1447,7 @@ namespace mml2vgmIDEx64
             tabPage2.Margin = new Padding(4);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(4);
-            tabPage2.Size = new Size(483, 193);
+            tabPage2.Size = new Size(483, 183);
             tabPage2.TabIndex = 1;
             tabPage2.Tag = "1";
             tabPage2.Text = "GS";
@@ -1455,7 +1467,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListB.RowHeadersVisible = false;
             dgvMIDIoutListB.RowTemplate.Height = 21;
             dgvMIDIoutListB.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListB.Size = new Size(449, 201);
+            dgvMIDIoutListB.Size = new Size(449, 191);
             dgvMIDIoutListB.TabIndex = 7;
             // 
             // btnUP_B
@@ -1473,7 +1485,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_B
             // 
             btnDOWN_B.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_B.Location = new Point(456, 128);
+            btnDOWN_B.Location = new Point(456, 118);
             btnDOWN_B.Margin = new Padding(4);
             btnDOWN_B.Name = "btnDOWN_B";
             btnDOWN_B.Size = new Size(26, 72);
@@ -1490,7 +1502,7 @@ namespace mml2vgmIDEx64
             tabPage3.Location = new Point(4, 24);
             tabPage3.Margin = new Padding(4);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(483, 193);
+            tabPage3.Size = new Size(483, 183);
             tabPage3.TabIndex = 2;
             tabPage3.Tag = "2";
             tabPage3.Text = "XG";
@@ -1510,7 +1522,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListC.RowHeadersVisible = false;
             dgvMIDIoutListC.RowTemplate.Height = 21;
             dgvMIDIoutListC.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListC.Size = new Size(449, 201);
+            dgvMIDIoutListC.Size = new Size(449, 191);
             dgvMIDIoutListC.TabIndex = 7;
             // 
             // btnUP_C
@@ -1528,7 +1540,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_C
             // 
             btnDOWN_C.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_C.Location = new Point(456, 128);
+            btnDOWN_C.Location = new Point(456, 118);
             btnDOWN_C.Margin = new Padding(4);
             btnDOWN_C.Name = "btnDOWN_C";
             btnDOWN_C.Size = new Size(26, 72);
@@ -1545,7 +1557,7 @@ namespace mml2vgmIDEx64
             tabPage4.Location = new Point(4, 24);
             tabPage4.Margin = new Padding(4);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(483, 193);
+            tabPage4.Size = new Size(483, 183);
             tabPage4.TabIndex = 3;
             tabPage4.Tag = "3";
             tabPage4.Text = "VSTi";
@@ -1565,7 +1577,7 @@ namespace mml2vgmIDEx64
             dgvMIDIoutListD.RowHeadersVisible = false;
             dgvMIDIoutListD.RowTemplate.Height = 21;
             dgvMIDIoutListD.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMIDIoutListD.Size = new Size(449, 201);
+            dgvMIDIoutListD.Size = new Size(449, 191);
             dgvMIDIoutListD.TabIndex = 7;
             // 
             // btnUP_D
@@ -1583,7 +1595,7 @@ namespace mml2vgmIDEx64
             // btnDOWN_D
             // 
             btnDOWN_D.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDOWN_D.Location = new Point(456, 128);
+            btnDOWN_D.Location = new Point(456, 118);
             btnDOWN_D.Margin = new Padding(4);
             btnDOWN_D.Name = "btnDOWN_D";
             btnDOWN_D.Size = new Size(26, 72);
@@ -3106,7 +3118,7 @@ namespace mml2vgmIDEx64
             gbMIDIExport.Margin = new Padding(4);
             gbMIDIExport.Name = "gbMIDIExport";
             gbMIDIExport.Padding = new Padding(4);
-            gbMIDIExport.Size = new Size(503, 582);
+            gbMIDIExport.Size = new Size(503, 642);
             gbMIDIExport.TabIndex = 0;
             gbMIDIExport.TabStop = false;
             // 
@@ -3415,7 +3427,7 @@ namespace mml2vgmIDEx64
             gbMIDIKeyboard.Margin = new Padding(4);
             gbMIDIKeyboard.Name = "gbMIDIKeyboard";
             gbMIDIKeyboard.Padding = new Padding(4);
-            gbMIDIKeyboard.Size = new Size(507, 496);
+            gbMIDIKeyboard.Size = new Size(507, 556);
             gbMIDIKeyboard.TabIndex = 0;
             gbMIDIKeyboard.TabStop = false;
             // 
@@ -4179,7 +4191,7 @@ namespace mml2vgmIDEx64
             // btnInitializeShortCutKey
             // 
             btnInitializeShortCutKey.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnInitializeShortCutKey.Location = new Point(390, 461);
+            btnInitializeShortCutKey.Location = new Point(390, 521);
             btnInitializeShortCutKey.Margin = new Padding(4);
             btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
             btnInitializeShortCutKey.Size = new Size(121, 29);
@@ -4192,7 +4204,7 @@ namespace mml2vgmIDEx64
             // 
             lblSKKey.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblSKKey.AutoSize = true;
-            lblSKKey.Location = new Point(49, 468);
+            lblSKKey.Location = new Point(49, 528);
             lblSKKey.Margin = new Padding(4, 0, 4, 0);
             lblSKKey.Name = "lblSKKey";
             lblSKKey.Size = new Size(0, 15);
@@ -4214,7 +4226,7 @@ namespace mml2vgmIDEx64
             dgvShortCutKey.RowHeadersVisible = false;
             dgvShortCutKey.RowTemplate.Height = 21;
             dgvShortCutKey.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvShortCutKey.Size = new Size(507, 441);
+            dgvShortCutKey.Size = new Size(507, 501);
             dgvShortCutKey.TabIndex = 29;
             dgvShortCutKey.CellContentClick += dgvShortCutKey_CellContentClick;
             // 
@@ -4550,11 +4562,255 @@ namespace mml2vgmIDEx64
             cbDispInstrumentName.Text = "disp Instrument name";
             cbDispInstrumentName.UseVisualStyleBackColor = true;
             // 
+            // tpEditor
+            // 
+            tpEditor.BorderStyle = BorderStyle.FixedSingle;
+            tpEditor.Controls.Add(cbShowIconBar);
+            tpEditor.Controls.Add(cbShowHRuler);
+            tpEditor.Controls.Add(cbShowDirtBar);
+            tpEditor.Controls.Add(cbShowLineNumber);
+            tpEditor.Controls.Add(cbDrawEolMark);
+            tpEditor.Controls.Add(cbDrawEofMark);
+            tpEditor.Controls.Add(cbDrawsFullWidthSpace);
+            tpEditor.Controls.Add(cbDrawSpaceMark);
+            tpEditor.Controls.Add(cbDrawTabMark);
+            tpEditor.Controls.Add(groupBox29);
+            tpEditor.Controls.Add(cbHilightOn);
+            tpEditor.Controls.Add(tbOpacity);
+            tpEditor.Controls.Add(tbTABWidth);
+            tpEditor.Controls.Add(label56);
+            tpEditor.Controls.Add(label52);
+            tpEditor.Location = new Point(4, 44);
+            tpEditor.Name = "tpEditor";
+            tpEditor.Size = new Size(518, 510);
+            tpEditor.TabIndex = 19;
+            tpEditor.Text = "Editor";
+            tpEditor.UseVisualStyleBackColor = true;
+            // 
+            // cbShowHRuler
+            // 
+            cbShowHRuler.AutoSize = true;
+            cbShowHRuler.Location = new Point(7, 350);
+            cbShowHRuler.Name = "cbShowHRuler";
+            cbShowHRuler.Size = new Size(97, 19);
+            cbShowHRuler.TabIndex = 33;
+            cbShowHRuler.Text = "Show H Ruler";
+            cbShowHRuler.UseVisualStyleBackColor = true;
+            // 
+            // cbShowDirtBar
+            // 
+            cbShowDirtBar.AutoSize = true;
+            cbShowDirtBar.Location = new Point(6, 300);
+            cbShowDirtBar.Name = "cbShowDirtBar";
+            cbShowDirtBar.Size = new Size(96, 19);
+            cbShowDirtBar.TabIndex = 33;
+            cbShowDirtBar.Text = "Show dirt bar";
+            cbShowDirtBar.UseVisualStyleBackColor = true;
+            // 
+            // cbShowLineNumber
+            // 
+            cbShowLineNumber.AutoSize = true;
+            cbShowLineNumber.Location = new Point(6, 275);
+            cbShowLineNumber.Name = "cbShowLineNumber";
+            cbShowLineNumber.Size = new Size(121, 19);
+            cbShowLineNumber.TabIndex = 33;
+            cbShowLineNumber.Text = "Show line number";
+            cbShowLineNumber.UseVisualStyleBackColor = true;
+            // 
+            // cbDrawEolMark
+            // 
+            cbDrawEolMark.AutoSize = true;
+            cbDrawEolMark.Location = new Point(6, 250);
+            cbDrawEolMark.Name = "cbDrawEolMark";
+            cbDrawEolMark.Size = new Size(101, 19);
+            cbDrawEolMark.TabIndex = 33;
+            cbDrawEolMark.Text = "Draw Eol mark";
+            cbDrawEolMark.UseVisualStyleBackColor = true;
+            // 
+            // cbDrawEofMark
+            // 
+            cbDrawEofMark.AutoSize = true;
+            cbDrawEofMark.Location = new Point(7, 225);
+            cbDrawEofMark.Name = "cbDrawEofMark";
+            cbDrawEofMark.Size = new Size(102, 19);
+            cbDrawEofMark.TabIndex = 33;
+            cbDrawEofMark.Text = "Draw Eof mark";
+            cbDrawEofMark.UseVisualStyleBackColor = true;
+            // 
+            // cbDrawsFullWidthSpace
+            // 
+            cbDrawsFullWidthSpace.AutoSize = true;
+            cbDrawsFullWidthSpace.Location = new Point(7, 200);
+            cbDrawsFullWidthSpace.Name = "cbDrawsFullWidthSpace";
+            cbDrawsFullWidthSpace.Size = new Size(143, 19);
+            cbDrawsFullWidthSpace.TabIndex = 33;
+            cbDrawsFullWidthSpace.Text = "Draw Full Width Space";
+            cbDrawsFullWidthSpace.UseVisualStyleBackColor = true;
+            // 
+            // cbDrawSpaceMark
+            // 
+            cbDrawSpaceMark.AutoSize = true;
+            cbDrawSpaceMark.Location = new Point(6, 175);
+            cbDrawSpaceMark.Name = "cbDrawSpaceMark";
+            cbDrawSpaceMark.Size = new Size(116, 19);
+            cbDrawSpaceMark.TabIndex = 33;
+            cbDrawSpaceMark.Text = "Draw Space mark";
+            cbDrawSpaceMark.UseVisualStyleBackColor = true;
+            // 
+            // cbDrawTabMark
+            // 
+            cbDrawTabMark.AutoSize = true;
+            cbDrawTabMark.Location = new Point(7, 150);
+            cbDrawTabMark.Name = "cbDrawTabMark";
+            cbDrawTabMark.Size = new Size(103, 19);
+            cbDrawTabMark.TabIndex = 33;
+            cbDrawTabMark.Text = "Draw Tab mark";
+            cbDrawTabMark.UseVisualStyleBackColor = true;
+            // 
+            // groupBox29
+            // 
+            groupBox29.Controls.Add(label36);
+            groupBox29.Controls.Add(btFont);
+            groupBox29.Controls.Add(label54);
+            groupBox29.Controls.Add(lblFontName);
+            groupBox29.Controls.Add(label53);
+            groupBox29.Controls.Add(lblFontSize);
+            groupBox29.Controls.Add(lblFontStyle);
+            groupBox29.Location = new Point(297, 4);
+            groupBox29.Margin = new Padding(4);
+            groupBox29.Name = "groupBox29";
+            groupBox29.Padding = new Padding(4);
+            groupBox29.Size = new Size(215, 106);
+            groupBox29.TabIndex = 21;
+            groupBox29.TabStop = false;
+            groupBox29.Text = "フォント";
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(6, 19);
+            label36.Margin = new Padding(4, 0, 4, 0);
+            label36.Name = "label36";
+            label36.Size = new Size(38, 15);
+            label36.TabIndex = 19;
+            label36.Text = "Name";
+            // 
+            // btFont
+            // 
+            btFont.Location = new Point(181, 69);
+            btFont.Margin = new Padding(4);
+            btFont.Name = "btFont";
+            btFont.Size = new Size(27, 29);
+            btFont.TabIndex = 18;
+            btFont.Text = "...";
+            btFont.UseVisualStyleBackColor = true;
+            btFont.Click += BtFont_Click;
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(6, 75);
+            label54.Margin = new Padding(4, 0, 4, 0);
+            label54.Name = "label54";
+            label54.Size = new Size(32, 15);
+            label54.TabIndex = 19;
+            label54.Text = "Style";
+            // 
+            // lblFontName
+            // 
+            lblFontName.AutoSize = true;
+            lblFontName.Location = new Point(64, 19);
+            lblFontName.Margin = new Padding(4, 0, 4, 0);
+            lblFontName.Name = "lblFontName";
+            lblFontName.Size = new Size(54, 15);
+            lblFontName.TabIndex = 19;
+            lblFontName.Text = "Consolas";
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Location = new Point(6, 48);
+            label53.Margin = new Padding(4, 0, 4, 0);
+            label53.Name = "label53";
+            label53.Size = new Size(27, 15);
+            label53.TabIndex = 19;
+            label53.Text = "Size";
+            // 
+            // lblFontSize
+            // 
+            lblFontSize.AutoSize = true;
+            lblFontSize.Location = new Point(64, 48);
+            lblFontSize.Margin = new Padding(4, 0, 4, 0);
+            lblFontSize.Name = "lblFontSize";
+            lblFontSize.Size = new Size(19, 15);
+            lblFontSize.TabIndex = 19;
+            lblFontSize.Text = "12";
+            // 
+            // lblFontStyle
+            // 
+            lblFontStyle.AutoSize = true;
+            lblFontStyle.Location = new Point(64, 75);
+            lblFontStyle.Margin = new Padding(4, 0, 4, 0);
+            lblFontStyle.Name = "lblFontStyle";
+            lblFontStyle.Size = new Size(47, 15);
+            lblFontStyle.TabIndex = 19;
+            lblFontStyle.Text = "Regular";
+            // 
+            // cbHilightOn
+            // 
+            cbHilightOn.AutoSize = true;
+            cbHilightOn.Location = new Point(7, 125);
+            cbHilightOn.Name = "cbHilightOn";
+            cbHilightOn.Size = new Size(121, 19);
+            cbHilightOn.TabIndex = 32;
+            cbHilightOn.Text = "ハイライトを使用する";
+            cbHilightOn.UseVisualStyleBackColor = true;
+            // 
+            // tbOpacity
+            // 
+            tbOpacity.Location = new Point(123, 28);
+            tbOpacity.Margin = new Padding(4);
+            tbOpacity.Maximum = 100;
+            tbOpacity.Minimum = 1;
+            tbOpacity.Name = "tbOpacity";
+            tbOpacity.Size = new Size(167, 45);
+            tbOpacity.TabIndex = 20;
+            tbOpacity.TickFrequency = 10;
+            tbOpacity.TickStyle = TickStyle.Both;
+            tbOpacity.Value = 1;
+            tbOpacity.Scroll += tbOpacity_Scroll;
+            // 
+            // tbTABWidth
+            // 
+            tbTABWidth.Location = new Point(123, 84);
+            tbTABWidth.Margin = new Padding(4);
+            tbTABWidth.Name = "tbTABWidth";
+            tbTABWidth.Size = new Size(61, 23);
+            tbTABWidth.TabIndex = 31;
+            // 
+            // label56
+            // 
+            label56.AutoSize = true;
+            label56.Location = new Point(6, 87);
+            label56.Margin = new Padding(4, 0, 4, 0);
+            label56.Name = "label56";
+            label56.Size = new Size(37, 15);
+            label56.TabIndex = 19;
+            label56.Text = "タブ幅";
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Location = new Point(4, 48);
+            label52.Margin = new Padding(4, 0, 4, 0);
+            label52.Name = "label52";
+            label52.Size = new Size(97, 15);
+            label52.TabIndex = 19;
+            label52.Text = "ウィンドウ不透明度";
+            // 
             // tpOther2
             // 
             tpOther2.Controls.Add(cbUseMuapDotNET);
-            tpOther2.Controls.Add(cbHilightOn);
-            tpOther2.Controls.Add(tbTABWidth);
             tpOther2.Controls.Add(cbDispWarningMessage);
             tpOther2.Controls.Add(tbUseHistoryBackUp);
             tpOther2.Controls.Add(cbUseHistoryBackUp);
@@ -4564,10 +4820,6 @@ namespace mml2vgmIDEx64
             tpOther2.Controls.Add(cbUseScript);
             tpOther2.Controls.Add(cbChangeEnterCode);
             tpOther2.Controls.Add(cbClearHistory);
-            tpOther2.Controls.Add(tbOpacity);
-            tpOther2.Controls.Add(label56);
-            tpOther2.Controls.Add(label52);
-            tpOther2.Controls.Add(groupBox29);
             tpOther2.Controls.Add(cbInfiniteOfflineMode);
             tpOther2.Controls.Add(cbUseSIen);
             tpOther2.Controls.Add(cbRequestCacheClear);
@@ -4579,23 +4831,16 @@ namespace mml2vgmIDEx64
             tpOther2.Text = "Other";
             tpOther2.UseVisualStyleBackColor = true;
             // 
-            // cbHilightOn
+            // cbUseMuapDotNET
             // 
-            cbHilightOn.AutoSize = true;
-            cbHilightOn.Location = new Point(8, 332);
-            cbHilightOn.Name = "cbHilightOn";
-            cbHilightOn.Size = new Size(121, 19);
-            cbHilightOn.TabIndex = 32;
-            cbHilightOn.Text = "ハイライトを使用する";
-            cbHilightOn.UseVisualStyleBackColor = true;
-            // 
-            // tbTABWidth
-            // 
-            tbTABWidth.Location = new Point(125, 472);
-            tbTABWidth.Margin = new Padding(4);
-            tbTABWidth.Name = "tbTABWidth";
-            tbTABWidth.Size = new Size(61, 23);
-            tbTABWidth.TabIndex = 31;
+            cbUseMuapDotNET.AutoSize = true;
+            cbUseMuapDotNET.Location = new Point(8, 251);
+            cbUseMuapDotNET.Margin = new Padding(4);
+            cbUseMuapDotNET.Name = "cbUseMuapDotNET";
+            cbUseMuapDotNET.Size = new Size(204, 19);
+            cbUseMuapDotNET.TabIndex = 33;
+            cbUseMuapDotNET.Text = "muapDotNETを使用する(要再起動)";
+            cbUseMuapDotNET.UseVisualStyleBackColor = true;
             // 
             // cbDispWarningMessage
             // 
@@ -4692,129 +4937,6 @@ namespace mml2vgmIDEx64
             cbClearHistory.TabIndex = 26;
             cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
             cbClearHistory.UseVisualStyleBackColor = true;
-            // 
-            // tbOpacity
-            // 
-            tbOpacity.Location = new Point(125, 416);
-            tbOpacity.Margin = new Padding(4);
-            tbOpacity.Maximum = 100;
-            tbOpacity.Minimum = 1;
-            tbOpacity.Name = "tbOpacity";
-            tbOpacity.Size = new Size(167, 45);
-            tbOpacity.TabIndex = 20;
-            tbOpacity.TickFrequency = 10;
-            tbOpacity.TickStyle = TickStyle.Both;
-            tbOpacity.Value = 1;
-            tbOpacity.Scroll += tbOpacity_Scroll;
-            // 
-            // label56
-            // 
-            label56.AutoSize = true;
-            label56.Location = new Point(8, 475);
-            label56.Margin = new Padding(4, 0, 4, 0);
-            label56.Name = "label56";
-            label56.Size = new Size(37, 15);
-            label56.TabIndex = 19;
-            label56.Text = "タブ幅";
-            // 
-            // label52
-            // 
-            label52.AutoSize = true;
-            label52.Location = new Point(6, 436);
-            label52.Margin = new Padding(4, 0, 4, 0);
-            label52.Name = "label52";
-            label52.Size = new Size(97, 15);
-            label52.TabIndex = 19;
-            label52.Text = "ウィンドウ不透明度";
-            // 
-            // groupBox29
-            // 
-            groupBox29.Controls.Add(label36);
-            groupBox29.Controls.Add(btFont);
-            groupBox29.Controls.Add(label54);
-            groupBox29.Controls.Add(lblFontName);
-            groupBox29.Controls.Add(label53);
-            groupBox29.Controls.Add(lblFontSize);
-            groupBox29.Controls.Add(lblFontStyle);
-            groupBox29.Location = new Point(299, 392);
-            groupBox29.Margin = new Padding(4);
-            groupBox29.Name = "groupBox29";
-            groupBox29.Padding = new Padding(4);
-            groupBox29.Size = new Size(215, 106);
-            groupBox29.TabIndex = 21;
-            groupBox29.TabStop = false;
-            groupBox29.Text = "フォント";
-            // 
-            // label36
-            // 
-            label36.AutoSize = true;
-            label36.Location = new Point(6, 19);
-            label36.Margin = new Padding(4, 0, 4, 0);
-            label36.Name = "label36";
-            label36.Size = new Size(38, 15);
-            label36.TabIndex = 19;
-            label36.Text = "Name";
-            // 
-            // btFont
-            // 
-            btFont.Location = new Point(181, 69);
-            btFont.Margin = new Padding(4);
-            btFont.Name = "btFont";
-            btFont.Size = new Size(27, 29);
-            btFont.TabIndex = 18;
-            btFont.Text = "...";
-            btFont.UseVisualStyleBackColor = true;
-            btFont.Click += BtFont_Click;
-            // 
-            // label54
-            // 
-            label54.AutoSize = true;
-            label54.Location = new Point(6, 75);
-            label54.Margin = new Padding(4, 0, 4, 0);
-            label54.Name = "label54";
-            label54.Size = new Size(32, 15);
-            label54.TabIndex = 19;
-            label54.Text = "Style";
-            // 
-            // lblFontName
-            // 
-            lblFontName.AutoSize = true;
-            lblFontName.Location = new Point(64, 19);
-            lblFontName.Margin = new Padding(4, 0, 4, 0);
-            lblFontName.Name = "lblFontName";
-            lblFontName.Size = new Size(54, 15);
-            lblFontName.TabIndex = 19;
-            lblFontName.Text = "Consolas";
-            // 
-            // label53
-            // 
-            label53.AutoSize = true;
-            label53.Location = new Point(6, 48);
-            label53.Margin = new Padding(4, 0, 4, 0);
-            label53.Name = "label53";
-            label53.Size = new Size(27, 15);
-            label53.TabIndex = 19;
-            label53.Text = "Size";
-            // 
-            // lblFontSize
-            // 
-            lblFontSize.AutoSize = true;
-            lblFontSize.Location = new Point(64, 48);
-            lblFontSize.Margin = new Padding(4, 0, 4, 0);
-            lblFontSize.Name = "lblFontSize";
-            lblFontSize.Size = new Size(19, 15);
-            lblFontSize.TabIndex = 19;
-            lblFontSize.Text = "12";
-            // 
-            // lblFontStyle
-            // 
-            lblFontStyle.AutoSize = true;
-            lblFontStyle.Location = new Point(64, 75);
-            lblFontStyle.Margin = new Padding(4, 0, 4, 0);
-            lblFontStyle.Name = "lblFontStyle";
-            lblFontStyle.Size = new Size(47, 15);
-            lblFontStyle.TabIndex = 19;
-            lblFontStyle.Text = "Regular";
             // 
             // cbInfiniteOfflineMode
             // 
@@ -5597,16 +5719,15 @@ namespace mml2vgmIDEx64
             cbHiyorimiMode.UseVisualStyleBackColor = true;
             cbHiyorimiMode.Visible = false;
             // 
-            // cbUseMuapDotNET
+            // cbShowIconBar
             // 
-            cbUseMuapDotNET.AutoSize = true;
-            cbUseMuapDotNET.Location = new Point(8, 251);
-            cbUseMuapDotNET.Margin = new Padding(4);
-            cbUseMuapDotNET.Name = "cbUseMuapDotNET";
-            cbUseMuapDotNET.Size = new Size(204, 19);
-            cbUseMuapDotNET.TabIndex = 33;
-            cbUseMuapDotNET.Text = "muapDotNETを使用する(要再起動)";
-            cbUseMuapDotNET.UseVisualStyleBackColor = true;
+            cbShowIconBar.AutoSize = true;
+            cbShowIconBar.Location = new Point(6, 325);
+            cbShowIconBar.Name = "cbShowIconBar";
+            cbShowIconBar.Size = new Size(101, 19);
+            cbShowIconBar.TabIndex = 34;
+            cbShowIconBar.Text = "Show Icon bar";
+            cbShowIconBar.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5760,11 +5881,13 @@ namespace mml2vgmIDEx64
             groupBox20.PerformLayout();
             tpMMLParameter.ResumeLayout(false);
             tpMMLParameter.PerformLayout();
-            tpOther2.ResumeLayout(false);
-            tpOther2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)tbOpacity).EndInit();
+            tpEditor.ResumeLayout(false);
+            tpEditor.PerformLayout();
             groupBox29.ResumeLayout(false);
             groupBox29.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)tbOpacity).EndInit();
+            tpOther2.ResumeLayout(false);
+            tpOther2.PerformLayout();
             tpOther.ResumeLayout(false);
             tpOther.PerformLayout();
             groupBox17.ResumeLayout(false);
@@ -6220,5 +6343,15 @@ namespace mml2vgmIDEx64
         private RadioButton rbSK_Spc_Cc;
         private RadioButton rbSK_Undo_Unuse;
         private CheckBox cbUseMuapDotNET;
+        private TabPage tpEditor;
+        private CheckBox cbDrawTabMark;
+        private CheckBox cbDrawEolMark;
+        private CheckBox cbDrawEofMark;
+        private CheckBox cbDrawsFullWidthSpace;
+        private CheckBox cbDrawSpaceMark;
+        private CheckBox cbShowHRuler;
+        private CheckBox cbShowDirtBar;
+        private CheckBox cbShowLineNumber;
+        private CheckBox cbShowIconBar;
     }
 }

@@ -100,6 +100,16 @@ namespace mml2vgmIDEx64
             azukiControl.DrawingOption |= DrawingOption.ShowsHRuler;
             azukiControl.TabWidth = setting.other.TabWidth;
 
+            azukiControl.DrawsTab = setting.editor.drawTabMark;
+            azukiControl.DrawsSpace = setting.editor.drawSpaceMark;
+            azukiControl.DrawsFullWidthSpace = setting.editor.drawsFullWidthSpace;
+            azukiControl.DrawsEofMark = setting.editor.drawEofMark;
+            azukiControl.DrawsEolCode = setting.editor.drawEolMark;
+            azukiControl.ShowsLineNumber=setting.editor.showLineNumber;
+            azukiControl.ShowsHRuler = setting.editor.showHRuler;
+            azukiControl.ShowsDirtBar = setting.editor.showDirtBar;
+            azukiControl.ShowsIconBar = setting.editor.showIconBar;
+
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
             azukiControl.ColorScheme.IconBarBack = Color.FromArgb(setting.ColorScheme.Azuki_IconBarBack);
