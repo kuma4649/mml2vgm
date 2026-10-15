@@ -8,6 +8,7 @@
 	M98DotNET  
 	PMDDotNET  
 	moondriverDotNET  
+	muapDotNET  
  を使用し各ドライバ毎の演奏ファイルを作成したりランダムな曲を生成したりすることが可能です。  
  IDEについては、IDE.txtを参照してください。  
  スクリプトについては、各々のスクリプトに付属の説明をご覧ください。  
@@ -187,6 +188,9 @@ mml2vgm , mvc , mml2vgmIDEはGPLv3ライセンスに準ずる物とします。L
 
   ・moondriverDotNET /動的リンク  
     MIT License(但しmoondriver関係は別ライセンス)  
+
+  ・muapDotNET /動的リンク  
+    GPLv3 License(但しmuap関係は別ライセンス)  
 
   
   

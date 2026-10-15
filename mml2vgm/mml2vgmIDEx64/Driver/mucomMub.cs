@@ -60,7 +60,7 @@ namespace mml2vgmIDEx64
                 //chipRegister.YM2151SetRegister(null, count, chipYM2151, pdOPM[1], false);
 
                 initPhase = false;
-                GC.Collect();
+                //GC.Collect();
 
                 return;
             }

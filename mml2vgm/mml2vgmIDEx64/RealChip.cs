@@ -468,8 +468,17 @@ namespace mml2vgmIDEx64
                 {
                     NIRealChip rc = nc86ctl.getChipInterface(i);
                     NIGimic2 gm = rc.QueryInterface();
-                    ChipType cct = gm.getModuleType();
                     Nc86ctl.Devinfo di = gm.getModuleInfo();
+                    ChipType cct = gm.getModuleType();
+                    if (cct == ChipType.CHIP_UNKNOWN)
+                    {
+                        if (di.Devname == "GMC-S2149") cct = ChipType.CHIP_YM2149;
+                        else if (di.Devname == "GMC-S8910") cct = ChipType.CHIP_AY38910;
+                        else if (di.Devname == "GMC-S2413") cct = ChipType.CHIP_YM2413;
+                        else if (di.Devname == "GMC-S3438") cct = ChipType.CHIP_YM3438;
+                        else if (di.Devname == "GMC-S5377") cct = ChipType.CHIP_SN76489;
+                        else if (di.Devname == "GMC-S2612") cct = ChipType.CHIP_YM2612;
+                    }
                     Setting.ChipType ct = null;
                     int o = -1;
                     switch (realChipType)
@@ -490,8 +499,8 @@ namespace mml2vgmIDEx64
                             }
                             break;
                         case EnmRealChipType.AY8910:
-                            if ((cct == ChipType.CHIP_UNKNOWN && di.Devname == "GMC-S2149")
-                                || (cct == ChipType.CHIP_UNKNOWN && di.Devname == "GMC-S8910")
+                            if (cct == ChipType.CHIP_YM2149
+                                || cct == ChipType.CHIP_AY38910
                                 || cct == ChipType.CHIP_YM2608 
                                 || cct == ChipType.CHIP_YMF288 
                                 || cct == ChipType.CHIP_YM2203)
@@ -508,9 +517,7 @@ namespace mml2vgmIDEx64
                             }
                             break;
                         case EnmRealChipType.YM2413:
-                            if (cct == ChipType.CHIP_YM2413
-                                || (cct == ChipType.CHIP_UNKNOWN && di.Devname == "GMC-S2413")
-                                )
+                            if (cct == ChipType.CHIP_YM2413)
                             {
                                 ct = new Setting.ChipType();
                                 ct.SoundLocation = -1;
@@ -550,10 +557,38 @@ namespace mml2vgmIDEx64
                                 ct.Type = (int)cct;
                             }
                             break;
+                        case EnmRealChipType.YM2612:
+                            if (cct == ChipType.CHIP_YM3438 || cct == ChipType.CHIP_YM2612)
+                            {
+                                ct = new Setting.ChipType();
+                                ct.SoundLocation = -1;
+                                ct.BusID = i;
+                                string seri = gm.getModuleInfo().Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.getModuleInfo().Devname;
+                                ct.InterfaceName = gm.getMBInfo().Devname;
+                                ct.Type = (int)cct;
+                            }
+                            break;
                         case EnmRealChipType.YM3526:
                         case EnmRealChipType.YM3812:
                         case EnmRealChipType.YMF262:
                             if (cct == ChipType.CHIP_OPL3)
+                            {
+                                ct = new Setting.ChipType();
+                                ct.SoundLocation = -1;
+                                ct.BusID = i;
+                                string seri = gm.getModuleInfo().Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.getModuleInfo().Devname;
+                                ct.InterfaceName = gm.getMBInfo().Devname;
+                                ct.Type = (int)cct;
+                            }
+                            break;
+                        case EnmRealChipType.SN76489:
+                            if (cct == ChipType.CHIP_SN76489)
                             {
                                 ct = new Setting.ChipType();
                                 ct.SoundLocation = -1;
