@@ -7,15 +7,21 @@ namespace Corex64
     {
         private static List<msgInfo> errBox = new List<msgInfo>();
         private static List<msgInfo> wrnBox = new List<msgInfo>();
+        private static HashSet<string> errDedupKeys = new HashSet<string>();
 
         public static void clear()
         {
             errBox = new List<msgInfo>();
             wrnBox = new List<msgInfo>();
+            errDedupKeys = new HashSet<string>();
         }
 
         public static void setErrMsg(msgInfo msg)
         {
+            if (msg == null) return;
+            string key = getErrDedupKey(msg);
+            if (errDedupKeys.Contains(key)) return;
+            errDedupKeys.Add(key);
             errBox.Add(msg);
         }
 
@@ -24,11 +30,11 @@ namespace Corex64
             //errBox.Add(string.Format("(F : {0}  L : {1}) : {2}", System.IO.Path.GetFileName(fn), lineNumber, msg));
             if (lp != null)
             {
-                errBox.Add(new msgInfo(lp.document,lp.srcMMLID, lp.row, lp.col, lp.length, msg));
+                setErrMsg(new msgInfo(lp.document, lp.srcMMLID, lp.row, lp.col, lp.length, msg));
             }
             else
             {
-                errBox.Add(new msgInfo(null,"-", -1, -1, -1, msg));
+                setErrMsg(new msgInfo(null, "-", -1, -1, -1, msg));
             }
         }
 
@@ -57,6 +63,13 @@ namespace Corex64
         public static msgInfo[] getWrn()
         {
             return wrnBox.ToArray();
+        }
+
+        private static string getErrDedupKey(msgInfo msg)
+        {
+            string file = msg.filename ?? "-";
+            string body = msg.body ?? "";
+            return string.Format("{0}|{1}|{2}", file, msg.line, body);
         }
     }
 
