@@ -10,11 +10,11 @@ del /Q .\output\samples\*.*
 rem rem mml2vgm(簡易UI版)のコピー
 rem xcopy .\mml2vgm\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 rem mml2vgmx64(簡易UI版)のコピー
-xcopy .\mml2vgmx64\bin\Release\net8.0-windows\*.* .\output\mml2vgmx64 /E /R /Y /I /K
+xcopy .\mml2vgmx64\bin\Release\net10.0-windows\*.* .\output\mml2vgmx64 /E /R /Y /I /K
 rem rem mvc(コマンドライン版)のコピー
 rem xcopy .\mvc\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 rem mvcx64(コマンドライン版)のコピー
-xcopy .\mvcx64\bin\Release\net8.0\*.* .\output\mml2vgmx64 /E /R /Y /I /K
+xcopy .\mvcx64\bin\Release\net10.0\*.* .\output\mml2vgmx64 /E /R /Y /I /K
 rem サンプルファイルのコピー
 xcopy .\samples\*.* .\output\samples /E /R /Y /I /K
 rem rem mml2vgmIDEのコピー
