@@ -16,6 +16,17 @@ namespace mml2vgmx64
         public frmMain()
         {
             InitializeComponent();
+            foreach (Control target in new Control[] {
+                this, toolStripContainer1, toolStripContainer1.ContentPanel,
+                toolStripContainer1.TopToolStripPanel, toolStripContainer1.BottomToolStripPanel,
+                splitContainer1, splitContainer1.Panel1, splitContainer1.Panel2,
+                textBox1, dgvResult, toolStrip1, statusStrip1
+            })
+            {
+                target.AllowDrop = true;
+                target.DragEnter += FrmMain_DragEnter;
+                target.DragDrop += FrmMain_DragDrop;
+            }
 #if DEBUG
             Corex64.Log.debug = true;
 #endif
@@ -62,10 +73,14 @@ namespace mml2vgmx64
             {
                 return;
             }
-            args = null;
+            openAndCompile(ofd.FileNames);
+        }
+
+        private void openAndCompile(string[] fileNames)
+        {
             List<string> a = new List<string>();
             a.Add("dummy");
-            foreach (string fn in ofd.FileNames)
+            foreach (string fn in fileNames)
             {
                 a.Add(fn);
             }
@@ -193,7 +208,7 @@ namespace mml2vgmx64
                 {
                     try
                     {
-                        //Process.Start(Path.ChangeExtension(args[1], 
+                        //Process.Start(Path.ChangeExtension(args[1],
                         //    (mv.desVGM.info.format == enmFormat.VGM) ?
                         //    Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
 
@@ -211,9 +226,9 @@ namespace mml2vgmx64
                         {
                             UseShellExecute = true,
                             FileName = Path.ChangeExtension(args[1],
-                            (mv.desVGM.info.format == enmFormat.VGM) 
-                            ? Properties.Resources.ExtensionVGM 
-                            : (mv.desVGM.info.format == enmFormat.XGM 
+                            (mv.desVGM.info.format == enmFormat.VGM)
+                            ? Properties.Resources.ExtensionVGM
+                            : (mv.desVGM.info.format == enmFormat.XGM
                                 ? Properties.Resources.ExtensionXGM
                                 : Properties.Resources.ExtensionZGM
                               )
@@ -364,7 +379,7 @@ namespace mml2vgmx64
 
         private void FrmMain_DragEnter(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!toolStrip1.Enabled || !e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 e.Effect = DragDropEffects.None;
                 return;
@@ -385,6 +400,8 @@ namespace mml2vgmx64
 
         private void FrmMain_DragDrop(object sender, DragEventArgs e)
         {
+            if (!toolStrip1.Enabled || !e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
             string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             foreach (string fn in fileNames)
             {
@@ -399,12 +416,7 @@ namespace mml2vgmx64
                 return;
             }
 
-            List<string> fs = new List<string>();
-            fs.Add("");//dummy;
-            fs.AddRange(fileNames);
-            args = fs.ToArray();
-
-            tsbCompile_Click(null, null);
+            if (fileNames.Length > 0) openAndCompile(fileNames);
         }
 
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
@@ -422,8 +434,8 @@ namespace mml2vgmx64
                     tsbCompile_Click(null, null);
                     break;
                 default:
-                    //Å´KeyDataämîFóp
-                    //log.Write(string.Format("ìÆçÏñ¢íËã`ÇÃÉLÅ[ÅF{0}",e.KeyData));
+                    //ÔøΩÔøΩKeyDataÔøΩmÔøΩFÔøΩp
+                    //log.Write(string.Format("ÔøΩÔøΩÔøΩÏñ¢ÔøΩÔøΩ`ÔøΩÃÉLÔøΩ[ÔøΩF{0}",e.KeyData));
                     break;
             }
         }
