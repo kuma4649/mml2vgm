@@ -2688,6 +2688,9 @@ namespace Corex64
 
             int i = page.instrument;
             if (i < 0) return;
+            if (page.voice == null || page.voice.Length < partPage.voiceWidth * 5) return;
+            if (mml == null || mml.args == null || mml.args.Count < 1) return;
+            if (!(mml.args[0] is Note)) return;
 
             page.toneDoublerKeyShift = 0;
             //byte[] instFM = parent.instFM[i].Item2;
@@ -2723,6 +2726,8 @@ namespace Corex64
             else
             {
                 //setToneDoubler
+                if (note.tDblOctave == null) return;
+
                 int oct = page.octaveNow;
                 foreach (MML octMml in note.tDblOctave)
                 {
@@ -2742,11 +2747,15 @@ namespace Corex64
                 oct = Common.CheckRange(oct, 1, 8);
                 page.octaveNew = oct;
                 int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + arpNote;
+                int noteIndex = Const.NOTE.IndexOf(note.tDblCmd);
+                if (noteIndex < 0) return;
+                int TdB = oct * 12 + noteIndex + note.tDblShift + page.keyShift + arpNote;
                 int s = TdB - page.TdA;// - TdB;
                 int us = Math.Abs(s);
                 int n = page.toneDoubler;
+                if (!parent.instToneDoubler.ContainsKey(n)) return;
                 clsToneDoubler instToneDoubler = parent.instToneDoubler[n];
+                if (instToneDoubler == null || instToneDoubler.lstTD == null) return;
                 if (us >= instToneDoubler.lstTD.Count)
                 {
                     return;

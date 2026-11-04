@@ -250,7 +250,11 @@ namespace Corex64
             {
                 Disp(ex.Message);
                 msgBox.setErrMsg(string.Format(Msg.get("E04005")
-                    , (desVGM.linePos == null ? "-" : desVGM.linePos.row.ToString())
+                    , (desVGM.linePos == null
+                        ? "-"
+                        : string.Format("{0}:{1}"
+                            , string.IsNullOrEmpty(desVGM.linePos.srcMMLID) ? "-" : desVGM.linePos.srcMMLID
+                            , desVGM.linePos.row))
                     , ex.Message
                     , ex.StackTrace), desVGM.linePos);
                 return -1;
