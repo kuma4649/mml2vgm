@@ -1,5 +1,7 @@
 ﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Corex64
 {
@@ -51,7 +53,8 @@ namespace Corex64
 
         public static msgInfo[] getErr()
         {
-            return errBox.ToArray();
+            return errBox.OrderBy(msg => msg.filename, StringComparer.Ordinal)
+                .ThenBy(msg => msg.line).ToArray();
         }
 
         public static msgInfo[] getWrn()
