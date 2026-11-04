@@ -738,12 +738,9 @@ namespace Core
                             || desVGM.info.format != enmFormat.XGM)
                         {
                             //ファイルの読み込み
-                            buf = Common.GetPCMDataFromFile(path, v, out isRaw, out is16bit, out samplerate);
+                            buf = Common.GetPCMDataFromFile(path, v, out isRaw, out is16bit, out samplerate, pds.linePos);
                             if (buf == null)
                             {
-                                msgBox.setErrMsg(string.Format(
-                                    msg.get("E04007")
-                                    , v.fileName), new LinePos(null,pds.FileName));
                                 continue;
                             }
 
@@ -884,7 +881,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , v.fileName), new LinePos(null,pds.FileName));
+                                , v.fileName), pds.linePos ?? new LinePos(null, pds.FileName));
                             continue;
                         }
 
@@ -907,12 +904,9 @@ namespace Core
                         break;
                     case enmPcmDefineType.RawData:
                         //ファイルの読み込み
-                        buf = Common.GetPCMDataFromFile(path, pds.FileName, 100, out isRaw, out is16bit, out samplerate);
+                        buf = Common.GetPCMDataFromFile(path, pds.FileName, 100, out isRaw, out is16bit, out samplerate, pds.linePos);
                         if (buf == null)
                         {
-                            msgBox.setErrMsg(string.Format(
-                                msg.get("E04007")
-                                , pds.FileName), new LinePos(null,pds.FileName));
                             continue;
                         }
                         desVGM.chips[pds.chip][pds.chipNumber]
