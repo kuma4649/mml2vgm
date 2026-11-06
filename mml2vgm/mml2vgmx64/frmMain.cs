@@ -435,7 +435,8 @@ namespace mml2vgmx64
                     break;
                 default:
                     //↓KeyData確認用
-                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));                    break;
+                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+                    break;
             }
         }
     }
