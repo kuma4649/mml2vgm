@@ -6234,6 +6234,14 @@ namespace Corex64
 
         private void Commander(partWork pw, partPage page, MML mml)
         {
+            if (mml != null && mml.line != null)
+            {
+                linePos = mml.line.Lp;
+            }
+            else
+            {
+                linePos = null;
+            }
 
             switch (mml.type)
             {
