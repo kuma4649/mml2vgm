@@ -1239,6 +1239,7 @@ namespace Corex64
                         , 0
                         , -1
                         );
+                    pds.linePos = line.Lp;
 
                     instPCMDatSeq.Add(pds);
                 }
@@ -1551,7 +1552,7 @@ namespace Corex64
             //}
 
 
-            instPCMDatSeq.Add(new clsPcmDatSeq(
+            clsPcmDatSeq pds = new clsPcmDatSeq(
                 enmPcmDefineType.Easy
                 , num
                 , fn
@@ -1561,7 +1562,9 @@ namespace Corex64
                 , chipNumber
                 , opt
                 , option
-                ));
+                );
+            pds.linePos = line.Lp;
+            instPCMDatSeq.Add(pds);
 
             //if (instPCM.ContainsKey(num))
             //{
@@ -1604,7 +1607,7 @@ namespace Corex64
                 Array.Copy(vs, 5, Option, 0, vs.Length - 5);
             }
 
-            instPCMDatSeq.Add(new clsPcmDatSeq(
+            clsPcmDatSeq pds = new clsPcmDatSeq(
                 enmPcmDefineType.RawData
                 , FileName
                 , ChipName
@@ -1613,7 +1616,9 @@ namespace Corex64
                 , DesStartAdr
                 , Length
                 , Option
-                ));
+                );
+            pds.linePos = line.Lp;
+            instPCMDatSeq.Add(pds);
 
         }
 
@@ -1701,7 +1706,7 @@ namespace Corex64
                 }
             }
 
-            instPCMDatSeq.Add(new clsPcmDatSeq(
+            clsPcmDatSeq pds = new clsPcmDatSeq(
                 enmPcmDefineType.Set
                 , num
                 , ChipName
@@ -1711,7 +1716,9 @@ namespace Corex64
                 , EndAdr
                 , LoopAdr
                 , Option
-                ));
+                );
+            pds.linePos = line.Lp;
+            instPCMDatSeq.Add(pds);
 
         }
 

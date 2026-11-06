@@ -948,6 +948,7 @@ namespace Core
     public class clsPcmDatSeq
     {
         public enmPcmDefineType type;
+        public LinePos linePos = null;
         public int No = -1;
         public string FileName = "";
         public int BaseFreq = 8000;
