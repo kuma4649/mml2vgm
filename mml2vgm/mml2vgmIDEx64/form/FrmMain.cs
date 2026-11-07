@@ -1286,7 +1286,7 @@ namespace mml2vgmIDEx64
                         if (doc != null) doc.editor.ActionJumpAnchorPrevious(null);
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.Compile:
-                        Comp();
+                        Compile(false, false, false, false, false);
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.M98:
                         M98Preprocess();
@@ -4848,16 +4848,12 @@ namespace mml2vgmIDEx64
 
         private void tssbCompile_ButtonClick_1(object sender, EventArgs e)
         {
-            Comp();
+            Compile(false, false, false, false, false);
         }
 
         private void Comp()
         {
-            IDockContent dc = GetActiveDockContent();
-            if (dc == null) return;
-            if (!(dc is FrmEditor)) return;
-            compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "");
-            compileManager.RequestPlayBack(((FrmEditor)dc).document, cbPlayBack);
+            Compile(false, false, false, false, false);
         }
 
         private void cbPlayBack(CompileManager.queItem qi)
