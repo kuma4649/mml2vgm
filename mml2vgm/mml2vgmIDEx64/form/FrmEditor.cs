@@ -4,6 +4,7 @@ using Sgry.Azuki.WinForms;
 using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using System.ComponentModel;
@@ -12,6 +13,7 @@ namespace mml2vgmIDEx64
 {
     public partial class FrmEditor : DockContent
     {
+        public const string PersistStringPrefix = "FrmEditorV2";
         private int searchAnchorIndex;
         //private bool searchUseRegex=false;
         private Regex searchRegex;
@@ -777,7 +779,15 @@ namespace mml2vgmIDEx64
 
         protected override string GetPersistString()
         {
-            return this.Name;
+            if (document == null || string.IsNullOrEmpty(document.gwiFullPath))
+            {
+                return this.Name;
+            }
+
+            string fullPath = document.gwiFullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            string encodedPath = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullPath));
+            int caretIndex = azukiControl?.CaretIndex ?? 0;
+            return string.Format("{0}|{1}|{2}|{3}", PersistStringPrefix, encodedPath, (int)document.srcFileFormat, caretIndex);
         }
 
         private void AzukiControl_IconBarClicked(object sender, IconBarClickedEventArgs e)
