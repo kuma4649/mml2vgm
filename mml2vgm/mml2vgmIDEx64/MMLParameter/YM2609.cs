@@ -24,16 +24,18 @@ namespace mml2vgmIDEx64.MMLParameter
             {
                 if (od.args[0] is char && (char)od.args[0] == 'W')
                 {
-                    if (setting.MMLParameter.dispInstrumentName
-                        && od.args.Count == 3
-                        && (od.args[2] != null
-                        && od.args[2].ToString() != ""))
-                        inst[od.linePos.ch] = string.Format("{0}", od.args[2]);
-                    else
-                        inst[od.linePos.ch] = string.Format("W:{0}", (int)od.args[1]);
+                    instNo[od.linePos.ch] = string.Format("W:{0}", (int)od.args[1]);
+                    instName[od.linePos.ch] = (od.args.Count == 3 && od.args[2] != null && od.args[2].ToString() != "")
+                        ? string.Format("{0}", od.args[2])
+                        : null;
+                    inst[od.linePos.ch] = GetDisplayInstrument(od.linePos.ch);
                 }
                 else if (od.args[0] is char && (char)od.args[0] == 'I')
-                    inst[od.linePos.ch] = string.Format("I:{0}", (int)od.args[1]);
+                {
+                    instNo[od.linePos.ch] = string.Format("I:{0}", (int)od.args[1]);
+                    instName[od.linePos.ch] = null;
+                    inst[od.linePos.ch] = GetDisplayInstrument(od.linePos.ch);
+                }
                 else
                     envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
             }

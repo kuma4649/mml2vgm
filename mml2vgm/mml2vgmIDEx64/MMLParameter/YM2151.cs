@@ -20,10 +20,7 @@ namespace mml2vgmIDEx64.MMLParameter
 
         protected override void SetInstrument(outDatum od, int ch, int cc)
         {
-            if (od.args.Count == 3 && (od.args[2] != null && od.args[2].ToString() != ""))
-                inst[od.linePos.ch] = od.args[2].ToString();
-            else
-                base.SetInstrument(od, ch, cc);
+            base.SetInstrument(od, ch, cc);
         }
 
         protected override void SetNote(outDatum od, int ch, int cc)

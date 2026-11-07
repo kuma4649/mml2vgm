@@ -455,7 +455,8 @@ namespace mml2vgmIDEx64
                     requiresSorting = true;
                 }
 
-                row.Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
+                string dispInst = mmli.GetDisplayInstrument(r);
+                row.Cells["ClmInstrument"].Value = string.IsNullOrEmpty(dispInst) ? "-" : dispInst;
                 row.Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
                 row.Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
                 row.Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
