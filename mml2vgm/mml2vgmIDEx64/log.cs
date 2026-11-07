@@ -34,16 +34,13 @@ namespace mml2vgmIDEx64
                     if (File.Exists(path)) File.Delete(path);
                 }
                 string timefmt = DateTime.Now.ToString(Resources.cntTimeFormat);
-
-#if DEBUG
-                dispMsg?.Invoke(string.Format(msg, prm));
-#else
                 using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
                 {
-                    writer.WriteLine(timefmt + msg);
-                    if (consoleEchoBack) Console.WriteLine(timefmt + msg);
+                    string line = string.Format(msg, prm);
+                    writer.WriteLine(timefmt + line);
+                    if (consoleEchoBack) Console.WriteLine(timefmt + line);
                 }
-#endif
+                dispMsg?.Invoke(string.Format(msg, prm));
             }
             catch
             {
@@ -66,8 +63,6 @@ namespace mml2vgmIDEx64
                     if (File.Exists(path)) File.Delete(path);
                 }
                 string timefmt = DateTime.Now.ToString(Resources.cntTimeFormat);
-
-#if DEBUG
                 string msg = string.Format(Resources.cntExceptionFormat, e.GetType().Name, e.Message, e.Source, e.StackTrace);
                 Exception ie = e;
                 while (ie.InnerException != null)
@@ -75,22 +70,12 @@ namespace mml2vgmIDEx64
                     ie = ie.InnerException;
                     msg += string.Format(Resources.cntInnerExceptionFormat, ie.GetType().Name, ie.Message, ie.Source, ie.StackTrace);
                 }
-                dispMsg?.Invoke(timefmt + msg);
-#else
                 using (StreamWriter writer = new StreamWriter(path, true, sjisEnc))
                 {
-                    string msg = string.Format(Resources.cntExceptionFormat, e.GetType().Name, e.Message, e.Source, e.StackTrace);
-                    Exception ie = e;
-                    while (ie.InnerException != null)
-                    {
-                        ie = ie.InnerException;
-                        msg += string.Format(Resources.cntInnerExceptionFormat, ie.GetType().Name, ie.Message, ie.Source, ie.StackTrace);
-                    }
-
                     writer.WriteLine(timefmt + msg);
                     if (consoleEchoBack) Console.WriteLine(timefmt + msg);
                 }
-#endif
+                dispMsg?.Invoke(timefmt + msg);
             }
             catch
             {

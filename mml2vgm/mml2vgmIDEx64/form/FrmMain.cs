@@ -2065,22 +2065,30 @@ namespace mml2vgmIDEx64
             Corex64.Log.Write("Call mml2vgm core");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
-            if (!doExport)
+            try
             {
-                mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, args[1], null, stPath, Disp, wrkPath, false);
+                if (!doExport)
+                {
+                    mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, args[1], null, stPath, Disp, wrkPath, false);
+                }
+                else
+                {
+                    mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, args[1], args[1], stPath, Disp, wrkPath, true);
+                }
+                mv.isIDE = true;
+                mv.doSkip = doSkip;
+                mv.doSkipStop = doSkipStop;
+                mv.caretPoint = caretPoint;
+                if (mv.Start() != 0)
+                {
+                    isSuccess = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, args[1], args[1], stPath, Disp, wrkPath, true);
-            }
-            mv.isIDE = true;
-            mv.doSkip = doSkip;
-            mv.doSkipStop = doSkipStop;
-            mv.caretPoint = caretPoint;
-            if (mv.Start() != 0)
-            {
+                msgBox.setErrMsg(new msgInfo(null, "", -1, -1, -1, ex.Message));
+                Disp(ex.ToString());
                 isSuccess = false;
-                //break;
             }
 
             Corex64.Log.Write("Return mml2vgm core");
@@ -2313,10 +2321,16 @@ namespace mml2vgmIDEx64
                 return;
             }
 
+            if (mv.desVGM == null || mv.desBuf == null)
+            {
+                isSuccess = false;
+                msgBox.setErrMsg(new msgInfo(null, "", -1, -1, -1, "Compiler returned no output data."));
+            }
+
             Document doc = null;
             if (compileTargetDocument is FrmEditor) doc = (Document)((FrmEditor)compileTargetDocument).Tag;
             else doc = (Document)compileTargetDocument;
-            muteManager.Add(doc);
+            if (doc != null) muteManager.Add(doc);
 
             try
             {
@@ -2327,6 +2341,11 @@ namespace mml2vgmIDEx64
                     Object[] cells = new object[9];
 
                     //int trackNum = 0;
+                    if (mv.desVGM.chips == null)
+                    {
+                        throw new NullReferenceException("Compiler output does not contain chip information.");
+                    }
+
                     foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                     {
                         foreach (ClsChip chip in kvp.Value)
@@ -2389,44 +2408,24 @@ namespace mml2vgmIDEx64
             //エラーリストウィンドウにエラーメッセージリストを追加
             foreach (msgInfo mes in msgBox.getErr())
             {
-                if (mes.document != null)
-                {
-                    frmErrorList.dataGridView1.Rows.Add(
-                        "Error",
-                        ((FrmEditor)mes.document).document.gwiFullPath,
-                        mes.line == -1 ? "-" : (mes.line + 1).ToString(),
-                        mes.body);
-                }
-                else
-                {
-                    frmErrorList.dataGridView1.Rows.Add(
-                        "Error",
-                        mes.filename,
-                        mes.line == -1 ? "-" : (mes.line + 1).ToString(),
-                        mes.body);
-                }
+                string srcFile = getMessageSourceFilePath(mes);
+                frmErrorList.dataGridView1.Rows.Add(
+                    "Error",
+                    srcFile,
+                    mes.line == -1 ? "-" : (mes.line + 1).ToString(),
+                    mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
             }
 
             //エラーリストウィンドウにワーニングメッセージリストを追加
             foreach (msgInfo mes in msgBox.getWrn())
             {
-                if (mes.document != null)
-                {
-                    frmErrorList.dataGridView1.Rows.Add(
-                        "Warning",
-                        ((FrmEditor)mes.document).document.gwiFullPath,
-                        mes.line == -1 ? "-" : (mes.line + 1).ToString(),
-                        mes.body);
-                }
-                else
-                {
-                    frmErrorList.dataGridView1.Rows.Add(
+                string srcFile = getMessageSourceFilePath(mes);
+                frmErrorList.dataGridView1.Rows.Add(
                     "Warning",
-                    mes.filename,
+                    srcFile,
                     mes.line == -1 ? "-" : (mes.line + 1).ToString(),
                     mes.body);
-                }
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
@@ -2524,6 +2523,23 @@ namespace mml2vgmIDEx64
 
             Compiling = 0;
             UpdateControl();
+        }
+
+        private string getMessageSourceFilePath(msgInfo mes)
+        {
+            if (mes == null) return "-";
+
+            if (mes.document is FrmEditor fe && fe.document != null && !string.IsNullOrEmpty(fe.document.gwiFullPath))
+            {
+                return fe.document.gwiFullPath;
+            }
+
+            if (mes.document is Document d && !string.IsNullOrEmpty(d.gwiFullPath))
+            {
+                return d.gwiFullPath;
+            }
+
+            return string.IsNullOrEmpty(mes.filename) ? "-" : mes.filename;
         }
 
         private string mucPartName = "ABCDEFGHIJKLMNOPQRSTUVabcdefghijklmnopqrstuvWXYZwxyz";
@@ -4867,6 +4883,8 @@ namespace mml2vgmIDEx64
                 this.Invoke(new Action<CompileManager.queItem>(cbPlayBack), new object[] { qi });
                 return;
             }
+
+            compileTargetDocument = qi.doc;
 
             if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
             {
