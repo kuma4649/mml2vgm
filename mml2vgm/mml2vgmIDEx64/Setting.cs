@@ -2057,6 +2057,8 @@ namespace mml2vgmIDEx64
             public int TabWidth { get => _TabWidth; set => _TabWidth = value; }
             private int _TabWidth = 8;
             private string[] _GwiFileHistory = null;
+            private string[] _OpenedEditorFiles = null;
+            private string _LastActiveEditorFile = "";
             private string _Tutorial = "Tutorial.txt";
             private string _CommandManual = "mml2vgm_MMLCommandMemo.txt";
             private string _CommandManualMucom = "";
@@ -2074,6 +2076,8 @@ namespace mml2vgmIDEx64
             public string CommandManualMuap { get => _CommandManualMuap; set => _CommandManualMuap = value; }
 
             public string[] GwiFileHistory { get => _GwiFileHistory; set => _GwiFileHistory = value; }
+            public string[] OpenedEditorFiles { get => _OpenedEditorFiles; set => _OpenedEditorFiles = value; }
+            public string LastActiveEditorFile { get => _LastActiveEditorFile; set => _LastActiveEditorFile = value; }
 
             public bool LogWarning { get; set; } = false;
 
@@ -2129,6 +2133,8 @@ namespace mml2vgmIDEx64
                 other.TextFontSize = this.TextFontSize;
                 other.TextFontStyle = this.TextFontStyle;
                 other.GwiFileHistory = this.GwiFileHistory;
+                other.OpenedEditorFiles = this.OpenedEditorFiles;
+                other.LastActiveEditorFile = this.LastActiveEditorFile;
                 other.LogWarning = this.LogWarning;
                 other.PlayDeviceCB = this.PlayDeviceCB;
                 other.LogLevel = this.LogLevel;

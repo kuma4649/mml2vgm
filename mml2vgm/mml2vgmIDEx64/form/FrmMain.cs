@@ -413,61 +413,52 @@ namespace mml2vgmIDEx64
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            int flg = 0;
-            Document ad = null;
-            string fn = "";
-            foreach (Document d in DocumentBox)
+            if (!SaveAllDocumentsForExit())
             {
-                if (d.isNew || d.edit)
-                {
-                    flg++;
-                    fn = Path.GetFileName(d.gwiFullPath);
-                    ad = d;
-                }
-            }
-
-            if (flg > 1)
-            {
-                DialogResult res = MessageBox.Show("未保存のファイルが複数あります。このまま終了しますか？"
-                    , "終了確認"
-                    , MessageBoxButtons.YesNo
-                    , MessageBoxIcon.Question
-                    , MessageBoxDefaultButton.Button2);
-                if (res != DialogResult.Yes)
-                {
-                    e.Cancel = true;
-                    return;
-                }
-            }
-            else if (flg == 1)
-            {
-                DialogResult res = MessageBox.Show(string.Format("このファイル\"{0}\"は未保存です。保存して閉じますか？", fn)
-                    , "ファイル保存確認"
-                    , MessageBoxButtons.YesNoCancel
-                    , MessageBoxIcon.Question
-                    , MessageBoxDefaultButton.Button3);
-                //キャンセルの場合は閉じる処理をキャンセル
-                if (res == DialogResult.Cancel)
-                {
-                    e.Cancel = true;
-                    return;
-                }
-
-                //Yesの場合は保存処理実施後閉じる
-                if (res == DialogResult.Yes)
-                {
-                    if (ad.isNew)
-                    {
-                        TsmiSaveAs_Click(null, null);
-                    }
-                    else
-                    {
-                        TsmiSaveFile_Click(null, null);
-                    }
-                }
+                e.Cancel = true;
+                return;
             }
 
             Finish();
+        }
+
+        private bool SaveAllDocumentsForExit()
+        {
+            foreach (Document d in DocumentBox.ToArray())
+            {
+                if (d == null)
+                {
+                    continue;
+                }
+
+                if (d.isNew)
+                {
+                    DialogResult res = MessageBox.Show(
+                        string.Format("このファイル\"{0}\"は新規ファイルです。保存して閉じますか？", Path.GetFileName(d.gwiFullPath))
+                        , "ファイル保存確認"
+                        , MessageBoxButtons.OKCancel
+                        , MessageBoxIcon.Question
+                        , MessageBoxDefaultButton.Button1);
+                    if (res != DialogResult.OK)
+                    {
+                        return false;
+                    }
+
+                    if (!SaveDocumentAs(d))
+                    {
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (!SaveDocument(d))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void RemoveForm(Form frm)
@@ -537,7 +528,11 @@ namespace mml2vgmIDEx64
             }
 
             if (d == null) return;
+            SaveDocument(d);
+        }
 
+        private bool SaveDocument(Document d)
+        {
             try
             {
                 //もし既にファイルがある場合はHistoryBackup機能を実施
@@ -569,12 +564,13 @@ namespace mml2vgmIDEx64
                 }
                 d.isNew = false;
                 UpdateControl();
+                return true;
             }
             catch (System.IO.IOException ioe)
             {
                 MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}", ioe.Message), "Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-
         }
 
         private void ExecHistoryBackUp(Document d)
@@ -638,7 +634,11 @@ namespace mml2vgmIDEx64
             }
 
             if (d == null) return;
+            SaveDocumentAs(d);
+        }
 
+        private bool SaveDocumentAs(Document d)
+        {
             SaveFileDialog sfd = new SaveFileDialog();
             string fn = d.gwiFullPath;
             if (fn.Length > 0 && fn[fn.Length - 1] == '*')
@@ -657,13 +657,13 @@ namespace mml2vgmIDEx64
             sfd.RestoreDirectory = true;
             if (sfd.ShowDialog() != DialogResult.OK)
             {
-                return;
+                return false;
             }
             fn = Path.Combine(path1, sfd.FileName);
             d.editor.Text = Path.GetFileName(sfd.FileName);
             d.gwiFullPath = fn;
             d.parentFullPath = "";
-            TsmiSaveFile_Click(null, null);
+            return SaveDocument(d);
         }
 
         private void TsmiImport_Click(object sender, EventArgs e)
@@ -1637,6 +1637,18 @@ namespace mml2vgmIDEx64
                 return;
             }
 
+            if (DocumentBox.Count > 0)
+            {
+                RestoreLastActiveEditor();
+                return;
+            }
+
+            if (RestoreEditorSession())
+            {
+                RestoreLastActiveEditor();
+                return;
+            }
+
             string lastFn = "";
             if (setting.other.GwiFileHistory == null) return;
             foreach (string fn in setting.other.GwiFileHistory)
@@ -1654,6 +1666,60 @@ namespace mml2vgmIDEx64
                 OpenFile(lastFn);
             }
             catch { }
+        }
+
+        private bool RestoreEditorSession()
+        {
+            if (setting.other.OpenedEditorFiles == null || setting.other.OpenedEditorFiles.Length < 1)
+            {
+                return false;
+            }
+
+            bool opened = false;
+            foreach (string fn in setting.other.OpenedEditorFiles)
+            {
+                if (string.IsNullOrWhiteSpace(fn) || !File.Exists(fn))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    OpenFile(fn);
+                    opened = true;
+                }
+                catch
+                {
+                }
+            }
+
+            return opened;
+        }
+
+        private void RestoreLastActiveEditor()
+        {
+            if (string.IsNullOrWhiteSpace(setting.other.LastActiveEditorFile))
+            {
+                return;
+            }
+
+            string targetPath = setting.other.LastActiveEditorFile.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            foreach (Document d in DocumentBox)
+            {
+                if (d == null || d.editor == null)
+                {
+                    continue;
+                }
+
+                string openedPath = d.gwiFullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                if (!string.Equals(openedPath, targetPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                d.editor.Activate();
+                return;
+            }
         }
 
         private void Tsmi_Click(object sender, EventArgs e)
@@ -3464,7 +3530,100 @@ namespace mml2vgmIDEx64
                 }
             }
 
+            IDockContent editorDockContent = RestoreEditorDockContent(persistString);
+            if (editorDockContent != null)
+            {
+                return editorDockContent;
+            }
+
             return null;
+        }
+
+        private IDockContent RestoreEditorDockContent(string persistString)
+        {
+            if (!TryParseEditorPersistString(persistString, out string fullPath, out EnmMmlFileFormat fileFormat, out int caretIndex))
+            {
+                return null;
+            }
+
+            if (!File.Exists(fullPath))
+            {
+                return null;
+            }
+
+            fullPath = fullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            foreach (Document d in DocumentBox)
+            {
+                if (string.Equals(d.gwiFullPath, fullPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    return d.editor;
+                }
+            }
+
+            Document dc = new Document(setting, fileFormat);
+            if (!dc.InitOpen(fullPath))
+            {
+                return null;
+            }
+
+            dc.editor.main = this;
+            dc.editor.document = dc;
+
+            int ci = Math.Max(0, Math.Min(caretIndex, dc.editor.azukiControl.Text.Length));
+            dc.editor.azukiControl.SetSelection(ci, ci);
+
+            FormBox.Add(dc.editor);
+            DocumentBox.Add(dc);
+
+            return dc.editor;
+        }
+
+        private bool TryParseEditorPersistString(string persistString, out string fullPath, out EnmMmlFileFormat fileFormat, out int caretIndex)
+        {
+            fullPath = "";
+            fileFormat = EnmMmlFileFormat.GWI;
+            caretIndex = 0;
+
+            if (string.IsNullOrWhiteSpace(persistString) || !persistString.StartsWith(FrmEditor.PersistStringPrefix + "|"))
+            {
+                return false;
+            }
+
+            string[] parts = persistString.Split('|');
+            if (parts.Length < 4)
+            {
+                return false;
+            }
+
+            try
+            {
+                byte[] pathBytes = Convert.FromBase64String(parts[1]);
+                fullPath = Encoding.UTF8.GetString(pathBytes);
+                if (string.IsNullOrWhiteSpace(fullPath))
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            if (!int.TryParse(parts[2], out int fmt) || !Enum.IsDefined(typeof(EnmMmlFileFormat), fmt))
+            {
+                fileFormat = Common.GetEnmMmlFileFormat(Path.GetExtension(fullPath));
+            }
+            else
+            {
+                fileFormat = (EnmMmlFileFormat)fmt;
+            }
+
+            if (!int.TryParse(parts[3], out caretIndex))
+            {
+                caretIndex = 0;
+            }
+
+            return true;
         }
 
         private void Reinit(Setting setting)
@@ -3550,6 +3709,7 @@ namespace mml2vgmIDEx64
                 MemoryStream stream = new MemoryStream();
                 dpMain.SaveAsXml(stream, Encoding.UTF8);
                 setting.dockingState = Encoding.UTF8.GetString(stream.ToArray());
+                StoreEditorSessionState();
 
                 if (WindowState == FormWindowState.Normal)
                 {
@@ -3579,6 +3739,51 @@ namespace mml2vgmIDEx64
             catch (Exception ex)
             {
                 Log.ForcedWrite(ex);
+            }
+        }
+
+        private void StoreEditorSessionState()
+        {
+            List<string> openedFiles = new List<string>();
+            foreach (Document d in DocumentBox)
+            {
+                if (d == null || d.isNew || string.IsNullOrWhiteSpace(d.gwiFullPath))
+                {
+                    continue;
+                }
+
+                string fullPath = d.gwiFullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                if (!File.Exists(fullPath))
+                {
+                    continue;
+                }
+
+                bool exists = false;
+                foreach (string fn in openedFiles)
+                {
+                    if (string.Equals(fn, fullPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists)
+                {
+                    openedFiles.Add(fullPath);
+                }
+            }
+
+            setting.other.OpenedEditorFiles = openedFiles.ToArray();
+
+            Document ad = GetActiveDocument();
+            if (ad != null && !ad.isNew && !string.IsNullOrWhiteSpace(ad.gwiFullPath))
+            {
+                setting.other.LastActiveEditorFile = ad.gwiFullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            }
+            else
+            {
+                setting.other.LastActiveEditorFile = "";
             }
         }
 
