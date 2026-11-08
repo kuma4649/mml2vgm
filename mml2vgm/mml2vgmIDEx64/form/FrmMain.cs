@@ -3470,12 +3470,7 @@ namespace mml2vgmIDEx64
 
             if (string.IsNullOrEmpty(setting.dockingState))
             {
-                frmPartCounter.Show(dpMain, DockState.DockLeft);
-                frmLog.Show(dpMain, DockState.DockBottom);
-                frmFolderTree.Show(dpMain, DockState.DockLeft);
-                frmErrorList.Show(dpMain, DockState.DockBottom);
-                frmLyrics.Show(dpMain, DockState.DockTop);
-                frmSien.Show(dpMain, DockState.DockRight);
+                ShowDefaultDockContents();
             }
             else
             {
@@ -3484,23 +3479,13 @@ namespace mml2vgmIDEx64
                     MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(setting.dockingState));
                     dpMain.LoadFromXml(stream, new DeserializeDockContent(GetDockContentFromPersistString));
 
-                    if (frmPartCounter.ParentForm == null) frmPartCounter.Show(dpMain, DockState.DockLeft);
-                    if (frmLog.ParentForm == null) frmLog.Show(dpMain, DockState.DockBottom);
-                    if (frmFolderTree.ParentForm == null) frmFolderTree.Show(dpMain, DockState.DockLeft);
-                    if (frmErrorList.ParentForm == null) frmErrorList.Show(dpMain, DockState.DockBottom);
-                    if (frmLyrics.ParentForm == null) frmLyrics.Show(dpMain, DockState.DockTop);
-                    if (frmSien.ParentForm == null) frmSien.Show(dpMain, DockState.DockRight);
+                    ShowDefaultDockContents();
                 }
                 catch (Exception ex)
                 {
                     Log.ForcedWrite(ex);
-
-                    frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
-                    frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-                    frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
-                    frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-                    frmLyrics.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockTop);
-                    frmSien.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockRight);
+                    InvalidateDockingStateAfterRestoreFailure();
+                    ShowDefaultDockContents();
                 }
             }
 
@@ -3516,6 +3501,30 @@ namespace mml2vgmIDEx64
 
             statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
 
+        }
+
+        private void ShowDefaultDockContents()
+        {
+            if (frmPartCounter.ParentForm == null) frmPartCounter.Show(dpMain, DockState.DockLeft);
+            if (frmLog.ParentForm == null) frmLog.Show(dpMain, DockState.DockBottom);
+            if (frmFolderTree.ParentForm == null) frmFolderTree.Show(dpMain, DockState.DockLeft);
+            if (frmErrorList.ParentForm == null) frmErrorList.Show(dpMain, DockState.DockBottom);
+            if (frmLyrics.ParentForm == null) frmLyrics.Show(dpMain, DockState.DockTop);
+            if (frmSien.ParentForm == null) frmSien.Show(dpMain, DockState.DockRight);
+        }
+
+        private void InvalidateDockingStateAfterRestoreFailure()
+        {
+            try
+            {
+                Log.ForcedWrite("パネル配置の復元に失敗したため、保存済み配置情報を初期化します。");
+                setting.dockingState = "";
+                setting.Save();
+            }
+            catch (Exception saveEx)
+            {
+                Log.ForcedWrite(saveEx);
+            }
         }
 
         private IDockContent GetDockContentFromPersistString(string persistString)
