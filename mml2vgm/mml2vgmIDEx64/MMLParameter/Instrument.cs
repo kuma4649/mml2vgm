@@ -13,6 +13,8 @@ namespace mml2vgmIDEx64.MMLParameter
 
         public int ChCount;
         public string[] inst;
+        protected string[] instNo;
+        protected string[] instName;
         public string[] envelope;
         public string[] notecmd;
         public string[] gatetime;
@@ -53,6 +55,8 @@ namespace mml2vgmIDEx64.MMLParameter
         {
             ChCount = n;
             inst = new string[n];
+            instNo = new string[n];
+            instName = new string[n];
             envelope = new string[n];
             gatetime = new string[n];
             notecmd = new string[n];
@@ -198,15 +202,29 @@ namespace mml2vgmIDEx64.MMLParameter
         {
             if (od.linePos.ch >= inst.Length) return;
 
-            if (setting.MMLParameter.dispInstrumentName
-                && od.args.Count == 3
-                && (od.args[2] != null
-                && od.args[2].ToString() != ""))
-                inst[od.linePos.ch] = od.args[2].ToString();
-            else
-                inst[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";
+            instNo[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";
+            instName[od.linePos.ch] = (od.args.Count == 3 && od.args[2] != null && od.args[2].ToString() != "")
+                ? od.args[2].ToString()
+                : null;
+            inst[od.linePos.ch] = GetDisplayInstrument(od.linePos.ch);
 
             //Console.WriteLine("{0} {1}",ch, od.args[1]);
+        }
+
+        public virtual string GetDisplayInstrument(int ch)
+        {
+            if (ch < 0 || ch >= inst.Length) return null;
+
+            string no = instNo[ch];
+            string name = instName[ch];
+            if (!string.IsNullOrEmpty(no) || !string.IsNullOrEmpty(name))
+            {
+                return (setting.MMLParameter.dispInstrumentName && !string.IsNullOrEmpty(name))
+                    ? name
+                    : no;
+            }
+
+            return inst[ch];
         }
 
         protected virtual void SetVolume(outDatum od, int ch, int cc)
