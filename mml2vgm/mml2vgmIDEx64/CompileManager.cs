@@ -329,29 +329,47 @@ namespace mml2vgmIDEx64
 
             Mml2vgm mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, tempPath, null, stPath, disp, wrkPath, false);
             mv.isIDE = true;
-            int result = mv.Start();
+            int result;
+            try
+            {
+                result = mv.Start();
+            }
+            catch (Exception ex)
+            {
+                msgBox.setErrMsg(new msgInfo(null, "", -1, -1, -1, ex.Message));
+                qi.doc.errBox = msgBox.getErr();
+                qi.doc.wrnBox = msgBox.getWrn();
+                qi.doc.dstFileFormat = EnmFileFormat.unknown;
+                qi.doc.compiledData = null;
+                qi.doc.compileStatus = Document.EnmCompileStatus.Failed;
+                disp(ex.ToString());
+                return;
+            }
 
             qi.doc.errBox = msgBox.getErr();
             qi.doc.wrnBox = msgBox.getWrn();
 
             disp("\r\n");
             disp(string.Format(Msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
-            if (mv.desVGM.loopSamples != -1)
+            if (result == 0 && mv.desVGM != null)
             {
-                disp(string.Format(Msg.get("I0111"), mv.desVGM.loopClock));
+                if (mv.desVGM.loopSamples != -1)
+                {
+                    disp(string.Format(Msg.get("I0111"), mv.desVGM.loopClock));
+                    if (mv.desVGM.info.format == enmFormat.VGM)
+                        disp(string.Format(Msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / 44100L));
+                    else
+                        disp(string.Format(Msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+                }
+                disp(string.Format(Msg.get("I0113"), mv.desVGM.lClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    disp(string.Format(Msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / 44100L));
+                    disp(string.Format(Msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
                 else
-                    disp(string.Format(Msg.get("I0112"), mv.desVGM.loopSamples, mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+                    disp(string.Format(Msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
-            disp(string.Format(Msg.get("I0113"), mv.desVGM.lClock));
-            if (mv.desVGM.info.format == enmFormat.VGM)
-                disp(string.Format(Msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
-            else
-                disp(string.Format(Msg.get("I0114"), mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
             disp(Msg.get("I0126"));
 
-            if (result == 0)
+            if (result == 0 && mv.desVGM != null && mv.desBuf != null)
             {
                 if (mv.desVGM.info.format == enmFormat.VGM)
                 {
@@ -375,6 +393,11 @@ namespace mml2vgmIDEx64
             }
             else
             {
+                if (result == 0 && mv.desVGM == null)
+                {
+                    msgBox.setErrMsg(new msgInfo(null, "", -1, -1, -1, "Compiler returned no output data."));
+                    qi.doc.errBox = msgBox.getErr();
+                }
                 qi.doc.dstFileFormat = EnmFileFormat.unknown;
                 qi.doc.compiledData = null;
                 qi.doc.compileStatus = Document.EnmCompileStatus.Failed;

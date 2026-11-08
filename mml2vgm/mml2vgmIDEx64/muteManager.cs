@@ -178,6 +178,7 @@ namespace mml2vgmIDEx64
 
         public static void Add(Document doc)
         {
+            if (doc == null) return;
             if (!lstMuteStatus.ContainsKey(doc))
             {
                 lstMuteStatus.Add(doc, null);
@@ -186,6 +187,7 @@ namespace mml2vgmIDEx64
 
         public static int UpdateTrackInfo(Document doc, object[] cells, int key = -1)
         {
+            if (doc == null) return -1;
             crntDoc = doc;
 
             Add(doc);
